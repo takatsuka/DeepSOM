@@ -8,3 +8,5 @@ Haoyan Qi, Sep 11
 ```
 $ python sphere.py <num_points>
 ```
+
+![data](https://bitbucket.org/ChristopherIrving/deep-som-dome/src/82c731939a70/datasets/sphere/sphere_2048.png?at=master)
