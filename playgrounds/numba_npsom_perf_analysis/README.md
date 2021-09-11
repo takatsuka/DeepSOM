@@ -15,7 +15,9 @@ Haoyan Qi, Sep 11
 Above result was tested on a system with Ryzen 3900X CPU running macOS, Python 3.9.
 
 
-### Dataset
+### Dataset and Training Result
+
+![Sphere](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/42529a270dc7a2b6903fd12b5b094ff5431ebe22/playgrounds/numba_npsom_perf_analysis/som_fast.png)
 
 
 
