@@ -10,7 +10,7 @@ Haoyan Qi, Sep 11
 
 ### Result
 
-`playfast.py` show an average of 28.6% shorter running time compares to `play.py`
+`playfast.py` show an average of 28.6% shorter running time compares to `play.py` even without exploiting task parallelization.
 
 Above result was tested on a system with Ryzen 3900X CPU running macOS, Python 3.9.
 
