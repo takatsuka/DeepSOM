@@ -1,0 +1,2 @@
+web: gunicorn server:app --preload --limit-request-line 0
+worker: celery -A server.celery worker

@@ -1,0 +1,174 @@
+\hypertarget{class_node}{}\doxysection{Node Class Reference}
+\label{class_node}\index{Node@{Node}}
+
+
+Class for \mbox{\hyperlink{class_s_o_m}{S\+OM}} nodes.  
+
+
+
+
+{\ttfamily \#include $<$Node.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_node_af34eb3e915d7244bd8fa266eeb7d41c1}{Node}} (const Vector\+Xd \&topo\+\_\+coord, int id\+\_\+v, const Vector\+Xd \&init\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_node}{Node}} constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_a50357c693b24099e45cb093eae224c02}{add\+\_\+neighbor}} (\mbox{\hyperlink{class_node}{Node}} $\ast$neighbor)
+\begin{DoxyCompactList}\small\item\em Adds a neighbor for node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_a4232e09993d7a4efd748df6c880f597b}{add\+\_\+pos}} (const Vector\+Xd \&delta)
+\begin{DoxyCompactList}\small\item\em Sums a vector to current node position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_a1f835c71b5986b60c61c44ce7a17132d}{set\+\_\+pos}} (const Vector\+Xd \&loc)
+\begin{DoxyCompactList}\small\item\em Sets node position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_node_ab2a647c3a98af60bc1567ec17ec65c57}{mul\+\_\+pos}} (double scalar)
+\begin{DoxyCompactList}\small\item\em Multiplies node position by a scaler. \end{DoxyCompactList}\item 
+Vector\+Xd \mbox{\hyperlink{class_node_afddbf87112328f23134aa9f5fe99a479}{get\+\_\+pos}} () const
+\begin{DoxyCompactList}\small\item\em Returns position of the node. \end{DoxyCompactList}\item 
+Vector\+Xd \mbox{\hyperlink{class_node_ad7d73ea1a5f34ca300263aedcbab3648}{get\+\_\+topo}} () const
+\begin{DoxyCompactList}\small\item\em Returns topology coordinate of the node. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_node_a3848805b318e1e85d456b97d98968a66}{get\+\_\+id}} () const
+\begin{DoxyCompactList}\small\item\em Returns id of the node. \end{DoxyCompactList}\item 
+vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \& \mbox{\hyperlink{class_node_a7fbd26aaf886d41c04055de6f0878b9b}{get\+\_\+neighbors}} ()
+\begin{DoxyCompactList}\small\item\em Returns refeerence to neighbors of the node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for \mbox{\hyperlink{class_s_o_m}{S\+OM}} nodes. 
+
+\mbox{\hyperlink{class_s_o_m}{S\+OM}} node class supporting topological coordinates and feature space coordinates. The node\textquotesingle{}s neighbors are decided based on the topology of the \mbox{\hyperlink{class_s_o_m}{S\+OM}}. The feature space coordinate matches the dimensionality of the input vectors. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_node_af34eb3e915d7244bd8fa266eeb7d41c1}\label{class_node_af34eb3e915d7244bd8fa266eeb7d41c1}} 
+\index{Node@{Node}!Node@{Node}}
+\index{Node@{Node}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}}
+{\footnotesize\ttfamily Node\+::\+Node (\begin{DoxyParamCaption}\item[{const Vector\+Xd \&}]{topo\+\_\+coord,  }\item[{int}]{id\+\_\+v,  }\item[{const Vector\+Xd \&}]{init\+\_\+pos }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_node}{Node}} constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em topo\+\_\+coord} & Topology coordinate of node in \mbox{\hyperlink{class_s_o_m}{S\+OM}}. \\
+\hline
+{\em id\+\_\+v} & Unique node id number starting from 0 for a given \mbox{\hyperlink{class_s_o_m}{S\+OM}}. \\
+\hline
+{\em init\+\_\+pos} & Initial position of node in feature space. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_node_a50357c693b24099e45cb093eae224c02}\label{class_node_a50357c693b24099e45cb093eae224c02}} 
+\index{Node@{Node}!add\_neighbor@{add\_neighbor}}
+\index{add\_neighbor@{add\_neighbor}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{add\_neighbor()}{add\_neighbor()}}
+{\footnotesize\ttfamily void Node\+::add\+\_\+neighbor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_node}{Node}} $\ast$}]{neighbor }\end{DoxyParamCaption})}
+
+
+
+Adds a neighbor for node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neighbor} & The neighbor node to be added. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_node_a4232e09993d7a4efd748df6c880f597b}\label{class_node_a4232e09993d7a4efd748df6c880f597b}} 
+\index{Node@{Node}!add\_pos@{add\_pos}}
+\index{add\_pos@{add\_pos}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{add\_pos()}{add\_pos()}}
+{\footnotesize\ttfamily void Node\+::add\+\_\+pos (\begin{DoxyParamCaption}\item[{const Vector\+Xd \&}]{delta }\end{DoxyParamCaption})}
+
+
+
+Sums a vector to current node position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & The vector to be added to position. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_node_a3848805b318e1e85d456b97d98968a66}\label{class_node_a3848805b318e1e85d456b97d98968a66}} 
+\index{Node@{Node}!get\_id@{get\_id}}
+\index{get\_id@{get\_id}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{get\_id()}{get\_id()}}
+{\footnotesize\ttfamily int Node\+::get\+\_\+id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns id of the node. 
+
+\begin{DoxyReturn}{Returns}
+Id of the node. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_node_a7fbd26aaf886d41c04055de6f0878b9b}\label{class_node_a7fbd26aaf886d41c04055de6f0878b9b}} 
+\index{Node@{Node}!get\_neighbors@{get\_neighbors}}
+\index{get\_neighbors@{get\_neighbors}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{get\_neighbors()}{get\_neighbors()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_node}{Node}} $\ast$ $>$ \& Node\+::get\+\_\+neighbors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns refeerence to neighbors of the node. 
+
+\begin{DoxyReturn}{Returns}
+Node$\ast$ vector of neighbors of the node. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_node_afddbf87112328f23134aa9f5fe99a479}\label{class_node_afddbf87112328f23134aa9f5fe99a479}} 
+\index{Node@{Node}!get\_pos@{get\_pos}}
+\index{get\_pos@{get\_pos}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{get\_pos()}{get\_pos()}}
+{\footnotesize\ttfamily Vector\+Xd Node\+::get\+\_\+pos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns position of the node. 
+
+\begin{DoxyReturn}{Returns}
+Position vector of the node. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_node_ad7d73ea1a5f34ca300263aedcbab3648}\label{class_node_ad7d73ea1a5f34ca300263aedcbab3648}} 
+\index{Node@{Node}!get\_topo@{get\_topo}}
+\index{get\_topo@{get\_topo}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{get\_topo()}{get\_topo()}}
+{\footnotesize\ttfamily Vector\+Xd Node\+::get\+\_\+topo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns topology coordinate of the node. 
+
+\begin{DoxyReturn}{Returns}
+Topology coordinate vector of the node. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_node_ab2a647c3a98af60bc1567ec17ec65c57}\label{class_node_ab2a647c3a98af60bc1567ec17ec65c57}} 
+\index{Node@{Node}!mul\_pos@{mul\_pos}}
+\index{mul\_pos@{mul\_pos}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{mul\_pos()}{mul\_pos()}}
+{\footnotesize\ttfamily void Node\+::mul\+\_\+pos (\begin{DoxyParamCaption}\item[{double}]{scalar }\end{DoxyParamCaption})}
+
+
+
+Multiplies node position by a scaler. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em scalar} & The scaler to multiply the node position by. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_node_a1f835c71b5986b60c61c44ce7a17132d}\label{class_node_a1f835c71b5986b60c61c44ce7a17132d}} 
+\index{Node@{Node}!set\_pos@{set\_pos}}
+\index{set\_pos@{set\_pos}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{set\_pos()}{set\_pos()}}
+{\footnotesize\ttfamily void Node\+::set\+\_\+pos (\begin{DoxyParamCaption}\item[{const Vector\+Xd \&}]{loc }\end{DoxyParamCaption})}
+
+
+
+Sets node position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em loc} & The vector to set node position to. \\
+\hline
+\end{DoxyParams}

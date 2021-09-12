@@ -1,0 +1,104 @@
+<h2>Data File</h2>
+<p>Data file that the SOM will be trained one. Supported file types: txt </p>
+<div style="width: 100%; overflow: hidden; display: table">
+    <div style="display:table-row">
+    <div style="display:table-cell; width:50%">
+        <p>Data format: </p>
+        <p>(dimension of data points) (number of data points)</p>
+        <p>(data points space separated)</p>
+    </div>
+    <div style="display:table-cell; width:50%">
+        <p>Example data file:</p>
+        <p>3 2</p>
+        <p>1 2 3</p>
+        <p>0 4 1</p>
+    </div>
+    </div>
+</div>
+<hr>
+<h2>Iterations</h2>
+<p>Maxiumum number of iterations in the SOM training.</p>
+<p>Restrictions: Integer larger than 0. Default value: 20</p>
+<p>More training iterations allow the SOM to model the input data more closely.</p>
+<hr>
+<h2>Grid shape</h2>
+<p>Shape of the SOM node grid to use for the network.</p>
+<p>Choices: Rectangle or Hexagon. Default value: Hex</p>
+<p>A hexagon grid is preferred as all adjacent nodes are equidistant from one another.</p>
+<hr>
+<h2>Test split</h2>
+<p>The proportion of the input data to be used for testing a LVQ classifier created using the SOM</p>
+<p>Restrictions: Value between 0 and 1. Default value: 0.25</p>
+<p>A value of 0 means a LVQ classifier will not be created at all.</p>
+<hr>
+<h2>Side Length</h2>
+<p>Side lengths of the grid.</p>
+<p>Input format: 2 space separated integers. Restrictions: Integers must be larger than 0. Default value: 10 10</p>
+<p>Larger side lengths create more nodes in the SOM and captures finer details in the input data.</p>
+<hr>
+<h2>Learning Rate</h2>
+<p>Initial learning rate of the SOM.</p>
+<p>Restrictions: Value between 0 and 1. Default value: 0.5</p>
+<p>A larger alpha adjusts how quickly the SOM initially trains and learns to model the input data.</p>
+<hr>
+<h2>Neighbourhood Radius</h2>
+<p>Initial neighbourhood radius of the SOM.</p>
+<p>Restrictions: Integer larger than 0. Default value: 0</p>
+<p>A larger neighbourhood radius allows SOM nodes to adjust their positions according to more neighbouring nodes.</p>
+<p>A value of 0 will set sigma to be 80% of the given side length.</p>
+<hr>
+<h2>Decay Constant</h2>
+<p>Decay constant for learning rate and neighbourhood radius.</p>
+<p>Restrictions: Value larger than 0. Default value: 0</p>
+<p>Larger values lead to a slower decay in learning rate and neighbourhood radius over time.</p>
+<p>A value of 0 will set lambda to be 80% of the given iterations.</p>
+<hr>
+<h2>Input Dimensions</h2>
+<p>Select the dimensions of the input data that the SOM will use.</p>
+<p>Input format: Space separated list of indices. Restrictions: Indices are indexed starting from 1. Default value: null</p>
+<p>Should only be used for nodes connected to the input node to allow SOM nodes to selectively learn certain dimensions.</p>
+<p>A value of null will set the SOM to use all input data dimensions.</p>
+<hr>
+<h2>SOM structure drawing tool</h2>
+<p>Click the + button to add a new SOM node.</p>
+<p>Click on SOM nodes to modify their parameters.</p>
+<p>Shift+Click 2 SOM nodes to connect them. The output of one SOM will be fed as input into another SOM according to the arrow direction.</p>
+<p>Ctrl+Click a SOM or connection in order to delete it.</p>
+<p>Restrictions: The final output SOM should be connected. The input node should be connected.</p>
+<p>The graph should have no cycles.</p>
+<p>Example architecture:</p>
+<img src="/static/example_network.png" width="550" height="300"/>
+<hr>
+<h2>UMatrix Visualisation</h2>
+<p>Availability: Available for all SOMs</p>
+<p>Provides a 2D visualisation of the distances between neurons in the SOM grid</p>
+<p>Red nodes indicate a neuron is far from its neighbours, hence red nodes represent cluster boundaries.</p>
+<p>Blue nodes indicate a neuron that is close to its neighbours, hence areas of blue nodes represent a cluster.</p>
+<p>Example visualisation:</p>
+<img src="/static/umatrix.png" width="400" height="300"/>
+<hr>
+<h2>3D SOM plot</h2>
+<p>Availability: Only available for SOMs with one node and 3D data</p>
+<p>Provides a visualisation of the SOM neurons and the data in a 3D space</p>
+<p>Example visualisation:</p>
+<img src="/static/3dplot.png" width="400" height="300"/>
+<hr>
+<h2>Error colour plot</h2>
+<p>Availability: Only available for SOMs with one node and 3D data</p>
+<p>Provides a visualisation of the SOM neurons and the data in a 3D space</p>
+<p>Data points are coloured according to how far they are from the nearest neuron with lighter colours indicating higher error</p>
+<p>Example visualisation:</p>
+<img src="/static/errorplot.png" width="400" height="300"/>
+<hr>
+<h2>4D SOM plot</h2>
+<p>Availability: Only available 4D data and when the output SOM has 4D neurons</p>
+<p>Uses PCA to visualise the output SOM neurons and the data in a 3D space</p>
+<p>Example visualisation:</p>
+<img src="/static/4dplot.png" width="400" height="300"/>
+<hr>
+<h2>3D PCA plot</h2>
+<p>Availability: Available for all SOMs</p>
+<p>Uses PCA to visualise the output SOM neurons and the data in a 3D space</p>
+<p>If LVQ is enabled (Test split > 0), data points are coloured according to their class</p>
+<p>Example visualisation:</p>
+<img src="/static/PCAPlot.png" width="400" height="300"/>

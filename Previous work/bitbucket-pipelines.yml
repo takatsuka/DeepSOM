@@ -1,0 +1,56 @@
+image: python:3.8.2
+
+clone:
+  depth: full
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Test and Build
+          caches:
+            - pip
+          script:
+            #- pip install -r requirements.txt
+            - pip install pybind11
+            - cd backend
+            - make prep -j4
+            - make test -j4
+            - make run_tests
+            - make release -j4
+            - cd ..
+            - python -m compileall server.py
+            - touch app.tar.gz
+            - tar --exclude-from=build_exclusion.txt -zcvf app.tar.gz . 
+          artifacts:
+            - app.tar.gz
+          
+      - step:
+          name: Deploy Dev
+          caches:
+            - pip
+          deployment: staging
+          trigger: manual
+          script:
+            - pipe: atlassian/heroku-deploy:0.1.1
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME_DEV
+                ZIP_FILE: app.tar.gz 
+            - docker run -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome:4.0.0-alpha-7-prerelease-20201009
+            - cd frontend/testing
+            - pip install -r requirements.txt
+            - python sel_tests.py remote http://cp37-soms-dev.herokuapp.com/
+    
+      - step:
+          name: Deploy Prod
+          clone:
+            enabled: false
+          deployment: production
+          trigger: manual
+          script:
+            - pipe: atlassian/heroku-deploy:0.1.1
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME
+                ZIP_FILE: app.tar.gz

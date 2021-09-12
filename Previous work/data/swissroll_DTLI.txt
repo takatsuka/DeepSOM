@@ -1,0 +1,13 @@
+Hexa SOM
+mean distance difference between DT and linear in percentage: 9.774009
+mean distance difference between DT and kNN graph in percentage (1): 8.957873
+mean distance difference between linear and kNN graph in percentage (1): 2.8657382
+mean distance difference between DT and kNN graph in percentage (2): 12.787357
+mean distance difference between linear and kNN graph in percentage(2): 5.3532763
+
+Geodesic SOM
+mean distance difference between DT and linear in percentage: 39.992554
+mean distance difference between DT and kNN graph in percentage (1): 44.96194
+mean distance difference between linear and kNN graph in percentage (1): 2.116624
+mean distance difference between DT and kNN graph in percentage (2): 48.08677
+mean distance difference between linear and kNN graph in percentage(2): 6.291283

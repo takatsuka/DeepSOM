@@ -1,0 +1,14 @@
+bitbucket-pipes-toolkit
+flask
+gunicorn
+numpy
+werkzeug
+matplotlib
+pybind11
+wtforms
+celery
+redis
+pandas
+plotly
+entropy_estimators
+scikit-learn

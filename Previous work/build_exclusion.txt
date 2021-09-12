@@ -1,0 +1,6 @@
+./app.tar.gz
+./docs
+./data
+./backend/deprecated
+./bitbucket-pipelines.yml
+./build_exclusion.txt
