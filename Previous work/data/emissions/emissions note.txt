@@ -1,1 +1,0 @@
-germany missing per capita value for 1990, made up value based on 1991 value + std dev
