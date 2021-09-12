@@ -37,4 +37,5 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
-plt.savefig(f"som_fast.png")
+# plt.show()
+plt.savefig(f"som_fast_donut.png")
