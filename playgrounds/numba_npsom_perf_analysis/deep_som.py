@@ -164,7 +164,7 @@ root_som = deep_som.train(data)
 
 weights = root_som.dump_weight_list()
 
-# Graph the resulting weights
+# Graph the resulting weights (doesn't work --> bug at line 174 where axes is only size 2)
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 
