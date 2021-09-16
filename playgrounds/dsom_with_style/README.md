@@ -12,15 +12,15 @@ Haoyan Qi, Sep 16
 ### Dataset and Training Result
 
 #### Original Image 28x28(768)
-![act](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/6f067a233d7723dc90ef0dc70a9aab8191ef4491/playgrounds/dsom_with_style/img_0.png){width=50%}
+![act](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/6f067a233d7723dc90ef0dc70a9aab8191ef4491/playgrounds/dsom_with_style/imgs/img_0.png)
 
 
 #### Mini patches recovered from 10x10(100) compressed sample
-![act](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/6f067a233d7723dc90ef0dc70a9aab8191ef4491/playgrounds/dsom_with_style/activation_0.png){width=50%}
+![act](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/6f067a233d7723dc90ef0dc70a9aab8191ef4491/playgrounds/dsom_with_style/imgs/activation_0.png)
 
 
 #### Sample layer
-![act](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/6f067a233d7723dc90ef0dc70a9aab8191ef4491/playgrounds/dsom_with_style/sample_0.png){width=50%}
+![act](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/6f067a233d7723dc90ef0dc70a9aab8191ef4491/playgrounds/dsom_with_style/imgs/sample_0.png)
 
 
 
