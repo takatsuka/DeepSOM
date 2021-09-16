@@ -6,7 +6,7 @@ Haoyan Qi, Sep 16
 
 ### What's here?
 * A CNN like multi-layer Deep SOM implementation.
-* Simple script for using it to classification on Fashion MNIST dataset.
+* Simple script for using it for classification on Fashion MNIST dataset.
 
 
 ### Dataset and Training Result
