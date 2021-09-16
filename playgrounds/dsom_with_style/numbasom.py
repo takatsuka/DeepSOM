@@ -22,8 +22,12 @@ def som_learn_batch(m, b, mat_coord, rg, lr):
     
     return mat
 
+@jit(nopython=True)
+def som_transform(mat, v):
+    return np.argmin(np.sum((mat - v) ** 2, axis=2))
+
 class simplesom:
-    def __init__(self, width,height, dimin, init_scale=2, init_offset = -0.5, init_epoch=600):
+    def __init__(self, width, height, dimin, init_scale=2, init_offset = -0.5, init_epoch=600):
 
         self.lr = 0.7
         self.lr_min = 0.1
@@ -42,8 +46,7 @@ class simplesom:
         self.mat = (np.random.default_rng().random((self.width, self.height, self.input_dim), dtype=np.float64) + init_offset) * init_scale
         idx_mat = np.unravel_index(np.arange(self.width * self.height).reshape(self.width, self.height), (self.width, self.height))
         self.mat_coord = np.stack(idx_mat, 2)
-
-
+        
 
     def __str__(self):
         return str(self.mat)
@@ -93,23 +96,21 @@ class simplesom:
         self.lr = min(self.lr_max, self.lr + self.lr_step)
         self.rg = min(self.rg_max, self.rg + self.rg_step)
 
-    #dataset should be of shape(n, dim(input))
-    def error_to_dataset(self, dataset):
-        cumerr = 0
-        cumidx = 0
-        for d in dataset:
-            dist = self.mat[self.get_arg_closest(d)] - d
-            cumerr += np.sqrt(np.dot(dist, dist.T))
-            cumidx += 1
-        
-        return cumerr / cumidx
 
-
-    def error_to_dataset_max(self, dataset):
-        cumerr = 0
-        for d in dataset:
-            dist = self.mat[self.get_arg_closest(d)] - d
-            cumerr = max(np.sqrt(np.dot(dist, dist.T)), cumerr)
-            
+    ##more batch operation
+    def bmu(self, b):
+        craps = []
+        for i in range(len(b)):
+            idx = self.get_arg_closest(b[i])
+            craps.append(self.mat[idx[0], idx[1]])
         
-        return cumerr
+        return np.array(craps)
+
+    def transform(self, b):
+        craps = []
+        for i in range(b.shape[0]):
+            idx = np.argmin(np.sum((self.mat - b[i]) ** 2, axis=2))
+            craps.append(idx)
+        
+        return np.array(craps)
+

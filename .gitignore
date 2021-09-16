@@ -48,3 +48,5 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Ignore publicly available large dataset files
+large_bin/

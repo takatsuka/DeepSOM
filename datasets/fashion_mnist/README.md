@@ -5,6 +5,8 @@ Haoyan Qi, Sep 16
 
 ### Usage
 
+Download binary archive from [zalandoresearch](https://github.com/zalandoresearch/fashion-mnist) and place unarchived files in `large_bin`.
+
 ```
 $ python fashion.py 
 ```
