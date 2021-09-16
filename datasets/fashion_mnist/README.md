@@ -13,5 +13,5 @@ $ python fashion.py
 
 `fashion.py` serves as an example for loading the Fashion-MNIST dataset.
 
-![preview](nope)
+![preview](https://bitbucket.org/ChristopherIrving/deep-som-dome/raw/1db94cb500eba53ce9c77c5823b52ed116cb22e0/datasets/fashion_mnist/fashion.png)
 
