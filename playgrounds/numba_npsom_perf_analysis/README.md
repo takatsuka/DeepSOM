@@ -7,6 +7,7 @@ Haoyan Qi, Sep 11
 ### What's here?
 * a simple single layer rect SOM implementation with Numpy.
 * Numba optimized SOM with minium changes to the above implementation.
+* A Python-less numbasom class compiled with @jitclass
 
 ### Result
 
