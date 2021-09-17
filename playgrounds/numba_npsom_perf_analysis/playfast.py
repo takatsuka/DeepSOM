@@ -14,7 +14,7 @@ BATCH_SIZE = 64
 
 start = time.time()
 for _ in range(16384 // BATCH_SIZE):
-    model.learn_batch(sp(data, BATCH_SIZE))
+    model.learn_batch(np.array(sp(data, BATCH_SIZE)))
 end = time.time()
 
 print("Elapsed (with compilation) = %s" % (end - start))
@@ -38,4 +38,4 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
 # plt.show()
-plt.savefig(f"som_fast_donut.png")
+plt.savefig(f"som_fast_jitclass.png")

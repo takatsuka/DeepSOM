@@ -24,8 +24,6 @@ class simplesom:
         idx_mat = np.unravel_index(np.arange(self.width * self.height).reshape(self.width, self.height), (self.width, self.height))
         self.mat_coord = np.stack(idx_mat, 2)
 
-
-
     def __str__(self):
         return str(self.mat)
 
