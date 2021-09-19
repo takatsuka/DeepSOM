@@ -1,5 +1,5 @@
 
-#a simple slow script to generate sphere pc dataset
+# a simple slow script to generate sphere pc dataset
 
 PLOTTY = True
 
@@ -9,9 +9,7 @@ import numpy as np
 from math import sqrt as st
 import random
 um = random.uniform
-umstd = lambda: um(-1,1)
-
-
+umstd = lambda: um(-1, 1)
 
 def gen_num(n):
     points = []
@@ -19,7 +17,7 @@ def gen_num(n):
         v = (umstd(), umstd(), umstd())
         lvdv = st(sum([x**2 for x in v]))
         points.append([x / lvdv for x in v])
-    
+
     return points
 
 nn = int(sys.argv[1])
@@ -40,6 +38,3 @@ if PLOTTY:
     ax.set_zlabel('Z')
 
     plt.savefig(f"sphere_{nn}.png")
-    
-        
-

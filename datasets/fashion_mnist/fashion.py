@@ -10,7 +10,6 @@ images = np.array(images, dtype=np.float64) / 255.0
 images = images.reshape((images.shape[0], 28, 28))
 
 
-
 def imgrid(imgs, w, h):
 
     row = np.concatenate(imgs[:w])
@@ -24,10 +23,9 @@ def imgrid(imgs, w, h):
     return row
 
 
-
 W = 50
 H = 50
-grid = imgrid(images[list(sp(list(range(images.shape[0])), W*H))], W, H, 28, 28)
+grid = imgrid(images[list(sp(list(range(images.shape[0])), W * H))], W, H, 28, 28)
 
 
 import matplotlib.pyplot as plt

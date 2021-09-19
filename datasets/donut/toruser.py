@@ -1,6 +1,4 @@
 
-
-
 PLOTTY = True
 
 if PLOTTY: import matplotlib.pyplot as plt
@@ -12,8 +10,8 @@ import random
 um = random.uniform
 umrad = lambda: um(0, 2 * pi)
 
-r = 0.7 #inner radius
-a = 0.3 #thickness
+r = 0.7 # inner radius
+a = 0.3 # thickness
 
 def gen_num(n):
     points = []
@@ -25,6 +23,7 @@ def gen_num(n):
         points.append((x, y, z))
     
     return points
+
 
 nn = int(sys.argv[1])
 
@@ -44,6 +43,3 @@ if PLOTTY:
     ax.set_zlabel('Z')
 
     plt.savefig(f"donut_{nn}.png")
-    
-        
-
