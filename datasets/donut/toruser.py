@@ -4,14 +4,15 @@ PLOTTY = True
 if PLOTTY: import matplotlib.pyplot as plt
 import sys
 import numpy as np
-from math import sqrt as st
+# from math import sqrt as st
 from math import pi, sin, cos
 import random
 um = random.uniform
 umrad = lambda: um(0, 2 * pi)
 
-r = 0.7 # inner radius
-a = 0.3 # thickness
+r = 0.7  # inner radius
+a = 0.3  # thickness
+
 
 def gen_num(n):
     points = []
@@ -21,7 +22,7 @@ def gen_num(n):
         y = (r + a * cos(i)) * sin(o)
         z = a * sin(i)
         points.append((x, y, z))
-    
+
     return points
 
 
@@ -36,7 +37,7 @@ if PLOTTY:
 
     axes = list(zip(*p))
     ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
-    
+
     ax.scatter(*axes, marker='o', s=1, color="magenta")
     ax.set_xlabel('X')
     ax.set_ylabel('Y')

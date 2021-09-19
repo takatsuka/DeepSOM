@@ -11,6 +11,7 @@ import random
 um = random.uniform
 umstd = lambda: um(-1, 1)
 
+
 def gen_num(n):
     points = []
     for _ in range(n):
@@ -19,6 +20,7 @@ def gen_num(n):
         points.append([x / lvdv for x in v])
 
     return points
+
 
 nn = int(sys.argv[1])
 
@@ -31,7 +33,7 @@ if PLOTTY:
 
     axes = list(zip(*p))
     ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
-    
+
     ax.scatter(*axes, marker='o', s=1, color="magenta")
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
