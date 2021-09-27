@@ -1,27 +1,22 @@
-# README #
+# PySOM #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains the core library for PySOM and its essential components. 
 
-### What is this repository for? ###
+### Structure Overview ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* `app` root for PySOM Creator standalone application.
+* `pysom` PySOM Python module.
+* `datasets` useful data set for benchmarking models wrapped with loaders.
+* `playground` experimental code.
+* `test` unit testing.
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* To be updated(Due Fri, Oct 1)
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Details still under review.
 
 ### Who do I talk to? ###
 
