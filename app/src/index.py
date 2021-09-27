@@ -18,6 +18,19 @@ class Api:
         with open(filename, 'w') as f:
             f.write(content)
 
+
+    def open_csv_file(self):
+        filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
+        if filename == None: return None
+
+        if len(filename) < 1: return None
+        filename = filename[0]
+        if not os.path.exists(filename): return None
+        
+        lines = open(filename).readlines()
+        return [l.strip().split(',') for l in lines]
+
+
     def terminate(self):
         webview.windows[0].destroy()
         os.exit(0)

@@ -2,17 +2,17 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
-import { Column, SelectionModes, Table, Cell } from "@blueprintjs/table";
+import { Tag, Popover, Menu, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
 import "./creator.scss"
+import Welcome from "../welcome/welcome"
+import ScatterView3D from "../scatterview_3d/scatterview"
 
 class Creator extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      tab: "sum"
+      tab: "sum", temp_vizData: [[1.0,1.0,1.0],[-1.0,-1.0,-1.0]]
     }
   }
 
@@ -25,8 +25,14 @@ class Creator extends Component {
     if (x === "tag") this.getTags()
   }
 
-  requestTerminate(){
+  requestTerminate() {
     window.pywebview.api.terminate()
+  }
+
+  temp_loadData() {
+    window.pywebview.api.open_csv_file().then((d) => {
+      this.setState({temp_vizData: d})
+    })
   }
 
   embedCard(whatever) {
@@ -40,16 +46,16 @@ class Creator extends Component {
   render() {
 
     var detailmap = {
-      "sum":
-        this.embedCard(<>
-          <h3>Welcome to PySOM!</h3>
-        </>),
+      "sum": <Welcome />,
+      "viz": <ScatterView3D data={this.state.temp_vizData}/>
     }
 
     const fileMenu = (
       <Menu>
         <MenuItem icon="label" text="Open Project" />
         <MenuItem icon="graph" text="New Project" />
+        <Divider />
+        <MenuItem icon="graph" text="Load Viz Data" onClick={() => this.temp_loadData()} />
       </Menu>
     )
 
@@ -79,7 +85,7 @@ class Creator extends Component {
           </Navbar.Group>
 
           <Navbar.Group align={Alignment.RIGHT}>
-            <Button className="bp3-minimal" icon="cross" onClick={() => this.requestTerminate()}/>
+            <Button className="bp3-minimal" icon="cross" onClick={() => this.requestTerminate()} />
           </Navbar.Group>
         </Navbar>
 
@@ -92,7 +98,7 @@ class Creator extends Component {
               <Tab id="sum" title="Summary" />
               <Tab id="sch" title="Editor" />
               <Tab id="dat" title="Data" />
-              <Tab id="Visuliza" title="Visualization" />
+              <Tab id="viz" title="Visualization" />
             </Tabs>
           </div>
           <div className="submenu-spacer" />
