@@ -9,15 +9,22 @@
     "clean": "run-script-os",
     "clean:default": "rm -rf dist 2>/dev/null; rm -rf gui 2>/dev/null; rm -rf build 2>/dev/null; ",
     "clean:windows": "if exist dist rd /S /Q dist & if exist build rd /S /Q build & if exist gui rd /S /Q gui",
+
     "dev": "parcel serve src/index.html",
+
     "frontend:dev": "parcel build src/index.html --public-url . -d gui",
     "frontend:prod": "parcel build src/index.html --public-url . --no-source-maps -d gui",
+
     "init": "npm install && run-script-os",
     "init:windows": "virtualenv -p python venv && .\\venv\\Scripts\\pip install -r requirements.txt",
     "init:default": "virtualenv -p python venv && ./venv/bin/pip install -r requirements.txt",
+
     "start": "npm run frontend:dev && run-script-os",
     "start:windows": ".\\venv\\Scripts\\python src\\index.py",
-    "start:default": "./venv/bin/python src/index.py"
+    "start:default": "./venv/bin/python src/index.py",
+
+    "build": "npm run clean && npm run frontend:prod && run-script-os",
+    "build:macos": "pyinstaller build-macOS.spec"
   },
   "dependencies": {
     "react": "16.12.0",

@@ -42,6 +42,8 @@ def get_index_page():
     raise Exception(f'No index.html found {os.getcwd()} {sys._MEIPASS}')
 
 
-
+if hasattr(sys,'_MEIPASS'):
+    print("moving to forzen application path: " + sys._MEIPASS)
+    os.chdir(sys._MEIPASS)
 window = webview.create_window('PySOM Creator', get_index_page(), js_api=Api(), frameless=True, easy_drag=False)
 webview.start(debug=(False if hasattr(sys,'_MEIPASS') else True))  # gui="cef")

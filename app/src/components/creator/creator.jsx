@@ -20,6 +20,11 @@ class Creator extends Component {
 
   }
 
+  onTabChange(x) {
+    this.setState({ tab: x })
+    if (x === "tag") this.getTags()
+  }
+
   embedCard(whatever) {
     return (
       <Card interactive={false} elevation={Elevation.TWO}>
@@ -46,7 +51,6 @@ class Creator extends Component {
 
     return (
       <>
-
 
         <Overlay isOpen={this.state.spinning_overlay} >
           <div className='loading-overlay'>
@@ -76,7 +80,7 @@ class Creator extends Component {
         <div className="detail">
 
           <div className="submenubar">
-            <Tabs id="TabsExample" selectedTabId={this.state.tab}>
+            <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
               <Tab id="sum" title="Summary" />
               <Tab id="sch" title="Editor" />
               <Tab id="dat" title="Data"/>

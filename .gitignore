@@ -79,3 +79,5 @@ pids
 # app build files
 venv/
 gui/
+build/
+dist/
