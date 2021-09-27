@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<head>
+    <style type="text/css">
+        button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        svg {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #progress-bar {
+            margin-top: 1em;
+            width: 100vw;
+            height: 1em;
+            background: red;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="input" />
+    <progress value="0" max="100" id="progress-bar"></progress>
+    
+    <div id="status"></div>
+    <svg width="960" height="680"></svg>
+    <script>
+        var origin = [480, 300], j = 1, scale = 200, scatter = [], xLine = [], yLine = [], zLine = [], beta = 0, alpha = 0, key = function(d){ return d.id; }, startAngle = Math.PI/4;
+        var svg = d3.select('svg').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
+        var color  = d3.scaleOrdinal(d3.schemeCategory20);
+        var mx, my, mouseX, mouseY;
+
+        var point3d = d3._3d()
+            .x(function(d){ return d.x; })
+            .y(function(d){ return d.y; })
+            .z(function(d){ return d.z; })
+            .origin(origin)
+            .rotateY( startAngle)
+            .rotateX(-startAngle)
+            .scale(scale); 
+
+        var xScale3d = d3._3d()
+            .shape('LINE_STRIP')
+            .origin(origin)
+            .rotateY( startAngle)
+            .rotateX(-startAngle)
+            .scale(scale);
+
+        var yScale3d = d3._3d()
+            .shape('LINE_STRIP')
+            .origin(origin)
+            .rotateY( startAngle)
+            .rotateX(-startAngle)
+            .scale(scale);
+
+        var zScale3d = d3._3d()
+            .shape('LINE_STRIP')
+            .origin(origin)
+            .rotateY( startAngle)
+            .rotateX(-startAngle)
+            .scale(scale);
+
+        const changeStatus = (status) => {
+            document.getElementById('status').innerHTML = status;
+        }
+
+        const setProgress = (e) => {
+            const fr = e.target;
+            const loadingPercentage = 100 * e.loaded / e.total;
+            document.getElementById('progress-bar').value = loadingPercentage;
+        }
+
+        const loaded = (e) => {
+            const fr = e.target;
+            var data = fr.result;
+            loadData(data);
+        }
+
+        const errorHandler = (e) => {
+            changeStatus('Error: ' + e.target.error.name);
+        }
+
+        const processFile = (file) => {
+            const fr = new FileReader();
+            fr.readAsText(file);
+            fr.addEventListener('loadStart', changeStatus('starting loading'));
+            fr.addEventListener('load', changeStatus('loaded'));
+            fr.addEventListener('loadend', loaded);
+            fr.addEventListener('progress', setProgress);
+            fr.addEventListener('error', errorHandler);
+        }
+
+        function loadData(data) {
+            scatter = [], xLine = [], yLine = [], zLine = [];
+            var counter = 0; // For assigning point IDs
+            
+            // Preprocess data
+            data = data.trim();
+            let lines = data.split("\n");
+
+            // Iterate through each line of data
+            for (let i = 0; i < lines.length; i++) {
+                let tokens = lines[i].split(",");
+                let pointX = parseFloat(tokens[0]);
+                let pointY = parseFloat(tokens[1]);
+                let pointZ = parseFloat(tokens[2]);
+                // Append float data to list
+                scatter.push({x: pointX, y: pointY, z: pointZ, id: 'point_' + counter++});
+            }
+
+            // Define values for xyz scales
+            for (let i=-1; i <= 1; i=i+0.5) {
+                xLine.push([-i, 1, -1]);
+                yLine.push([-1, i, -1]);
+                zLine.push([-1, 1, -i]);
+            }
+
+            var result = [
+                point3d(scatter),
+                xScale3d([xLine]),
+                yScale3d([yLine]),
+                zScale3d([zLine])
+            ];
+
+            processData(result, 1000);
+        }
+
+        function processData(data, tt){
+            console.log("processing data");
+
+            /* ----------- POINTS ----------- */
+
+            var points = svg.selectAll('circle').data(data[0], key);
+
+            points
+                .enter()
+                .append('circle')
+                .attr('class', '_3d')
+                .attr('opacity', 0)
+                .attr('cx', posPointX)
+                .attr('cy', posPointY)
+                .merge(points)
+                .transition().duration(tt)
+                .attr('r', 3)
+                .attr('stroke', function(d){ return d3.color(color(d.id)).darker(3); })
+                .attr('fill', function(d){ return color(d.id); })
+                .attr('opacity', 1)
+                .attr('cx', posPointX)
+                .attr('cy', posPointY);
+
+            points.exit().remove();
+
+            /* ----------- x-Scale ----------- */
+
+            var xScale = svg.selectAll('path.xScale').data(data[1]);
+
+            xScale
+                .enter()
+                .append('path')
+                .attr('class', '_3d xScale')
+                .merge(xScale)
+                .attr('stroke', 'black')
+                .attr('stroke-width', .5)
+                .attr('d', xScale3d.draw);
+
+            xScale.exit().remove();
+
+            /* ----------- x-Scale Text ----------- */
+
+            var xText = svg.selectAll('text.xText').data(data[1][0]);
+
+            xText
+                .enter()
+                .append('text')
+                .attr('class', '_3d xText')
+                .attr('dx', '.3em')
+                .merge(xText)
+                .each(function(d){
+                    d.centroid = {x: d.rotated.x, y: d.rotated.y, z: d.rotated.z};
+                })
+                .attr('x', function(d){ return d.projected.x; })
+                .attr('y', function(d){ return d.projected.y; })
+                .text(function(d){ return d[0]; });
+
+            xText.exit().remove();
+
+            /* ----------- y-Scale ----------- */
+
+            var yScale = svg.selectAll('path.yScale').data(data[2]);
+
+            yScale
+                .enter()
+                .append('path')
+                .attr('class', '_3d yScale')
+                .merge(yScale)
+                .attr('stroke', 'black')
+                .attr('stroke-width', .5)
+                .attr('d', yScale3d.draw);
+
+            yScale.exit().remove();
+
+            /* ----------- y-Scale Text ----------- */
+
+            var yText = svg.selectAll('text.yText').data(data[2][0]);
+
+            yText
+                .enter()
+                .append('text')
+                .attr('class', '_3d yText')
+                .attr('dx', '.3em')
+                .merge(yText)
+                .each(function(d){
+                    d.centroid = {x: d.rotated.x, y: d.rotated.y, z: d.rotated.z};
+                })
+                .attr('x', function(d){ return d.projected.x; })
+                .attr('y', function(d){ return d.projected.y; })
+                .text(function(d){ return -d[1]; });
+
+            yText.exit().remove();
+
+            /* ----------- y-Scale ----------- */
+
+            var zScale = svg.selectAll('path.zScale').data(data[3]);
+
+            zScale
+                .enter()
+                .append('path')
+                .attr('class', '_3d zScale')
+                .merge(zScale)
+                .attr('stroke', 'black')
+                .attr('stroke-width', .5)
+                .attr('d', zScale3d.draw);
+
+            zScale.exit().remove();
+
+            /* ----------- z-Scale Text ----------- */
+
+            var zText = svg.selectAll('text.zText').data(data[3][0]);
+
+            zText
+                .enter()
+                .append('text')
+                .attr('class', '_3d yText')
+                .attr('dx', '.3em')
+                .merge(zText)
+                .each(function(d){
+                    d.centroid = {x: d.rotated.x, y: d.rotated.y, z: d.rotated.z};
+                })
+                .attr('x', function(d){ return d.projected.x; })
+                .attr('y', function(d){ return d.projected.y; })
+                .text(function(d){ return d[2]; });
+
+            zText.exit().remove();
+        }
+
+        function posPointX(d){
+            return d.projected.x;
+        }
+
+        function posPointY(d){
+            return d.projected.y;
+        }
+
+        function dragStart(){
+            mx = d3.event.x;
+            my = d3.event.y;
+        }
+
+        function dragged(){
+            mouseX = mouseX || 0;
+            mouseY = mouseY || 0;
+            beta   = (d3.event.x - mx + mouseX) * Math.PI / 230 ;
+            alpha  = (d3.event.y - my + mouseY) * Math.PI / 230  * (-1);
+            var data = [
+                point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(scatter),
+                xScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([xLine]),
+                yScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([yLine]),
+                zScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([zLine]),
+            ];
+            processData(data, 0);
+        }
+
+        function dragEnd(){
+            mouseX = d3.event.x - mx + mouseX;
+            mouseY = d3.event.y - my + mouseY;
+        }
+
+        // d3.selectAll('button').on('click', init);
+        console.log("here");
+        document.getElementById('input').addEventListener('change', (e) => {
+            const file = document.getElementById('input').files[0];
+
+            if (file) {
+                console.log("file accepted");
+                processFile(file);
+            }
+        });
+    </script>
+</body>
