@@ -12,11 +12,17 @@ class Creator extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      tab: "sum"
     }
   }
 
   componentDidMount() {
 
+  }
+
+  onTabChange(x) {
+    this.setState({ tab: x })
+    if (x === "tag") this.getTags()
   }
 
   embedCard(whatever) {
@@ -30,7 +36,7 @@ class Creator extends Component {
   render() {
 
     var detailmap = {
-      "ori":
+      "sum":
         this.embedCard(<>
           <h3>Welcome to PySOM!</h3>
         </>),
@@ -46,7 +52,6 @@ class Creator extends Component {
     return (
       <>
 
-
         <Overlay isOpen={this.state.spinning_overlay} >
           <div className='loading-overlay'>
             <Card className="loading-overlay-card">
@@ -55,7 +60,7 @@ class Creator extends Component {
           </div>
         </Overlay>
 
-        <Navbar className="navbar bp3-dark">
+        <Navbar className="navbar bp3-dark pywebview-drag-region">
           <Navbar.Group align={Alignment.LEFT}>
             <Navbar.Heading>PySOM Creator</Navbar.Heading>
             <Navbar.Divider />
@@ -75,11 +80,11 @@ class Creator extends Component {
         <div className="detail">
 
           <div className="submenubar">
-            <Tabs id="TabsExample" selectedTabId={this.state.tab}>
+            <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
               <Tab id="sum" title="Summary" />
-              <Tab id="sch" title="Editor" disabled={!this.state.sliced} />
-              <Tab id="dat" title="Data" disabled={!this.state.havefile} />
-              <Tab id="Visuliza" title="Visualization" disabled={this.state.net_basic === null} />
+              <Tab id="sch" title="Editor" />
+              <Tab id="dat" title="Data"/>
+              <Tab id="Visuliza" title="Visualization"/>
             </Tabs>
           </div>
           <div className="submenu-spacer" />
