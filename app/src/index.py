@@ -18,8 +18,11 @@ class Api:
         with open(filename, 'w') as f:
             f.write(content)
 
-    def ls(self):
-        return os.listdir('.')
+    def terminate(self):
+        webview.windows[0].destroy()
+        os.exit(0)
+
+
 
 
 def get_index_page():

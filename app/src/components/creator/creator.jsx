@@ -25,6 +25,10 @@ class Creator extends Component {
     if (x === "tag") this.getTags()
   }
 
+  requestTerminate(){
+    window.pywebview.api.terminate()
+  }
+
   embedCard(whatever) {
     return (
       <Card interactive={false} elevation={Elevation.TWO}>
@@ -44,8 +48,8 @@ class Creator extends Component {
 
     const fileMenu = (
       <Menu>
-        <MenuItem icon="label" text="Open Project"/>
-        <MenuItem icon="graph" text="New Project"/>
+        <MenuItem icon="label" text="Open Project" />
+        <MenuItem icon="graph" text="New Project" />
       </Menu>
     )
 
@@ -64,14 +68,18 @@ class Creator extends Component {
           <Navbar.Group align={Alignment.LEFT}>
             <Navbar.Heading>PySOM Creator</Navbar.Heading>
             <Navbar.Divider />
-            
+
             <Popover content={fileMenu} position={Position.BOTTOM_LEFT} placement="bottom" interactionKind="click">
-                <Button className="bp3-minimal" icon="document" text="File"/>
+              <Button className="bp3-minimal" icon="document" text="File" />
             </Popover>
 
-            <Button className="bp3-minimal" icon="graph" text="View"/>
-            <Button className="bp3-minimal" icon="help" text="Help"/>
+            <Button className="bp3-minimal" icon="graph" text="View" />
+            <Button className="bp3-minimal" icon="help" text="Help" />
 
+          </Navbar.Group>
+
+          <Navbar.Group align={Alignment.RIGHT}>
+            <Button className="bp3-minimal" icon="cross" onClick={() => this.requestTerminate()}/>
           </Navbar.Group>
         </Navbar>
 
@@ -83,8 +91,8 @@ class Creator extends Component {
             <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
               <Tab id="sum" title="Summary" />
               <Tab id="sch" title="Editor" />
-              <Tab id="dat" title="Data"/>
-              <Tab id="Visuliza" title="Visualization"/>
+              <Tab id="dat" title="Data" />
+              <Tab id="Visuliza" title="Visualization" />
             </Tabs>
           </div>
           <div className="submenu-spacer" />
