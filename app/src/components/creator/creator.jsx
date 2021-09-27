@@ -55,7 +55,7 @@ class Creator extends Component {
           </div>
         </Overlay>
 
-        <Navbar className="navbar bp3-dark">
+        <Navbar className="navbar bp3-dark pywebview-drag-region">
           <Navbar.Group align={Alignment.LEFT}>
             <Navbar.Heading>PySOM Creator</Navbar.Heading>
             <Navbar.Divider />

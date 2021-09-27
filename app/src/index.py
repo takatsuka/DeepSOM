@@ -43,5 +43,5 @@ def get_index_page():
 
 
 
-window = webview.create_window('PySOM Creator', get_index_page(), js_api=Api())
+window = webview.create_window('PySOM Creator', get_index_page(), js_api=Api(), frameless=True, easy_drag=False)
 webview.start(debug=(False if hasattr(sys,'_MEIPASS') else True))  # gui="cef")
