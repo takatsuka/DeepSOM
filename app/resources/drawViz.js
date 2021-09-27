@@ -1,9 +1,19 @@
 // Function to draw or redraw scatter plot with the given data
-function processData(data, tt){
+function drawPlot(data, tt){
     drawPoints(data[0], tt);
     drawAxis(data[1], 'x', xScale3d);
     drawAxis(data[2], 'y', yScale3d);
     drawAxis(data[3], 'z', zScale3d);
+}
+
+function updatePlot() {
+    let result = [
+        point3d(currentCoordinates[0]),
+        xScale3d(currentCoordinates[1]),
+        yScale3d(currentCoordinates[2]),
+        zScale3d(currentCoordinates[3]),
+    ];
+    drawPlot(result, 1000);
 }
 
 // Draws scatter points with inputted coordinate data

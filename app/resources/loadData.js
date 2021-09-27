@@ -1,14 +1,28 @@
 
-// Function to be called when valid file is passed
-const processFile = (file) => {
-    // Open file for reading
-    const fr = new FileReader();
+// Function to be called when valid data file is passed
+const processDataFile = (file) => {
+    // Open data file for reading
+    let fr = new FileReader();
     fr.readAsText(file);
 
     // Event listeners to trigger 
     fr.addEventListener('loadStart', changeStatus('starting loading'));
     fr.addEventListener('load', changeStatus('loaded'));
-    fr.addEventListener('loadend', loaded);
+    fr.addEventListener('loadend', dataLoaded);
+    fr.addEventListener('progress', setProgress);
+    fr.addEventListener('error', errorHandler);
+}
+
+// Function to be called when valid weights file is passed
+const processWeightsFile = (file) => {
+    // Open weights file for reading
+    let fr = new FileReader();
+    fr.readAsText(file);
+
+    // Event listeners to trigger
+    fr.addEventListener('loadStart', changeStatus('starting loading'));
+    fr.addEventListener('load', changeStatus('loaded'));
+    fr.addEventListener('loadend', weightsLoaded)
     fr.addEventListener('progress', setProgress);
     fr.addEventListener('error', errorHandler);
 }
@@ -25,11 +39,25 @@ const setProgress = (e) => {
     document.getElementById('progress-bar').value = loadingPercentage;
 }
 
-// File reader event listener to trigger when file has been loaded
-const loaded = (e) => {
+// File reader event listener to trigger when data file has been loaded
+const dataLoaded = (e) => {
     const fr = e.target;
-    var data = fr.result;
-    loadData(data);
+    let data = fr.result;
+    dataCoordinates = loadData(data);
+    currentCoordinates = dataCoordinates;
+    updatePlot();
+    // Show svg plot now that data has been loaded
+    document.getElementById('plot').style.display = "block";
+}
+
+// File reader event listener to trigger when weights file has been loaded
+const weightsLoaded = (e) => {
+    const fr = e.target;
+    let weights = fr.result;
+    weightsCoordinates = loadData(weights);
+    // Show slider now that weights have been loaded
+    document.getElementById("progressSlider").style.display = "block";
+    document.getElementById("progressSlider").oninput = updateProgressPlot;
 }
 
 // File reader event listener to trigger when file read has error
@@ -65,12 +93,11 @@ function loadData(data) {
 
     // Input data for d3 drawing
     var result = [
-        point3d(scatter),
-        xScale3d([xLine]),
-        yScale3d([yLine]),
-        zScale3d([zLine])
+        scatter,
+        [xLine],
+        [yLine],
+        [zLine]
     ];
 
-    // Preprocess data array
-    processData(result, 1000);
+    return result;
 }

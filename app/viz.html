@@ -9,17 +9,19 @@
     <link rel="stylesheet" href="resources/viz.css">
 </head>
 <body>
-    <input type="file" id="input" />
+    <input type="file" id="dataInput" />
+    <input type="file" id="weightInput" />
     <progress value="0" max="100" id="progress-bar"></progress>
     
     <div id="status"></div>
-    <svg width="960" height="680"></svg>
+    <svg id="plot" width="960" height="680"></svg>
     <div class="slidecontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="progressSlider">
+        <input type="range" min="0" max="1" value="0" class="slider" id="progressSlider">
     </div>
 
     <script>
         var mx, my, mouseX, mouseY;
+        var dataCoordinates, weightsCoordinates,currentCoordinates;
 
         /* -------- d3 object configurations -------- */
         let origin = [480, 300], j = 1, scale = 200, scatter = [], xLine = [], yLine = [], zLine = [], beta = 0, alpha = 0, key = function(d){ return d.id; }, startAngle = Math.PI/4;
@@ -80,23 +82,40 @@
             mouseY = mouseY || 0;
             beta   = (d3.event.x - mx + mouseX) * Math.PI / 230 ;
             alpha  = (d3.event.y - my + mouseY) * Math.PI / 230  * (-1);
-            var data = [
-                point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(scatter),
-                xScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([xLine]),
-                yScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([yLine]),
-                zScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)([zLine]),
+            let data = [
+                point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(currentCoordinates[0]),
+                xScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(currentCoordinates[1]),
+                yScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(currentCoordinates[2]),
+                zScale3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(currentCoordinates[3]),
             ];
-            processData(data, 0);
+            drawPlot(data, 0);
+        }
+
+        function updateProgressPlot() {
+            let value = document.getElementById('progressSlider').value;
+            if (value == 0) {
+                currentCoordinates = dataCoordinates;
+            } else {
+                currentCoordinates = weightsCoordinates;
+            }
+            updatePlot();
         }
         
         function init() {
-            document.getElementById('input').addEventListener('change', (e) => {
-                const file = document.getElementById('input').files[0];
+            document.getElementById('dataInput').addEventListener('change', (e) => {
+                const file = document.getElementById('dataInput').files[0];
                 if (file) {
                     // File is valid and start read in process
-                    processFile(file);
-                    // Show slider now that data has been loaded
-                    document.getElementById("progressSlider").style.display = "block";
+                    processDataFile(file);
+                    // Hide slider
+                    document.getElementById("progressSlider").style.display = "none";
+                }
+            });
+
+            document.getElementById('weightInput').addEventListener('change', (e) => {
+                const file = document.getElementById('weightInput').files[0];
+                if (file) {
+                    processWeightsFile(file);
                 }
             });
         }
