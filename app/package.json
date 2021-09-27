@@ -1,0 +1,43 @@
+{
+  "author": "COMP3988_T17_01_Group2",
+  "homepage": "https://bitbucket.org/ChristopherIrving/deep-som-dome/src/master/",
+  "name": "PySOM-Creator",
+  "version": "0.0.1",
+  "description": "Graphical SOM experimentation platform powered by PySOM, designed to be friendly to wide range of target users from researchers to kids.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "run-script-os",
+    "clean:default": "rm -rf dist 2>/dev/null; rm -rf gui 2>/dev/null; rm -rf build 2>/dev/null; ",
+    "clean:windows": "if exist dist rd /S /Q dist & if exist build rd /S /Q build & if exist gui rd /S /Q gui",
+    "dev": "parcel serve src/index.html",
+    "frontend:dev": "parcel build src/index.html --public-url . -d gui",
+    "frontend:prod": "parcel build src/index.html --public-url . --no-source-maps -d gui",
+    "init": "npm install && run-script-os",
+    "init:windows": "virtualenv -p python venv && .\\venv\\Scripts\\pip install -r requirements.txt",
+    "init:default": "virtualenv -p python venv && ./venv/bin/pip install -r requirements.txt",
+    "start": "npm run frontend:dev && run-script-os",
+    "start:windows": ".\\venv\\Scripts\\python src\\index.py",
+    "start:default": "./venv/bin/python src/index.py"
+  },
+  "dependencies": {
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+
+    "d3": "^6.4.0",
+    
+    "@blueprintjs/core": "^3.37.0",
+    "@blueprintjs/icons": "^3.24.0",
+    "@blueprintjs/popover2": "^0.1.1",
+    "@blueprintjs/select": "^3.15.3",
+    "@blueprintjs/table": "^3.8.20",
+    "normalize.css": "^8.0.1",
+
+    "@popperjs/core": "^2.6.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "1.12.2",
+    "run-script-os": "^1.1.5",
+    "sass": "^1.42.1",
+    "typescript": "^4.4.3"
+  }
+}
