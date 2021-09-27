@@ -12,6 +12,7 @@ class Creator extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      tab: "sum"
     }
   }
 
@@ -30,7 +31,7 @@ class Creator extends Component {
   render() {
 
     var detailmap = {
-      "ori":
+      "sum":
         this.embedCard(<>
           <h3>Welcome to PySOM!</h3>
         </>),
@@ -77,9 +78,9 @@ class Creator extends Component {
           <div className="submenubar">
             <Tabs id="TabsExample" selectedTabId={this.state.tab}>
               <Tab id="sum" title="Summary" />
-              <Tab id="sch" title="Editor" disabled={!this.state.sliced} />
-              <Tab id="dat" title="Data" disabled={!this.state.havefile} />
-              <Tab id="Visuliza" title="Visualization" disabled={this.state.net_basic === null} />
+              <Tab id="sch" title="Editor" />
+              <Tab id="dat" title="Data"/>
+              <Tab id="Visuliza" title="Visualization"/>
             </Tabs>
           </div>
           <div className="submenu-spacer" />
