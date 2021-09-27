@@ -1,0 +1,3 @@
+setuptools
+pywebview
+pyinstaller; sys_platform != 'darwin'
