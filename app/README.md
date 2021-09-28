@@ -5,10 +5,34 @@ Graphical SOM experimentation platform powered by [PySOM](), designed to be frie
 
 # Usage
 
-## Requirements
+### Requirements
+
+The following softwares are required to run the automated build system, and thus have to be installed manually on your system.
 - Python 3
 - Node, and many packages.
 - virtualenv
+
+### Install Build Dependencies
+
+* Make sure your current directory is at `./app`, if not,  `cd ./app`.
+* `npm run init`, this will install all npm packages and create a virtualenv for Python. It could take a while depends on your internet connection.
+
+
+### Run
+
+After installing the softwares above, you can use the following commands to run the application base on your focus:
+
+* `npm run dev` will bundle resources into `./gui` and bring up a dev server with support for live updating. This option is ideal when working with GUI only.
+* `npm run start` will bundle resources into `./gui` and use Python application to render the content.
+
+
+### Build
+
+*The only available target currently is macOS. Other targets are still under development*
+
+Run `npm run build` to start the bundling process. GUI will be recompiled into `./gui` with production flags and the resutlting portable application bundle will be placed in `./dist` after a successful build.
+
+
 
 
 # Features
