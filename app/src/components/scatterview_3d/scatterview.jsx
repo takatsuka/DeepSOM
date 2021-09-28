@@ -51,8 +51,8 @@ class ScatterView3D extends Component {
             .merge(points)
             .transition().duration(tt)
             .attr('r', 3)
-            .attr('stroke', function(d){ return d3.color(cm(d.id)).darker(3) })
-            .attr('fill', function(d){ return d3.color(cm(d.id)) })
+            .attr('stroke', (d) => d3.color(cm(d.id)).darker(3))
+            .attr('fill', (d) => d3.color(cm(d.id)))
             .attr('opacity', 1)
             .attr('cx', this.posPointX)
             .attr('cy', this.posPointY);
