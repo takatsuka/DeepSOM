@@ -8,11 +8,16 @@ import "./creator.scss"
 import Welcome from "../welcome/welcome"
 import ScatterView3D from "../scatterview_3d/scatterview"
 
+import ProjectExplorer from '../project_explorer/project_explorer';
+
+import SplitPane, { Pane } from 'react-split-pane';
+import "../common/splitview.scss"
+
 class Creator extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      tab: "sum", temp_vizData: [[1.0,1.0,1.0],[-1.0,-1.0,-1.0]]
+      tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]]
     }
   }
 
@@ -31,7 +36,7 @@ class Creator extends Component {
 
   temp_loadData() {
     window.pywebview.api.open_csv_file().then((d) => {
-      this.setState({temp_vizData: d})
+      this.setState({ temp_vizData: d })
     })
   }
 
@@ -47,7 +52,7 @@ class Creator extends Component {
 
     var detailmap = {
       "sum": <Welcome />,
-      "viz": <ScatterView3D data={this.state.temp_vizData}/>
+      "viz": <ScatterView3D data={this.state.temp_vizData} />
     }
 
     const fileMenu = (
@@ -79,7 +84,7 @@ class Creator extends Component {
               <Button className="bp3-minimal" icon="document" text="File" />
             </Popover>
 
-            <Button className="bp3-minimal" icon="graph" text="View" />
+            <Button className="bp3-minimal" icon="control" text="View" />
             <Button className="bp3-minimal" icon="help" text="Help" />
 
           </Navbar.Group>
@@ -89,25 +94,38 @@ class Creator extends Component {
           </Navbar.Group>
         </Navbar>
 
-
-
         <div className="detail">
+          <SplitPane split="vertical" minSize={180}>
 
-          <div className="submenubar">
-            <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
-              <Tab id="sum" title="Summary" />
-              <Tab id="sch" title="Editor" />
-              <Tab id="dat" title="Data" />
-              <Tab id="viz" title="Visualization" />
-            </Tabs>
-          </div>
-          <div className="submenu-spacer" />
+            <div className="leftpanel">
+              <ProjectExplorer />
 
-          <div className="detail-container">
-            {this.state.spinning ? <Spinner intent={Intent.PRIMARY} /> : detailmap[this.state.tab]}
-          </div>
+            </div>
 
+            <div className="detail-inner">
+
+              <div className="submenubar">
+                <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
+                  <Tab id="sum" title="Welcome"> <Icon icon="small-cross" /> </Tab>
+                  <Tab id="sch" title="SOM1 Editor"> <Icon icon="small-cross" /> </Tab>
+                  <Tab id="dat" title="Data"> <Icon icon="small-cross" /> </Tab>
+                  <Tab id="viz" title="Visualization"> <Icon icon="small-cross" /> </Tab>
+                </Tabs>
+              </div>
+              <div className="submenu-spacer" />
+
+              <div className="detail-container">
+                {this.state.spinning ? <Spinner intent={Intent.PRIMARY} /> : detailmap[this.state.tab]}
+              </div>
+
+            </div>
+
+
+          </SplitPane>
         </div>
+
+
+
 
       </>)
 

@@ -26,6 +26,7 @@
     "build": "npm run clean && npm run frontend:prod && run-script-os",
     "build:macos": "pyinstaller build-macOS.spec"
   },
+  
   "dependencies": {
     "react": "16.12.0",
     "react-dom": "16.12.0",
@@ -40,8 +41,10 @@
     "@blueprintjs/table": "^3.8.20",
     "normalize.css": "^8.0.1",
 
+    "react-split-pane": "^0.1.92",
     "@popperjs/core": "^2.6.0"
   },
+
   "devDependencies": {
     "parcel-bundler": "1.12.2",
     "run-script-os": "^1.1.5",
