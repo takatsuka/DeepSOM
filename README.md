@@ -2,6 +2,8 @@
 
 This repository contains the core library for PySOM and its essential components. 
 
+#### [Roadmap](https://christopher-irving.atlassian.net/jira/software/projects/DSD/boards/2/roadmap?shared=&atlOrigin=eyJpIjoiMGZmZDdmZjRiMGY2NDc3OWJiZTg2YmZmMjM4NDIyNTUiLCJwIjoiaiJ9)
+
 ### Structure Overview ###
 
 * `app` root for PySOM Creator standalone application.
