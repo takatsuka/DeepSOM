@@ -34,12 +34,6 @@ class Creator extends Component {
     window.pywebview.api.terminate()
   }
 
-  temp_loadData() {
-    window.pywebview.api.open_csv_file().then((d) => {
-      this.setState({ temp_vizData: d })
-    })
-  }
-
   embedCard(whatever) {
     return (
       <Card interactive={false} elevation={Elevation.TWO}>
@@ -60,7 +54,7 @@ class Creator extends Component {
         <MenuItem icon="label" text="Open Project" />
         <MenuItem icon="graph" text="New Project" />
         <Divider />
-        <MenuItem icon="graph" text="Load Viz Data" onClick={() => this.temp_loadData()} />
+        <MenuItem icon="graph" text="Import Data" />
       </Menu>
     )
 

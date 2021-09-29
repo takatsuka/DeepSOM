@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Intent, Divider, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 import "./scatterview.scss"
 
 const d3 = require("d3");
@@ -20,6 +20,10 @@ class ScatterView3D extends Component {
 
         this.d3view = React.createRef();
 
+        this.state = {
+            vizData: null, hasData: false
+        }
+
         this.mx = 0;
         this.my = 0;
         this.mouseX = 0;
@@ -27,16 +31,13 @@ class ScatterView3D extends Component {
         this.origin = [400, 400];
         this.scale = 200;
         this.startAngle = Math.PI / 4;
-        this.raw_coordinates = this.props.data;
         this.coordinates = [];
         this.point3d = null;
         this.xScale3d = null;
         this.yScale3d = null;
         this.zScale3d = null;
 
-        this.state = {
-        
-        }
+
     }
 
     componentDidMount() {
@@ -130,25 +131,26 @@ class ScatterView3D extends Component {
 
     // Record mouse coordinate at start of drag
     dragStart(event) {
-        console.log("start drag");
+        // console.log("start drag");
         this.mx = d3.pointer(event, this)[0];
         this.my = d3.pointer(event, this)[1];
     }
 
     // Record mouse coordinate at end of drag
     dragEnd(event) {
-        console.log("end drag");
+        // console.log("end drag");
         this.mouseX = d3.pointer(event, this)[0] - this.mx + this.mouseX;
         this.mouseY = d3.pointer(event, this)[1] - this.my + this.mouseY;
     }
 
     // Calculate where everything should be after dragging and redraw plot
     dragged(event) {
-        console.log(this.mouseX, this.mouseY);
+        if (!this.state.hasData) return
+        // console.log(this.mouseX, this.mouseY);
         this.mouseX = this.mouseX || 0;
         this.mouseY = this.mouseY || 0;
-        let beta = (d3.pointer(event, this)[0] - this.mx + this.mouseX) * Math.PI / 230 ;
-        let alpha = (d3.pointer(event, this)[1] - this.my + this.mouseY) * Math.PI / 230  * (-1);
+        let beta = (d3.pointer(event, this)[0] - this.mx + this.mouseX) * Math.PI / 230;
+        let alpha = (d3.pointer(event, this)[1] - this.my + this.mouseY) * Math.PI / 230 * (-1);
         let data = [
             this.point3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[0]),
             this.xScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[1]),
@@ -190,6 +192,14 @@ class ScatterView3D extends Component {
             [yLine],
             [zLine]
         ];
+    }
+
+    importDataFile() {
+        window.pywebview.api.open_csv_file().then((d) => {
+            this.setState({ vizData: d, hasData: true })
+            this.loadData(this.state.vizData);
+            this.updatePlot();
+        })
     }
 
     // Draws the scatter points and 3 axes
@@ -265,7 +275,11 @@ class ScatterView3D extends Component {
 
         // Load datapoints from file for now
         // TODO(jenny): read datapoints from json configuration as well
-        this.loadData(this.raw_coordinates);
+
+        if (this.state.vizData === null) {
+            return
+        }
+        this.loadData(this.state.vizData);
         this.updatePlot();
     }
 
@@ -277,10 +291,25 @@ class ScatterView3D extends Component {
         )
     }
     render() {
-
-
         return (
             <>
+                <div className="submenu">
+                    <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
+                        {this.state.hasData ?
+                            <>
+                                <Button disabled={true} >data</Button>
+                                <Divider />
+                            </>
+                            :
+                            <></>
+                        }
+
+                        <Button icon="document" onClick={() => this.importDataFile()}>Load</Button>
+                    </ButtonGroup>
+
+
+                </div>
+
                 <svg className="svg-render" ref={this.d3view} />
             </>)
 
