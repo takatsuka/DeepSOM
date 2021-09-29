@@ -1,6 +1,2 @@
-import unittest
-
-
-class CalculatorTester(unittest.TestCase):
-    def do_nothing(self):
-        pass
+def do_nothing():
+    pass
