@@ -29,8 +29,8 @@ class ScatterView3D extends Component {
         this.my = 0;
         this.mouseX = 0;
         this.mouseY = 0;
-        this.origin = [400, 400];
-        this.scale = 200;
+        this.origin = [300, 250];
+        this.scale = 150;
         this.startAngle = Math.PI / 4;
         this.coordinates = [];
         this.point3d = null;
