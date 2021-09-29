@@ -13,5 +13,5 @@ SOM layer, containers etc.
 Use `pysom/utils` for any non-SOM specific functionality, like activation
 functions, transition functions, learning growth/decay functions, etc.
 
-Use the base directory `pysom` to store driver code that should be imported by
-other libraries.
+Use the base directory `pysom` to store public methods that should be
+imported by other libraries.
