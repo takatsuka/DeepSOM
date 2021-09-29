@@ -26,11 +26,10 @@ pipelines:
   branches: # Pipelines that run automatically on a commit to a branch can also be triggered manually
     tony-package-sandbox:
       - step:
-          name: unittest coverage
+          name: Test with coverage
           caches:
             - pip
           script:
             - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
             - pip install coverage
-            - coverage run -m unittest discover ./tests/
-            - coverage html --omit="*/tests/*,*__init__.py" -d tests/report
+            - coverage run -m pytest -v --junitxml=test-reports/report.xml tests/

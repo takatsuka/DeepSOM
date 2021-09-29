@@ -11,10 +11,6 @@ class Testing(unittest.TestCase):
         a = True
         b = True
         self.assertEqual(a, b)
-        
-    # bad egg
-    def test_add(self):
-        self.assertNotEqual(1, 1)
 
 
 if __name__ == '__main__':
