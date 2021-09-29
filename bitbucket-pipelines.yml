@@ -14,22 +14,11 @@ pipelines:
               - pip
             script:
               - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-              - pip install pytest
-              - pytest -v tests/* --junitxml=test-reports/report.xml
+            - pip install coverage pytest
+            - coverage run -m pytest -v --junitxml=test-reports/report.xml tests/
         - step:
             name: Lint code
             script:
               # Enforce style consistency across Python projects https://flake8.pycqa.org/en/latest/manpage.html
               - pip install flake8
               - flake8 . --extend-exclude=dist,build,playgrounds --ignore=E701,E402,E731,E501,E711,W293,F401,E741 --show-source --statistics
-
-  branches: # Pipelines that run automatically on a commit to a branch can also be triggered manually
-    tony-package-sandbox:
-      - step:
-          name: Test with coverage
-          caches:
-            - pip
-          script:
-            - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-            - pip install coverage pytest
-            - coverage run -m pytest -v --junitxml=test-reports/report.xml tests/
