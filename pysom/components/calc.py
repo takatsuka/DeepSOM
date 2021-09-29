@@ -16,8 +16,7 @@ class Calculator:
     def do(self, arg1: float, arg2: float) -> float:
         """
         Wrapper functionality to allow the calculator functionality to be
-        called by name. For example, calc.do(add) can be used instead of
-        calc.funcs.add()
+        called by name.
 
         Args:
             arg1 (float): the first operand
