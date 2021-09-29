@@ -1,8 +1,8 @@
-from components.calc import Calculator
-from utils.add import add
-from utils.subtract import subtract
-from utils.multiply import multiply
-from utils.divide import divide
+from .components.calc import Calculator
+from .utils.add import add
+from .utils.subtract import subtract
+from .utils.multiply import multiply
+from .utils.divide import divide
 
 
 class DeepCalculator():
