@@ -81,3 +81,7 @@ venv/
 gui/
 build/
 dist/
+
+# Cached files
+**venv**
+**.vscode**
