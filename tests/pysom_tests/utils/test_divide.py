@@ -2,7 +2,7 @@ import unittest
 from pysom.utils.divide import divide
 
 
-class AddTester(unittest.TestCase):
+class DivideTester(unittest.TestCase):
     def test_divide_basic(self):
         self.assertAlmostEqual(7.0, divide(14.0, 2.0))
         
