@@ -8,16 +8,34 @@ import "./scatterview.scss"
 const d3 = require("d3");
 import { _3d } from 'd3-3d';
 
-
 class ScatterView3D extends Component {
+
     constructor(props) {
         super(props)
 
-        this.initView = this.initView.bind(this)
-        this.d3view = React.createRef()
+        this.initView = this.initView.bind(this);
+        this.drawAxis = this.drawAxis.bind(this);
+        this.updatePlot = this.updatePlot.bind(this);
+        this.drawPlot = this.drawPlot.bind(this);
+
+        this.d3view = React.createRef();
+
+        this.mx = 0;
+        this.my = 0;
+        this.mouseX = 0;
+        this.mouseY = 0;
+        this.origin = [400, 400];
+        this.scale = 200;
+        this.startAngle = Math.PI / 4;
+        this.raw_coordinates = this.props.data;
+        this.coordinates = [];
+        this.point3d = null;
+        this.xScale3d = null;
+        this.yScale3d = null;
+        this.zScale3d = null;
 
         this.state = {
-
+        
         }
     }
 
@@ -39,7 +57,6 @@ class ScatterView3D extends Component {
     drawPoints(data, tt) {
         const svg = this.svg
         const cm = this.colorMap
-        console.log(this)
         var points = svg.selectAll('circle').data(data, (d) => { d.id });
         points
             .enter()
@@ -61,20 +78,8 @@ class ScatterView3D extends Component {
     }
 
     // Draws axis scale and text
-    drawAxis(data, axis, _3dObject) {
+    drawAxis(data, axis, object) {
         const svg = this.svg
-        // Draw scale
-        let scale = svg.selectAll('path.' + axis + "Scale").data(data);
-        scale
-            .enter()
-            .append('path')
-            .attr('class', '_3d ' + axis + "Scale")
-            .merge(scale)
-            .attr('stroke', 'black')
-            .attr('stroke-width', .5)
-            .attr('d', _3dObject.draw);
-
-        scale.exit().remove();
 
         // Determine dimension to read from and write to
         let dimension = 0;
@@ -91,6 +96,19 @@ class ScatterView3D extends Component {
             default:
                 break;
         }
+
+        // Draw scale
+        let scale = svg.selectAll('path.' + axis + "Scale").data(data);
+        scale
+            .enter()
+            .append('path')
+            .attr('class', '_3d ' + axis + "Scale")
+            .merge(scale)
+            .attr('stroke', 'black')
+            .attr('stroke-width', .5)
+            .attr('d', object.draw);
+
+        scale.exit().remove();
 
         // Write scale text
         let text = svg.selectAll('text.' + axis + 'Text').data(data[0]);
@@ -110,14 +128,41 @@ class ScatterView3D extends Component {
         text.exit().remove();
     }
 
+    // Record mouse coordinate at start of drag
+    dragStart(event) {
+        console.log("start drag");
+        this.mx = d3.pointer(event, this)[0];
+        this.my = d3.pointer(event, this)[1];
+    }
+
+    // Record mouse coordinate at end of drag
+    dragEnd(event) {
+        console.log("end drag");
+        this.mouseX = d3.pointer(event, this)[0] - this.mx + this.mouseX;
+        this.mouseY = d3.pointer(event, this)[1] - this.my + this.mouseY;
+    }
+
+    dragged(event) {
+        this.mouseX = this.mouseX || 0;
+        this.mouseY = this.mouseY || 0;
+        let beta = (d3.pointer(event, this)[0] - this.mx + this.mouseX) * Math.PI / 230 ;
+        let alpha = (d3.pointer(event, this)[1] - this.my + this.mouseY) * Math.PI / 230  * (-1);
+        let data = [
+            this.point3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[0]),
+            this.xScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[1]),
+            this.yScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[2]),
+            this.zScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[3])
+        ];
+
+        this.drawPlot(data, 0);
+    }
+
 
     // Function to run when file is successfully loaded and contents are read in
     // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     loadData(data) {
         var scatter = [], xLine = [], yLine = [], zLine = [];
         var counter = 0; // For assigning point IDs
-
-
 
         // Iterate through each line of data
         for (let i = 0; i < data.length; i++) {
@@ -137,77 +182,82 @@ class ScatterView3D extends Component {
         }
 
         // Input data for d3 drawing
-        var result = [
+        this.coordinates = [
             scatter,
             [xLine],
             [yLine],
             [zLine]
         ];
+    }
 
-        return result;
+    drawPlot(result, tt) {
+        this.drawPoints(result[0], tt);
+        this.drawAxis(result[1], 'x', this.xScale3d);
+        this.drawAxis(result[2], 'y', this.yScale3d);
+        this.drawAxis(result[3], 'z', this.zScale3d);
+    }
+
+    updatePlot() {
+        let result = [
+            this.point3d(this.coordinates[0]),
+            this.xScale3d(this.coordinates[1]),
+            this.yScale3d(this.coordinates[2]),
+            this.zScale3d(this.coordinates[3]),
+        ];
+
+        this.drawPlot(result, 1000);
     }
 
     initView() {
+        /* -------- d3 object initialisations -------- */
         const svg = d3.select(this.d3view.current)
+            .call(d3.drag().on('start', this.dragStart)
+                .on('end', this.dragEnd)
+                .on('drag', event => {
+                    this.dragged(event);
+                })
+            ).append('g');
         this.svg = svg
         this.colorMap = d3.scaleOrdinal(d3.schemeCategory10);
-        const rawData = this.loadData(this.props.data) // TODO: 
 
-
-
-        var mx, my, mouseX, mouseY;
-        var dataCoordinates, weightsCoordinates;
-
-        /* -------- d3 object configurations -------- */
-        let origin = [480, 300], j = 1, scale = 200, scatter = [], xLine = [], yLine = [], zLine = [], beta = 0, alpha = 0, key = function (d) { return d.id; }, startAngle = Math.PI / 4;
-
-
-        /* -------- d3 object initialisations -------- */
         // Points
-        let point3d = _3d()
+        this.point3d = _3d()
             .x(function (d) { return d.x; })
-            .y(function (d) { return d.y; })
+            .y(function (d) { return -d.y; })
             .z(function (d) { return d.z; })
-            .origin(origin)
-            .rotateY(startAngle)
-            .rotateX(-startAngle)
-            .scale(scale);
+            .origin(this.origin)
+            .rotateY(this.startAngle)
+            .rotateX(-this.startAngle)
+            .scale(this.scale);
 
         // X axis
-        let xScale3d = _3d()
+        this.xScale3d = _3d()
             .shape('LINE_STRIP')
-            .origin(origin)
-            .rotateY(startAngle)
-            .rotateX(-startAngle)
-            .scale(scale);
+            .origin(this.origin)
+            .rotateY(this.startAngle)
+            .rotateX(-this.startAngle)
+            .scale(this.scale);
 
         // Y axis
-        let yScale3d = _3d()
+        this.yScale3d = _3d()
             .shape('LINE_STRIP')
-            .origin(origin)
-            .rotateY(startAngle)
-            .rotateX(-startAngle)
-            .scale(scale);
+            .origin(this.origin)
+            .rotateY(this.startAngle)
+            .rotateX(-this.startAngle)
+            .scale(this.scale);
 
         // Z axis
-        let zScale3d = _3d()
+        this.zScale3d = _3d()
             .shape('LINE_STRIP')
-            .origin(origin)
-            .rotateY(startAngle)
-            .rotateX(-startAngle)
-            .scale(scale);
+            .origin(this.origin)
+            .rotateY(this.startAngle)
+            .rotateX(-this.startAngle)
+            .scale(this.scale);
 
-        let currentCoordinates = [
-            point3d(rawData[0]),
-            xScale3d(rawData[1]),
-            yScale3d(rawData[2]),
-            zScale3d(rawData[3]),
-        ];
-
-        this.drawPoints(currentCoordinates[0], 1);
-        this.drawAxis(currentCoordinates[1], 'x', xScale3d);
-        this.drawAxis(currentCoordinates[2], 'y', yScale3d);
-        this.drawAxis(currentCoordinates[3], 'z', zScale3d);
+        // Load datapoints from file for now
+        // TODO(jenny): read datapoints from json configuration as well
+        this.loadData(this.raw_coordinates);
+        this.updatePlot();
     }
 
     embedCard(whatever) {
@@ -217,7 +267,6 @@ class ScatterView3D extends Component {
             </Card>
         )
     }
-
     render() {
 
 
