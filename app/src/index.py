@@ -30,7 +30,7 @@ class Api:
             return None
 
         lines = open(filename).readlines()
-        return [l.strip().split(',') for l in lines]
+        return os.path.basename(filename), [l.strip().split(',') for l in lines]
 
     def terminate(self):
         webview.windows[0].destroy()
