@@ -14,8 +14,8 @@ pipelines:
               - pip
             script:
               - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-            - pip install coverage pytest
-            - coverage run -m pytest -v --junitxml=test-reports/report.xml tests/
+              - pip install coverage pytest
+              - coverage run -m pytest -v --junitxml=test-reports/report.xml tests/
         - step:
             name: Lint code
             script:
