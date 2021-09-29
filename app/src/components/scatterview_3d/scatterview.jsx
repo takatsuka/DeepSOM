@@ -142,7 +142,9 @@ class ScatterView3D extends Component {
         this.mouseY = d3.pointer(event, this)[1] - this.my + this.mouseY;
     }
 
+    // Calculate where everything should be after dragging and redraw plot
     dragged(event) {
+        console.log(this.mouseX, this.mouseY);
         this.mouseX = this.mouseX || 0;
         this.mouseY = this.mouseY || 0;
         let beta = (d3.pointer(event, this)[0] - this.mx + this.mouseX) * Math.PI / 230 ;
@@ -190,6 +192,7 @@ class ScatterView3D extends Component {
         ];
     }
 
+    // Draws the scatter points and 3 axes
     drawPlot(result, tt) {
         this.drawPoints(result[0], tt);
         this.drawAxis(result[1], 'x', this.xScale3d);
@@ -197,6 +200,7 @@ class ScatterView3D extends Component {
         this.drawAxis(result[3], 'z', this.zScale3d);
     }
 
+    // Function to update the current plot and redraw, created for slider feature when moving between plots
     updatePlot() {
         let result = [
             this.point3d(this.coordinates[0]),
@@ -211,8 +215,13 @@ class ScatterView3D extends Component {
     initView() {
         /* -------- d3 object initialisations -------- */
         const svg = d3.select(this.d3view.current)
-            .call(d3.drag().on('start', this.dragStart)
-                .on('end', this.dragEnd)
+            .call(d3.drag()
+                .on('start', event => {
+                    this.dragStart(event);
+                })
+                .on('end', event => {
+                    this.dragEnd(event);
+                })
                 .on('drag', event => {
                     this.dragged(event);
                 })
