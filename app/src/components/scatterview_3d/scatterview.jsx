@@ -21,6 +21,7 @@ class ScatterView3D extends Component {
         this.d3view = React.createRef();
 
         this.state = {
+            datasetName: "",
             vizData: null, hasData: false
         }
 
@@ -196,7 +197,7 @@ class ScatterView3D extends Component {
 
     importDataFile() {
         window.pywebview.api.open_csv_file().then((d) => {
-            this.setState({ vizData: d, hasData: true })
+            this.setState({ vizData: d[1], hasData: true, datasetName: d[0] })
             this.loadData(this.state.vizData);
             this.updatePlot();
         })
@@ -297,7 +298,7 @@ class ScatterView3D extends Component {
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
                         {this.state.hasData ?
                             <>
-                                <Button disabled={true} >data</Button>
+                                <Button disabled={true} >{this.state.datasetName}</Button>
                                 <Divider />
                             </>
                             :
