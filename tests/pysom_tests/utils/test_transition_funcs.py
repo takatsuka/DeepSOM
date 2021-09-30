@@ -30,8 +30,9 @@ def test_concat_binary_basic_2():
     assert all([a == b for a, b in zip(expected, output)])
     assert len(expected) == len(output)
 
+
 # randomnness makes it difficult to test against an expected output, this seems reverse logic
-def test_concat_binary_basic_2():
+def test_concat_binary_basic_3():
     vector = np.array([9, 21, 3])
     som = Som(3, 3, 3)
 
@@ -45,7 +46,7 @@ def test_concat_binary_basic_2():
     assert len(expected) == len(output)
 
 
-def test_concat_binary_basic_3():
+def test_concat_binary_basic_4():
     vector = np.array([0, 1, 0, 21, -5])
     som = Som(3, 3, 5)
 
