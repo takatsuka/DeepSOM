@@ -1,7 +1,12 @@
 from pysom.components.som import Som
 from pysom.utils import decay_funcs as functions
 import numpy as np
-import math
+
+
+# helper function
+def dist(vector_1, vector_2):
+    dims = len(vector_1)
+    return np.nansum([(vector_1[i] - vector_2[i]) ** 2 for i in range(dims)])
 
 
 def test_initialise():
@@ -52,12 +57,12 @@ def test_find_bmu():
     bmu_idx = som.get_idx_closest(vector)
     bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
 
-    d = math.dist(vector, bmu)
+    d = dist(vector, bmu)
 
     for i in range(len(som.mat)):
         for j in range(len(som.mat[i])):
 
-            assert d <= math.dist(vector, som.mat[i, j])
+            assert d <= dist(vector, som.mat[i, j])
 
 
 def test_find_bmu_2():
@@ -68,12 +73,12 @@ def test_find_bmu_2():
     bmu_idx = som.get_idx_closest(vector)
     bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
 
-    d = math.dist(vector, bmu)
+    d = dist(vector, bmu)
 
     for i in range(len(som.mat)):
         for j in range(len(som.mat[i])):
 
-            assert d <= math.dist(vector, som.mat[i, j])
+            assert d <= dist(vector, som.mat[i, j])
 
 
 def test_find_bmu_3():
@@ -84,8 +89,8 @@ def test_find_bmu_3():
     bmu_idx = som.get_idx_closest(vector)
     bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
 
-    d = math.dist(vector, bmu)
+    d = dist(vector, bmu)
 
     for i in range(len(som.mat)):
         for j in range(len(som.mat[i])):
-            assert d <= math.dist(vector, som.mat[i, j])
+            assert d <= dist(vector, som.mat[i, j])
