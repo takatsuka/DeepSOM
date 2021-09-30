@@ -1,6 +1,7 @@
 from pysom.components.som import Som
 from pysom.utils import decay_funcs as functions
 import numpy as np
+import math
 
 
 def test_initialise():
@@ -41,3 +42,17 @@ def test_customise():
     assert len(bmu_idx) == 2
     bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
     assert (som.indim,) == bmu.shape
+
+def test_find_bmu():
+    data = np.array([[1, 5], [3, 6], [-2, 10]])
+    som = Som(3, len(data), 2)
+    vector = np.array([1, 2])
+
+    bmu_idx = som.get_idx_closest(vector)
+    bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
+
+    d = math.dist(vector, bmu)
+    for i in range(len(som.mat)):
+        for j in range(len(som.mat[i])):
+
+            assert d <= math.dist(vector, som.mat[i, j])
