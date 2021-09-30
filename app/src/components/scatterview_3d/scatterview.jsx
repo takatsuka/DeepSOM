@@ -48,7 +48,7 @@ class ScatterView3D extends Component {
     componentDidMount() {
         this.initView();
         this.updateWindow();
-        
+
     }
 
     // Predefined function to return x coordinate for drawing purposes
@@ -330,8 +330,8 @@ class ScatterView3D extends Component {
     updateWindow() {
         let innerWidth = window.innerWidth - 180;
         let innerHeight = window.innerHeight - 120;
-        this.origin = [innerWidth/2, innerHeight/2];
-        this.scale = innerWidth/620 > innerHeight/480 ? innerHeight/480*100 : innerWidth/620*100;
+        this.origin = [innerWidth / 2, innerHeight / 2];
+        this.scale = innerWidth / 620 > innerHeight / 480 ? innerHeight / 480 * 100 : innerWidth / 620 * 100;
         console.log(this.scale);
         this.updateObjects();
         if (this.state.hasData) this.updatePlot();
@@ -340,7 +340,7 @@ class ScatterView3D extends Component {
     // Function to update state on whether to show SOM training data or not based on slider
     handleShowTrainingChange() {
         this.setState((state) => {
-            return {showTraining: !state.showTraining}
+            return { showTraining: !state.showTraining }
         }, () => { this.updatePlot(); });
     }
 
@@ -359,7 +359,11 @@ class ScatterView3D extends Component {
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
                         {this.state.hasData ?
                             <>
-                                <Switch disabled={!this.state.hasTraining} className="switch" checked={this.state.showTraining} label="Show training" onChange={this.handleShowTrainingChange} />
+                                <Switch disabled={!this.state.hasTraining} className="switch"
+                                    checked={this.state.showTraining}
+                                    label="Show training"
+                                    onChange={this.handleShowTrainingChange} />
+                                    
                                 <Button disabled={true} >{this.state.datasetName}</Button>
                                 <Divider />
                             </>
@@ -374,7 +378,7 @@ class ScatterView3D extends Component {
 
                 </div>
                 <svg className="svg-render" ref={this.d3view} />
-                
+
             </>)
 
     }
