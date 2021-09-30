@@ -44,7 +44,7 @@ def test_customise():
     assert (som.indim,) == bmu.shape
 
 
-def test_find_bmu():
+def test_find_bmu_2d():
     data = np.array([[1, 5], [3, 6], [-2, 10]])
     som = Som(3, len(data), 2)
     vector = np.array([1, 2])
@@ -56,4 +56,18 @@ def test_find_bmu():
     for i in range(len(som.mat)):
         for j in range(len(som.mat[i])):
 
+            assert d <= math.dist(vector, som.mat[i, j])
+
+
+def test_find_bmu_3d():
+    data = np.array([[1, 5, 2], [3, 6, 4], [-2, 10, 8]])
+    som = Som(3, len(data), 3)
+    vector = np.array([9, 21, 3])
+
+    bmu_idx = som.get_idx_closest(vector)
+    bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
+
+    d = math.dist(vector, bmu)
+    for i in range(len(som.mat)):
+        for j in range(len(som.mat[i])):
             assert d <= math.dist(vector, som.mat[i, j])
