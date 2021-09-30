@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Switch, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 import "./scatterview.scss"
 
 const d3 = require("d3");
@@ -17,6 +17,7 @@ class ScatterView3D extends Component {
         this.drawAxis = this.drawAxis.bind(this);
         this.updatePlot = this.updatePlot.bind(this);
         this.drawPlot = this.drawPlot.bind(this);
+        this.handleShowTrainingChange = this.handleShowTrainingChange.bind(this);
 
         this.d3view = React.createRef();
 
@@ -24,7 +25,7 @@ class ScatterView3D extends Component {
         this.my = 0;
         this.mouseX = 0;
         this.mouseY = 0;
-        this.origin = [300, 250];
+        this.origin = [300, 300];
         this.scale = 150;
         this.startAngle = Math.PI / 4;
         this.raw_coordinates = this.props.data;
@@ -35,7 +36,7 @@ class ScatterView3D extends Component {
         this.zScale3d = null;
 
         this.state = {
-        
+            showTraining: false,
         }
     }
 
@@ -269,6 +270,12 @@ class ScatterView3D extends Component {
         this.updatePlot();
     }
 
+    handleShowTrainingChange() {
+        this.setState((state) => {
+            return {showTraining: !state.showTraining}
+        });
+    }
+
     embedCard(whatever) {
         return (
             <Card interactive={false} elevation={Elevation.TWO}>
@@ -276,11 +283,14 @@ class ScatterView3D extends Component {
             </Card>
         )
     }
-    render() {
 
+    render() {
 
         return (
             <>
+                <div className="switch">
+                    <Switch  checked={this.state.showTraining} label="Show training" onChange={this.handleShowTrainingChange} />
+                </div>
                 <svg className="svg-render" ref={this.d3view} />
             </>)
 
