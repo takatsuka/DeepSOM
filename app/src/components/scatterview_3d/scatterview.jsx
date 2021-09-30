@@ -24,7 +24,7 @@ class ScatterView3D extends Component {
         this.state = {
             datasetName: "",
             vizData: null, hasData: false,
-            showTraining: false,
+            showTraining: false, trainingData: null, hasTraining: false,
         }
 
         this.mx = 0;
@@ -35,7 +35,9 @@ class ScatterView3D extends Component {
         this.scale = 150;
         this.startAngle = Math.PI / 4;
         this.coordinates = [];
+        this.weights = [];
         this.point3d = null;
+        this.weights3d = null;
         this.xScale3d = null;
         this.yScale3d = null;
         this.zScale3d = null;
@@ -158,6 +160,7 @@ class ScatterView3D extends Component {
         let alpha = (d3.pointer(event, this)[1] - this.my + this.mouseY) * Math.PI / 230 * (-1);
         let data = [
             this.point3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[0]),
+            this.weights3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.weights),
             this.xScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[1]),
             this.yScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[2]),
             this.zScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[3])
@@ -191,34 +194,49 @@ class ScatterView3D extends Component {
         }
 
         // Input data for d3 drawing
-        this.coordinates = [
+        let input = [
             scatter,
             [xLine],
             [yLine],
             [zLine]
         ];
+
+        return input;
     }
 
     importDataFile() {
         window.pywebview.api.open_csv_file().then((d) => {
             this.setState({ vizData: d[1], hasData: true, datasetName: d[0], showTraining: false })
-            this.loadData(this.state.vizData);
+            this.coordinates = this.loadData(this.state.vizData);
             this.updatePlot();
         })
+    }
+
+    importWeightsFile() {
+        window.pywebview.api.open_csv_file().then((d) => {
+            this.setState({ trainingData: d[1], hasTraining: true, showTraining: true });
+            this.weights = this.loadData(this.state.trainingData)[0];
+            this.updatePlot();
+        });
     }
 
     // Draws the scatter points and 3 axes
     drawPlot(result, tt) {
         this.drawPoints(result[0], tt);
-        this.drawAxis(result[1], 'x', this.xScale3d);
-        this.drawAxis(result[2], 'y', this.yScale3d);
-        this.drawAxis(result[3], 'z', this.zScale3d);
+        if (this.state.showTraining) {
+            console.log("here");
+            this.drawPoints(result[1], tt);
+        }
+        this.drawAxis(result[2], 'x', this.xScale3d);
+        this.drawAxis(result[3], 'y', this.yScale3d);
+        this.drawAxis(result[4], 'z', this.zScale3d);
     }
 
     // Function to update the current plot and redraw, created for slider feature when moving between plots
     updatePlot() {
         let result = [
             this.point3d(this.coordinates[0]),
+            this.weights3d(this.weights),
             this.xScale3d(this.coordinates[1]),
             this.yScale3d(this.coordinates[2]),
             this.zScale3d(this.coordinates[3]),
@@ -244,8 +262,18 @@ class ScatterView3D extends Component {
         this.svg = svg
         this.colorMap = d3.scaleOrdinal(d3.schemeCategory10);
 
-        // Points
+        // Data points
         this.point3d = _3d()
+            .x(function (d) { return d.x; })
+            .y(function (d) { return -d.y; })
+            .z(function (d) { return d.z; })
+            .origin(this.origin)
+            .rotateY(this.startAngle)
+            .rotateX(-this.startAngle)
+            .scale(this.scale);
+
+        // Weight points
+        this.weights3d = _3d()
             .x(function (d) { return d.x; })
             .y(function (d) { return -d.y; })
             .z(function (d) { return d.z; })
@@ -280,18 +308,12 @@ class ScatterView3D extends Component {
 
         // Load datapoints from file for now
         // TODO(jenny): read datapoints from json configuration as well
-
-        if (this.state.vizData === null) {
-            return
-        }
-        this.loadData(this.state.vizData);
-        this.updatePlot();
     }
 
     handleShowTrainingChange() {
         this.setState((state) => {
             return {showTraining: !state.showTraining}
-        });
+        }, () => { this.updatePlot(); });
     }
 
     embedCard(whatever) {
@@ -309,7 +331,7 @@ class ScatterView3D extends Component {
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
                         {this.state.hasData ?
                             <>
-                                <Switch  className="switch" checked={this.state.showTraining} label="Show training" onChange={this.handleShowTrainingChange} />
+                                <Switch disabled={!this.state.hasTraining} className="switch" checked={this.state.showTraining} label="Show training" onChange={this.handleShowTrainingChange} />
                                 <Button disabled={true} >{this.state.datasetName}</Button>
                                 <Divider />
                             </>
@@ -317,7 +339,8 @@ class ScatterView3D extends Component {
                             <></>
                         }
 
-                        <Button icon="document" onClick={() => this.importDataFile()}>Load</Button>
+                        <Button icon="document" onClick={() => this.importDataFile()}>Load Data</Button>
+                        <Button icon="document" disabled={!this.state.hasData} onClick={() => this.importWeightsFile()}>Load Weights</Button>
                     </ButtonGroup>
 
 
