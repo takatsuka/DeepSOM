@@ -43,3 +43,17 @@ def test_concat_binary_basic_2():
 
     assert all([a == b for a, b in zip(expected, output)])
     assert len(expected) == len(output)
+
+
+def test_concat_binary_basic_3():
+    vector = np.array([0, 1, 0, 21, -5])
+    som = Som(3, 3, 5)
+
+    expected = np.zeros(som.width * som.height)
+    bmu_coords = som.get_idx_closest(vector)
+    expected[bmu_coords[0] * som.height + bmu_coords[1]] = 1
+
+    output = concat_binary(vector, som)
+
+    assert all([a == b for a, b in zip(expected, output)])
+    assert len(expected) == len(output)
