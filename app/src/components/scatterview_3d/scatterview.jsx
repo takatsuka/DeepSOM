@@ -51,6 +51,10 @@ class ScatterView3D extends Component {
 
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindow)
+    }
+
     // Predefined function to return x coordinate for drawing purposes
     posPointX(d) {
         return d.projected.x;
