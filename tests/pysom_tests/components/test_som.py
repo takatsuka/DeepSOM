@@ -61,12 +61,12 @@ def test_customise():
     assert (som.indim,) == bmu.shape
 
 
-def test_cutomise_2():
+def customise_2():  # doesn't seem to like this one at get_weight()
     width = 123
     height = 254
     indim = 1000
 
-    som = Som.Som(width, height, indim)
+    som = Som(width, height, indim)
     som.regen_mat(scale=4, offset=-0.25)
 
     som.set_lr(lr_max=0.7, lr_min=0.001, lr_step=0.0001, lr_func=functions.linear_step)

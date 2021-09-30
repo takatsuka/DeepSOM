@@ -1,6 +1,7 @@
 import numpy as np
 from pysom.utils import decay_funcs as functions
 
+
 # Defaults
 LR_MAX = 0.7
 LR_MIN = 0.1
@@ -19,7 +20,7 @@ def regen_mat(width, height, indim, scale, offset):
 
 def get_idx_closest(example, mat, in_dist_p):
     flat_idx = np.argmin(np.linalg.norm(mat - example, ord=in_dist_p, axis=2))
-    return (flat_idx // mat.shape[0], flat_idx % mat.shape[1])
+    return (flat_idx // mat.shape[1], flat_idx % mat.shape[1])
 
 
 def learn(example, epoch, mat, mat_coord, lr, rad, in_dist_p, out_dist_p):
@@ -39,16 +40,11 @@ def set_epoch(epoch, lr_max, lr_min, lr_step, lr_func, rad_max, rad_min, rad_ste
     return lr, rad
 
 
-def som_activate(example, mat, in_dist_p):
-    flat_idx = np.argmin(np.linalg.norm(mat - example, ord=in_dist_p, axis=2))
-    return (flat_idx // mat.shape[0], flat_idx % mat.shape[1])
-
-
 def som_learn_batch(batch, mat, mat_coord, lr, rad, in_dist_p, out_dist_p):
     w, h, _ = mat.shape
-
+    batch
     for example in batch:
-        bmu = som_activate(example, mat, in_dist_p)
+        bmu = get_idx_closest(example, mat, in_dist_p)
 
         dists_mat = np.linalg.norm(mat_coord - np.array(bmu), ord=out_dist_p, axis=2)
         influence_mat = np.exp(-(dists_mat * (1 / rad)) ** 2).reshape(w, h, 1)
