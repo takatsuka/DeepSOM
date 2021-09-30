@@ -57,6 +57,7 @@ class Creator extends Component {
         <MenuItem icon="graph" text="Import Data" />
       </Menu>
     )
+    
 
     return (
       <>
@@ -74,7 +75,7 @@ class Creator extends Component {
             <Navbar.Heading>PySOM Creator</Navbar.Heading>
             <Navbar.Divider />
 
-            <Popover content={fileMenu} position={Position.BOTTOM_LEFT} placement="bottom" interactionKind="click">
+            <Popover content={fileMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
               <Button className="bp3-minimal" icon="document" text="File" />
             </Popover>
 
