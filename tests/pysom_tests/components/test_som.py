@@ -43,6 +43,7 @@ def test_customise():
     bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
     assert (som.indim,) == bmu.shape
 
+
 def test_find_bmu():
     data = np.array([[1, 5], [3, 6], [-2, 10]])
     som = Som(3, len(data), 2)
