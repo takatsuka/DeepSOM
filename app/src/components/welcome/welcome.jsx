@@ -10,12 +10,19 @@ class Welcome extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            a: 8, b:0.28, c:0
+            a: Math.random() * 10, b:0.28, c:0
         }
     }
 
     componentDidMount() {
+        var state = this.props.pullState()
+        if(state != null){
+            this.setState(state)
+        }
+    }
 
+    componentWillUnmount() {
+        this.props.saveState(this.state)
     }
 
 
@@ -32,12 +39,10 @@ class Welcome extends Component {
     }
 
     render() {
-
-
         return (
             <>
                 {this.embedCard(<>
-                    <h1>Welcome to PySOM</h1>
+                    <h1>Welcome to PySOM {this.props.tabID}</h1>
                     {this.embedCard(
                     <div>
                     <h3>Sliders drag</h3>

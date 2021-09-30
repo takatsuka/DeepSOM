@@ -11,23 +11,34 @@ import ScatterView3D from "../scatterview_3d/scatterview"
 import ProjectExplorer from '../project_explorer/project_explorer';
 
 import SplitPane, { Pane } from 'react-split-pane';
+
+import TabsManager from '../common/tabsmanager';
+
 import "../common/splitview.scss"
 
 class Creator extends Component {
   constructor(props) {
     super(props)
+
+    this.tabman = React.createRef();
+
     this.state = {
-      tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]]
+      tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]],
+      tabs: []
     }
   }
 
   componentDidMount() {
-
+    
   }
 
   onTabChange(x) {
     this.setState({ tab: x })
     if (x === "tag") this.getTags()
+  }
+
+  onTabsUpdated(list) {
+    this.setState({tabs: list, tab: list[0].id})
   }
 
   requestTerminate() {
@@ -57,7 +68,7 @@ class Creator extends Component {
         <MenuItem icon="graph" text="Import Data" />
       </Menu>
     )
-    
+
     const viewMenu = (
       <Menu>
         <MenuItem icon="chat" text="Welcome" />
@@ -66,7 +77,6 @@ class Creator extends Component {
         <MenuItem icon="heatmap" text="Import Data" />
       </Menu>
     )
-
 
     return (
       <>
@@ -89,10 +99,10 @@ class Creator extends Component {
             </Popover>
 
             <Popover content={viewMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-            <Button className="bp3-minimal" icon="control" text="View" />
+              <Button className="bp3-minimal" icon="control" text="View" />
             </Popover>
 
-            
+
             <Button className="bp3-minimal" icon="help" text="Help" />
 
           </Navbar.Group>
@@ -114,16 +124,15 @@ class Creator extends Component {
 
               <div className="submenubar">
                 <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
-                  <Tab id="sum" title="Welcome"> <Icon icon="small-cross" /> </Tab>
-                  <Tab id="sch" title="SOM1 Editor"> <Icon icon="small-cross" /> </Tab>
-                  <Tab id="dat" title="Data"> <Icon icon="small-cross" /> </Tab>
-                  <Tab id="viz" title="Visualization"> <Icon icon="small-cross" /> </Tab>
+                  {this.state.tabs.map((t) => (
+                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" /> </Tab>
+                  ))}
                 </Tabs>
               </div>
               <div className="submenu-spacer" />
 
               <div className="detail-container">
-                {this.state.spinning ? <Spinner intent={Intent.PRIMARY} /> : detailmap[this.state.tab]}
+                <TabsManager ref={this.tabman} activeTab={this.state.tab} onTabsListChanged={(x) => this.onTabsUpdated(x)}/>
               </div>
 
             </div>
