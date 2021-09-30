@@ -29,7 +29,7 @@ class Creator extends Component {
   }
 
   componentDidMount() {
-    
+
   }
 
   onTabChange(x) {
@@ -38,7 +38,7 @@ class Creator extends Component {
   }
 
   onTabsUpdated(list) {
-    this.setState({tabs: list, tab: list[0].id})
+    this.setState({ tabs: list, tab: list[0].id })
   }
 
   requestTerminate() {
@@ -55,11 +55,6 @@ class Creator extends Component {
 
   render() {
 
-    var detailmap = {
-      "sum": <Welcome />,
-      "viz": <ScatterView3D data={this.state.temp_vizData} />
-    }
-
     const fileMenu = (
       <Menu>
         <MenuItem icon="label" text="Open Project" />
@@ -71,10 +66,10 @@ class Creator extends Component {
 
     const viewMenu = (
       <Menu>
-        <MenuItem icon="chat" text="Welcome" />
+        <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <MenuItem icon="graph" text="Editor" />
         <Divider />
-        <MenuItem icon="heatmap" text="Import Data" />
+        <MenuItem icon="heatmap" text="Scatter" />
       </Menu>
     )
 
@@ -132,7 +127,10 @@ class Creator extends Component {
               <div className="submenu-spacer" />
 
               <div className="detail-container">
-                <TabsManager ref={this.tabman} activeTab={this.state.tab} onTabsListChanged={(x) => this.onTabsUpdated(x)}/>
+                <TabsManager ref={this.tabman}
+                  activeTab={this.state.tab}
+                  onTabsListChanged={(x) => this.onTabsUpdated(x)} 
+                  onSwitch={(x) => this.onTabChange(x)}/>
               </div>
 
             </div>

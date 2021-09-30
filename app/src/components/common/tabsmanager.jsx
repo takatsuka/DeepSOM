@@ -47,9 +47,11 @@ class TabsManager extends Component {
 
         this.setState({
             openTabs: tabs,
-            activeTab: active ? asid : this.state.activeTab
         }, () => {
             this.props.onTabsListChanged(this.getOpenedTabsDesc())
+            if(active) {
+                this.props.onSwitch(asid)
+            }
         })
     }
 
