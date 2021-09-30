@@ -61,6 +61,32 @@ def test_customise():
     assert (som.indim,) == bmu.shape
 
 
+def test_cutomise_2():
+    width = 123
+    height = 254
+    indim = 1000
+
+    som = Som.Som(width, height, indim)
+    som.regen_mat(scale=4, offset=-0.25)
+
+    som.set_lr(lr_max=0.7, lr_min=0.001, lr_step=0.0001, lr_func=functions.linear_step)
+    som.set_rad(rad_max=height / 2, rad_min=0, rad_step=0.5, rad_func=functions.exp_decay)
+
+    assert (som.mat >= -1).all()
+    assert (som.mat <= 3).all()
+
+    for i in range(1500):
+        data = (np.random.random((indim,)) - 0.25) * 4
+        som.learn(data, i)
+        bmu_idx = som.get_idx_closest(data)
+        bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
+
+    bmu_idx = som.get_idx_closest(np.random.random(indim))
+    assert len(bmu_idx) == 2
+    bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
+    assert (som.indim,) == bmu.shape
+
+
 def test_find_bmu():
     data = np.array([[1, 5], [3, 6], [-2, 10]])
     som = Som(3, len(data), 2)
