@@ -1,5 +1,6 @@
 from pysom.components.som import Som
 from pysom.utils import decay_funcs as functions
+import numpy as np
 
 
 def test_initialise():
@@ -24,5 +25,19 @@ def test_customise():
 
     for i in range(len(som.mat)):
         for j in range(len(som.mat[i])):
-            assert som.mat[i, j].any() > -10
-            assert som.mat[i, j].any() < 10
+            assert som.mat[i, j].all() > -10
+            assert som.mat[i, j].all() < 10
+
+    som.set_in_norm_p(2)
+    som.set_out_norm_p(1)
+
+    for i in range(100):
+        data = np.random.random((indim,))
+        som.learn(data, i)
+        bmu_idx = som.get_idx_closest(data)
+        bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
+
+    bmu_idx = som.get_idx_closest(np.random.random(indim))
+    assert len(bmu_idx) == 2
+    bmu = som.get_weight(bmu_idx[0], bmu_idx[1])
+    assert (som.indim,) == bmu.shape
