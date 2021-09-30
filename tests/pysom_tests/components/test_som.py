@@ -1,7 +1,17 @@
 from pysom.components.som import Som
 from pysom.utils import decay_funcs as functions
 import numpy as np
+import sys
+import os
 
+PATH_TO_DSOM = "../dsom_code"
+if os.path.dirname(__file__) != "":
+    PATH_TO_DSOM = os.path.dirname(__file__) + "/" + PATH_TO_DSOM
+sys.path.append(PATH_TO_DSOM)
+
+PATH_TO_DATA = "resources"
+if os.path.dirname(__file__) != "":
+    PATH_TO_DATA = os.path.dirname(__file__) + "/" + PATH_TO_DATA
 
 # helper function
 def dist(vector_1, vector_2):
@@ -94,3 +104,27 @@ def test_find_bmu_3():
     for i in range(len(som.mat)):
         for j in range(len(som.mat[i])):
             assert d <= dist(vector, som.mat[i, j])
+
+
+def test_sphere_learn():
+    width = 100
+    height = 100
+    indim = 3
+
+    som = Som(width, height, indim)
+    som.regen_mat(scale=2, offset=-0.5)
+
+    data_file = open(PATH_TO_DATA + "/sphere_4096.txt", "r")
+    dataset_lines = data_file.readlines()
+    data_file.close()
+
+    for i in range(len(dataset_lines)):
+        dataset_lines[i] = dataset_lines[i].strip("\n").split(",")
+        for j in range(len(dataset_lines[i])):
+            dataset_lines[i][j] = float(dataset_lines[i][j])
+
+    data = np.array(dataset_lines)
+
+    for i in range(16384):
+        point = data[np.random.randint(0, len(data))]
+        som.learn(point, i)
