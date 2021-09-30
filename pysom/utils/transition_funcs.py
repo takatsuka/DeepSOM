@@ -81,7 +81,7 @@ def coordinates_distance(example, som):
     bmu_coords = som.get_idx_closest(example)
     output[0] = bmu_coords[0]
     output[1] = bmu_coords[1]
-    bmu = som.get_weight(bmu_coords[1], bmu_coords[0])
+    bmu = som.get_weight(bmu_coords[0], bmu_coords[1])
     output[2] = np.norm(bmu - example, ord=som.in_dist_p)
     return output
 

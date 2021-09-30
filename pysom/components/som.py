@@ -175,9 +175,9 @@ class Som:
         Args:
             p (int/str/np.inf): The exponent to be used in calculating
                 distance in input space. Must be a positive integer,
-                a string "inf" or "-inf", or the numpy objects np.inf
-                or -np.inf. In the latter cases, the distance function
-                will become the maximum/supremum and minimum/infimum norms.
+                a string "inf", or the numpy object np.inf. In the latter
+                cases, the distance function will become the maximum/supremum
+                norm.
 
         Returns:
             None
@@ -187,8 +187,6 @@ class Som:
             self.in_dist_p = p
         elif p == np.inf or (isinstance(p, str) and p.lower() == "inf"):
             self.in_dist_p = np.inf
-        elif p == -np.inf or (isinstance(p, str) and p.lower() == "-inf"):
-            self.in_dist_p = -np.inf
 
     def set_out_norm_p(self, p):
         """Distance between node positions on the output grid are calculated
@@ -200,9 +198,9 @@ class Som:
         Args:
             p (int/str/np.inf): The exponent to be used in calculating
                 distance in output space. Must be a positive integer,
-                a string "inf" or "-inf", or the numpy objects np.inf
-                or -np.inf. In the latter cases, the distance function
-                will become the maximum/supremum and minimum/infimum norms.
+                a string "inf", or the numpy object np.inf. In the latter
+                cases, the distance function will become the maximum/supremum
+                norm.
 
         Returns:
             None
@@ -212,8 +210,6 @@ class Som:
             self.out_dist_p = p
         elif p == np.inf or (isinstance(p, str) and p.lower() == "inf"):
             self.out_dist_p = np.inf
-        elif p == -np.inf or (isinstance(p, str) and p.lower() == "-inf"):
-            self.out_dist_p = -np.inf
 
     def __str__(self):
         return str(self.mat)
@@ -251,7 +247,7 @@ class Som:
             np.ndarray: vector of the input weights belonging to node at (x, y).
                 Will be of shape (indim,) from the constructor.
         """
-        return self.mat[y, x]
+        return self.mat[x, y]
 
     def dump_weight_list(self):
         """Returns the full node matrix of the SOM, shaped as single array
