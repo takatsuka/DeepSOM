@@ -5,6 +5,16 @@ from pysom.utils.transition_funcs import concat_binary
 import pytest
 
 
+# helper function
+def setup_layer():
+    layer = Layer(1)
+    som = Som(3, 3, 2)
+    sc = SomContainer(som, concat_binary)
+    layer.add_som_container(sc)
+
+    return layer
+
+
 def test_layer_init_inlen():
     layer = Layer(9)
     assert hasattr(layer, "inlen")
@@ -50,3 +60,14 @@ def test_add_container():
     assert layer.get_layer_size() == 1
     assert len(layer.soms) == 1
     assert layer.get_out_len() == sc.get_out_len()
+    assert layer.get_out_len() == 9
+
+
+def test_insert_container():
+    layer = setup_layer()
+
+    som = Som(4, 4, 3)
+    sc = SomContainer(som, concat_binary)
+    layer.insert_som_container(0, sc)
+
+    assert layer.get_layer_size() == 2

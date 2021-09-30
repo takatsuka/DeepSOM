@@ -134,7 +134,7 @@ def test_find_bmu_3():
             assert d <= dist(vector, som.mat[i, j])
 
 
-def test_sphere_learn():
+def sphere_learn():
     width = 100
     height = 100
     indim = 3
