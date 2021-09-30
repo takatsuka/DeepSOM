@@ -13,42 +13,42 @@ class ScatterView3D extends Component {
     constructor(props) {
         super(props)
 
+        // Bind functions
         this.initView = this.initView.bind(this);
         this.drawAxis = this.drawAxis.bind(this);
         this.updatePlot = this.updatePlot.bind(this);
         this.drawPlot = this.drawPlot.bind(this);
         this.handleShowTrainingChange = this.handleShowTrainingChange.bind(this);
+        this.updateWindow = this.updateWindow.bind(this);
 
         this.d3view = React.createRef();
 
+        // Define state variables
         this.state = {
             datasetName: "",
             vizData: null, hasData: false,
             showTraining: false, trainingData: null, hasTraining: false,
         }
 
+        // Define graph variables
         this.mx = 0;
         this.my = 0;
         this.mouseX = 0;
         this.mouseY = 0;
         this.origin = [300, 300];
-        this.scale = 150;
+        this.scale = 100;
         this.startAngle = Math.PI / 4;
         this.coordinates = [];
         this.weights = [];
-        this.point3d = null;
-        this.weights3d = null;
-        this.xScale3d = null;
-        this.yScale3d = null;
-        this.zScale3d = null;
 
-        // this.state = {
-        //     showTraining: false,
-        // }
+        // Add listener for window resize events
+        window.addEventListener('resize', this.updateWindow);
     }
 
     componentDidMount() {
-        this.initView()
+        this.initView();
+        this.updateWindow();
+        
     }
 
     // Predefined function to return x coordinate for drawing purposes
@@ -61,6 +61,7 @@ class ScatterView3D extends Component {
         return d.projected.y;
     }
 
+    // TODO: Set colour of points accordingly to type of data
     // Draws scatter points with inputted coordinate data
     drawPoints(data, tt) {
         const svg = this.svg
@@ -138,7 +139,6 @@ class ScatterView3D extends Component {
 
     // Record mouse coordinate at start of drag
     dragStart(event) {
-        // console.log("start drag");
         this.mx = d3.pointer(event, this)[0];
         this.my = d3.pointer(event, this)[1];
     }
@@ -153,11 +153,12 @@ class ScatterView3D extends Component {
     // Calculate where everything should be after dragging and redraw plot
     dragged(event) {
         if (!this.state.hasData) return
-        // console.log(this.mouseX, this.mouseY);
         this.mouseX = this.mouseX || 0;
         this.mouseY = this.mouseY || 0;
+        // Calculate rotation angles
         let beta = (d3.pointer(event, this)[0] - this.mx + this.mouseX) * Math.PI / 230;
         let alpha = (d3.pointer(event, this)[1] - this.my + this.mouseY) * Math.PI / 230 * (-1);
+        // Apply rotation values to d3 objects and data points
         let data = [
             this.point3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[0]),
             this.weights3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.weights),
@@ -165,7 +166,7 @@ class ScatterView3D extends Component {
             this.yScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[2]),
             this.zScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.coordinates[3])
         ];
-
+        // Redraw plot
         this.drawPlot(data, 0);
     }
 
@@ -204,6 +205,8 @@ class ScatterView3D extends Component {
         return input;
     }
 
+    // To accept a data file from the upload point on ScatterView
+    // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importDataFile() {
         window.pywebview.api.open_csv_file().then((d) => {
             this.setState({ vizData: d[1], hasData: true, datasetName: d[0], showTraining: false })
@@ -212,6 +215,8 @@ class ScatterView3D extends Component {
         })
     }
 
+    // To accept a weights file from the upload point on ScatterView
+    // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importWeightsFile() {
         window.pywebview.api.open_csv_file().then((d) => {
             this.setState({ trainingData: d[1], hasTraining: true, showTraining: true });
@@ -224,7 +229,6 @@ class ScatterView3D extends Component {
     drawPlot(result, tt) {
         this.drawPoints(result[0], tt);
         if (this.state.showTraining) {
-            console.log("here");
             this.drawPoints(result[1], tt);
         }
         this.drawAxis(result[2], 'x', this.xScale3d);
@@ -242,7 +246,7 @@ class ScatterView3D extends Component {
             this.zScale3d(this.coordinates[3]),
         ];
 
-        this.drawPlot(result, 1000);
+        this.drawPlot(result, 0);
     }
 
     initView() {
@@ -259,6 +263,7 @@ class ScatterView3D extends Component {
                     this.dragged(event);
                 })
             ).append('g');
+
         this.svg = svg
         this.colorMap = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -305,11 +310,34 @@ class ScatterView3D extends Component {
             .rotateY(this.startAngle)
             .rotateX(-this.startAngle)
             .scale(this.scale);
-
-        // Load datapoints from file for now
-        // TODO(jenny): read datapoints from json configuration as well
     }
 
+    // Updates the origin and scale of d3 objects according to adjusted window size
+    updateObjects() {
+        // Data points
+        this.point3d.origin(this.origin).scale(this.scale);
+        // Weight points
+        this.weights3d.origin(this.origin).scale(this.scale);
+        // X axis
+        this.xScale3d.origin(this.origin).scale(this.scale);
+        // Y axis
+        this.yScale3d.origin(this.origin).scale(this.scale);
+        // Z axis
+        this.zScale3d.origin(this.origin).scale(this.scale);
+    }
+
+    // Reads in adjusted window size to calculate origin and scale of d3 objects
+    updateWindow() {
+        let innerWidth = window.innerWidth - 180;
+        let innerHeight = window.innerHeight - 120;
+        this.origin = [innerWidth/2, innerHeight/2];
+        this.scale = innerWidth/620 > innerHeight/480 ? innerHeight/480*100 : innerWidth/620*100;
+        console.log(this.scale);
+        this.updateObjects();
+        if (this.state.hasData) this.updatePlot();
+    }
+
+    // Function to update state on whether to show SOM training data or not based on slider
     handleShowTrainingChange() {
         this.setState((state) => {
             return {showTraining: !state.showTraining}
@@ -345,8 +373,8 @@ class ScatterView3D extends Component {
 
 
                 </div>
-
                 <svg className="svg-render" ref={this.d3view} />
+                
             </>)
 
     }
