@@ -58,6 +58,15 @@ class Creator extends Component {
       </Menu>
     )
     
+    const viewMenu = (
+      <Menu>
+        <MenuItem icon="chat" text="Welcome" />
+        <MenuItem icon="graph" text="Editor" />
+        <Divider />
+        <MenuItem icon="heatmap" text="Import Data" />
+      </Menu>
+    )
+
 
     return (
       <>
@@ -79,7 +88,11 @@ class Creator extends Component {
               <Button className="bp3-minimal" icon="document" text="File" />
             </Popover>
 
+            <Popover content={viewMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
             <Button className="bp3-minimal" icon="control" text="View" />
+            </Popover>
+
+            
             <Button className="bp3-minimal" icon="help" text="Help" />
 
           </Navbar.Group>
