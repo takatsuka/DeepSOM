@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import os
 
+
 PATH_TO_DSOM = "../dsom_code"
 if os.path.dirname(__file__) != "":
     PATH_TO_DSOM = os.path.dirname(__file__) + "/" + PATH_TO_DSOM
@@ -12,6 +13,7 @@ sys.path.append(PATH_TO_DSOM)
 PATH_TO_DATA = "resources"
 if os.path.dirname(__file__) != "":
     PATH_TO_DATA = os.path.dirname(__file__) + "/" + PATH_TO_DATA
+
 
 # helper function
 def dist(vector_1, vector_2):
