@@ -14,7 +14,7 @@ This repository contains the core library for PySOM and its essential components
 
 ### How do I get set up? ###
 
-* To be updated(Due Fri, Oct 1)
+* To be updated(Due Fri, Oct 8)
 
 ### Contribution guidelines ###
 
