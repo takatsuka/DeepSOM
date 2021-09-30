@@ -60,6 +60,7 @@ def test_add_container():
     assert layer.get_layer_size() == 1
     assert len(layer.soms) == 1
     assert layer.get_out_len() == sc.get_out_len()
+    assert layer.get_som_container(0).get_out_len() == sc.get_out_len()
     assert layer.get_out_len() == 9
 
 
@@ -71,3 +72,5 @@ def test_insert_container():
     layer.insert_som_container(0, sc)
 
     assert layer.get_layer_size() == 2
+    assert layer.soms[0] == sc
+    assert layer.get_out_len() == layer.get_som_container(0).get_out_len() + layer.get_som_container(1).get_out_len()
