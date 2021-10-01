@@ -3,14 +3,14 @@ import json
 import numpy as np
 
 
-width = 100
-height = 100
+width = 10
+height = 10
 indim = 3
 
 som = Som(width, height, indim)
 som.regen_mat(scale=2, offset=-0.5)
 
-data_file = open("sphere_256.txt", "r")
+data_file = open("vis/sphere_64.txt", "r")
 dataset_lines = data_file.readlines()
 data_file.close()
 
@@ -24,14 +24,16 @@ data = np.array(dataset_lines)
 js = {}
 
 step = 0
-for i in range(16000):
+for i in range(1000):
     point = data[np.random.randint(0, len(data))]
     som.learn(point, i)
 
-    if i % 1600 == 0:
-        fw = [elem for l in som.dump_weight_list() for elem in l]
+    if i % 100 == 0:
+        s = {}
+        fw = som.dump_weight_list()
+        fw = [weights.tolist() for weights in fw]
         js[step] = fw
         step += 1
     
-with open('vis_sphere256.txt', 'w') as outfile:
+with open('app/src/components/scatterview_3d/data/vis_sphere64.json', 'w') as outfile:
     json.dump(js, outfile)

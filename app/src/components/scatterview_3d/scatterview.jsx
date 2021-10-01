@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Intent, Divider, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay, Switch } from "@blueprintjs/core";
+import { Tag, Popover, Menu, MenuItem, Slider, Button, ButtonGroup, Tab, Tabs, Intent, Divider, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay, Switch } from "@blueprintjs/core";
 import "./scatterview.scss"
 
 const d3 = require("d3");
@@ -28,7 +28,7 @@ class ScatterView3D extends Component {
             datasetName: "",
             showTraining: false, 
             vizData: null, hasDataset: false, dataset: [],
-            trainingData: null, hasTraining: false, weights: [],
+            trainingData: null, hasTraining: false, weights: [], weightsId: 0,
             point3d: null, weights3d: null, xScale3d: null, yScale3d: null, zScale3d: null,
             mouseX: 0, mouseY: 0,
         }
@@ -226,16 +226,18 @@ class ScatterView3D extends Component {
     // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importDataFile() {
         window.pywebview.api.open_csv_file().then((d) => {
-            this.setState({ vizData: d[1], hasDataset: true, datasetName: d[0], showTraining: false, dataset: this.loadData(d[1]) })
-            this.updatePlot();
-        })
+            this.setState({ vizData: d[1], hasDataset: true, datasetName: d[0], showTraining: false, dataset: this.loadData(d[1]) }, () => {
+                this.updatePlot();
+            });
+        });
     }
 
     // To accept a weights file from the upload point on ScatterView
     // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importWeightsFile() {
-        window.pywebview.api.open_csv_file().then((d) => {
-            this.setState({ trainingData: d[1], hasTraining: true, showTraining: true, weights: this.loadData(d[1])[0] });
+        let jsonData = require('./data/vis_sphere64.json');
+        console.log(jsonData)
+        this.setState({ trainingData: jsonData, hasTraining: true, showTraining: true, weightsId: 0, weights: this.loadData(jsonData[0])[0] }, () => {
             this.updatePlot();
         });
     }
@@ -264,6 +266,7 @@ class ScatterView3D extends Component {
         this.drawPlot(result, 0);
     }
 
+    // Define the svg variable, function to be used when initialising new state or restoring old state
     updateSvg() {
         const svg = d3.select(this.d3view.current)
             .call(d3.drag()
@@ -347,7 +350,7 @@ class ScatterView3D extends Component {
     // Reads in adjusted window size to calculate origin and scale of d3 objects
     updateWindow() {
         let innerWidth = window.innerWidth - 180;
-        let innerHeight = window.innerHeight - 80;
+        let innerHeight = (window.innerHeight - 80)*0.9;
         // Calculate origin and scale based on current window size
         this.origin = [innerWidth / 2, innerHeight / 2];
         this.scale = innerWidth / 620 > innerHeight / 480 ? innerHeight / 480 * 100 : innerWidth / 620 * 100;
@@ -357,11 +360,19 @@ class ScatterView3D extends Component {
         if (this.state.hasDataset) this.updatePlot();
     }
 
-    // Function to update state on whether to show SOM training data or not based on slider
+    // Function to update state on whether to show SOM training data or not based on switch
     handleShowTrainingChange() {
         this.setState((state) => {
             return { showTraining: !state.showTraining }
-        }, () => { this.updatePlot(); });
+        }, () => this.updatePlot());
+    }
+
+    // Function to update state on which set of weights from the training process we should visualise
+    handleWeightsIdChange(key) {
+        return (value) => this.setState({ 
+            [key]: value, 
+            weights: this.loadData(this.state.trainingData[value])[0] },
+            () => this.updatePlot());
     }
 
     embedCard(whatever) {
@@ -392,13 +403,23 @@ class ScatterView3D extends Component {
                         }
 
                         <Button icon="document" onClick={() => this.importDataFile()}>Load Data</Button>
-                        <Button icon="document" disabled={!this.state.hasDataset} onClick={() => this.importWeightsFile()}>Load Weights</Button>
+                        <Button icon="one-to-many" disabled={!this.state.hasDataset} onClick={() => this.importWeightsFile()}>Train data</Button>
                     </ButtonGroup>
 
 
                 </div>
                 <svg className="svg-render" ref={this.d3view} />
-
+                <div className="slider">
+                    <Slider
+                        disabled={!this.state.showTraining}
+                        min={0}
+                        max={9} // This is hardcoded for now, TODO: JSON file need to include size 
+                        stepSize={1}
+                        labelStepSize={1}
+                        onChange={this.handleWeightsIdChange("weightsId")}
+                        value={this.state.weightsId}
+                    />
+                </div>
             </>)
 
     }
