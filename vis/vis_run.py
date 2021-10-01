@@ -1,4 +1,4 @@
-from Som import Som 
+from Som import Som
 import json
 import numpy as np
 import matplotlib.pyplot as plt
@@ -34,7 +34,7 @@ for i in range(16001):
         fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
 
-        axes = list(zip(*sw))     
+        axes = list(zip(*sw))
         axes_o = list(zip(*dataset))
         ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
 
