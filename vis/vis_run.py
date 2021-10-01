@@ -1,6 +1,7 @@
-from pysom.components.som import Som
+from Som import Som 
 import json
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 width = 100
@@ -10,28 +11,42 @@ indim = 3
 som = Som(width, height, indim)
 som.regen_mat(scale=2, offset=-0.5)
 
-data_file = open("sphere_256.txt", "r")
-dataset_lines = data_file.readlines()
-data_file.close()
+datastr = [l.strip().split(',') for l in open("sphere_64.txt", "r").readlines()]
+dataset = [[float(c) for c in e] for e in datastr]
 
-for i in range(len(dataset_lines)):
-    dataset_lines[i] = dataset_lines[i].strip("\n").split(",")
-    for j in range(len(dataset_lines[i])):
-        dataset_lines[i][j] = float(dataset_lines[i][j])
-
-data = np.array(dataset_lines)
+data = np.array(dataset)
+print(len(data))
 
 js = {}
 
 step = 0
-for i in range(16000):
+
+for i in range(16001):
     point = data[np.random.randint(0, len(data))]
     som.learn(point, i)
 
-    if i % 1600 == 0:
-        fw = [elem for l in som.dump_weight_list() for elem in l]
+    if i % 800 == 0:
+        sw = som.dump_weight_list()
+        fw = [elem for l in sw for elem in l]
+        
         js[step] = fw
+        """
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+
+        axes = list(zip(*sw))     
+        axes_o = list(zip(*dataset))
+        ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
+
+        ax.scatter(*axes, marker='o', s=1)
+        ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+
+        plt.savefig("sphere64_{}.png".format(step))
+        """
         step += 1
-    
-with open('vis_sphere256.txt', 'w') as outfile:
+
+with open('vis20_sphere64.txt', 'w') as outfile:
     json.dump(js, outfile)
