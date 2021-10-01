@@ -10,13 +10,13 @@ class Welcome extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            a: Math.random() * 10, b:0.28, c:0
+            a: Math.random() * 10, b: 0.28, c: 0
         }
     }
 
     componentDidMount() {
         var state = this.props.pullState()
-        if(state != null){
+        if (state != null) {
             this.setState(state)
         }
     }
@@ -44,35 +44,35 @@ class Welcome extends Component {
                 {this.embedCard(<>
                     <h1>Welcome to PySOM {this.props.tabID}</h1>
                     {this.embedCard(
-                    <div>
-                    <h3>Sliders drag</h3>
-                    <p>Drag the sliders then switch to another tab and back. See how their states are restored?</p>
-                    <Slider
-                        min={0}
-                        max={10}
-                        stepSize={0.1}
-                        labelStepSize={10}
-                        onChange={this.getChangeHandler("a")}
-                        value={this.state.a}
-                    />
-                    <Slider
-                        min={0}
-                        max={0.7}
-                        stepSize={0.01}
-                        labelStepSize={0.14}
-                        onChange={this.getChangeHandler("b")}
-                        value={this.state.b}  
-                    />
-                    <Slider
-                        min={-12}
-                        max={48}
-                        stepSize={6}
-                        labelStepSize={6}
-                        onChange={this.getChangeHandler("c")}
-                        showTrackFill={false}
-                        value={this.state.c}
-                    />
-                    </div>)}
+                        <div>
+                            <h3>Sliders drag</h3>
+                            <p>Drag the sliders then switch to another tab and back. See how their states are restored?</p>
+                            <Slider
+                                min={0}
+                                max={10}
+                                stepSize={0.1}
+                                labelStepSize={10}
+                                onChange={this.getChangeHandler("a")}
+                                value={this.state.a}
+                            />
+                            <Slider
+                                min={0}
+                                max={0.7}
+                                stepSize={0.01}
+                                labelStepSize={0.14}
+                                onChange={this.getChangeHandler("b")}
+                                value={this.state.b}
+                            />
+                            <Slider
+                                min={-12}
+                                max={48}
+                                stepSize={6}
+                                labelStepSize={6}
+                                onChange={this.getChangeHandler("c")}
+                                showTrackFill={false}
+                                value={this.state.c}
+                            />
+                        </div>)}
                 </>)}
             </>)
 
