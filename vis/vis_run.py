@@ -1,6 +1,7 @@
-from pysom.components.som import Som 
+from pysom.components.som import Som
 import json
 import numpy as np
+
 
 width = 100
 height = 100
