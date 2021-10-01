@@ -55,8 +55,27 @@ class TabsManager extends Component {
         })
     }
 
+    closeTab(tabID) {
+        var tabIDs = Object.keys(this.state.openedTabs);
+        var newActive = Math.max(tabIDs.indexOf(this.state.activeTab) - 1 , 0)
+        var tabs = this.state.openedTabs
+        delete tabs[tabID]
+        console.log(newActive)
+        newActive = tabs[Object.keys(tabs)[newActive]].id
+        console.log(newActive)
+        this.setState({
+            openedTabs: tabs,
+            activeTab: newActive
+        }, () => {
+            this.props.onTabsListChanged(this.getOpenedTabsDesc())
+            this.props.onSwitch(newActive)
+        })
+    }
+
     storeState(tabID, state) {
         var tabs = this.state.openedTabs
+        if(tabs[tabID] == null) return // dont care about closed tabs
+
         tabs[tabID].state = state
 
         this.setState({
