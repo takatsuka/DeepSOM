@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Component } from 'react';
 import { NonIdealState } from "@blueprintjs/core";
 import Welcome from "../welcome/welcome"
+import DragDrop from "../drag-drop/drag-drop"
 
 class TabsManager extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ class TabsManager extends Component {
         this.state = {
             activeTab: -1,
             openedTabs: {},
-            
+
         }
         this.tabIDCounter = 0
     }
@@ -18,6 +19,7 @@ class TabsManager extends Component {
 
         this.openTab(<Welcome />, "Welcome PySOM", true)
         this.openTab(<Welcome />, "Welcome PySOM 2", true)
+        this.openTab(<DragDrop />, "Drag Drop", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
