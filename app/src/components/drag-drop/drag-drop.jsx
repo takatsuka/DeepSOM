@@ -1,4 +1,3 @@
-
 import * as React from 'react'
 import { Component } from 'react';
 
@@ -9,49 +8,54 @@ import "./drag-drop.scss"
 class DragDropSOM extends Component {
     constructor(props) {
         super(props);
-        this.setState({dragging: false});
-        console.log("NEW");
-        console.log(this.props);
+        this.state = {x: Math.random() * 300,
+                    y: Math.random() * 300,
+                    dragging: false};
     }
 
     onMouseDown() {
         console.log("DOWN");
-        this.setState({dragging: true});
+        this.setState({dragging: true, prev_mouse_pos: {
+            x: event.pageX,
+            y: event.pageY
+        }});
     }
+
     onMouseUp() {
         console.log("UP");
         this.setState({dragging: false});
     }
+
+    onMouseOut() {
+        this.onMouseUp();
+    }
+
     onMouseMove(e) {
         if (!this.state.dragging) return
-        var sombox = document.getElementById("som-box").getBoundingClientRect();
 
-      var left = sombox.left;
-      var top = sombox.top;
-      var this_elem = document.getElementsByClassName("som")[0].getBoundingClientRect();
-        var x = e.pageX - left - this_elem.width/2;
-        var y = e.pageY - top - this_elem.height/2;
-        console.log(left, top, x, y);
-        this.props.DragDropObj.update_som_pos(this.props.id, x, y);
-        e.stopPropagation()
-        e.preventDefault()
+        var current_mouse_pos = {
+            x: event.pageX,
+            y: event.pageY
+        };
+        var dx = current_mouse_pos.x - this.state.prev_mouse_pos.x;
+        var dy = current_mouse_pos.y - this.state.prev_mouse_pos.y;
+
+        this.setState({x: this.state.x + dx, y: this.state.y + dy, prev_mouse_pos: current_mouse_pos});
     }
 
     render() {
+        var opacity = 1;
+        if (this.state.dragging) {
+            var opacity = 0.6;
+        }
+
         return (<div class="som"
-                style={{top: this.props.y, left: this.props.x}}
+                style={{top: this.state.y, left: this.state.x, opacity: opacity}}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
+                onMouseOut={this.onMouseOut.bind(this)}
                 >SOM {this.props.id}</div>);
-    }
-}
-
-class SOMContainer {
-    constructor(id, x, y) {
-        this.id = id;
-        this.x = x;
-        this.y = y;
     }
 }
 
@@ -68,24 +72,15 @@ class DragDrop extends Component {
 
     add_som() {
         if (this.state.soms.length > 10) {
-            alert("NO!");
             return false;
         }
-        var x = Math.random() * 300;
-        var y = Math.random() * 300;
-        var joined = this.state.soms.concat(new SOMContainer(this.i++, x, y));
-        this.setState({ soms: joined });
-    }
 
-    update_som_pos(id, x, y) {
-        this.state.soms[id].x = x;
-        this.state.soms[id].y = y;
-        this.setState({ soms: this.state.soms});
+        var joined = this.state.soms.concat(this.i++);
+        this.setState({ soms: joined });
     }
 
     render() {
         const add_som_enable = this.state.soms.length < 10;
-        const thisobj = this;
         return (
             <div class="som-drag-drop">
                 <h1>Drag Drop SOM</h1>
@@ -101,7 +96,7 @@ class DragDrop extends Component {
 
                     <div class="som-box" id="som-box">
                     {this.state.soms.map(function(d, idx){
-                        return (<DragDropSOM id={d.id} x={d.x} y={d.y} DragDropObj={thisobj}/>);
+                        return (<DragDropSOM id={d}/>);
                     })}
                     </div>
                 </div>
