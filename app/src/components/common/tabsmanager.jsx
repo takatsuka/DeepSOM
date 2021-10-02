@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { NonIdealState } from "@blueprintjs/core";
 import Welcome from "../welcome/welcome"
 import DragDrop from "../drag-drop/drag-drop"
-import Canvas from "../canvas/canvas"
+import Canvas from "./canvas"
 
 class TabsManager extends Component {
     constructor(props) {

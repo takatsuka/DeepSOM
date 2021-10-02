@@ -19,7 +19,7 @@ class Api:
     services_n = 0
 
     def launch_service(self, key, params):
-        if not key in self.services_handle:
+        if key not in self.services_handle:
             return
         s = self.services_handle[key](*params)
         self.services[self.services_n] = s
@@ -28,7 +28,7 @@ class Api:
         return s
 
     def close_service(self, handle):
-        if not handle in self.services:
+        if handle not in self.services:
             return
         s = self.services[handle]
 
@@ -39,7 +39,7 @@ class Api:
         return
 
     def call_service(self, handle, method, params):
-        if not handle in self.services:
+        if handle not in self.services:
             return
         s = self.services[handle]
 
