@@ -2,15 +2,15 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Content, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
 import "./drag-drop.scss"
 
 class DragDropSOM extends Component {
     constructor(props) {
         super(props);
-        this.state = {x: Math.random() * 300,
-                    y: Math.random() * 300,
+        this.state = {x: Math.random() * 800,
+                    y: Math.random() * 600,
                     dragging: false};
     }
 
@@ -42,7 +42,7 @@ class DragDropSOM extends Component {
         var dy = current_mouse_pos.y - this.state.prev_mouse_pos.y;
 
         this.setState({x: this.state.x + dx, y: this.state.y + dy, prev_mouse_pos: current_mouse_pos});
-        this.props.onUpdate();
+        this.props.parent.child_update();
     }
 
     render() {
@@ -57,8 +57,13 @@ class DragDropSOM extends Component {
                 onMouseUp={this.onMouseUp.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
                 onMouseOut={this.onMouseOut.bind(this)}
-                >SOM {this.props.id}
-                <Button icon="trash" intent="danger" onClick={() => this.props.onDelete(this.props.id)}/>
+                >
+                <b style={{margin: "0 10px"}}>SOM {this.props.id}</b>
+                {this.props.parent.state.add_link_active ? (
+                    <Button id="addlink" icon="add" intent="success" onClick={() => this.props.parent.add_link_node(this.props.id)}/>
+                ) : (
+                    <Button id="deletenode" icon="trash" intent="warning" onClick={() => this.props.parent.remove_handler(this.props.id)}/>
+                )}
                 </div>);
     }
 }
@@ -66,13 +71,20 @@ class DragDropSOM extends Component {
 class DragDrop extends Component {
     constructor(props) {
         super(props)
-        this.state = {soms: []};
+        this.state = {soms: [], add_link_active: false, add_link_step: 1};
 
         // Bind functions
         this.add_som = this.add_som.bind(this);
+        this.add_link_init = this.add_link_init.bind(this);
+        this.add_link_cancel = this.add_link_cancel.bind(this);
+        this.add_link_node = this.add_link_node.bind(this);
         this.render = this.render.bind(this);
         this.remove_handler = this.remove_handler.bind(this);
         this.child_update = this.child_update.bind(this);
+
+
+        this.new_link_nodes = [-1, -1];
+        this.links = [];
         this.i = 0;
     }
 
@@ -83,6 +95,29 @@ class DragDrop extends Component {
 
         var joined = this.state.soms.concat(this.i++);
         this.setState({ soms: joined });
+    }
+
+    add_link_init() {
+        this.setState({ add_link_active: true, add_link_step: 1 });
+    }
+
+    add_link_cancel() {
+        this.setState({ add_link_active: false });
+    }
+
+    add_link_node(id) {
+        if (!this.state.add_link_active) return;
+
+        if (this.state.add_link_step == 1) {
+            this.new_link_nodes[0] = id;
+            this.setState({ add_link_step: 2 });
+        } else if (this.state.add_link_step == 2) {
+            this.new_link_nodes[1] = id;
+            if (!this.links.includes(this.new_link_nodes)) {
+                this.links.push(this.new_link_nodes.slice(0));
+            }
+            this.setState({ add_link_active: false, add_link_step: -1 });
+        }
     }
 
     remove_handler(id) {
@@ -97,25 +132,35 @@ class DragDrop extends Component {
 
     render() {
         const add_som_enable = this.state.soms.length < 10;
-        const bin = this.remove_handler;
-        const update = this.child_update;
-        var links = [];
-        for (var i = 0; i < this.state.soms.length - 1; i++) {
-            if (this.state.soms[i] < 0) continue;
-            for (var j = i + 1; j < this.state.soms.length; j++) {
-                if (this.state.soms[j] < 0) continue;
-                links.push([this.state.soms[i], this.state.soms[j]]);
-            }
-        }
+        const add_link_active = this.state.add_link_active;
+        const add_link_step = this.state.add_link_step;
+        const this_obj = this;
+
+        let add_link_content = (
+            <div>
+                {add_link_step == 1 ? (
+                    <h2>Select your first node...</h2>
+                ) : (
+                    <h2>Select your second node...</h2>
+                )}
+            </div>
+        );
 
         return (
             <div class="som-drag-drop">
                 <h1>Drag Drop SOM</h1>
-                {add_som_enable ? (
-                    <Button icon="plus" text="Add SOM" onClick={this.add_som} />
-                ) : (
-                    <Button icon="cross" text="Add SOM" disabled="true" />
-                )}
+
+                <ButtonGroup large>
+                    {add_som_enable ? (
+                        <Button icon="add" text="Add SOM" onClick={this.add_som} />
+                    ) : (
+                        <Button icon="disable" text="Add SOM" disabled="true" />
+                    )}
+
+                    <Popover content={add_link_content} popoverClassName="bp3-popover-content-sizing" onClose={this.add_link_cancel} interactionKind="CLICK_TARGET_ONLY" isOpen={add_link_active} >
+                        <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active}/>
+                    </Popover>
+                </ButtonGroup>
 
                 <div class="drag-drop-box">
                     <div class="svg-box">
@@ -124,9 +169,9 @@ class DragDrop extends Component {
                     <div class="som-box" id="som-box">
                     {this.state.soms.map(function(d, idx){
                         if (d < 0) return null;
-                        return (<DragDropSOM id={d} onDelete={bin} onUpdate={update}/>);
+                        return (<DragDropSOM id={d} parent={this_obj}/>);
                     })}
-                    {links.map(function(d, idx){
+                    {this.links.map(function(d, idx){
                         return (<Xarrow start={"som_"+d[0]} end={"som_"+d[1]} dashness={{animation:3}}/>);
                     })}
                     </div>
