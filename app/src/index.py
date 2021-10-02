@@ -5,8 +5,49 @@ import webview
 
 from time import time
 
+from py.som_viz_service import SOMVisualizationService
+
 
 class Api:
+
+    # Class variables
+    services_handle = {
+        'SOMVisualizationService': SOMVisualizationService
+    }
+
+    services = {}
+    services_n = 0
+
+    def launch_service(self, key, params):
+        if not key in self.services_handle:
+            return
+        s = self.services_handle[key](*params)
+        self.services[self.services_n] = s
+        self.services_n += 1
+
+        return s
+
+    def close_service(self, handle):
+        if not handle in self.services:
+            return
+        s = self.services[handle]
+
+        if callable(getattr(s, 'on_close', None)):
+            s.on_close()
+
+        self.services.pop(handle)
+        return
+
+    def call_service(self, handle, method, params):
+        if not handle in self.services:
+            return
+        s = self.services[handle]
+
+        md = getattr(s, method, None)
+        if not callable(md):
+            return
+
+        return md(*params)
 
     def fullscreen(self):
         webview.windows[0].toggle_fullscreen()
