@@ -12,10 +12,10 @@ const Canvas = props => {
         }
     }
 
-    const canvasRef = useRef(null);
-    useEffect(() => {draw(canvasRef.current.getContext('2d'), props)}, [draw]);
+    const canvas_ref = useRef(null);
+    useEffect(() => {draw(canvas_ref.current.getContext('2d'), props)}, [draw]);
 
-    return <canvas ref = {canvasRef}/>
+    return <canvas ref={canvas_ref}/>
 }
 
 export default Canvas;
