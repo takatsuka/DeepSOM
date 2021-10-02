@@ -28,7 +28,7 @@ class DragDropSOM extends Component {
     }
 
     onMouseOut() {
-        this.onMouseUp();
+        //this.onMouseUp();
     }
 
     onMouseMove(e) {
