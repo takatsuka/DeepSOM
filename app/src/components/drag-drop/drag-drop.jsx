@@ -55,7 +55,9 @@ class DragDropSOM extends Component {
                 onMouseUp={this.onMouseUp.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
                 onMouseOut={this.onMouseOut.bind(this)}
-                >SOM {this.props.id}</div>);
+                >SOM {this.props.id}
+                <Button icon="trash" intent="danger" onClick={() => this.props.onDelete(this.props.id)}/>
+                </div>);
     }
 }
 
@@ -67,6 +69,7 @@ class DragDrop extends Component {
         // Bind functions
         this.add_som = this.add_som.bind(this);
         this.render = this.render.bind(this);
+        this.remove_handler = this.remove_handler.bind(this);
         this.i = 0;
     }
 
@@ -79,8 +82,15 @@ class DragDrop extends Component {
         this.setState({ soms: joined });
     }
 
+    remove_handler(id) {
+        console.log("Delete", id);
+        this.state.soms[id] = -1;
+        this.setState({ soms: this.state.soms });
+    }
+
     render() {
         const add_som_enable = this.state.soms.length < 10;
+        const bin = this.remove_handler;
         return (
             <div class="som-drag-drop">
                 <h1>Drag Drop SOM</h1>
@@ -96,7 +106,8 @@ class DragDrop extends Component {
 
                     <div class="som-box" id="som-box">
                     {this.state.soms.map(function(d, idx){
-                        return (<DragDropSOM id={d}/>);
+                        if (d < 0) return null;
+                        return (<DragDropSOM id={d} onDelete={bin} />);
                     })}
                     </div>
                 </div>
