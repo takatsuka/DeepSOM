@@ -7,6 +7,7 @@ from time import time
 
 
 class Api:
+
     def fullscreen(self):
         webview.windows[0].toggle_fullscreen()
 
