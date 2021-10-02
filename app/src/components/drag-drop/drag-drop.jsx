@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Component } from 'react';
+import Xarrow from "react-xarrows";
 
 import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
@@ -41,6 +42,7 @@ class DragDropSOM extends Component {
         var dy = current_mouse_pos.y - this.state.prev_mouse_pos.y;
 
         this.setState({x: this.state.x + dx, y: this.state.y + dy, prev_mouse_pos: current_mouse_pos});
+        this.props.onUpdate();
     }
 
     render() {
@@ -49,7 +51,7 @@ class DragDropSOM extends Component {
             var opacity = 0.6;
         }
 
-        return (<div class="som"
+        return (<div class="som" id={"som_"+this.props.id}
                 style={{top: this.state.y, left: this.state.x, opacity: opacity}}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
@@ -70,6 +72,7 @@ class DragDrop extends Component {
         this.add_som = this.add_som.bind(this);
         this.render = this.render.bind(this);
         this.remove_handler = this.remove_handler.bind(this);
+        this.child_update = this.child_update.bind(this);
         this.i = 0;
     }
 
@@ -88,9 +91,23 @@ class DragDrop extends Component {
         this.setState({ soms: this.state.soms });
     }
 
+    child_update() {
+        this.setState({ render_now: true });
+    }
+
     render() {
         const add_som_enable = this.state.soms.length < 10;
         const bin = this.remove_handler;
+        const update = this.child_update;
+        var links = [];
+        for (var i = 0; i < this.state.soms.length - 1; i++) {
+            if (this.state.soms[i] < 0) continue;
+            for (var j = i + 1; j < this.state.soms.length; j++) {
+                if (this.state.soms[j] < 0) continue;
+                links.push([this.state.soms[i], this.state.soms[j]]);
+            }
+        }
+
         return (
             <div class="som-drag-drop">
                 <h1>Drag Drop SOM</h1>
@@ -107,7 +124,10 @@ class DragDrop extends Component {
                     <div class="som-box" id="som-box">
                     {this.state.soms.map(function(d, idx){
                         if (d < 0) return null;
-                        return (<DragDropSOM id={d} onDelete={bin} />);
+                        return (<DragDropSOM id={d} onDelete={bin} onUpdate={update}/>);
+                    })}
+                    {links.map(function(d, idx){
+                        return (<Xarrow start={"som_"+d[0]} end={"som_"+d[1]} dashness={{animation:3}}/>);
                     })}
                     </div>
                 </div>
