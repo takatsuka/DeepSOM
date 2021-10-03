@@ -2,16 +2,23 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Tag, Popover, Content, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Collapse, TextArea, Content, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
 import "./drag-drop.scss"
 
 class DragDropSOM extends Component {
     constructor(props) {
         super(props);
-        this.state = {x: Math.random() * 800,
-                    y: Math.random() * 600,
-                    dragging: false};
+        if (this.props.x >= 0) {
+            this.state = {x: this.props.x,
+                        y: this.props.y,
+                        dragging: false};
+        } else {
+            this.state = {x: Math.random() * 800,
+                        y: Math.random() * 600,
+                        dragging: false};
+        }
+        this.props.parent.child_update(this.props.id, this.state.x, this.state.y);
     }
 
     onMouseDown() {
@@ -42,7 +49,7 @@ class DragDropSOM extends Component {
         var dy = current_mouse_pos.y - this.state.prev_mouse_pos.y;
 
         this.setState({x: this.state.x + dx, y: this.state.y + dy, prev_mouse_pos: current_mouse_pos});
-        this.props.parent.child_update();
+        this.props.parent.child_update(this.props.id, Math.round(this.state.x), Math.round(this.state.y));
     }
 
     render() {
@@ -71,7 +78,7 @@ class DragDropSOM extends Component {
 class DragDrop extends Component {
     constructor(props) {
         super(props)
-        this.state = {soms: [], add_link_active: false, add_link_step: 1};
+        this.state = {soms: [], add_link_active: false, add_link_step: 1, advanced_open: false};
 
         // Bind functions
         this.add_som = this.add_som.bind(this);
@@ -81,7 +88,8 @@ class DragDrop extends Component {
         this.render = this.render.bind(this);
         this.remove_handler = this.remove_handler.bind(this);
         this.child_update = this.child_update.bind(this);
-
+        this.advanced_toggle = this.advanced_toggle.bind(this);
+        this.import_som = this.import_som.bind(this);
 
         this.new_link_nodes = [-1, -1];
         this.links = [];
@@ -93,8 +101,8 @@ class DragDrop extends Component {
             return false;
         }
 
-        var joined = this.state.soms.concat(this.i++);
-        this.setState({ soms: joined });
+        this.state.soms.push([this.i++, -1, -1]);
+        this.setState({ soms: this.state.soms });
     }
 
     add_link_init() {
@@ -122,12 +130,24 @@ class DragDrop extends Component {
 
     remove_handler(id) {
         console.log("Delete", id);
-        this.state.soms[id] = -1;
+        this.state.soms[id][0] = -1;
         this.setState({ soms: this.state.soms });
     }
 
-    child_update() {
+    child_update(id, x, y) {
+        this.state.soms[id][1] = x;
+        this.state.soms[id][2] = y;
         this.setState({ render_now: true });
+    }
+
+    advanced_toggle() {
+        this.setState({ advanced_open: !this.state.advanced_open });
+    }
+
+    import_som(e) {
+        const data = JSON.parse(event.target.value);
+        this.links = data['links'];
+        this.setState({ soms: data['soms'] });
     }
 
     render() {
@@ -160,16 +180,25 @@ class DragDrop extends Component {
                     <Popover content={add_link_content} popoverClassName="bp3-popover-content-sizing" onClose={this.add_link_cancel} interactionKind="CLICK_TARGET_ONLY" isOpen={add_link_active} >
                         <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active}/>
                     </Popover>
+
+                    <Button icon="cog" onClick={this.advanced_toggle}>
+                        {this.state.advanced_open ? "Hide" : "Show"} Advanced Options
+                    </Button>
+
                 </ButtonGroup>
 
-                <div class="drag-drop-box">
-                    <div class="svg-box">
-                    </div>
+                <Collapse isOpen={this.state.advanced_open}>
+                    <Icon icon="export" /> Export SOM
+                    <TextArea id="export_som" value={JSON.stringify({"soms": this.state.soms, "links": this.links})} growVertically={true} />
+                    <Icon icon="import" /> Import SOM
+                    <TextArea id="import_som" growVertically={true} onChange={this.import_som}/>
+                </Collapse>
 
+                <div class="drag-drop-box">
                     <div class="som-box" id="som-box">
                     {this.state.soms.map(function(d, idx){
-                        if (d < 0) return null;
-                        return (<DragDropSOM id={d} parent={this_obj}/>);
+                        if (d[0] < 0) return null;
+                        return (<DragDropSOM id={d[0]} x={d[1]} y={d[2]} parent={this_obj}/>);
                     })}
                     {this.links.map(function(d, idx){
                         return (<Xarrow start={"som_"+d[0]} end={"som_"+d[1]} dashness={{animation:3}}/>);

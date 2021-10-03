@@ -5,6 +5,7 @@ import { NonIdealState } from "@blueprintjs/core";
 import Welcome from "../welcome/welcome"
 import Canvas from "./canvas"
 import ImageView from "../imageview/imageview"
+import DragDropSOM from "../drag-drop/drag-drop"
 
 class TabsManager extends Component {
     constructor(props) {
@@ -34,6 +35,7 @@ class TabsManager extends Component {
         this.openTab(<Canvas w="30" h="30" data={data}/>, "Canvas", false)
 
         this.openTab(<ImageView />, "SOM1", true)
+        this.openTab(<DragDropSOM />, "Drag Drop", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
