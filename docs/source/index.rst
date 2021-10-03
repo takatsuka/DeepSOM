@@ -17,7 +17,7 @@ Quickstart Guide
     the PySOM Creator tool.
 
 :doc:`prerequisites`
-    Dependencies and setup configuration required 
+    Dependencies and setup configuration possibly required prior to use.
 
 :doc:`tested-environments`
     Operating systems and environments known to work.
@@ -52,7 +52,6 @@ PySOM Creator Visualisation Tool
    :maxdepth: 1
    :caption: Contents:
    
-   quickstart
    installing
    prerequisites
    tested-environments

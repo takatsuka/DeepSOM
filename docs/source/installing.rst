@@ -1,5 +1,5 @@
-Installing
-======================
+Setup & Installation
+==========================
 
 There are two main methods to get the Deep SOM Library up and running on your
 system.
