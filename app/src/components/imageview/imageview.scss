@@ -1,23 +1,39 @@
 .som {
-    width: 100%;
-    height: 100%;
-    background-color: #BFCCD6;
+    display: flex;
+    // background-color: #BFCCD6;
 }
 
 .result {
     width: 100%;
     height: 100%;
-    background-color: #8A9BA8;
+    background-color: #10161A;
+    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.svg-render {
+.imviewsvg-render {
     width: 100%;
     height: 100%;
+    
 }
 
 .visview {
-    width: 200px;
-    height: 200px;
+    padding-top: 40px;
+    width: 100%;
+
+}
+
+.imviewgraph-area {
+    height: 100%;
+
+}
+
+.imviewgraph-area > div {
+    float: left;
+    height: 100%;
 }
 
 .submenu{

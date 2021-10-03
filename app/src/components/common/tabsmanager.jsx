@@ -3,7 +3,6 @@ import { Component } from 'react';
 import { NonIdealState } from "@blueprintjs/core";
 
 import Welcome from "../welcome/welcome"
-import Canvas from "./canvas"
 import ImageView from "../imageview/imageview"
 
 class TabsManager extends Component {
@@ -20,19 +19,6 @@ class TabsManager extends Component {
     componentDidMount() {
 
         this.openTab(<Welcome />, "Welcome PySOM", true)
-        this.openTab(<Welcome />, "Welcome PySOM 2", true)
-
-
-        const data = [
-                        [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240],
-                        [255, 235, 215, 195, 175, 155, 135, 115, 95, 75, 55, 35, 15],
-                        [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240],
-                        [255, 235, 215, 195, 175, 155, 135, 115, 95, 75, 55, 35, 15],
-                        [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240],
-                        [255, 235, 215, 195, 175, 155, 135, 115, 95, 75, 55, 35, 15],
-                    ]
-        this.openTab(<Canvas w="30" h="30" data={data}/>, "Canvas", false)
-
         this.openTab(<ImageView />, "SOM1", true)
     }
 
