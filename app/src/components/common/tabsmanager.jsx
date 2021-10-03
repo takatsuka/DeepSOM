@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { Component } from 'react';
 import { NonIdealState } from "@blueprintjs/core";
+
 import Welcome from "../welcome/welcome"
-import DragDrop from "../drag-drop/drag-drop"
 import Canvas from "./canvas"
+import ImageView from "../imageview/imageview"
 
 class TabsManager extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class TabsManager extends Component {
 
         this.openTab(<Welcome />, "Welcome PySOM", true)
         this.openTab(<Welcome />, "Welcome PySOM 2", true)
-        this.openTab(<DragDrop />, "Drag Drop", true)
+
 
         const data = [
                         [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240],
@@ -30,7 +31,9 @@ class TabsManager extends Component {
                         [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240],
                         [255, 235, 215, 195, 175, 155, 135, 115, 95, 75, 55, 35, 15],
                     ]
-        this.openTab(<Canvas w="30" h="30" data={data}/>, "Canvas", true)
+        this.openTab(<Canvas w="30" h="30" data={data}/>, "Canvas", false)
+
+        this.openTab(<ImageView />, "SOM1", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {

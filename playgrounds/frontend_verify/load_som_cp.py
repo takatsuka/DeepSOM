@@ -1,5 +1,5 @@
 import json
-
+import numpy as np
 d = json.loads(open('sample_cp.json').read())
 
-print(len(d['weights'][0]))
+print(np.array(d['weights']))

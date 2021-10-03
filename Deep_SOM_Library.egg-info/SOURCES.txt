@@ -1,6 +1,0 @@
-README.md
-setup.py
-Deep_SOM_Library.egg-info/PKG-INFO
-Deep_SOM_Library.egg-info/SOURCES.txt
-Deep_SOM_Library.egg-info/dependency_links.txt
-Deep_SOM_Library.egg-info/top_level.txt

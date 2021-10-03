@@ -1,0 +1,44 @@
+.som {
+    width: 100%;
+    height: 100%;
+    background-color: #BFCCD6;
+}
+
+.result {
+    width: 100%;
+    height: 100%;
+    background-color: #8A9BA8;
+}
+
+.svg-render {
+    width: 100%;
+    height: 100%;
+}
+
+.visview {
+    width: 200px;
+    height: 200px;
+}
+
+.submenu{
+    position: fixed;
+    width: 100%;
+    background-color: whitesmoke;
+    padding: 0px 0px 0px 3px;
+
+    border-bottom: ridge;
+    border-bottom-color: #979ea3;
+    border-bottom-width: thin;
+
+    border-top: ridge;
+    border-top-color: #006195;
+    border-top-width:thin;
+    height: 40px;
+}
+
+
+.sm-buttong{
+    // width: 100%;
+    height: 40px;
+    padding: 5px 0px 5px 0px;
+}

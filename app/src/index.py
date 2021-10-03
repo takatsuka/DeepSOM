@@ -18,14 +18,16 @@ class Api:
     services = {}
     services_n = 0
 
-    def launch_service(self, key, params):
+    def launch_service(self, key):
         if key not in self.services_handle:
             return
-        s = self.services_handle[key](*params)
-        self.services[self.services_n] = s
+        s = self.services_handle[key]()
+
+        sid = self.services_n
+        self.services[sid] = s
         self.services_n += 1
 
-        return s
+        return sid
 
     def close_service(self, handle):
         if handle not in self.services:

@@ -15,7 +15,7 @@ const Canvas = props => {
     const canvas_ref = useRef(null);
     useEffect(() => {draw(canvas_ref.current.getContext('2d'), props)}, [draw]);
 
-    return <canvas ref={canvas_ref}/>
+    return <canvas className={props.canvasClass} ref={canvas_ref}/>
 }
 
 export default Canvas;
