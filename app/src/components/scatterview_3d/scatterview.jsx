@@ -4,7 +4,6 @@ import { Component } from 'react';
 
 import { Tag, Popover, Menu, MenuItem, Slider, Button, ButtonGroup, Tab, Tabs, Intent, Divider, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay, Switch } from "@blueprintjs/core";
 import "./scatterview.scss"
-
 const d3 = require("d3");
 import { _3d } from 'd3-3d';
 
@@ -28,7 +27,7 @@ class ScatterView3D extends Component {
             datasetName: "",
             showTraining: false,
             vizData: null, hasDataset: false, dataset: [],
-            trainingData: null, hasTraining: false, weights: [], weightsId: 0, edges: [], somHeight: 10, somWidth: 10,
+            trainingData: null, hasTraining: false, weights: [], weightsId: 0, edges: [], somHeight: 20, somWidth: 20,
             point3d: null, weights3d: null, xScale3d: null, yScale3d: null, zScale3d: null,
             mouseX: 0, mouseY: 0,
         }
@@ -91,7 +90,7 @@ class ScatterView3D extends Component {
             .merge(lines)
             .attr('fill', d3.color('steelblue'))
             .attr('stroke', d3.color('steelblue'))
-            .attr('stroke-width', 0.2)
+            .attr('stroke-width', 0.6)
             .attr('x1', function (d) { return d[0].projected.x; })
             .attr('y1', function (d) { return d[0].projected.y; })
             .attr('x2', function (d) { return d[1].projected.x; })
@@ -225,14 +224,14 @@ class ScatterView3D extends Component {
 
         for (let i = 0; i < data.length; i++) {
             let center = nodes[i];
-            if (i % this.state.somWidth == this.state.somWidth-1) {
+            if (i % this.state.somWidth == this.state.somWidth - 1) {
                 // At the right most column
                 if (i != data.length - 1) {
                     // Not at the bottom row yet
                     let down = nodes[i + this.state.somWidth];
                     lines.push([center, down]); // Define line to the down node
                 }
-            } else if (Math.floor(i/this.state.somWidth) == this.state.somHeight-1) {
+            } else if (Math.floor(i / this.state.somWidth) == this.state.somHeight - 1) {
                 // At the bottom row
                 let right = nodes[i + 1];
                 lines.push([center, right]); // Define line to the right node
@@ -283,7 +282,6 @@ class ScatterView3D extends Component {
     }
 
     // To accept a data file from the upload point on ScatterView
-    // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importDataFile() {
         window.pywebview.api.open_csv_file().then((d) => {
             this.setState({ vizData: d[1], hasDataset: true, datasetName: d[0], showTraining: false, dataset: this.loadData(d[1]) }, () => {
@@ -295,11 +293,20 @@ class ScatterView3D extends Component {
     // To accept a weights file from the upload point on ScatterView
     // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importWeightsFile() {
-        let jsonData = require('./data/vis_sphere64.json');
-        let weightData = this.loadWeights(jsonData[0]);
-        // TODO: update this.state.somHeight, this.state.somWidth as well when loading weights from JSON file
-        this.setState({ trainingData: jsonData, hasTraining: true, showTraining: true, weightsId: 0, weights: weightData[0], edges: weightData[1] }, () => {
-            this.updatePlot();
+        window.pywebview.api.open_json_file().then((d) => {
+            let jsonData = d.weightspb;
+            let weightData = this.loadWeights(jsonData);
+            // console.log(jsonData)
+            // TODO: update this.state.somHeight, this.state.somWidth as well when loading weights from JSON file
+            this.setState({
+                
+                trainingData: jsonData,
+                hasTraining: true, showTraining: true,
+                weightsId: 0, weights: weightData[0], edges: weightData[1],
+                somHeight: d.h, somWidth: d.w
+            }, () => {
+                this.updatePlot();
+            });
         });
     }
 
@@ -476,17 +483,19 @@ class ScatterView3D extends Component {
 
                 <div className="graph-area">
                     <svg className="scatterview-svg-render" ref={this.d3view} />
-                    <div className="slider">
-                        <Slider
-                            disabled={!this.state.showTraining}
-                            min={0}
-                            max={9} // This is hardcoded for now, TODO: JSON file need to include size 
-                            stepSize={1}
-                            labelStepSize={1}
-                            onChange={this.handleWeightsIdChange("weightsId")}
-                            value={this.state.weightsId}
-                        />
-                    </div>
+                    {this.state.trainingData == null ? <></> :
+                        <div className="slider">
+                            <Slider
+                                disabled={!this.state.showTraining}
+                                min={0}
+                                max={Object.keys(this.state.trainingData).length} // This is hardcoded for now, TODO: JSON file need to include size 
+                                stepSize={1}
+                                labelStepSize={1}
+                                onChange={this.handleWeightsIdChange("weightsId")}
+                                value={this.state.weightsId}
+                            />
+                        </div>
+                    }
                 </div>
 
 

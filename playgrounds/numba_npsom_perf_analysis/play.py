@@ -9,7 +9,7 @@ datastr = [l.strip().split(',') for l in open(sys.argv[1]).readlines()]
 data = [[float(c) for c in e] for e in datastr]
 
 
-model = som(100,100,3, init_epoch=16384)
+model = som(10,10,3, init_epoch=16384)
 
 start = time.time()
 for _ in range(16384):
