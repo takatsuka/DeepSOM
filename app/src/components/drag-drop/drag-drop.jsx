@@ -9,16 +9,7 @@ import "./drag-drop.scss"
 class DragDropSOM extends Component {
     constructor(props) {
         super(props);
-        if (this.props.x >= 0) {
-            this.state = {x: this.props.x,
-                        y: this.props.y,
-                        dragging: false};
-        } else {
-            this.state = {x: Math.random() * 800,
-                        y: Math.random() * 600,
-                        dragging: false};
-        }
-        this.props.parent.child_update(this.props.id, this.state.x, this.state.y);
+        this.state = {dragging: false};
     }
 
     onMouseDown() {
@@ -45,11 +36,10 @@ class DragDropSOM extends Component {
             x: event.pageX,
             y: event.pageY
         };
-        var dx = current_mouse_pos.x - this.state.prev_mouse_pos.x;
-        var dy = current_mouse_pos.y - this.state.prev_mouse_pos.y;
-
-        this.setState({x: this.state.x + dx, y: this.state.y + dy, prev_mouse_pos: current_mouse_pos});
-        this.props.parent.child_update(this.props.id, Math.round(this.state.x), Math.round(this.state.y));
+        var new_x = this.props.x + current_mouse_pos.x - this.state.prev_mouse_pos.x;
+        var new_y = this.props.y + current_mouse_pos.y - this.state.prev_mouse_pos.y;
+        this.setState({prev_mouse_pos: current_mouse_pos});
+        this.props.parent.child_update(this.props.id, Math.round(new_x), Math.round(new_y));
     }
 
     render() {
@@ -59,7 +49,7 @@ class DragDropSOM extends Component {
         }
 
         return (<div class="som" id={"som_"+this.props.id}
-                style={{top: this.state.y, left: this.state.x, opacity: opacity}}
+                style={{top: this.props.y, left: this.props.x, opacity: opacity}}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
@@ -101,7 +91,9 @@ class DragDrop extends Component {
             return false;
         }
 
-        this.state.soms.push([this.i++, -1, -1]);
+        let x = Math.round(Math.random() * 800);
+        let y = Math.round(Math.random() * 600);
+        this.state.soms.push([this.i++, x, y]);
         this.setState({ soms: this.state.soms });
     }
 
