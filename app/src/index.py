@@ -2,7 +2,7 @@ import os
 import sys
 import threading
 import webview
-
+import json
 from time import time
 
 from py.som_viz_service import SOMVisualizationService
@@ -75,6 +75,20 @@ class Api:
 
         lines = open(filename).readlines()
         return os.path.basename(filename), [l.strip().split(',') for l in lines]
+
+    def open_json_file(self):
+        filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
+        if filename == None:
+            return None
+
+        if len(filename) < 1:
+            return None
+        filename = filename[0]
+        if not os.path.exists(filename):
+            return None
+
+        fields = json.loads(open(filename).read())
+        return fields
 
     def terminate(self):
         webview.windows[0].destroy()

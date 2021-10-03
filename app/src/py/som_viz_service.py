@@ -17,7 +17,8 @@ def bilinear(q11, q12, q21, q22, x, y):
 class SOMVisualizationService:
     def __init__(self):
 
-        self.filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
+        self.filename = webview.windows[0].create_file_dialog(
+            webview.OPEN_DIALOG)
         self.data = json.loads(open(self.filename[0]).read())
         self.weights = np.array(self.data['weights'])
 

@@ -108,7 +108,7 @@ class Creator extends Component {
         </Navbar>
 
         <div className="detail">
-          <SplitPane split="vertical" minSize={180}>
+          <SplitPane split="vertical" minSize={180} style={{height:'calc(100% - 50px)'}} >
 
             <div className="leftpanel">
               <ProjectExplorer />
