@@ -28,7 +28,7 @@ class ScatterView3D extends Component {
             datasetName: "",
             showTraining: false,
             vizData: null, hasDataset: false, dataset: [],
-            trainingData: null, hasTraining: false, weights: [], weightsId: 0, edges: [],
+            trainingData: null, hasTraining: false, weights: [], weightsId: 0, edges: [], somHeight: 10, somWidth: 10,
             point3d: null, weights3d: null, xScale3d: null, yScale3d: null, zScale3d: null,
             mouseX: 0, mouseY: 0,
         }
@@ -225,20 +225,20 @@ class ScatterView3D extends Component {
 
         for (let i = 0; i < data.length; i++) {
             let center = nodes[i];
-            if (i % 10 == 9) {
+            if (i % this.state.somWidth == this.state.somWidth-1) {
                 // At the right most column
                 if (i != data.length - 1) {
                     // Not at the bottom row yet
-                    let down = nodes[i + 10];
+                    let down = nodes[i + this.state.somWidth];
                     lines.push([center, down]); // Define line to the down node
                 }
-            } else if (i % 100 > 89) {
+            } else if (Math.floor(i/this.state.somWidth) == this.state.somHeight-1) {
                 // At the bottom row
                 let right = nodes[i + 1];
                 lines.push([center, right]); // Define line to the right node
             } else {
                 // Not at the bottom row nor at the right most column
-                let down = nodes[i + 10];
+                let down = nodes[i + this.state.somWidth];
                 let right = nodes[i + 1];
                 lines.push([center, down]); // Define line to the down node
                 lines.push([center, right]); // Define line to the right node
@@ -297,6 +297,7 @@ class ScatterView3D extends Component {
     importWeightsFile() {
         let jsonData = require('./data/vis_sphere64.json');
         let weightData = this.loadWeights(jsonData[0]);
+        // TODO: update this.state.somHeight, this.state.somWidth as well when loading weights from JSON file
         this.setState({ trainingData: jsonData, hasTraining: true, showTraining: true, weightsId: 0, weights: weightData[0], edges: weightData[1] }, () => {
             this.updatePlot();
         });
