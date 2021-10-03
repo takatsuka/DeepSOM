@@ -7,6 +7,7 @@ import numpy as np
 def lerp(u, v, t):
     return u + t * (v - u)
 
+
 def bilinear(q11, q12, q21, q22, x, y):
     # x and y are within range [0,1]
     r1 = lerp(q11, q12, x)
@@ -27,7 +28,8 @@ class SOMVisualizationService:
         q12 = int(x) + 1, int(y)
         q21 = int(x), int(y) + 1
         q22 = int(x) + 1, int(y) + 1
-        pts = [self.weights[i[1] * self.data['w'] + i[0]] for i in [q11, q12, q21, q22]]
+        pts = [self.weights[i[1] * self.data['w'] + i[0]]
+               for i in [q11, q12, q21, q22]]
         img = bilinear(*pts, x - int(x), y - int(y)) * 255
 
         return img.astype(np.int32).reshape((28, 28)).tolist()
