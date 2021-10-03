@@ -490,7 +490,7 @@ class ScatterView3D extends Component {
                                 min={0}
                                 max={Object.keys(this.state.trainingData).length} // This is hardcoded for now, TODO: JSON file need to include size 
                                 stepSize={1}
-                                labelStepSize={1}
+                                labelStepSize={20}
                                 onChange={this.handleWeightsIdChange("weightsId")}
                                 value={this.state.weightsId}
                             />
