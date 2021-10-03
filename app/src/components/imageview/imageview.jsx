@@ -103,19 +103,16 @@ class ImageView extends Component {
         var horMarg = this.state.dotRadius
         var verMarg = h * 0.5 - (gridSize * 0.5)
 
-
-
-
-        if (this.selector.length < 1) this.selector.push({x: horMarg + margin, y: verMarg + margin})
+        if (this.selector.length < 1) this.selector.push({ x: horMarg + margin, y: verMarg + margin })
         else {
             var coord = this.selector[0]
             var ori = { x: (coord.x - (horMarg + margin)) / gridSize, y: (coord.y - (verMarg + margin)) / gridSize }
-            var somC = { x: ori.x * this.state.somDim, y: ori.y * this.state.somDim }
-
+            var somC = { x: ori.x * (this.state.somDim-1), y: ori.y * (this.state.somDim-1) }
+            console.log(somC)
             var self = this
             if (this.state.services != null) {
                 window.pywebview.api.call_service(this.state.services, "position", [somC.x, somC.y]).then((x) => (
-                    // console.log(x)
+                    
                     self.setState({
                         img: x
                     })
@@ -130,8 +127,23 @@ class ImageView extends Component {
                 (x) => ({ x: x * spacing + horMarg + margin, y: y * spacing + verMarg + margin })
             ))
         )
-        console.log(dots)
+
         var grid = dots.flat()
+
+        var lines = [...Array(this.state.somDim).keys()].map((x) => (
+            {
+                x1: horMarg + margin, y1: x * spacing + verMarg + margin,
+                x2: horMarg + margin + (this.state.somDim - 1) * spacing, y2: x * spacing + verMarg + margin
+            }
+        ))
+
+        var vlines = [...Array(this.state.somDim).keys()].map((x) => (
+            {
+                x1: x * spacing + horMarg + margin, y1: verMarg + margin,
+                x2: x * spacing + horMarg + margin, y2: (this.state.somDim - 1) * spacing + verMarg + margin
+            }
+        ))
+        lines = lines.concat(vlines)
 
         const svg = d3.select(this.d3view.current)
         svg.selectAll('*').remove()
@@ -147,6 +159,18 @@ class ImageView extends Component {
             .attr("fill", "#10161A")
 
         svg.append("g")
+            .attr("stroke", "#555")
+            .attr("stroke-width", 0.5)
+            .selectAll("line")
+            .data(lines)
+            .join("line")
+            .attr("x1", (d) => (d.x1))
+            .attr("x2", (d) => (d.x2))
+            .attr("y1", (d) => (d.y1))
+            .attr("y2", (d) => (d.y2))
+            .attr("stroke", "#182026")
+
+        svg.append("g")
             .attr("stroke", "#fff")
             .attr("stroke-width", 0.5)
             .selectAll("circle")
@@ -157,11 +181,6 @@ class ImageView extends Component {
             .attr("r", 12)
             .attr("fill", "#C22762")
             .call(this.somSelectorDrag())
-
-        // svg.append("g")
-        //     .attr("stroke", "#555")
-        //     .attr("stroke-width", 0.5)
-        //     .selectAll("line")
 
 
 
