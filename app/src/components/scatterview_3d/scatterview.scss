@@ -1,12 +1,15 @@
-.svg-render {
+$slider-height: 30px;
+
+.scatterview-svg-render {
     width: 100%;
-    height: 80%;
+    height: calc(100% - $slider-height - 20px);
 }
 
 .slider {
-    height: 10%;
+    height: $slider-height;
     width: 80%;
     display: block;
+
     margin: 0 auto;
 }
 
@@ -14,7 +17,10 @@
     height: 40px;
     padding: 5px 0px 5px 0px;
 }
-
+.graph-area {
+    padding-top: 40px;
+    height: 100%;
+}
 .submenu{
     position: fixed;
     width: 100%;

@@ -26,7 +26,7 @@ class ScatterView3D extends Component {
         // Define state variables
         this.state = {
             datasetName: "",
-            showTraining: false, 
+            showTraining: false,
             vizData: null, hasDataset: false, dataset: [],
             trainingData: null, hasTraining: false, weights: [], weightsId: 0, edges: [],
             point3d: null, weights3d: null, xScale3d: null, yScale3d: null, zScale3d: null,
@@ -55,7 +55,7 @@ class ScatterView3D extends Component {
                 this.updatePlot();
                 this.updateWindow();
             });
-            
+
         } else {
             // If there wasn't a previous dataset loaded
             this.initView();
@@ -84,20 +84,20 @@ class ScatterView3D extends Component {
         const svg = this.svg
         let lines = svg.selectAll('line').data(data);
 
-		lines
-			.enter()
-			.append('line')
+        lines
+            .enter()
+            .append('line')
             .attr('class', '_3d')
-			.merge(lines)
-			.attr('fill', d3.color('steelblue'))
-			.attr('stroke', d3.color('steelblue'))
-			.attr('stroke-width', 0.2)
-			.attr('x1', function(d){ return d[0].projected.x; })
-			.attr('y1', function(d){ return d[0].projected.y; })
-			.attr('x2', function(d){ return d[1].projected.x; })
-			.attr('y2', function(d){ return d[1].projected.y; });
+            .merge(lines)
+            .attr('fill', d3.color('steelblue'))
+            .attr('stroke', d3.color('steelblue'))
+            .attr('stroke-width', 0.2)
+            .attr('x1', function (d) { return d[0].projected.x; })
+            .attr('y1', function (d) { return d[0].projected.y; })
+            .attr('x2', function (d) { return d[1].projected.x; })
+            .attr('y2', function (d) { return d[1].projected.y; });
 
-		lines.exit().remove();
+        lines.exit().remove();
     }
 
     // TODO: Set colour of points accordingly to type of data
@@ -186,7 +186,7 @@ class ScatterView3D extends Component {
     dragEnd(event) {
         this.mouseX = d3.pointer(event, this)[0] - this.mx + this.mouseX;
         this.mouseY = d3.pointer(event, this)[1] - this.my + this.mouseY;
-        this.setState({mouseX: this.mouseX, mouseY: this.mouseY});
+        this.setState({ mouseX: this.mouseX, mouseY: this.mouseY });
     }
 
     // Calculate where everything should be after dragging and redraw plot
@@ -227,19 +227,19 @@ class ScatterView3D extends Component {
             let center = nodes[i];
             if (i % 10 == 9) {
                 // At the right most column
-                if (i != data.length-1) {
+                if (i != data.length - 1) {
                     // Not at the bottom row yet
-                    let down = nodes[i+10];
+                    let down = nodes[i + 10];
                     lines.push([center, down]); // Define line to the down node
-                } 
+                }
             } else if (i % 100 > 89) {
                 // At the bottom row
-                let right = nodes[i+1];
+                let right = nodes[i + 1];
                 lines.push([center, right]); // Define line to the right node
             } else {
                 // Not at the bottom row nor at the right most column
-                let down = nodes[i+10];
-                let right = nodes[i+1];
+                let down = nodes[i + 10];
+                let right = nodes[i + 1];
                 lines.push([center, down]); // Define line to the down node
                 lines.push([center, right]); // Define line to the right node
             }
@@ -363,9 +363,9 @@ class ScatterView3D extends Component {
         // Weight edges
         this.state.weights3d = _3d()
             .shape('LINE')
-            .x(function(d){ return d.x; })
-            .y(function(d){ return -d.y; })
-            .z(function(d){ return d.z; })
+            .x(function (d) { return d.x; })
+            .y(function (d) { return -d.y; })
+            .z(function (d) { return d.z; })
             .origin(this.origin)
             .rotateY(this.startAngle)
             .rotateX(-this.startAngle)
@@ -413,7 +413,7 @@ class ScatterView3D extends Component {
     // Reads in adjusted window size to calculate origin and scale of d3 objects
     updateWindow() {
         let innerWidth = window.innerWidth - 180;
-        let innerHeight = (window.innerHeight - 80)*0.9;
+        let innerHeight = (window.innerHeight - 80) * 0.9;
         // Calculate origin and scale based on current window size
         this.origin = [innerWidth / 2, innerHeight / 2];
         this.scale = innerWidth / 620 > innerHeight / 480 ? innerHeight / 480 * 100 : innerWidth / 620 * 100;
@@ -432,10 +432,10 @@ class ScatterView3D extends Component {
 
     // Function to update state on which set of weights from the training process we should visualise
     handleWeightsIdChange(key) {
-        return (value) => this.setState({ 
-            [key]: value, 
+        return (value) => this.setState({
+            [key]: value,
             weights: this.loadWeights(this.state.trainingData[value])[0],
-            edges: this.loadWeights(this.state.trainingData[value])[1] 
+            edges: this.loadWeights(this.state.trainingData[value])[1]
         }, () => this.updatePlot());
     }
 
@@ -458,7 +458,7 @@ class ScatterView3D extends Component {
                                     checked={this.state.showTraining}
                                     label="Show training"
                                     onChange={this.handleShowTrainingChange} />
-                                    
+
                                 <Button disabled={true} >{this.state.datasetName}</Button>
                                 <Divider />
                             </>
@@ -472,18 +472,23 @@ class ScatterView3D extends Component {
 
 
                 </div>
-                <svg className="svg-render" ref={this.d3view} />
-                <div className="slider">
-                    <Slider
-                        disabled={!this.state.showTraining}
-                        min={0}
-                        max={9} // This is hardcoded for now, TODO: JSON file need to include size 
-                        stepSize={1}
-                        labelStepSize={1}
-                        onChange={this.handleWeightsIdChange("weightsId")}
-                        value={this.state.weightsId}
-                    />
+
+                <div className="graph-area">
+                    <svg className="scatterview-svg-render" ref={this.d3view} />
+                    <div className="slider">
+                        <Slider
+                            disabled={!this.state.showTraining}
+                            min={0}
+                            max={9} // This is hardcoded for now, TODO: JSON file need to include size 
+                            stepSize={1}
+                            labelStepSize={1}
+                            onChange={this.handleWeightsIdChange("weightsId")}
+                            value={this.state.weightsId}
+                        />
+                    </div>
                 </div>
+
+
             </>)
 
     }
