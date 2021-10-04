@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, NonIdealState, Overlay, Divider, Drawer, DrawerSize, Classes, Portal } from "@blueprintjs/core";
+import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal } from "@blueprintjs/core";
 
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import "./drag-drop.scss"
@@ -114,12 +114,47 @@ class DragDrop extends Component {
         this.node_templates = {
             inout: {
                 name: "Input",
+                fixed: true,
                 style: { backgroundColor: "#738694", width: "100px", height: "100px" },
                 node_props: { dim: 3 },
                 render: (d) => (
                     <div style={{ textAlign: 'center' }}>
                         <p style={{ fontSize: '18px' }}>{d.name}</p>
                         <strong style={{}}>{d.props.dim}</strong>
+                    </div>
+                ),
+
+                contextMenu: (d) => (
+                    <div>
+                        <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <Divider />
+                        <NumericInput
+                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
+                            rightElement={<Button disabled minimal>Dimension</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                    </div>
+                )
+            },
+
+            get_bmu: {
+                name: "get_bmu",
+                style: { backgroundColor: "#D9822B", width: "100px", height: "100px" },
+                node_props: { dim: 3 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center' }}>
+                        <p style={{ fontSize: '18px' }}>{d.name}</p>
+                        <strong style={{}}>{d.props.dim}</strong>
+                    </div>
+                ),
+
+                contextMenu: (d) => (
+                    <div>
+                        <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <Divider />
+                        <NumericInput
+                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
+                            rightElement={<Button disabled minimal>Dimension</Button>}
+                            fill buttonPosition="left" placeholder="10" />
                     </div>
                 )
             },
@@ -134,15 +169,30 @@ class DragDrop extends Component {
                         <p style={{ fontSize: '18px' }}>{d.name}</p>
                         <Icon icon="layout-grid" size={30} />
 
-                        <p style={{ textAlign: 'left', marginTop: "20px" }}>
+                        <div style={{ textAlign: 'left', marginTop: "20px" }}>
                             <strong style={{}}> Dimension:</strong><br />
-                            <div style={{paddingLeft: "10px", marginBottom: '10px'}}>
-                                Data: {d.props.dim} <br />
+                            <div style={{ paddingLeft: "10px", marginBottom: '10px' }}>
+                                Data: {d.props.inputDim} <br />
                                 Internal: {d.props.dim}
                             </div>
                             <strong style={{}}> Shape: </strong> {d.props.shape}<br />
-                        </p>
+                        </div>
 
+                    </div>
+                ),
+                contextMenu: (d) => (
+                    <div>
+                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <Divider />
+                        <NumericInput
+                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
+                            rightElement={<Button disabled minimal>Dimension</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                        <NumericInput
+                            value={d.props.inputDim} onValueChange={(t) => this.wrapSOMS(() => (d.props.inputDim = t))}
+                            rightElement={<Button disabled minimal>Input Dimension</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                        <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => this.wrapSOMS(() => (d.props.shape = t.target.value))} />
                     </div>
                 )
             }
@@ -161,6 +211,11 @@ class DragDrop extends Component {
         output.props.dim = 2
         this.state.soms[output.id] = output
 
+    }
+
+    wrapSOMS(thing) {
+        thing()
+        this.setState({ soms: this.state.soms })
     }
 
     create_som(template) {
@@ -183,7 +238,6 @@ class DragDrop extends Component {
         this.state.soms[this.i] = node;
         this.setState({ soms: this.state.soms });
 
-        return newN
     }
 
     add_link_init() {
@@ -212,7 +266,7 @@ class DragDrop extends Component {
     remove_handler(id) {
         var s = this.state.soms
         delete s[id]
-        this.setState({ soms: s, side_menu: false });
+        this.setState({ soms: s, side_menu: false, editing: null });
     }
 
     child_update(id, x, y) {
@@ -231,12 +285,27 @@ class DragDrop extends Component {
         this.setState({ soms: data['soms'] });
     }
 
+    export_som() {
+        return {nodes: this.state.soms, connections: this.links}
+    }
+
     closeSideMenu() {
         this.setState({ side_menu: false, editing: null })
     }
 
     openSideMenu(som) {
         this.setState({ side_menu: true, editing: som.props.node.id })
+    }
+
+    saveSession(){
+        window.pywebview.api.save_json_file(this.export_som()).then((e) => (console.log(e)))
+    }
+
+    loadSessionFromFile(){
+        window.pywebview.api.open_json_file().then(function(x){
+            this.links = x.connections
+            this.setState({soms: x.nodes})
+        }.bind(this))
     }
 
     render() {
@@ -254,7 +323,15 @@ class DragDrop extends Component {
                 )}
             </div>
         );
-        
+
+        var editingNode = this.state.soms[this.state.editing]
+
+        const sessionMenu = (
+            <Menu>
+                <MenuItem icon="document-share" text="Save" onClick={() => this.saveSession()}/>
+                <MenuItem icon="document-open" text="Load" onClick={() => this.loadSessionFromFile()}/>
+            </Menu>
+        )
 
         return (
             <>
@@ -263,6 +340,11 @@ class DragDrop extends Component {
 
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
                         <Button disabled={true} >not_so_deep_som</Button>
+                        <Divider />
+                        <Popover content={sessionMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
+                            <Button className="bp3-minimal" icon="code-block" text="Session" />
+                        </Popover>
+
                         <Divider />
                         {add_som_enable ? (
                             <Button icon="add" text="Add SOM" onClick={() => this.add_som('som')} />
@@ -291,6 +373,7 @@ class DragDrop extends Component {
                     <div className="dd-submenu">
 
                         <Drawer
+
                             icon="info-sign"
                             onClose={() => (this.closeSideMenu())}
                             title="Properties"
@@ -303,23 +386,12 @@ class DragDrop extends Component {
                             <div className={Classes.DRAWER_BODY}>
                                 <div className={Classes.DIALOG_BODY}>
 
-                                    <InputGroup placeholder="Name" />
-                                    <Divider />
+                                    {this.state.editing == null ? <></> : this.node_templates[editingNode.template].contextMenu(editingNode)}
 
-                                    <NumericInput placeholder="10" rightElement={<Button disabled minimal>SOM Dimension</Button>} fill buttonPosition="left" />
-                                    <Divider />
-                                    <NumericInput placeholder="10" rightElement={<Button disabled minimal> Input Dimension </Button>} fill buttonPosition="left" />
-
-                                    <Divider />
-                                    <strong>Connections</strong><br />
-                                    TODO: make this
-
-                                    <Divider />
-                                    <strong>Single layer SOM model.</strong>
                                 </div>
                             </div>
                             <div className={Classes.DRAWER_FOOTER}>
-                                <Button icon="trash" intent="danger" minimal onClick={() => this.remove_handler(this.state.editing)}> Delete </Button>
+                                <Button icon="trash" intent="danger" disabled={editingNode && 'fixed' in this.node_templates[editingNode.template]} minimal onClick={() => this.remove_handler(this.state.editing)}> Delete </Button>
                                 <Button icon="help" intent="success" minimal> Open Manual </Button>
                             </div>
                         </Drawer>

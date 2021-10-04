@@ -90,6 +90,15 @@ class Api:
         fields = json.loads(open(filename).read())
         return fields
 
+    def save_json_file(self, obj):
+        filename = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
+        if filename == None:
+            return None
+
+
+        open(filename, 'w').write(json.dumps(obj))
+        return os.path.basename(filename)
+
     def terminate(self):
         webview.windows[0].destroy()
         os.exit(0)
