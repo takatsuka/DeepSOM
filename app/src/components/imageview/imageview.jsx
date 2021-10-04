@@ -108,7 +108,6 @@ class ImageView extends Component {
             var coord = this.selector[0]
             var ori = { x: (coord.x - (horMarg + margin)) / gridSize, y: (coord.y - (verMarg + margin)) / gridSize }
             var somC = { x: ori.x * (this.state.somDim-1), y: ori.y * (this.state.somDim-1) }
-            console.log(somC)
             var self = this
             if (this.state.services != null) {
                 window.pywebview.api.call_service(this.state.services, "position", [somC.x, somC.y]).then((x) => (
