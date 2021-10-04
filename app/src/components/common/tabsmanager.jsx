@@ -19,9 +19,7 @@ class TabsManager extends Component {
 
     componentDidMount() {
 
-        this.openTab(<Welcome />, "Welcome PySOM", true)
-        this.openTab(<ImageView />, "SOM1", true)
-        this.openTab(<DragDropSOM />, "Drag Drop", true)
+        this.openTab(<Welcome />, "Welcome to PySOM", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
