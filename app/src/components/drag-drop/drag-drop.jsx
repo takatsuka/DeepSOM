@@ -267,6 +267,16 @@ class DragDrop extends Component {
             }
         }
 
+        var init = this.props.pullInit()
+        if(init != null){
+            window.pywebview.api.open_json_file_at(init).then(function (x) {
+                this.links = x.connections
+                this.setState({ soms: x.nodes })
+            }.bind(this))
+
+            return
+        }
+
         var restored = this.props.pullState()
         
         if(restored != null && "state" in restored && "links" in restored){
@@ -437,7 +447,7 @@ class DragDrop extends Component {
                 <div className="submenu">
 
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
-                        <Button disabled={true} >not_so_deep_som</Button>
+                        {/* <Button disabled={true} >not_so_deep_som</Button> */}
                         <Divider />
                         <Popover content={sessionMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
                             <Button className="bp3-minimal" icon="code-block" text="Session" />

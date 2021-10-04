@@ -29,7 +29,20 @@ class TabsManager extends Component {
         }
     }
 
-    openTab(cont, displayName, active) {
+    getTabInit(tabID) {
+        var tabs = this.state.openedTabs
+        if(tabs[tabID] == null) return // dont care about closed tabs
+        if(!tabs[tabID].shouldInit) return null
+
+        tabs[tabID].shouldInit = false
+        this.setState({
+            openedTabs: tabs
+        })
+
+        return tabs[tabID].init
+    }
+
+    openTab(cont, displayName, active, init) {
         var tabs = this.state.openedTabs
         let asid = this.tabIDCounter
         this.tabIDCounter = this.tabIDCounter + 1
@@ -37,14 +50,17 @@ class TabsManager extends Component {
             key: asid,
             tabID: asid,
             saveState: (state) => this.storeState(asid, state),
-            pullState: () => this.getState(asid)
+            pullState: () => this.getState(asid),
+            pullInit: () => this.getTabInit(asid)
         })
 
         tabs[asid] = {
             content: c,
             state: {},
             name: displayName,
-            id: asid
+            id: asid,
+            init: init,
+            shouldInit: init != null
         }
 
         this.setState({

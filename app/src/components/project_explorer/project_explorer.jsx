@@ -4,7 +4,8 @@ import { Component } from 'react';
 
 import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup } from "@blueprintjs/core";
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
-
+import DragDropSOM from '../drag-drop/drag-drop';
+import ImageView from '../imageview/imageview';
 
 class ProjectExplorer extends Component {
     constructor(props) {
@@ -19,55 +20,20 @@ class ProjectExplorer extends Component {
             },
 
             {
-                id: 1,
-                hasCaret: true,
+                id: 143,
+                hasCaret: false,
                 isExpanded: true,
                 icon: "graph",
                 label: "deepsom",
-                childNodes: [
-                    {
-                        id: 2,
-                        icon: "regression-chart",
-                        label: "LVQ",
-                    },
-                    {
-                        id: 3,
-                        icon: "layout-grid",
-                        label: "top_som",
-                    },
-                    {
-                        id: 4,
-                        icon: "many-to-one",
-                        label: "sampler2",
-                        hasCaret: true,
-                    },
-                ]
+                
             },
 
             {
-                id: 2,
-                hasCaret: true,
+                id: 22,
+                hasCaret: false,
                 isExpanded: false,
                 icon: "graph",
                 label: "not_so_deepsom",
-                childNodes: [
-                    {
-                        id: 4,
-                        icon: "regression-chart",
-                        label: "LVQ",
-                    },
-                    {
-                        id: 5,
-                        icon: "layout-grid",
-                        label: "top_som",
-                    },
-                    {
-                        id: 7,
-                        icon: "many-to-one",
-                        label: "sampler2",
-                        hasCaret: true,
-                    },
-                ]
             },
             {
                 id: 3,
@@ -88,6 +54,13 @@ class ProjectExplorer extends Component {
                         label: "donut_viz",
 
                     },
+
+                    {
+                        id: 96,
+                        icon: "media",
+                        label: "fashion_imgset",
+
+                    },
                 ]
             },
         ]
@@ -106,6 +79,20 @@ class ProjectExplorer extends Component {
         this.setState({tree: this.state.tree})
     }
 
+    handleOpen(id){
+        if(id == 143) {
+            this.props.openTab(<DragDropSOM />, "deepsom", true, "/Volumes/Sweep\ SSD/comp3988pre/dsom.json")
+        }
+
+        if(id == 22) {
+            this.props.openTab(<DragDropSOM />, "not_so_deepsom", true, "/Volumes/Sweep\ SSD/comp3988pre/som.json")
+        }
+
+        if(id == 96) {
+            this.props.openTab(<ImageView />, "ImageViz", true, "load")
+        }
+    }
+
     render() {
 
         return (
@@ -118,6 +105,7 @@ class ProjectExplorer extends Component {
                 <Tree elevation={Elevation.FOUR}
                     onNodeExpand={(x) => (this.updateTree(() => x.isExpanded = true))}
                     onNodeCollapse={(x) => (this.updateTree(() => x.isExpanded = false))}
+                    onNodeClick={(x) => this.handleOpen(x.id)}
                     contents={this.state.tree}
 
                 />

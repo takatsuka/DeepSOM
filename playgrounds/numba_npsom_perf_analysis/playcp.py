@@ -8,7 +8,7 @@ from random import sample as sp
 
 
 from mnist import MNIST
-mndata = MNIST('../../datasets/mnist/large_bin')
+mndata = MNIST('../../datasets/fashion_mnist/large_bin')
 train_dat, train_lab = mndata.load_training()
 test_dat, test_lab = mndata.load_testing()
 

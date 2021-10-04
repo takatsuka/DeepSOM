@@ -90,6 +90,14 @@ class Api:
         fields = json.loads(open(filename).read())
         return fields
 
+    def open_json_file_at(self, path):
+        filename = path
+        if not os.path.exists(filename):
+            return None
+
+        fields = json.loads(open(filename).read())
+        return fields
+
     def save_json_file(self, obj):
         filename = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
         if filename == None:

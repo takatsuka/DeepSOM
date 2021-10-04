@@ -72,7 +72,7 @@ class Creator extends Component {
       <Menu>
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <Divider />
-        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
+        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }}/>
         <Divider />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }}/>
         <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }}/>
@@ -117,7 +117,7 @@ class Creator extends Component {
           <SplitPane split="vertical" minSize={180} style={{height:'calc(100% - 50px)'}} >
 
             <div className="leftpanel">
-              <ProjectExplorer />
+              <ProjectExplorer openTab={(a,b,c,d) => this.tabman.current.openTab(a,b,c,d)}/>
 
             </div>
 
