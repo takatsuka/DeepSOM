@@ -2,9 +2,11 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Tag, Popover, Collapse, TextArea, Content, Menu, MenuItem, Position, Button, ButtonGroup, Alignment, Text, NonIdealState, Overlay, Divider} from "@blueprintjs/core";
+import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, NonIdealState, Overlay, Divider, Drawer, DrawerSize, Classes, Portal } from "@blueprintjs/core";
 
+import { ContextMenu2 } from "@blueprintjs/popover2";
 import "./drag-drop.scss"
+import { some } from 'd3-array';
 
 class DragDropSOM extends Component {
     constructor(props) {
@@ -12,8 +14,8 @@ class DragDropSOM extends Component {
         this.state = { dragging: false };
     }
 
-    onMouseDown() {
-        // console.log("DOWN");
+    onMouseDown(e) {
+        if (e.buttons !== 1) return
         this.setState({
             dragging: true, prev_mouse_pos: {
                 x: event.pageX,
@@ -29,48 +31,69 @@ class DragDropSOM extends Component {
 
     onMouseOut() {
         //this.onMouseUp();
+        // this.setState({ dragging: false });
     }
 
     onMouseMove(e) {
         if (!this.state.dragging) return
-
+        var n = this.props.node
         var current_mouse_pos = {
-            x: event.pageX,
-            y: event.pageY
+            x: e.pageX,
+            y: e.pageY
         };
-        var new_x = this.props.x + current_mouse_pos.x - this.state.prev_mouse_pos.x;
-        var new_y = this.props.y + current_mouse_pos.y - this.state.prev_mouse_pos.y;
+        var new_x = n.x + current_mouse_pos.x - this.state.prev_mouse_pos.x;
+        var new_y = n.y + current_mouse_pos.y - this.state.prev_mouse_pos.y;
         this.setState({ prev_mouse_pos: current_mouse_pos });
-        this.props.parent.child_update(this.props.id, Math.round(new_x), Math.round(new_y));
+        this.props.parent.child_update(n.id, Math.round(new_x), Math.round(new_y));
+    }
+
+    contextMenu(e) {
+        e.preventDefault()
+        this.props.parent.openSideMenu(this)
     }
 
     render() {
-        var opacity = 1;
-        if (this.state.dragging) {
-            var opacity = 0.6;
-        }
+        var n = this.props.node
+        var t = this.props.template
+        var s = t.style
 
-        return (<div className="dd-som" id={"som_" + this.props.id}
-            style={{ top: this.props.y, left: this.props.x, opacity: opacity }}
-            onMouseDown={this.onMouseDown.bind(this)}
-            onMouseUp={this.onMouseUp.bind(this)}
-            onMouseMove={this.onMouseMove.bind(this)}
-            onMouseOut={this.onMouseOut.bind(this)}
-        >
-            <b style={{ margin: "0 10px" }}>SOM {this.props.id}</b>
-            {this.props.parent.state.add_link_active ? (
-                <Button id="addlink" icon="add" intent="success" onClick={() => this.props.parent.add_link_node(this.props.id)} />
-            ) : (
-                <Button id="deletenode" icon="trash" intent="warning" onClick={() => this.props.parent.remove_handler(this.props.id)} />
-            )}
-        </div>);
+        return (
+            <div className="dd-som" id={"ddn_" + n.id}
+                style={{ top: n.y, left: n.x, opacity: this.state.dragging ? 0.6 : 1, width: s.width, height: s.height }}
+                onMouseDown={this.onMouseDown.bind(this)}
+                onMouseUp={this.onMouseUp.bind(this)}
+                onMouseMove={this.onMouseMove.bind(this)}
+                onMouseOut={this.onMouseOut.bind(this)}
+                onContextMenu={this.contextMenu.bind(this)}
+            >
+
+                <Card style={{ backgroundColor: s.backgroundColor, width: s.width, height: s.height }} interactive={true} elevation={Elevation.THREE}>
+                    {t.render(n)}
+                    {this.props.parent.state.add_link_active ? (
+                        <Button icon="add" intent="success" onClick={() => this.props.parent.add_link_node(n.id)} />
+                    ) : (
+                        <></>
+                    )}
+                </Card>
+
+            </div>
+        );
     }
 }
 
 class DragDrop extends Component {
     constructor(props) {
         super(props)
-        this.state = { soms: [], add_link_active: false, add_link_step: 1, advanced_open: false };
+        this.state = {
+            soms: {
+
+            },
+            add_link_active: false,
+            add_link_step: 1,
+            advanced_open: false,
+            side_menu: false,
+            editing: null
+        };
 
         // Bind functions
         this.add_som = this.add_som.bind(this);
@@ -86,17 +109,81 @@ class DragDrop extends Component {
         this.new_link_nodes = [-1, -1];
         this.links = [];
         this.i = 0;
-    }
 
-    add_som() {
-        if (this.state.soms.length > 10) {
-            return false;
+
+        this.node_templates = {
+            inout: {
+                name: "Input",
+                style: { backgroundColor: "#738694", width: "100px", height: "100px" },
+                node_props: { dim: 3 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center' }}>
+                        <p style={{ fontSize: '18px' }}>{d.name}</p>
+                        <strong style={{}}>{d.props.dim}</strong>
+                    </div>
+                )
+            },
+
+            som: {
+                name: "SOM",
+                style: { backgroundColor: "#137CBD", width: "200px", height: "200px" },
+                node_props: { dim: 10, shape: 'rect', inputDim: 3 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center' }}>
+
+                        <p style={{ fontSize: '18px' }}>{d.name}</p>
+                        <Icon icon="layout-grid" size={30} />
+
+                        <p style={{ textAlign: 'left', marginTop: "20px" }}>
+                            <strong style={{}}> Dimension:</strong><br />
+                            <div style={{paddingLeft: "10px", marginBottom: '10px'}}>
+                                Data: {d.props.dim} <br />
+                                Internal: {d.props.dim}
+                            </div>
+                            <strong style={{}}> Shape: </strong> {d.props.shape}<br />
+                        </p>
+
+                    </div>
+                )
+            }
         }
 
-        let x = Math.round(Math.random() * 800);
-        let y = Math.round(Math.random() * 600);
-        this.state.soms.push([this.i++, x, y]);
+        var input = this.create_som("inout")
+        input.x = 100
+        input.y = 200
+        input.name = "Input"
+        this.state.soms[input.id] = input
+
+        var output = this.create_som("inout")
+        output.x = 600
+        output.y = 200
+        output.name = "Output"
+        output.props.dim = 2
+        this.state.soms[output.id] = output
+
+    }
+
+    create_som(template) {
+
+        var te = this.node_templates[template]
+        var newN = {}
+        newN.name = te.name
+        newN.id = (++this.i)
+        newN.x = Math.round(Math.random() * 800);
+        newN.y = Math.round(Math.random() * 600);
+        newN.props = JSON.parse(JSON.stringify(te.node_props))
+        newN.template = template
+
+        return newN
+    }
+
+    add_som(template) {
+
+        var node = this.create_som(template)
+        this.state.soms[this.i] = node;
         this.setState({ soms: this.state.soms });
+
+        return newN
     }
 
     add_link_init() {
@@ -123,14 +210,14 @@ class DragDrop extends Component {
     }
 
     remove_handler(id) {
-        console.log("Delete", id);
-        this.state.soms[id][0] = -1;
-        this.setState({ soms: this.state.soms });
+        var s = this.state.soms
+        delete s[id]
+        this.setState({ soms: s, side_menu: false });
     }
 
     child_update(id, x, y) {
-        this.state.soms[id][1] = x;
-        this.state.soms[id][2] = y;
+        this.state.soms[id].x = x;
+        this.state.soms[id].y = y;
         this.setState({ render_now: true });
     }
 
@@ -144,8 +231,16 @@ class DragDrop extends Component {
         this.setState({ soms: data['soms'] });
     }
 
+    closeSideMenu() {
+        this.setState({ side_menu: false, editing: null })
+    }
+
+    openSideMenu(som) {
+        this.setState({ side_menu: true, editing: som.props.node.id })
+    }
+
     render() {
-        const add_som_enable = this.state.soms.length < 10;
+        const add_som_enable = true;
         const add_link_active = this.state.add_link_active;
         const add_link_step = this.state.add_link_step;
         const this_obj = this;
@@ -153,28 +248,24 @@ class DragDrop extends Component {
         let add_link_content = (
             <div>
                 {add_link_step == 1 ? (
-                    <h2>Select your first node...</h2>
+                    <h3>Select first node</h3>
                 ) : (
-                    <h2>Select your second node...</h2>
+                    <h2>Select second node</h2>
                 )}
             </div>
         );
-        //     <Collapse isOpen={this.state.advanced_open}>
-        //     <Icon icon="export" /> Export SOM
-        //     <TextArea id="export_som" value={JSON.stringify({ "soms": this.state.soms, "links": this.links })} growVertically={true} />
-        //     <Icon icon="import" /> Import SOM
-        //     <TextArea id="import_som" growVertically={true} onChange={this.import_som} />
-        // </Collapse>
+        
 
         return (
             <>
+
                 <div className="submenu">
-                    
+
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
-                    <Button disabled={true} >not_so_deep_som</Button>
-                    <Divider />
+                        <Button disabled={true} >not_so_deep_som</Button>
+                        <Divider />
                         {add_som_enable ? (
-                            <Button icon="add" text="Add SOM" onClick={this.add_som} />
+                            <Button icon="add" text="Add SOM" onClick={() => this.add_som('som')} />
                         ) : (
                             <Button icon="disable" text="Add SOM" disabled="true" />
                         )}
@@ -187,17 +278,61 @@ class DragDrop extends Component {
                             {this.state.advanced_open ? "Hide" : "Show"} Advanced Options
                         </Button>
                     </ButtonGroup>
+                    <Collapse isOpen={this.state.advanced_open}>
+                        <Icon icon="export" /> Export SOM
+                        <TextArea id="export_som" value={JSON.stringify({ "soms": this.state.soms, "links": this.links })} growVertically={true} />
+                        <Icon icon="import" /> Import SOM
+                        <TextArea id="import_som" growVertically={true} onChange={this.import_som} />
+                    </Collapse>
                 </div>
 
 
                 <div className="drag-drop-box">
+                    <div className="dd-submenu">
+
+                        <Drawer
+                            icon="info-sign"
+                            onClose={() => (this.closeSideMenu())}
+                            title="Properties"
+                            size={DrawerSize.SMALL}
+                            usePortal={true}
+                            isOpen={this.state.side_menu}
+                            hasBackdrop={false}
+                            style={{ marginTop: "145px", marginRight: "20px", marginBottom: "20px" }}
+                        >
+                            <div className={Classes.DRAWER_BODY}>
+                                <div className={Classes.DIALOG_BODY}>
+
+                                    <InputGroup placeholder="Name" />
+                                    <Divider />
+
+                                    <NumericInput placeholder="10" rightElement={<Button disabled minimal>SOM Dimension</Button>} fill buttonPosition="left" />
+                                    <Divider />
+                                    <NumericInput placeholder="10" rightElement={<Button disabled minimal> Input Dimension </Button>} fill buttonPosition="left" />
+
+                                    <Divider />
+                                    <strong>Connections</strong><br />
+                                    TODO: make this
+
+                                    <Divider />
+                                    <strong>Single layer SOM model.</strong>
+                                </div>
+                            </div>
+                            <div className={Classes.DRAWER_FOOTER}>
+                                <Button icon="trash" intent="danger" minimal onClick={() => this.remove_handler(this.state.editing)}> Delete </Button>
+                                <Button icon="help" intent="success" minimal> Open Manual </Button>
+                            </div>
+                        </Drawer>
+                    </div>
+
+
                     <div className="som-box" id="som-box">
-                        {this.state.soms.map(function (d, idx) {
-                            if (d[0] < 0) return null;
-                            return (<DragDropSOM key={d[0]} id={d[0]} x={d[1]} y={d[2]} parent={this_obj} />);
-                        })}
+                        {Object.keys(this.state.soms).map(function (k, idx) {
+                            var d = this.state.soms[k]
+                            return (<DragDropSOM key={d.id} node={d} template={this.node_templates[d.template]} parent={this_obj} />);
+                        }.bind(this))}
                         {this.links.map(function (d, idx) {
-                            return (<Xarrow key={idx} start={"som_" + d[0]} end={"som_" + d[1]} dashness={{ animation: 3 }} />);
+                            return (<Xarrow key={idx} start={"ddn_" + d[0]} end={"ddn_" + d[1]} dashness={{ animation: 0.5 }} />);
                         })}
                     </div>
                 </div>
