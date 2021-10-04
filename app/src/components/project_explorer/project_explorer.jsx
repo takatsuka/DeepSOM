@@ -24,7 +24,7 @@ class ProjectExplorer extends Component {
         return (
             <>
                 <ButtonGroup minimal={false} elevation={Elevation.FOUR} fill={true} alignText="left" minimal={true} large={true}>
-                    <Button active={true} >untitled project</Button>
+                    <Button active={true} >pres-demo-2</Button>
                     
                 </ButtonGroup>
 

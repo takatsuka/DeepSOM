@@ -7,6 +7,7 @@ import { Tag, Popover, Menu, MenuItem, Position, Button, Divider, ButtonGroup, T
 import "./creator.scss"
 import Welcome from "../welcome/welcome"
 import ScatterView3D from "../scatterview_3d/scatterview"
+import DragDropSOM from '../drag-drop/drag-drop';
 
 import ProjectExplorer from '../project_explorer/project_explorer';
 
@@ -58,8 +59,10 @@ class Creator extends Component {
     const fileMenu = (
       <Menu>
         <MenuItem icon="label" text="Open Project" />
-        <MenuItem icon="graph" text="New Project" />
+        <MenuItem icon="git-repo" text="New Project" />
+        <MenuItem icon="git-push" text="Save Project" />
         <Divider />
+        <MenuItem icon="layout-auto" text="New SOM" />
         <MenuItem icon="graph" text="Import Data" />
       </Menu>
     )
@@ -67,7 +70,8 @@ class Creator extends Component {
     const viewMenu = (
       <Menu>
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
-        <MenuItem icon="graph" text="Editor" />
+        <Divider />
+        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
         <Divider />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }}/>
       </Menu>

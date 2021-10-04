@@ -2,27 +2,29 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Tag, Popover, Collapse, TextArea, Content, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Collapse, TextArea, Content, Menu, MenuItem, Position, Button, ButtonGroup, Alignment, Text, NonIdealState, Overlay, Divider} from "@blueprintjs/core";
 
 import "./drag-drop.scss"
 
 class DragDropSOM extends Component {
     constructor(props) {
         super(props);
-        this.state = {dragging: false};
+        this.state = { dragging: false };
     }
 
     onMouseDown() {
-        console.log("DOWN");
-        this.setState({dragging: true, prev_mouse_pos: {
-            x: event.pageX,
-            y: event.pageY
-        }});
+        // console.log("DOWN");
+        this.setState({
+            dragging: true, prev_mouse_pos: {
+                x: event.pageX,
+                y: event.pageY
+            }
+        });
     }
 
     onMouseUp() {
-        console.log("UP");
-        this.setState({dragging: false});
+        // console.log("UP");
+        this.setState({ dragging: false });
     }
 
     onMouseOut() {
@@ -38,7 +40,7 @@ class DragDropSOM extends Component {
         };
         var new_x = this.props.x + current_mouse_pos.x - this.state.prev_mouse_pos.x;
         var new_y = this.props.y + current_mouse_pos.y - this.state.prev_mouse_pos.y;
-        this.setState({prev_mouse_pos: current_mouse_pos});
+        this.setState({ prev_mouse_pos: current_mouse_pos });
         this.props.parent.child_update(this.props.id, Math.round(new_x), Math.round(new_y));
     }
 
@@ -48,27 +50,27 @@ class DragDropSOM extends Component {
             var opacity = 0.6;
         }
 
-        return (<div class="som" id={"som_"+this.props.id}
-                style={{top: this.props.y, left: this.props.x, opacity: opacity}}
-                onMouseDown={this.onMouseDown.bind(this)}
-                onMouseUp={this.onMouseUp.bind(this)}
-                onMouseMove={this.onMouseMove.bind(this)}
-                onMouseOut={this.onMouseOut.bind(this)}
-                >
-                <b style={{margin: "0 10px"}}>SOM {this.props.id}</b>
-                {this.props.parent.state.add_link_active ? (
-                    <Button id="addlink" icon="add" intent="success" onClick={() => this.props.parent.add_link_node(this.props.id)}/>
-                ) : (
-                    <Button id="deletenode" icon="trash" intent="warning" onClick={() => this.props.parent.remove_handler(this.props.id)}/>
-                )}
-                </div>);
+        return (<div className="dd-som" id={"som_" + this.props.id}
+            style={{ top: this.props.y, left: this.props.x, opacity: opacity }}
+            onMouseDown={this.onMouseDown.bind(this)}
+            onMouseUp={this.onMouseUp.bind(this)}
+            onMouseMove={this.onMouseMove.bind(this)}
+            onMouseOut={this.onMouseOut.bind(this)}
+        >
+            <b style={{ margin: "0 10px" }}>SOM {this.props.id}</b>
+            {this.props.parent.state.add_link_active ? (
+                <Button id="addlink" icon="add" intent="success" onClick={() => this.props.parent.add_link_node(this.props.id)} />
+            ) : (
+                <Button id="deletenode" icon="trash" intent="warning" onClick={() => this.props.parent.remove_handler(this.props.id)} />
+            )}
+        </div>);
     }
 }
 
 class DragDrop extends Component {
     constructor(props) {
         super(props)
-        this.state = {soms: [], add_link_active: false, add_link_step: 1, advanced_open: false};
+        this.state = { soms: [], add_link_active: false, add_link_step: 1, advanced_open: false };
 
         // Bind functions
         this.add_som = this.add_som.bind(this);
@@ -157,49 +159,51 @@ class DragDrop extends Component {
                 )}
             </div>
         );
+        //     <Collapse isOpen={this.state.advanced_open}>
+        //     <Icon icon="export" /> Export SOM
+        //     <TextArea id="export_som" value={JSON.stringify({ "soms": this.state.soms, "links": this.links })} growVertically={true} />
+        //     <Icon icon="import" /> Import SOM
+        //     <TextArea id="import_som" growVertically={true} onChange={this.import_som} />
+        // </Collapse>
 
         return (
-            <div class="som-drag-drop">
-                <h1>Drag Drop SOM</h1>
+            <>
+                <div className="submenu">
+                    
+                    <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
+                    <Button disabled={true} >not_so_deep_som</Button>
+                    <Divider />
+                        {add_som_enable ? (
+                            <Button icon="add" text="Add SOM" onClick={this.add_som} />
+                        ) : (
+                            <Button icon="disable" text="Add SOM" disabled="true" />
+                        )}
 
-                <ButtonGroup large>
-                    {add_som_enable ? (
-                        <Button icon="add" text="Add SOM" onClick={this.add_som} />
-                    ) : (
-                        <Button icon="disable" text="Add SOM" disabled="true" />
-                    )}
+                        <Popover content={add_link_content} popoverClassName="bp3-popover-content-sizing" onClose={this.add_link_cancel} interactionKind="CLICK_TARGET_ONLY" isOpen={add_link_active} >
+                            <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active} />
+                        </Popover>
 
-                    <Popover content={add_link_content} popoverClassName="bp3-popover-content-sizing" onClose={this.add_link_cancel} interactionKind="CLICK_TARGET_ONLY" isOpen={add_link_active} >
-                        <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active}/>
-                    </Popover>
+                        <Button icon="cog" onClick={this.advanced_toggle}>
+                            {this.state.advanced_open ? "Hide" : "Show"} Advanced Options
+                        </Button>
+                    </ButtonGroup>
+                </div>
 
-                    <Button icon="cog" onClick={this.advanced_toggle}>
-                        {this.state.advanced_open ? "Hide" : "Show"} Advanced Options
-                    </Button>
 
-                </ButtonGroup>
-
-                <Collapse isOpen={this.state.advanced_open}>
-                    <Icon icon="export" /> Export SOM
-                    <TextArea id="export_som" value={JSON.stringify({"soms": this.state.soms, "links": this.links})} growVertically={true} />
-                    <Icon icon="import" /> Import SOM
-                    <TextArea id="import_som" growVertically={true} onChange={this.import_som}/>
-                </Collapse>
-
-                <div class="drag-drop-box">
-                    <div class="som-box" id="som-box">
-                    {this.state.soms.map(function(d, idx){
-                        if (d[0] < 0) return null;
-                        return (<DragDropSOM id={d[0]} x={d[1]} y={d[2]} parent={this_obj}/>);
-                    })}
-                    {this.links.map(function(d, idx){
-                        return (<Xarrow start={"som_"+d[0]} end={"som_"+d[1]} dashness={{animation:3}}/>);
-                    })}
+                <div className="drag-drop-box">
+                    <div className="som-box" id="som-box">
+                        {this.state.soms.map(function (d, idx) {
+                            if (d[0] < 0) return null;
+                            return (<DragDropSOM key={d[0]} id={d[0]} x={d[1]} y={d[2]} parent={this_obj} />);
+                        })}
+                        {this.links.map(function (d, idx) {
+                            return (<Xarrow key={idx} start={"som_" + d[0]} end={"som_" + d[1]} dashness={{ animation: 3 }} />);
+                        })}
                     </div>
                 </div>
-            </div>
-            );
-     }
+            </>
+        );
+    }
 }
 
 export default DragDrop;
