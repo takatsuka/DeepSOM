@@ -40,9 +40,9 @@ class Welcome extends Component {
 
     render() {
         return (
-            <div class="welcome">
+            <div className="welcome">
                 <h1>Welcome to PySOM!</h1>
-                <div class="card-flex">
+                <div className="card-flex">
                     <Card interactive={true} elevation={Elevation.TWO}>
                         <h2>Start a new project</h2>
                         <Button large="true" icon="add">Start</Button>
