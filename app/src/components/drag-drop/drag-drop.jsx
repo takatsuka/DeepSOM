@@ -137,24 +137,20 @@ class DragDrop extends Component {
             },
 
             get_bmu: {
-                name: "get_bmu",
-                style: { backgroundColor: "#D9822B", width: "100px", height: "100px" },
-                node_props: { dim: 3 },
+                name: "get_bmu_",
+                style: { backgroundColor: "#D9822B", width: "180px", height: "50px" },
+                node_props: { shape: '2d_dis' },
                 render: (d) => (
-                    <div style={{ textAlign: 'center' }}>
-                        <p style={{ fontSize: '18px' }}>{d.name}</p>
-                        <strong style={{}}>{d.props.dim}</strong>
+                    <div style={{ textAlign: 'center', marginTop: "-7px" }}>
+                        <i style={{ fontSize: '18px' }}>Get BMU({d.props.shape})</i>
                     </div>
                 ),
 
                 contextMenu: (d) => (
                     <div>
-                        <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
                         <Divider />
-                        <NumericInput
-                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
-                            rightElement={<Button disabled minimal>Dimension</Button>}
-                            fill buttonPosition="left" placeholder="10" />
+                        <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => this.wrapSOMS(() => (d.props.shape = t.target.value))} />
                     </div>
                 )
             },
@@ -286,7 +282,7 @@ class DragDrop extends Component {
     }
 
     export_som() {
-        return {nodes: this.state.soms, connections: this.links}
+        return { nodes: this.state.soms, connections: this.links }
     }
 
     closeSideMenu() {
@@ -297,14 +293,14 @@ class DragDrop extends Component {
         this.setState({ side_menu: true, editing: som.props.node.id })
     }
 
-    saveSession(){
+    saveSession() {
         window.pywebview.api.save_json_file(this.export_som()).then((e) => (console.log(e)))
     }
 
-    loadSessionFromFile(){
-        window.pywebview.api.open_json_file().then(function(x){
+    loadSessionFromFile() {
+        window.pywebview.api.open_json_file().then(function (x) {
             this.links = x.connections
-            this.setState({soms: x.nodes})
+            this.setState({ soms: x.nodes })
         }.bind(this))
     }
 
@@ -328,8 +324,24 @@ class DragDrop extends Component {
 
         const sessionMenu = (
             <Menu>
-                <MenuItem icon="document-share" text="Save" onClick={() => this.saveSession()}/>
-                <MenuItem icon="document-open" text="Load" onClick={() => this.loadSessionFromFile()}/>
+                <MenuItem icon="document-share" text="Save" onClick={() => this.saveSession()} />
+                <MenuItem icon="document-open" text="Load" onClick={() => this.loadSessionFromFile()} />
+            </Menu>
+        )
+
+        const addMenu = (
+            <Menu>
+                <MenuItem icon="one-to-many" text="Distributor" />
+                <MenuItem icon="many-to-one" text="Concatenator"/>
+                <Divider />
+                <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
+                <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.loadSessionFromFile()} />
+                <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.loadSessionFromFile()} />
+                <Divider />
+                <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} />
+                <MenuItem icon="function" text="Random Sample"  />
+
+
             </Menu>
         )
 
@@ -346,11 +358,10 @@ class DragDrop extends Component {
                         </Popover>
 
                         <Divider />
-                        {add_som_enable ? (
-                            <Button icon="add" text="Add SOM" onClick={() => this.add_som('som')} />
-                        ) : (
-                            <Button icon="disable" text="Add SOM" disabled="true" />
-                        )}
+
+                        <Popover content={addMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
+                            <Button icon="add" text="Add Node" />
+                        </Popover>
 
                         <Popover content={add_link_content} popoverClassName="bp3-popover-content-sizing" onClose={this.add_link_cancel} interactionKind="CLICK_TARGET_ONLY" isOpen={add_link_active} >
                             <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active} />
