@@ -7,6 +7,7 @@ import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInpu
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import "./drag-drop.scss"
 import { some } from 'd3-array';
+import { timeHours } from 'd3-time';
 
 class DragDropSOM extends Component {
     constructor(props) {
@@ -266,6 +267,15 @@ class DragDrop extends Component {
             }
         }
 
+        var restored = this.props.pullState()
+        
+        if(restored != null && "state" in restored && "links" in restored){
+            this.links = restored.links
+            this.state = restored.state
+            this.i = restored.i
+            return
+        }
+
         var input = this.create_som("inout")
         input.x = 100
         input.y = 200
@@ -279,6 +289,10 @@ class DragDrop extends Component {
         output.props.dim = 2
         this.state.soms[output.id] = output
 
+    }
+
+    componentWillUnmount() {
+        this.props.saveState({state: this.state, links: this.links, i: this.i})
     }
 
     wrapSOMS(thing) {
