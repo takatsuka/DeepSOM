@@ -95,7 +95,6 @@ class Api:
         if filename == None:
             return None
 
-
         open(filename, 'w').write(json.dumps(obj))
         return os.path.basename(filename)
 
