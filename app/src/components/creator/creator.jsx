@@ -8,6 +8,7 @@ import "./creator.scss"
 import Welcome from "../welcome/welcome"
 import ScatterView3D from "../scatterview_3d/scatterview"
 import DragDropSOM from '../drag-drop/drag-drop';
+import ImageView from '../imageview/imageview';
 
 import ProjectExplorer from '../project_explorer/project_explorer';
 
@@ -74,6 +75,7 @@ class Creator extends Component {
         <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
         <Divider />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }}/>
+        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }}/>
       </Menu>
     )
 

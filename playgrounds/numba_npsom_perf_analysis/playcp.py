@@ -8,7 +8,7 @@ from random import sample as sp
 
 
 from mnist import MNIST
-mndata = MNIST('../../datasets/fashion_mnist/large_bin')
+mndata = MNIST('../../datasets/mnist/large_bin')
 train_dat, train_lab = mndata.load_training()
 test_dat, test_lab = mndata.load_testing()
 
@@ -22,8 +22,8 @@ train_dat = train_dat
 train_lab = train_lab
 train_dat = train_dat.reshape((train_dat.shape[0], 28*28))
 
-SWID = 12
-SHEI = 12
+SWID = 15
+SHEI = 15
 
 model = som(SWID,SHEI,train_dat.shape[1], init_epoch=70000)
 print("train started")
