@@ -13,9 +13,12 @@ class DragDropSOM extends Component {
     constructor(props) {
         super(props);
         this.state = { dragging: false };
+        this.onMouseMove = this.onMouseMove.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
     }
 
     onMouseDown(e) {
+        // console.log("DOWN");
         if (e.buttons !== 1) return
         this.setState({
             dragging: true, prev_mouse_pos: {
@@ -23,16 +26,15 @@ class DragDropSOM extends Component {
                 y: event.pageY
             }
         });
+        document.addEventListener('mousemove', this.onMouseMove);
+        document.addEventListener('mouseup', this.onMouseUp);
     }
 
     onMouseUp() {
         // console.log("UP");
         this.setState({ dragging: false });
-    }
-
-    onMouseOut() {
-        //this.onMouseUp();
-        // this.setState({ dragging: false });
+        document.removeEventListener('mousemove', this.onMouseMove);
+        document.removeEventListener('mouseup', this.onMouseUp);
     }
 
     onMouseMove(e) {
@@ -62,9 +64,6 @@ class DragDropSOM extends Component {
             <div className="dd-som" id={"ddn_" + n.id}
                 style={{ top: n.y, left: n.x, opacity: this.state.dragging ? 0.6 : 1, width: s.width, height: s.height }}
                 onMouseDown={this.onMouseDown.bind(this)}
-                onMouseUp={this.onMouseUp.bind(this)}
-                onMouseMove={this.onMouseMove.bind(this)}
-                onMouseOut={this.onMouseOut.bind(this)}
                 onContextMenu={this.contextMenu.bind(this)}
             >
 
@@ -268,7 +267,7 @@ class DragDrop extends Component {
         }
 
         var restored = this.props.pullState()
-        
+
         if(restored != null && "state" in restored && "links" in restored){
             this.links = restored.links
             this.state = restored.state
