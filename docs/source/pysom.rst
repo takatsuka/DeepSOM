@@ -13,6 +13,14 @@ Subpackages
 Submodules
 ----------
 
+pysom.deep\_som module
+----------------------
+
+.. automodule:: pysom.deep_som
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pysom.deepcalc module
 ---------------------
 
