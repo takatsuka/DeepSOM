@@ -402,7 +402,7 @@ class DragDrop extends Component {
                 {add_link_step == 1 ? (
                     <h3>Select first node</h3>
                 ) : (
-                    <h2>Select second node</h2>
+                    <h3>Select second node</h3>
                 )}
             </div>
         );
