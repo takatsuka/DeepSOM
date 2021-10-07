@@ -337,8 +337,10 @@ class DragDrop extends Component {
             this.setState({ add_link_step: 2 });
         } else if (this.state.add_link_step == 2) {
             this.new_link_nodes[1] = id;
-            if (!this.links.includes(this.new_link_nodes)) {
+            if (!this.links.some(l => (l[0] == this.new_link_nodes[0] && l[1] == this.new_link_nodes[1]))) {
                 this.links.push(this.new_link_nodes.slice(0));
+            } else {
+                alert("Cannot add link - an identical link exists");
             }
             this.setState({ add_link_active: false, add_link_step: -1 });
         }
