@@ -205,7 +205,7 @@ class DragDrop extends Component {
                         <Icon icon="heat-grid" size={30} />
 
                         <div style={{ textAlign: 'left', marginTop: "20px" }}>
-                            <p style={{}}> Input Patches: {d.props.dim}</p><br />
+                            <p style={{}}> Input Patches: {d.props.dim}</p><br/>
                         </div>
 
                     </div>
@@ -411,7 +411,7 @@ class DragDrop extends Component {
                 {add_link_step == 1 ? (
                     <h3>Select first node</h3>
                 ) : (
-                    <h2>Select second node</h2>
+                    <h3>Select second node</h3>
                 )}
             </div>
         );

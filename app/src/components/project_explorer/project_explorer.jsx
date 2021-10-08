@@ -6,6 +6,7 @@ import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, But
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
 import DragDropSOM from '../drag-drop/drag-drop';
 import ImageView from '../imageview/imageview';
+import ScatterView3D from '../scatterview_3d/scatterview';
 
 class ProjectExplorer extends Component {
     constructor(props) {
@@ -43,13 +44,13 @@ class ProjectExplorer extends Component {
                 label: "Vis",
                 childNodes: [
                     {
-                        id: 3,
+                        id: 98,
                         icon: "heatmap",
                         label: "sphere_viz",
 
                     },
                     {
-                        id: 4,
+                        id: 111,
                         icon: "heatmap",
                         label: "donut_viz",
 
@@ -89,7 +90,15 @@ class ProjectExplorer extends Component {
         }
 
         if(id == 96) {
-            this.props.openTab(<ImageView />, "ImageViz", true, "load")
+            this.props.openTab(<ImageView />, "fashion_imgset", true, "load")
+        }
+
+        if(id == 98) {
+            this.props.openTab(<ScatterView3D />, "sphere_viz", true, {d: "/Volumes/Sweep\ SSD/comp3988pre/sphere_64.txt", t: "/Volumes/Sweep\ SSD/comp3988pre/sphere.json"})
+        }
+
+        if(id == 111) {
+            this.props.openTab(<ScatterView3D />, "donut_viz", true, {d: "/Volumes/Sweep\ SSD/comp3988pre/donut_512.txt", t: "/Volumes/Sweep\ SSD/comp3988pre/donut.json"})
         }
     }
 

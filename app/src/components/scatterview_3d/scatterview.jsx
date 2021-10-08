@@ -62,6 +62,37 @@ class ScatterView3D extends Component {
             this.initView();
             this.updateWindow();
         }
+
+        var init = this.props.pullInit();
+        if(init == null) return
+
+        window.pywebview.api.open_csv_file_at(init.d).then((d) => {
+            this.setState({ 
+                vizData: d[1], 
+                hasDataset: true, 
+                datasetName: d[0], 
+                showTraining: false, 
+                dataset: this.loadData(d[1]), 
+                showDataset: true 
+            }, () => { 
+                this.updatePlot(); 
+            });
+        });
+
+        window.pywebview.api.open_json_file_at(init.t).then((d) => {
+            this.setState({
+                trainingData: d.weightspb,
+                hasTraining: true, 
+                showTraining: true,
+                weightsId: 0, 
+                weights: this.loadWeights(d.weightspb, d.w, d.h)[0], 
+                edges: this.loadWeights(d.weightspb, d.w, d.h)[1],
+                somHeight: d.h, 
+                somWidth: d.w
+            }, () => {
+                this.updatePlot();
+            });
+        });
     }
 
     componentWillUnmount() {
