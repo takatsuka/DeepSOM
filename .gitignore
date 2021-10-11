@@ -87,3 +87,7 @@ dist/
 **.vscode
 *__pycache__
 .coverage
+Deep_SOM_Library.egg-info
+.prettierrc
+htmlcov/
+test-reports/
