@@ -113,6 +113,7 @@ def test_defaults():
     assert layer.get_in_len() == 30
     assert layer.get_layer_size() == 3
 
+
 def test_som_moves():
     inlen = 100
     layer = Layer(inlen)
@@ -152,4 +153,3 @@ def test_som_moves():
     assert layer.get_som_container(1) is somc1
     assert layer.get_som_container(2) is somc4
     assert layer.get_som_container(3) is somc2
-    
