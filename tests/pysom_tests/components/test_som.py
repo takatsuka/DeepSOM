@@ -61,10 +61,10 @@ def test_customise():
     assert (som.indim,) == bmu.shape
 
 
-def customise_2():  # doesn't seem to like this one at get_weight()
-    width = 123
-    height = 254
-    indim = 1000
+def test_customise_2():  # doesn't seem to like this one at get_weight()
+    width = 23
+    height = 54
+    indim = 100
 
     som = Som(width, height, indim)
     som.regen_mat(scale=4, offset=-0.25)
@@ -75,7 +75,7 @@ def customise_2():  # doesn't seem to like this one at get_weight()
     assert (som.mat >= -1).all()
     assert (som.mat <= 3).all()
 
-    for i in range(1500):
+    for i in range(150):
         data = (np.random.random((indim,)) - 0.25) * 4
         som.learn(data, i)
         bmu_idx = som.get_idx_closest(data)
