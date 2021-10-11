@@ -13,12 +13,14 @@ def test_always_true():
     b = "some"
     assert a == b
 
+
 def test_defaults():
     indim = 30
     dsom = DeepSom(indim)
 
     assert dsom.get_layer_count() == 1
     assert dsom.get_som_count() == 0
+
 
 def test_malformed():
     indim = 30
@@ -63,6 +65,7 @@ def test_malformed():
     with pytest.raises(AttributeError):
         dsom.check_structure()
 
+
 def test_run_dsom():
     indim = 25
     dsom = DeepSom(indim)
@@ -92,10 +95,8 @@ def test_run_dsom():
 
     som1l2 = Som(5, 5, 10)
     som1l2.regen_mat(scale=10, offset=0)
-    som1l2.set_lr(lr_max=2, lr_min=0.1, lr_step=0.1,
-                    lr_func=df.linear_step)
-    som1l2.set_rad(rad_max=6, rad_min=0, rad_step=0.5,
-                    rad_func=df.exp_decay)
+    som1l2.set_lr(lr_max=2, lr_min=0.1, lr_step=0.1, lr_func=df.linear_step)
+    som1l2.set_rad(rad_max=6, rad_min=0, rad_step=0.5, rad_func=df.exp_decay)
 
     lay2.add_som_container(
         SomContainer(
@@ -104,10 +105,8 @@ def test_run_dsom():
             in_set=in_set1))
 
     som2l2 = Som(5, 5, 5)
-    som2l2.set_lr(lr_max=1, lr_min=0.1, lr_step=0.001,
-                    lr_func=df.exp_decay)
-    som2l2.set_rad(rad_max=3, rad_min=0, rad_step=0.2,
-                    rad_func=df.linear_step)
+    som2l2.set_lr(lr_max=1, lr_min=0.1, lr_step=0.001, lr_func=df.exp_decay)
+    som2l2.set_rad(rad_max=3, rad_min=0, rad_step=0.2, rad_func=df.linear_step)
 
     lay2.add_som_container(
         SomContainer(
