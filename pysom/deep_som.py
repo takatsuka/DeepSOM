@@ -18,7 +18,7 @@ class DeepSom:
         """
 
         self.layers = []
-        self.layers.append(Layer.Layer(indim))
+        self.layers.append(Layer(indim))
 
     def get_layer_count(self):
         """Returns the number of layers in the Deep SOM.
@@ -77,7 +77,7 @@ class DeepSom:
         """
 
         new_indim = self.layers[-1].get_out_len()
-        self.layers.append(Layer.Layer(new_indim))
+        self.layers.append(Layer(new_indim))
 
     def insert_layer(self, idx):
         """Inserts a new layer at the specified index in the SOM's layer list.
@@ -100,7 +100,7 @@ class DeepSom:
             self.append_layer()
         else:
             new_indim = self.layers[idx].get_in_len()
-            self.layers.insert(Layer.Layer(new_indim))
+            self.layers.insert(Layer(new_indim))
 
     def pop_layer(self, idx):
         """Removes and returns the layer at the specified index in the SOM's
@@ -177,7 +177,7 @@ class DeepSom:
                         input from index {}, but the layer only expects an\
                         input vector of length {}\n".format(j, i, idx, inlen)
 
-        if output == "crash":
+        if output == "crash" and error_string != "":
             raise AttributeError(error_string)
         elif output == "print":
             print(error_string)

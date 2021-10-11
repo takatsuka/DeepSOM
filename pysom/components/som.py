@@ -42,7 +42,7 @@ def set_epoch(epoch, lr_max, lr_min, lr_step, lr_func, rad_max, rad_min, rad_ste
 
 def som_learn_batch(batch, mat, mat_coord, lr, rad, in_dist_p, out_dist_p):
     w, h, _ = mat.shape
-
+    batch
     for example in batch:
         bmu = get_idx_closest(example, mat, in_dist_p)
 

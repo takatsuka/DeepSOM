@@ -82,7 +82,7 @@ class SomContainer:
                 SOM.
         """
 
-        return self.transition(example, self.som)
+        return self.transition_func(example, self.som)
 
     def train_som(self, example, epoch):
         """Trains the SOM on the given input, and returns whatever the
@@ -103,6 +103,6 @@ class SomContainer:
                 running the transition function on this SOM.
         """
 
-        output = self.transition(example, self.som)
+        output = self.transition_func(example, self.som)
         self.som.learn(example, epoch)
         return output
