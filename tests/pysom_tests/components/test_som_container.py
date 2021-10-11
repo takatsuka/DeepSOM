@@ -11,6 +11,7 @@ def test_always_true():
     b = "some"
     assert a == b
 
+
 def test_initialise():
 
     width = 7
@@ -42,6 +43,7 @@ def test_initialise():
     assert cont3.in_set[0] == 0
     assert cont3.in_set[indim - 1] == indim - 1
 
+
 def test_make_input():
 
     width = 13
@@ -64,6 +66,7 @@ def test_make_input():
 
     for i in range(0, 15):
         assert madein[i] == -2 * i
+
 
 def test_operate():
     width = 23

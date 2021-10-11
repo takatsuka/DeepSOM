@@ -1,7 +1,7 @@
 from pysom.components.som import Som
 from pysom.components.layer import Layer
 from pysom.components.som_container import SomContainer
-from pysom.utils.transition_funcs import *
+from pysom.utils.transition_funcs import concat_binary, coordinates_distance, coordinates
 import pytest
 
 
@@ -152,3 +152,4 @@ def test_som_moves():
     assert layer.get_som_container(1) is somc1
     assert layer.get_som_container(2) is somc4
     assert layer.get_som_container(3) is somc2
+    
