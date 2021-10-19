@@ -2,7 +2,8 @@ import numpy as np
 
 
 def make_input(vector, inlen, in_set):
-    return data_point[in_set,]
+    return vector[in_set, ]
+
 
 # This is the identity transition function from transition_funcs
 # We include it here to avoid having to import it via a complicated

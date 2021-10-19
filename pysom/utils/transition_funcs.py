@@ -28,6 +28,7 @@ def identity(example, som):
     """
     return example
 
+
 def concat_binary(example, som):
     """A transition function where every entry in the output vector represents
     one node of the SOM. All entries are zero except for the entry
