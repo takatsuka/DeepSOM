@@ -2,10 +2,7 @@ import numpy as np
 
 
 def make_input(vector, inlen, in_set):
-    data_point = np.zeros(inlen)
-    for i in range(inlen):
-        data_point[i] = vector[in_set[i]]
-    return data_point
+    return data_point[in_set,]
 
 
 class SomContainer:
