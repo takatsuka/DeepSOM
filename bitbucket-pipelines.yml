@@ -28,5 +28,6 @@ pipelines:
             name: NPM
             script:
               - cd app
+              - pip install virtualenv
               - npm run init
               - timeout 2m npm run dev
