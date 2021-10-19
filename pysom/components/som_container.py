@@ -1,9 +1,25 @@
 import numpy as np
-import ..utils.transition_funcs
 
 
 def make_input(vector, inlen, in_set):
     return data_point[in_set,]
+
+# This is the identity transition function from transition_funcs
+# We include it here to avoid having to import it via a complicated
+# directory path.
+def identity(example, som):
+    """A transition function which simply returns the input.
+    The som variable is not used, but has been included to conform to
+    standards for transition functions.
+
+    Args:
+        example (np.ndarray): The input data point.
+        som (class Som): The SOM to which the data is fed.
+
+    Returns:
+        np.ndarray: The output vector.
+    """
+    return example
 
 
 class SomContainer:
@@ -27,7 +43,7 @@ class SomContainer:
 
         self.som = som
         if som == None:
-            self.transition_func = transition_funcs.identity
+            self.transition_func = identity
         else:
             self.transition_func = transition
         self.inlen = som.indim
