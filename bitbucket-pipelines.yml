@@ -28,6 +28,7 @@ pipelines:
             name: NPM
             script:
               - cd app
+              - apt-get update
               - apt-get install python3-pip -y
               - pip3 install virtualenv
               - npm run init
