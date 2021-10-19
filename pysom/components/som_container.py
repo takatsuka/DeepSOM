@@ -28,7 +28,9 @@ class SomContainer:
         """Constructor. Holds a SOM, a transition function, and some useful information.
 
         Args:
-            som (class Som): The SOM for the container to hold
+            som (class Som): The SOM for the container to hold. If None, the
+                som container will be an identity transition, simply returning
+                the vector given as input.
             transition (function): The transition function which creates some
                 numeric vector by feeding the SOM an input. See the
                 'transitions' module for more.
