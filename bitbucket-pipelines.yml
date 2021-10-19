@@ -27,5 +27,6 @@ pipelines:
             image: node
             name: NPM
             script:
+              - cd app
               - npm run init
               - timeout 2m npm run dev
