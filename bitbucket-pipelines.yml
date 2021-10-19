@@ -32,4 +32,4 @@ pipelines:
               - apt-get install python3-pip -y
               - pip3 install virtualenv
               - npm run init
-              - timeout 2m npm run dev
+              - timeout 1m npm run dev || [ $? -eq 124 ] && echo time limit reached
