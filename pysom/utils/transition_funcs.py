@@ -14,6 +14,20 @@ import numpy as np
 # attributes if necessary.
 
 
+def identity(example, som):
+    """A transition function which simply returns the input.
+    The som variable is not used, but has been included to conform to
+    standards for transition functions.
+
+    Args:
+        example (np.ndarray): The input data point.
+        som (class Som): The SOM to which the data is fed.
+
+    Returns:
+        np.ndarray: The output vector.
+    """
+    return example
+
 def concat_binary(example, som):
     """A transition function where every entry in the output vector represents
     one node of the SOM. All entries are zero except for the entry
