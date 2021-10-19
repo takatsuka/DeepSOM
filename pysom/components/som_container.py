@@ -1,4 +1,5 @@
 import numpy as np
+import ..utils.transition_funcs
 
 
 def make_input(vector, inlen, in_set):
@@ -25,7 +26,10 @@ class SomContainer:
         """
 
         self.som = som
-        self.transition_func = transition
+        if som == None:
+            self.transition_func = transition_funcs.identity
+        else:
+            self.transition_func = transition
         self.inlen = som.indim
         if in_set == None:
             self.in_set = tuple([i for i in range(self.inlen)])
