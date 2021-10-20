@@ -16,3 +16,4 @@ setup(
     tests_require=['pytest'],
     install_requires=['numpy']
 )
+
