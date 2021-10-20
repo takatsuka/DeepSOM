@@ -9,10 +9,11 @@ Types:
 """
 class Node:
 
+
     def __init__(self, uid, data=None):
         self.uid = uid
         self.type = 0
-        self.data = data # used for storing actual SOM class
+        self.data = data  # used for storing actual SOM class
         self.incoming = list()  # 2-tuple (output_node, slot)
                 
         # self.slots = list()           
