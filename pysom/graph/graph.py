@@ -102,26 +102,4 @@ if __name__ == "__main__":
     print("Result of n4:", g.find_node(n4).evaluate())
     print("Result of n5:", g.find_node(n5).evaluate())
     print("Result of n6:", g.find_node(n6).evaluate())
-    
-    """
-    n1 = g.create_and_add_node(node_type=DummyNode))
-    n2 = g.create_and_add_node(node_type=DummyNode))
-    x = g.create_node(node_type=SOMNode)
-    g.add_node(x)
-    print(n1)
-    print(g.get_nodes())
-    """
-
-    """
-    x1 = SOMNode(1)
-    x2 = SOMNode(5)
-    g.add_node(x1)
-    g.add_node(x2)
-    print(x1, x2)
-    try:
-        print(g.add_connection(x1.get_id, x2.get_id, 0)) # This should be True
-        print(g.add_connection(x1.get_id, x2.get_id, 2)) # This should raise RuntimeError
-    except RuntimeError:
-        print("I made a mistake :(")
-    """
-    
+ 

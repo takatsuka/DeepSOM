@@ -33,7 +33,3 @@ class ConcatNode(Node):
             return False
         else:
             return True
-        
-        
-if __name__ == "__main__":
-    pass

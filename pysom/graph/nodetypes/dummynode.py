@@ -11,7 +11,6 @@ class DummyNode(Node):
     def init(self, uid, data=None):
         super(DummyNode, self).__init__(uid, data=data)
     
-    
     """
     HELPER METHODS HERE
     """
@@ -34,7 +33,4 @@ class DummyNode(Node):
             return False
         else:
             return True
-        
-        
-if __name__ == "__main__":
-    pass
+ 

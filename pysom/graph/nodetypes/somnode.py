@@ -33,7 +33,3 @@ class SOMNode(Node):
             # if (slot in self.slots.keys()):
             #     raise RuntimeError("Cannot duplicate the slot")
             return True
-        
-        
-if __name__ == "__main__":
-    pass
