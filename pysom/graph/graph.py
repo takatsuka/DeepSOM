@@ -102,4 +102,3 @@ if __name__ == "__main__":
     print("Result of n4:", g.find_node(n4).evaluate())
     print("Result of n5:", g.find_node(n5).evaluate())
     print("Result of n6:", g.find_node(n6).evaluate())
-

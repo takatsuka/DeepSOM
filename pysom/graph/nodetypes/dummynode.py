@@ -33,4 +33,3 @@ class DummyNode(Node):
             return False
         else:
             return True
-
