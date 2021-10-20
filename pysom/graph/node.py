@@ -7,16 +7,17 @@ Types:
     1 - Get BMU
     2 - etc. etc.
 """
-class Node:
 
+
+class Node:
 
     def __init__(self, uid, data=None):
         self.uid = uid
         self.type = 0
         self.data = data  # used for storing actual SOM class
         self.incoming = list()  # 2-tuple (output_node, slot)
-                
-        # self.slots = list()           
+
+        # self.slots = list()
         # {
         #     0: DefaultConnection(self), # only in SOMNode, unused in DistNode
         #     1: DistConnection(self, indices), # DistConnection stores the actual indices
@@ -37,7 +38,7 @@ class Node:
             return False
 
     def __hash__(self) -> int:
-        return self.uid   
+        return self.uid
 
     def get_id(self) -> int:
         return self.uid
@@ -61,9 +62,9 @@ class Node:
         return False
 
     # Default method for all concrete classes
-    def add_incoming_connection(self, output_node: Node, slot: int) -> bool:        
+    def add_incoming_connection(self, output_node: Node, slot: int) -> bool:
         if output_node.check_outgoing_connection(self, slot):
-            self.incoming.append( (output_node, slot) )
+            self.incoming.append((output_node, slot))
             return True
         
         return False
@@ -75,7 +76,10 @@ class Node:
         else:
             return False
 
-if __name__ == "__main__": 
+
+if __name__ == "__main__":
+
+
     x1 = Node()
     x2 = Node()
     print(x1)

@@ -4,11 +4,13 @@ from node import Node
 """
     Type 2
 """
+
+
 class DistNode(Node):
     
+
     def init(self, uid):
         super(DistNode, self).__init__(uid)
-    
     
     """
     HELPER METHODS HERE
@@ -36,3 +38,4 @@ class DistNode(Node):
         
 if __name__ == "__main__":
     pass
+    

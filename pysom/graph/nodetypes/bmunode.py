@@ -4,8 +4,11 @@ from node import Node
 """
     Type 1
 """
+
+
 class BMUNode(Node):
     
+
     def init(self, uid):
         super(BMUNode, self).__init__(uid)
 
@@ -32,6 +35,6 @@ class BMUNode(Node):
         else:
             return True
     
-    
+
 if __name__ == "__main__":
     pass

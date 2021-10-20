@@ -3,7 +3,9 @@ from node import Node
 from nodetypes.somnode import SOMNode
 from nodetypes.dummynode import DummyNode
 
+
 class Graph:
+
 
     uid = 2
 
@@ -36,14 +38,14 @@ class Graph:
         return node
 
     def create_and_add_node(self, node_type=None, data=None) -> int:
-        node = self.create_node(node_type=node_type, data=data)        
+        node = self.create_node(node_type=node_type, data=data)
         return self.add_node(node)
         
     def get_nodes(self) -> list:
         return list(self.nodes.values())
         
     def add_node(self, node: Node) -> int:
-        self.nodes[node.get_id()] = node                
+        self.nodes[node.get_id()] = node 
         return node.get_id()
     
     def find_node(self, uid: int) -> Node:
@@ -102,24 +104,24 @@ if __name__ == "__main__":
     print("Result of n5:", g.find_node(n5).evaluate())
     print("Result of n6:", g.find_node(n6).evaluate())
     
-    # n1 = g.create_and_add_node(node_type=DummyNode))
-    # n2 = g.create_and_add_node(node_type=DummyNode))
-    # x = g.create_node(node_type=SOMNode)
-    # g.add_node(x)
-    
-    # print(n1)
-    # print(g.get_nodes())
-    
-    
-    # x1 = SOMNode(1)
-    # x2 = SOMNode(5)
-    # g.add_node(x1)
-    # g.add_node(x2)
-    
-    # print(x1, x2)
+    """
+    n1 = g.create_and_add_node(node_type=DummyNode))
+    n2 = g.create_and_add_node(node_type=DummyNode))
+    x = g.create_node(node_type=SOMNode)
+    g.add_node(x)
+    print(n1)
+    print(g.get_nodes())
+    """
 
-    # try:        
-    #     print(g.add_connection(x1.get_id, x2.get_id, 0)) # This should be True    
-    #     print(g.add_connection(x1.get_id, x2.get_id, 2)) # This should raise RuntimeError  
-    # except RuntimeError:
-    #     print("I made a mistake :(")
+    """
+    x1 = SOMNode(1)
+    x2 = SOMNode(5)
+    g.add_node(x1)
+    g.add_node(x2)
+    print(x1, x2)
+    try:
+        print(g.add_connection(x1.get_id, x2.get_id, 0)) # This should be True
+        print(g.add_connection(x1.get_id, x2.get_id, 2)) # This should raise RuntimeError
+    except RuntimeError:
+        print("I made a mistake :(")
+    """

@@ -4,8 +4,11 @@ from node import Node
 """
     Type 5
 """
+
+
 class DummyNode(Node):
     
+
     def init(self, uid, data=None):
         super(DummyNode, self).__init__(uid, data=data)
     
@@ -36,3 +39,4 @@ class DummyNode(Node):
         
 if __name__ == "__main__":
     pass
+    

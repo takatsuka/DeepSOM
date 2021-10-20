@@ -4,12 +4,14 @@ from node import Node
 """
     Type 0
 """
+
+
 class SOMNode(Node):
     
+
     def init(self, uid):
         print("Hello from SOMnode")
         super(SOMNode, self).__init__(uid)
-    
     
     """
     HELPER METHODS HERE

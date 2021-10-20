@@ -4,11 +4,13 @@ from node import Node
 """
     Type 3
 """
+
+
 class ConcatNode(Node):
     
+
     def init(self, uid):
         super(ConcatNode, self).__init__(uid)
-    
     
     """
     HELPER METHODS HERE
@@ -36,3 +38,4 @@ class ConcatNode(Node):
         
 if __name__ == "__main__":
     pass
+    
