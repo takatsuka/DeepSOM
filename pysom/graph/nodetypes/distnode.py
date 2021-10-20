@@ -7,7 +7,6 @@ from node import Node
 
 
 class DistNode(Node):
-    
 
     def init(self, uid):
         super(DistNode, self).__init__(uid)
@@ -38,4 +37,3 @@ class DistNode(Node):
         
 if __name__ == "__main__":
     pass
-    

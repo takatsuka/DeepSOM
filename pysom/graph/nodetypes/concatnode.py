@@ -8,7 +8,6 @@ from node import Node
 
 class ConcatNode(Node):
     
-
     def init(self, uid):
         super(ConcatNode, self).__init__(uid)
     
@@ -38,4 +37,3 @@ class ConcatNode(Node):
         
 if __name__ == "__main__":
     pass
-    

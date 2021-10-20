@@ -7,7 +7,6 @@ from node import Node
 
 
 class SOMNode(Node):
-    
 
     def init(self, uid):
         print("Hello from SOMnode")

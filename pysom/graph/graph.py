@@ -6,7 +6,6 @@ from nodetypes.dummynode import DummyNode
 
 class Graph:
 
-
     uid = 2
 
     def __init__(self):
@@ -45,7 +44,7 @@ class Graph:
         return list(self.nodes.values())
         
     def add_node(self, node: Node) -> int:
-        self.nodes[node.get_id()] = node 
+        self.nodes[node.get_id()] = node
         return node.get_id()
     
     def find_node(self, uid: int) -> Node:
@@ -125,3 +124,4 @@ if __name__ == "__main__":
     except RuntimeError:
         print("I made a mistake :(")
     """
+    

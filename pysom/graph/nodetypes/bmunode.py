@@ -8,7 +8,6 @@ from node import Node
 
 class BMUNode(Node):
     
-
     def init(self, uid):
         super(BMUNode, self).__init__(uid)
 
