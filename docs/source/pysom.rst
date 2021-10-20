@@ -21,14 +21,6 @@ pysom.deep\_som module
    :undoc-members:
    :show-inheritance:
 
-pysom.deepcalc module
----------------------
-
-.. automodule:: pysom.deepcalc
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
