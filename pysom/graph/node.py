@@ -50,7 +50,12 @@ class Node:
     def evaluate(self) -> int:
         total = 0
         for node in self.incoming:
-            print("-> Incoming node of {}: {}".format(self, node[0]))
+            if node[0].uid == 0:
+                print("-> Incoming node of {}: {} (START)".format(self, node[0]))
+            elif self.uid == 1:
+                print("-> Incoming node of {}: {} (END)".format(self, node[0]))
+            else:
+                print("-> Incoming node of {}: {}   |".format(self, node[0]))
             total += node[0].get_output(node[1])
         return total + self.data
     

@@ -66,14 +66,15 @@ class Graph:
     SORTING METHODS
     """
 
+
 def example_graph():
     """
-    Example Graph:      
+    Example Graph:
     ~~~~~~~~~~~~~~
-                     *->n4->*   
-                    /        \                 Reserved Nodes       UID   Type
+                     *->n4->*
+                    /        \\                 Reserved Nodes       UID   Type
        start-->*-->n2-->n5--->n6--*-->end      ~~~~~~~~~~~~~~       ~~~   ~~~~~
-                \                /             * START (DummyNode)   0    input
+                \\                /             * START (DummyNode)   0    input
                  *-->n3--->n7-->*              * END   (DummyNode)   1    output
 
     """
