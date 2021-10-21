@@ -1,0 +1,54 @@
+
+    Example Graph:
+    ~~~~~~~~~~~~~~
+                     *->n4->*
+                    /        \                 Reserved Nodes       UID   Type
+       start-->*-->n2-->n5--->n6--*-->end      ~~~~~~~~~~~~~~       ~~~   ~~~~~
+                \                /             * START (DummyNode)   0    input
+                 *-->n3--->n7-->*              * END   (DummyNode)   1    output
+
+    
+TOP BRANCH (up to n6)
+========================
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+Result of n2: 1
+
+-> Incoming node of DummyNode 4: DummyNode 2   |
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+Result of n4: 2
+
+-> Incoming node of DummyNode 5: DummyNode 2   |
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+Result of n5: 2
+
+-> Incoming node of DummyNode 6: DummyNode 4   |
+-> Incoming node of DummyNode 4: DummyNode 2   |
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+-> Incoming node of DummyNode 6: DummyNode 5   |
+-> Incoming node of DummyNode 5: DummyNode 2   |
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+Result of n6: 5
+
+BOTTOM BRANCH (up to n7)
+========================
+-> Incoming node of DummyNode 3: DummyNode 0 (START)
+Result of n3: 1
+
+-> Incoming node of DummyNode 7: DummyNode 3   |
+-> Incoming node of DummyNode 3: DummyNode 0 (START)
+Result of n7: 2
+
+OVERALL (result of END)
+========================
+-> Incoming node of DummyNode 1: DummyNode 6 (END)
+-> Incoming node of DummyNode 6: DummyNode 4   |
+-> Incoming node of DummyNode 4: DummyNode 2   |
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+-> Incoming node of DummyNode 6: DummyNode 5   |
+-> Incoming node of DummyNode 5: DummyNode 2   |
+-> Incoming node of DummyNode 2: DummyNode 0 (START)
+-> Incoming node of DummyNode 1: DummyNode 7 (END)
+-> Incoming node of DummyNode 7: DummyNode 3   |
+-> Incoming node of DummyNode 3: DummyNode 0 (START)
+Result of END: 7
+
