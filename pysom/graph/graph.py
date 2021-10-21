@@ -1,4 +1,3 @@
-
 from node import Node
 from nodetypes.somnode import SOMNode
 from nodetypes.dummynode import DummyNode
