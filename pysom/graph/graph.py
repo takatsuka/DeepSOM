@@ -19,12 +19,12 @@ class Graph:
     def create_start(self) -> Node:
         node = DummyNode(0, data=0)
         self.start = node
-        return node
+        return self.add_node(node)
     
     def create_end(self) -> Node:
         node = DummyNode(1, data=0)
         self.end = node
-        return node
+        return self.add_node(node)
             
     def create_node(self, node_type=None, data=None) -> Node:
         if node_type is None:
@@ -65,7 +65,18 @@ class Graph:
     """
     SORTING METHODS
     """
-        
+
+def example_graph():
+    """
+    Example Graph:       
+                     *->n4->*   
+                    /        \\
+       start-->*-->n2-->n5--->n6--*-->end
+                \                / 
+                 *-->n3--->n7-->*
+    
+    """
+    pass
 
 if __name__ == "__main__":
     g = Graph()
@@ -74,7 +85,7 @@ if __name__ == "__main__":
     end = g.create_end()
     
     # Level 1
-    n2 = g.create_and_add_node(node_type=DummyNode, data=100)
+    n2 = g.create_and_add_node(node_type=DummyNode, data=1)
     n3 = g.create_and_add_node(node_type=DummyNode, data=1)
     g.add_connection(start, n2, 1)
     g.add_connection(start, n3, 1)
@@ -97,8 +108,22 @@ if __name__ == "__main__":
     # Finishing Connections
     g.add_connection(n6, end, 1)
     g.add_connection(n7, end, 1)
+
+    # Printing Example Graph
+    print(example_graph.__doc__)
     
-    print("Result of n2:", g.find_node(n2).evaluate())
-    print("Result of n4:", g.find_node(n4).evaluate())
-    print("Result of n5:", g.find_node(n5).evaluate())
-    print("Result of n6:", g.find_node(n6).evaluate())
+    print("TOP BRANCH (up to n6)")
+    print("========================")
+    print("Result of n2:", g.find_node(n2).evaluate(), end="\n\n")
+    print("Result of n4:", g.find_node(n4).evaluate(), end="\n\n")
+    print("Result of n5:", g.find_node(n5).evaluate(), end="\n\n")
+    print("Result of n6:", g.find_node(n6).evaluate(), end="\n\n")
+
+    print("BOTTOM BRANCH (up to n7)")
+    print("========================")
+    print("Result of n3:", g.find_node(n3).evaluate(), end="\n\n")
+    print("Result of n7:", g.find_node(n7).evaluate(), end="\n\n")
+
+    print("OVERALL (result of end)")
+    print("========================")
+    print("Result of end:", g.find_node(end).evaluate(), end="\n\n")
