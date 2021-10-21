@@ -50,7 +50,7 @@ class Node:
     def evaluate(self) -> int:
         total = 0
         for node in self.incoming:
-            print(node[0])
+            print("-> Incoming node of {}: {}".format(self, node[0]))
             total += node[0].get_output(node[1])
         return total + self.data
     
