@@ -68,15 +68,16 @@ class Graph:
 
 def example_graph():
     """
-    Example Graph:       
-                     *->n4->*   
+    Example Graph:
+                     *->n4->*
                     /        \\
        start-->*-->n2-->n5--->n6--*-->end
-                \                / 
+                \                /
                  *-->n3--->n7-->*
-    
+
     """
     pass
+
 
 if __name__ == "__main__":
     g = Graph()
@@ -111,7 +112,7 @@ if __name__ == "__main__":
 
     # Printing Example Graph
     print(example_graph.__doc__)
-    
+
     print("TOP BRANCH (up to n6)")
     print("========================")
     print("Result of n2:", g.find_node(n2).evaluate(), end="\n\n")
