@@ -68,12 +68,13 @@ class Graph:
 
 def example_graph():
     """
-    Example Graph:
-                     *->n4->*
-                    /        \\
-       start-->*-->n2-->n5--->n6--*-->end
-                \                /
-                 *-->n3--->n7-->*
+    Example Graph:      
+    ~~~~~~~~~~~~~~
+                     *->n4->*   
+                    /        \                 Reserved Nodes       UID   Type
+       start-->*-->n2-->n5--->n6--*-->end      ~~~~~~~~~~~~~~       ~~~   ~~~~~
+                \                /             * START (DummyNode)   0    input
+                 *-->n3--->n7-->*              * END   (DummyNode)   1    output
 
     """
     pass
@@ -125,6 +126,6 @@ if __name__ == "__main__":
     print("Result of n3:", g.find_node(n3).evaluate(), end="\n\n")
     print("Result of n7:", g.find_node(n7).evaluate(), end="\n\n")
 
-    print("OVERALL (result of end)")
+    print("OVERALL (result of END)")
     print("========================")
-    print("Result of end:", g.find_node(end).evaluate(), end="\n\n")
+    print("Result of END:", g.find_node(end).evaluate(), end="\n\n")
