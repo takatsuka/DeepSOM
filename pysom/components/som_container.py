@@ -124,5 +124,6 @@ class SomContainer:
         """
 
         output = self.transition_func(example, self.som)
-        self.som.learn(example, epoch)
+        if som != None:
+            self.som.learn(example, epoch)
         return output
