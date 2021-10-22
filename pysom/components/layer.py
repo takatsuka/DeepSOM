@@ -75,7 +75,7 @@ class Layer:
             self.soms.append(som_container)
         else:
             self.soms.insert(idx, som_container)
-            self.outlen += som_container.get_out_len()
+        self.outlen += som_container.get_out_len()
 
     def pop_som_container(self, idx):
         """Removes the SOM container at the specified index from the layer.
@@ -90,8 +90,9 @@ class Layer:
         Returns:
             class SomContainer: The SOM container removed from the layer.
         """
-
-        return self.soms.pop(idx)
+        removed_som = self.soms.pop(idx)
+        self.outlen -= removed_som.get_out_len()
+        return removed_som
 
     def get_som_container(self, idx):
         """Returns the SOM container at specified position in the layer.

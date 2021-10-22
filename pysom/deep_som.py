@@ -114,6 +114,9 @@ class DeepSom:
             idx (int): Index of the layer to be removed. Starts from 0 at the
                 front of the Deep SOM. Must be withing the bounds of the layer
                 list; use get_layer
+
+        Returns:
+            class Layer: The Layer of the Deep SOM which has been removed.
         """
 
         if len(self.layers) > 1:
@@ -128,7 +131,7 @@ class DeepSom:
                 at the beginning of the SOM. Must be non-negative.
 
         Returns:
-            class Layer: The requested Layer of the SOM.
+            class Layer: The requested Layer of the Deep SOM.
         """
 
         return self.layers[idx]
