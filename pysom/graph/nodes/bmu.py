@@ -18,7 +18,7 @@ class BMU(Node):
         self.som = None
         ret_bmu = {'1D': self.get_1D,
                    '2D': self.get_2D}
-        self.output = ret_bmu[output]
+        self.get_bmu = ret_bmu[output]
     """
     HELPER METHODS HERE
     """
@@ -30,15 +30,13 @@ class BMU(Node):
     CUSTOM METHODS HERE
     """
     def get_output(self, slot: int) -> Node:
+        if not self.check_slot(slot): 
+            return 
 
-        try:  
-            self.som = self.get_input()
-        except:
-            print("shit")
-    
-        out = self.output(self.som.get_input())
-        
-        return out
+        self.som = self.get_input()
+
+        # 1D vector (indices) or 2D vector (weights) of bmu for each row in data
+        return self.get_bmu(self.som.get_input())
     
     def check_slot(self, slot: int) -> bool:
         if (slot == 0):
