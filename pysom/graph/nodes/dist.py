@@ -4,7 +4,7 @@ from node import Node
 """
     Type 2
 """
-class DistNode(Node):
+class Dist(Node):
     
     def __init__(self, uid):
         super(Dist, self).__init__(uid)

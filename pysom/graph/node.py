@@ -50,22 +50,17 @@ class Node:
         return self.uid
 
     def get_incoming(self) -> list:
-        """
-        Getter method to extract 
-
-        Returns:
-            list: [description]
-        """
         return self.incoming
 
-    def _evaluate(self) -> object:
-        total = 0
-        for node in self.incoming:
-            if node[0].uid == 0:
-                print("-> Incoming node of {}: {} (START)"
-                      .format(self, node[0]))
+    # TO DO
+    def evaluate(self) -> int:
+        total = []
+
+        for node, slot in self.incoming:
+            if node.uid == 0:
+                print("-> Incoming node of {}: {} (START)".format(self, node))
             elif self.uid == 1:
-                print("-> Incoming node of {}: {} (END)".format(self, node[0]))
+                print("-> Incoming node of {}: {} (END)".format(self, node))
             else:
                 print("-> Incoming node of {}: {}   |".format(self, node[0]))
             total += node[0].get_output(node[1])
@@ -90,7 +85,7 @@ class Node:
         """
         return self.evaluate()
 
-    # Defer to concrete class
+    # Basic Node can be connected any where
     def check_slot(self, slot: int) -> bool:
         """
         A verification method to confirm if a proposed slot ID can be used.
@@ -106,7 +101,7 @@ class Node:
                   False otherwise. Returns False by default in the Node
                   superclass.
         """
-        return False
+        return True
 
     # Default method for all concrete classes
     def add_incoming_connection(self, output_node: Node, slot: int) -> bool:
@@ -124,13 +119,13 @@ class Node:
         """
 
         if output_node.check_outgoing_connection(self, slot):
-            self.incoming.append(slot)
+            self.incoming.append((output_node, slot))
             return True
 
         return False
 
     # Default method for all concrete classes
-    def check_outgoing_connection(self, slot: int) -> bool:
+    def check_outgoing_connection(self, input_node: Node, slot: int) -> bool:
         """
         Helper function to check connection can be added for an outgoing node.
 
@@ -148,10 +143,7 @@ class Node:
             bool: True if the slot is not reserved and not in use, or
                   False otherwise
         """
-        if self.check_slot(slot):
-            return True
-        else:
-            return False
+        return self.check_slot(slot)
 
 
 if __name__ == "__main__":
