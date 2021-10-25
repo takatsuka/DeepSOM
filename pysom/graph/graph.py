@@ -70,12 +70,12 @@ class Graph:
         input_node = self.find_node(node1)
         output_node = self.find_node(node2)
 
-        if (input_node is not None) and (output_node is not None):
-            return output_node.add_incoming_connection(input_node, slot)
-        else:
+        if (input_node is None) or (output_node is None):
             return False
 
-    def set_input(self, data):
+        return output_node.add_incoming_connection(input_node, slot)
+        
+    def set_input(self, data): 
         self.find_node(self.start).data = data
 
     def get_output(self):
