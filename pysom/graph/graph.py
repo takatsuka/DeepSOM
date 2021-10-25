@@ -1,6 +1,5 @@
 from node import Node
-from nodetypes.somnode import SOMNode
-from nodetypes.dummynode import DummyNode
+from nodetypes.som import SOM
 
 
 class Graph:
@@ -16,12 +15,12 @@ class Graph:
     HELPER METHODS
     """
     def create_start(self) -> Node:
-        node = DummyNode(0, data=0)
+        node = Node(0, data=0)
         self.start = node
         return self.add_node(node)
     
     def create_end(self) -> Node:
-        node = DummyNode(1, data=0)
+        node = Node(1, data=0)
         self.end = node
         return self.add_node(node)
             
@@ -87,24 +86,24 @@ if __name__ == "__main__":
     end = g.create_end()
     
     # Level 1
-    n2 = g.create_and_add_node(node_type=DummyNode, data=1)
-    n3 = g.create_and_add_node(node_type=DummyNode, data=1)
+    n2 = g.create_and_add_node(node_type=Node, data=1)
+    n3 = g.create_and_add_node(node_type=Node, data=1)
     g.add_connection(start, n2, 1)
     g.add_connection(start, n3, 1)
     
     # Bubble
-    n4 = g.create_and_add_node(node_type=DummyNode, data=1)
-    n5 = g.create_and_add_node(node_type=DummyNode, data=1)
+    n4 = g.create_and_add_node(node_type=Node, data=1)
+    n5 = g.create_and_add_node(node_type=Node, data=1)
     g.add_connection(n2, n4, 1)
     g.add_connection(n2, n5, 1)
 
     # Top row
-    n6 = g.create_and_add_node(node_type=DummyNode, data=1)
+    n6 = g.create_and_add_node(node_type=Node, data=1)
     g.add_connection(n4, n6, 1)
     g.add_connection(n5, n6, 1)
     
     # Bottom row
-    n7 = g.create_and_add_node(node_type=DummyNode, data=1)
+    n7 = g.create_and_add_node(node_type=Node, data=1)
     g.add_connection(n3, n7, 1)
     
     # Finishing Connections
