@@ -46,13 +46,14 @@ def mexican_func(bmu, x_mat, y_mat, sigma):
 
 class SOM(Node):
 
-    def __init__(self, uid, x, y, dim, sigma=0.3, lr=0.7, 
+    def __init__(self, uid, x, y, dim, sigma=0.3, lr=0.7, n_iters=1000,
         topology="rectangular", dist="euclidean", nhood=gaussian_func):
 
         super(SOM, self).__init__(uid)
         self.lr = lr
         self.sigma = sigma
         self.rg = random.RandomState(1)
+        self.n_iters = n_iters
         self.weights = self.rg.rand(x, y, dim) * 2 - 1
         self.weights /= linalg.norm(self.weights, axis=-1, keepdims=True)
         self.map = zeros((x, y))
@@ -82,7 +83,8 @@ class SOM(Node):
     def get_output(self, slot: int) -> Node:
         if not self.check_slot(slot):
             raise RuntimeError("SOMNode can only output to slot 0")
-        return self
+        
+        return self.train(self.get_input())
     
     def check_slot(self, slot: int) -> bool:
         if (slot != 0):
@@ -135,42 +137,4 @@ class SOM(Node):
 
 
 if __name__ == "__main__":
-    
-    file_path = "../../datasets/sphere/sphere_256.txt"
-
-    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
-    data = [[float(c) for c in e] for e in datastr]
-
-    som = SOM(uid=2, x=100, y=100, dim=3, sigma=6, lr=0.8, nhood=gaussian_func, 
-                dist="manhattan", topology="hexagonal")
-
-    som.train(data, 1000)
-
-    sample = data[0]
-    print(som.bmu(sample))  # bmu for sample vector
-
-    som_weights = som.get_weights()
-    print(som.get_weights()) # dump som weights
-
-    # flattening weights list for graph
-    flatten_weights = [elem for l in som_weights for elem in l]
-
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
-
-    axes = list(zip(*flatten_weights))     # Seems to work when i fiddle with sigma
-    axes_o = list(zip(*data))
-    ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
-
-    ax.scatter(*axes, marker='o', s=1)
-    ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-
-    plt.savefig("sphere.png")
-
-
-
-
-
+    pass
