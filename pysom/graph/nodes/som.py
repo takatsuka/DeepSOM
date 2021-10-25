@@ -83,8 +83,8 @@ class SOM(Node):
     def get_output(self, slot: int) -> Node:
         if not self.check_slot(slot):
             raise RuntimeError("SOMNode can only output to slot 0")
-        
-        return self.train(self.get_input())
+        self.train(self.get_input())
+        return self
     
     def check_slot(self, slot: int) -> bool:
         if (slot != 0):
@@ -129,10 +129,10 @@ class SOM(Node):
         self.weights += einsum('ij, ijk->ijk', nhood, x - self.weights)
         # rewrite transpose as einsum contraction?
 
-    def train(self, data, n_iters):
+    def train(self, data):
         # train som, update each iter
-        iters = arange(n_iters) % len(data)
-        [self.update(data[iter], self.bmu(data[iter]), curr, n_iters)
+        iters = arange(self.n_iters) % len(data)
+        [self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters)
          for curr, iter in enumerate(iters)]
 
 
