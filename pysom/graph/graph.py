@@ -15,17 +15,17 @@ class Graph:
         }
 
 
-    def _create_node(self, node_type=None, data=None) -> Node:
+    def _create_node(self, node_type=None, props=None) -> Node:
         if node_type is None:
             node = Node(Graph.uid, data=data)
         else:
-            node = node_type(Graph.uid, data=data)
+            node = node_type(Graph.uid, **props)
 
         Graph.uid += 1
 
         return node
 
-    def create(self, node_type=None, data=None) -> int:
+    def create(self, node_type=None, props=None) -> int:
         node = self._create_node(node_type=node_type, data=data)
         return self._add_node(node)
 
@@ -50,6 +50,9 @@ class Graph:
             return output_node.add_incoming_connection(input_node, slot)
         else:
             return False
+
+    def set_input(self, data): 
+        self.find_node(self.start).data = data
 
     """
     SORTING METHODS

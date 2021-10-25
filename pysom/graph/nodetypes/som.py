@@ -1,12 +1,13 @@
 from __future__ import annotations
 from node import Node
 
+
 """
     Type 0
 """
 class SOM(Node):
     
-    def __init__(self, uid):
+    def __init__(self, uid, shape="rect", in_dim=9):
         print("Hello from SOMnode")
         super(SOM, self).__init__(uid)
     
