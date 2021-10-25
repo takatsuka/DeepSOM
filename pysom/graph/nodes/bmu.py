@@ -6,8 +6,8 @@ from graph.node import Node
 """
 class BMU(Node):
     
-    def __init__(self, uid):
-        super(BMU, self).__init__(uid)
+    def __init__(self, uid, graph):
+        super(BMU, self).__init__(uid, graph)
 
     """
     HELPER METHODS HERE

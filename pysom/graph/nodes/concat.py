@@ -6,8 +6,8 @@ from graph.node import Node
 """
 class Concat(Node):
     
-    def __init__(self, uid):
-        super(Concat, self).__init__(uid)
+    def __init__(self, uid, graph):
+        super(Concat, self).__init__(uid, graph)
     
     
     """
