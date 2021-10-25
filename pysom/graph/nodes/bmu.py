@@ -49,14 +49,12 @@ def mexican_func(bmu, x_mat, y_mat, sigma):
 
 class BMU(Node):
     
-    def __init__(self, uid, output='2D'):
-
-        super(BMU, self).__init__(uid)
+    def __init__(self, uid, graph, output='2D'):
+        super(BMU, self).__init__(uid, graph)
         self.som = None
         ret_bmu = {'1D': self.get_1D,
                    '2D': self.get_2D}
         self.output = ret_bmu[output]
-
     """
     HELPER METHODS HERE
     """

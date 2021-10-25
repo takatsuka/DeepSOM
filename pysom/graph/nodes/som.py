@@ -46,10 +46,10 @@ def mexican_func(bmu, x_mat, y_mat, sigma):
 
 class SOM(Node):
 
-    def __init__(self, uid, x, y, dim, sigma=0.3, lr=0.7, n_iters=1000,
+    def __init__(self, uid, graph, x, y, dim, sigma=0.3, lr=0.7, n_iters=1, 
         topology="rectangular", dist="euclidean", nhood=gaussian_func):
 
-        super(SOM, self).__init__(uid)
+        super(SOM, self).__init__(uid, graph)
         self.lr = lr
         self.sigma = sigma
         self.rg = random.RandomState(1)
