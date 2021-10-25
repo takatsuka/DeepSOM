@@ -1,5 +1,5 @@
 from __future__ import annotations
-from graph.node import Node
+from ..node import Node
 
 """
     Input Container

@@ -1,6 +1,6 @@
 from typing import Type
-from graph.node import Node
-from graph.nodes.input_container import InputContainer
+from .node import Node
+from .nodes.input_container import InputContainer
 
 
 class Graph:
@@ -98,7 +98,7 @@ class Graph:
                        object stored by the current Graph instance.
 
         Returns:
-            Node: the matching Node object with an ID matching the provided
+            Node: the matching Node object with an ID matching the provided \
                   uid. Will return None if no suitable match is found.
         """
         for node in self.nodes.values():
@@ -125,7 +125,7 @@ class Graph:
                         Node instance
 
         Returns:
-            bool: True if an edge was able to be created. False if any node
+            bool: True if an edge was able to be created. False if any node \
                   could not be found, or if the provided IDs were equal
         """
         if uid_in == uid_out:
@@ -161,7 +161,7 @@ class Graph:
         an iteration of training.
         
         Returns:
-            object: the resultant data object output from the Graph after 
+            object: the resultant data object output from the Graph after \
                     training
         """
         return self.find_node(self.end).get_output(1)
@@ -213,18 +213,18 @@ class Graph:
     """
 
 
-def example_graph():
-    """
-    Example Graph:
-    ~~~~~~~~~~~~~~
-                     *->n4->*
-                    /        \\               Reserved Nodes       UID   Type
-       start-->*-->n2-->n5--->n6--*-->end     ~~~~~~~~~~~~~~       ~~~   ~~~~~
-                \\                /           * START (DummyNode)   0    input
-                 *-->n3--->n7-->*             * END   (DummyNode)   1    output
+# def example_graph():
+#     """
+#     Example Graph:
+#     ~~~~~~~~~~~~~~
+#                      *->n4->*
+#                     /        \\               Reserved Nodes       UID   Type
+#        start-->*-->n2-->n5--->n6--*-->end     ~~~~~~~~~~~~~~       ~~~   ~~~~~
+#                 \\                /           * START (DummyNode)   0    input
+#                  *-->n3--->n7-->*             * END   (DummyNode)   1    output
 
-    """
-    pass
+#     """
+#     pass
 
 
 if __name__ == "__main__":
