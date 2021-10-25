@@ -55,16 +55,28 @@ class Graph:
         Args:
             node_type (Node, optional): the class of the Node to be created as
                                         defined in graph/nodetypes. Defaults
-                                        to None.
-            props ([type], optional): [description]. Defaults to None.
+                                        to None, which creates and returns
+                                        a parent Node instance.
+            props (optional): property parameters that may be unpacked and
+                              interpreted by the constructor of the Node.
+                              Defaults to None.
 
         Returns:
-            int: [description]
+            int: the automatically assigned unique integer ID of the node
         """
         node = self._create_node(node_type=node_type, props=props)
         return self._add_node(node)
 
     def get_nodes(self) -> dict:
+        """
+        Helper function to return the nodes in the graph.
+        
+        Returns the map of all nodes currently stored and indexed by the
+        current Graph instance by their unique integer node ID.
+
+        Returns:
+            dict: the map of nodes indexed by their ID. Will not be empty.
+        """
         return self.nodes
 
     def _add_node(self, node: Node) -> int:
@@ -72,12 +84,40 @@ class Graph:
         return node.get_id()
 
     def find_node(self, uid: int) -> Node:
+        """
+        Helper function to retrieve a specific Node object in the graph.
+        
+        Returns the Node object matching the provided unique integer ID if
+        possible. If there is no such match, then None is returned.
+
+        Args:
+            uid (int): the unique integer ID search key for retrieving a Node
+                       object stored by the current Graph instance.
+
+        Returns:
+            Node: the matching Node object with an ID matching the provided
+                  uid. May be None if no suitable match is found.
+        """
         for node in self.nodes.values():
             if node.get_id() == uid:
                 return node
         return None
 
     def connect(self, node1: int, node2: int, slot: int) -> bool:
+        """
+        Helper function to connect two Node objects in the graph.
+
+        Also triggers the bookkeeping required in the Node class in terms
+        of tracking of incoming and outgoing Nodes.
+
+        Args:
+            node1 (int): [description]
+            node2 (int): [description]
+            slot (int): [description]
+
+        Returns:
+            bool: [description]
+        """
         input_node = self.find_node(node1)
         output_node = self.find_node(node2)
 
