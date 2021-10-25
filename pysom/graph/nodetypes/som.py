@@ -4,12 +4,12 @@ from node import Node
 """
     Type 0
 """
-
-
-class SOMNode(Node):
-
-    def init(self, uid):
-        super(SOMNode, self).__init__(uid)
+class SOM(Node):
+    
+    def __init__(self, uid):
+        print("Hello from SOMnode")
+        super(SOM, self).__init__(uid)
+    
     
     """
     HELPER METHODS HERE
@@ -32,3 +32,7 @@ class SOMNode(Node):
             # if (slot in self.slots.keys()):
             #     raise RuntimeError("Cannot duplicate the slot")
             return True
+        
+        
+if __name__ == "__main__":
+    pass

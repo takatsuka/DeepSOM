@@ -2,27 +2,26 @@ from __future__ import annotations
 from node import Node
 
 """
-    Type 1
+    Type 5
 """
-
-
-class BMUNode(Node):
+class DummyNode(Node):
     
-    def init(self, uid):
-        super(BMUNode, self).__init__(uid)
-
+    def __init__(self, uid, data=None):
+        super(Dummy, self).__init__(uid, data=data)
+    
+    
     """
     HELPER METHODS HERE
     """
     def __str__(self) -> str:
-        str_rep = "BMUNode {}".format(self.uid)
+        str_rep = "DummyNode {}".format(self.uid)
         return str_rep
     
     """
     CUSTOM METHODS HERE
     """
-    def get_output(self, slot: int) -> Node:
-        return self
+    # def get_output(self, slot: int) -> Node:
+    #     return self
     
     def check_slot(self, slot: int) -> bool:
         if (slot == 0):
@@ -33,3 +32,7 @@ class BMUNode(Node):
             return False
         else:
             return True
+        
+        
+if __name__ == "__main__":
+    pass

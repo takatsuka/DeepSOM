@@ -2,20 +2,19 @@ from __future__ import annotations
 from node import Node
 
 """
-    Type 2
+    Type 3
 """
-
-
-class DistNode(Node):
-
-    def init(self, uid):
-        super(DistNode, self).__init__(uid)
+class Concat(Node):
+    
+    def __init__(self, uid):
+        super(Concat, self).__init__(uid)
+    
     
     """
     HELPER METHODS HERE
     """
     def __str__(self) -> str:
-        str_rep = "DistNode {}".format(self.uid)
+        str_rep = "ConcatNode {}".format(self.uid)
         return str_rep
     
     """
@@ -33,3 +32,7 @@ class DistNode(Node):
             return False
         else:
             return True
+
+
+if __name__ == "__main__":
+    pass
