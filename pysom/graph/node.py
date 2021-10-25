@@ -28,7 +28,7 @@ class Node:
         #        actual indices
         #     2: DistConnection(self, indices), # configured by user
         #     3: DistConnection(self, indices) # configured by user
-        # }
+        # }self.slot
 
     def __str__(self) -> str:
         str_rep = "Default Node {}".format(self.uid)
@@ -47,9 +47,25 @@ class Node:
         return self.uid
 
     def get_id(self) -> int:
+        """
+        Getter function to return the ID of the current node.
+
+        Returns:
+            int: the assigned unique integer ID of the current node
+        """
         return self.uid
 
     def get_incoming(self) -> list:
+        """
+        Getter function to return a list of all incoming Node objects.
+
+        Incoming Node objects are other Node instances which have a valid
+        outgoing edge to the current node. Used to backtrace and request
+        data output from these nodes during the training process.
+
+        Returns:
+            list: [description]
+        """
         return self.incoming
 
     # TO DO
@@ -89,7 +105,7 @@ class Node:
     def check_slot(self, slot: int) -> bool:
         """
         A verification method to confirm if a proposed slot ID can be used.
-        
+
         Typically deferred to implementing classes to manage whether a slot ID
         can be used when a connection is to be established between two nodes.
 
@@ -98,7 +114,7 @@ class Node:
 
         Returns:
             bool: True if the slot is not reserved and not in use, or
-                  False otherwise. Returns False by default in the Node
+                  False otherwise. Returns True by default in the Node
                   superclass.
         """
         return True
@@ -115,7 +131,8 @@ class Node:
                         assigned to the edge
 
         Returns:
-            bool: [description]
+            bool: true if the outgoing edge was added successfully, false
+                  otherwise
         """
 
         if output_node.check_outgoing_connection(self, slot):
