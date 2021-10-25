@@ -65,7 +65,7 @@ class Node:
         data output from these nodes during the training process.
 
         Returns:
-            list: the list of all nodes that have an outgoing edge to the
+            list: the list of all nodes that have an outgoing edge to the \
                   current node
         """
         return self.incoming
@@ -116,7 +116,7 @@ class Node:
                         output is to be passed down
 
         Returns:
-            object: the data object to be passed down the edge identified by
+            object: the data object to be passed down the edge identified by \
                     the user provided slot ID
         """
         if slot == 0:
@@ -136,8 +136,8 @@ class Node:
             slot (int): a proposed integer slot ID to be checked
 
         Returns:
-            bool: True if the slot is not reserved and not in use, or
-                  False otherwise. Returns True by default in the Node
+            bool: True if the slot is not reserved and not in use, or \
+                  False otherwise. Returns True by default in the Node \
                   superclass.
         """
         return True
@@ -154,7 +154,7 @@ class Node:
                         assigned to the edge
 
         Returns:
-            bool: True if the outgoing edge was added successfully, False
+            bool: True if the outgoing edge was added successfully, False \
                   otherwise
         """
         if output_node.check_outgoing_connection(self, slot):
@@ -179,7 +179,7 @@ class Node:
                         to be created
 
         Returns:
-            bool: True if the slot is not reserved and not in use, or
+            bool: True if the slot is not reserved and not in use, or \
                   False otherwise
         """
         return self.check_slot(slot)
