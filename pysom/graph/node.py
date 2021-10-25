@@ -8,7 +8,7 @@ class Node:
         """
         The default Node class used to build a SOM Node.
 
-        The smallest definable element for the Deep SOM Model. Can be connected
+        The basic building element for the Deep SOM Model. Can be connected
         to other SOM Nodes, and at any time may optionally hold some data for
         evaluation during the training process.
 
@@ -50,6 +50,12 @@ class Node:
         return self.uid
 
     def get_incoming(self) -> list:
+        """
+        Getter method to extract 
+
+        Returns:
+            list: [description]
+        """
         return self.incoming
 
     def _evaluate(self) -> object:
