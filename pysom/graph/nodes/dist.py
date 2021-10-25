@@ -6,7 +6,7 @@ from node import Node
 """
 class Dist(Node):
     
-    def __init__(self, uid):
+    def __init__(self, uid, selections=[]):
         super(Dist, self).__init__(uid)
     
     

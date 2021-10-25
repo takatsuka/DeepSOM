@@ -17,7 +17,7 @@ class Graph:
 
     def _create_node(self, node_type=None, props=None) -> Node:
         if node_type is None:
-            node = Node(Graph.uid, data=data)
+            node = Node(Graph.uid)
         else:
             node = node_type(Graph.uid, **props)
 
@@ -26,7 +26,7 @@ class Graph:
         return node
 
     def create(self, node_type=None, props=None) -> int:
-        node = self._create_node(node_type=node_type, data=data)
+        node = self._create_node(node_type=node_type, props=props)
         return self._add_node(node)
 
     def get_nodes(self) -> list:
