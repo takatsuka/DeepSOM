@@ -20,7 +20,7 @@ class Node:
         self.type = 0
         self.props = props  # used for storing actual SOM class
         self.incoming = list()  # 2-tuple (output_node, slot)
-
+        self.output_ready = False
         # self.slots = list()
         # {
         #     0: DefaultConnection(self), # only in SOMNode, unused in DistNode
