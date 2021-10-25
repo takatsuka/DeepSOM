@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pysom.graph.graph import Graph
+
 # import numpy as np
 
 
@@ -105,7 +105,6 @@ class Node:
             object: the data returned from the incoming node indexed
         """
         node, slot = self.incoming[index]
-
         return node.get_output(slot)
 
     def get_output(self, slot: int) -> object:
@@ -124,6 +123,7 @@ class Node:
             object: the data object to be passed down the edge identified by
                     the user provided slot ID
         """
+        if slot == 0: return self
 
         return self._evaluate()
 
@@ -160,7 +160,6 @@ class Node:
             bool: True if the outgoing edge was added successfully, False
                   otherwise
         """
-        print("add")
         if output_node.check_outgoing_connection(self, slot):
             self.incoming.append((output_node, slot))
             return True

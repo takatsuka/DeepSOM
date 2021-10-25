@@ -18,7 +18,7 @@ class Dist(Node):
         return str_rep
 
 
-    def evaluate(self):
+    def _evaluate(self):
         if self.output_ready: return
         dat = self.get_input()
         self.pre_chopped = [dat.take(sel, axis=axis) for axis, sel in self.sel]
@@ -27,10 +27,9 @@ class Dist(Node):
 
 
     def get_output(self, slot: int) -> Node:
-        if not self.output_ready:
-            self.evaluate()
-        print(self.pre_chopped)
         if slot == 0: return self
+        if not self.output_ready:
+            self._evaluate()
         
         return self.pre_chopped[slot - 1]
     
