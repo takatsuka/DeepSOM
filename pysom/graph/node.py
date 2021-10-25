@@ -1,21 +1,35 @@
 from __future__ import annotations
+
+from pysom.graph.graph import Graph
 # import numpy as np
 
 
 class Node:
+    """
+    The default Node class used to build a SOM Node.
 
-    def __init__(self, uid: int):
+    Also the parent class of all node types defined in graph/nodetypes.
+    The basic building element for the Deep SOM Model. Can be connected
+    to other SOM Nodes, and at any time may optionally hold some data for
+    evaluation during the training process.
+
+    Attributes:
+        uid (str): the unique integer ID of the Node instance
+        incoming (list): the list of all incoming Node objects that have a
+                         connection to the current Node instance
+    """
+
+    def __init__(self, uid: int, graph: Graph):
         """
-        The default Node class used to build a SOM Node.
-
-        The basic building element for the Deep SOM Model. Can be connected
-        to other SOM Nodes, and at any time may optionally hold some data for
-        evaluation during the training process.
+        The constructor for the default Node class used to build a SOM Node.
 
         Args:
-            uid (int): A unique positive integer ID for the Node
+            uid (int): a unique positive integer ID for the Node
+            graph (Graph): the containing Graph instance holding the
+                           constructed Node
         """
         self.uid = uid
+        self.graph = graph
         self.type = 0
         self.incoming = list()  # 2-tuple (output_node, slot)
 
@@ -73,17 +87,6 @@ class Node:
             node.get_output(slot)
 
     def _evaluate(self) -> int:
-
-        # total = []
-
-        # for node, slot in self.incoming:
-        #     if node.uid == 0:
-        #         print("-> Incoming node of {}: {} (START)".format(self, node))
-        #     elif self.uid == 1:
-        #         print("-> Incoming node of {}: {} (END)".format(self, node))
-        #     else:
-        #         print("-> Incoming node of {}: {}   |".format(self, node))
-        #     total += node.get_output(slot)
         return self.get_input()
 
     def get_input(self, index: int = 0) -> object:

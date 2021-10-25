@@ -3,21 +3,30 @@ from graph.nodes.input_container import InputContainer
 
 
 class Graph:
+    """
+    Base class of the API library representing the graph of the deep SOM model.
+
+    Holds all the methods necessary for constructing the graphs. May
+    construct vertices and join vertices.
+
+    Attributes:
+        nodes (dict): the map of all Node objects indexed by their
+                      automatically assigned unique integer ID
+    """
 
     uid = 2
 
     def __init__(self):
         """
-        Base class of the API library representing the graph of the SOM model.
-
-        Holds all the methods necessary for constructing the graphs. May
-        construct vertices and join vertices.
+        Constructor of the Graph class representing the deep SOM model.
 
         Creates the starting input node of ID 0 and final output node of ID 0
-        upon instantiation.
+        upon instantiation. Training flag is initially set to false and can
+        be toggled using the training methods.
         """
         self.start = 0
         self.end = 1
+        self.is_training = False
 
         self.nodes = {
             0: InputContainer(self.start),
@@ -82,6 +91,29 @@ class Graph:
 
     def get_output(self):
         return self.find_node(self.end).get_output(1)
+
+    def train(self):
+        if self.is_training:
+            raise RuntimeError("Model is already training")
+
+        # Initiate the training process here
+        # TODO: Some actual training logic here
+
+        # End of actual training logic
+
+        self.is_training = True
+        return self.is_training
+
+    def halt_training(self):
+        if not self.is_training:
+            raise RuntimeError("Cannot halt training when model is \
+                not training")
+
+        # TODO: Abort training logic here
+        # May need to handle manual interrupts
+
+        self.is_training = False
+        return self.is_training
 
     """
     SORTING METHODS

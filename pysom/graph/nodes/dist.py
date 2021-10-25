@@ -8,8 +8,8 @@ from graph.node import Node
 """
 class Dist(Node):
     
-    def __init__(self, uid, selections=[]):
-        super(Dist, self).__init__(uid)
+    def __init__(self, uid, graph, selections=[]):
+        super(Dist, self).__init__(uid, graph)
         self.sel = selections
         self.pre_chopped = []
 
