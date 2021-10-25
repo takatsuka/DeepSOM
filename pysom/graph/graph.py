@@ -29,15 +29,15 @@ class Graph:
         self.is_training = False
 
         self.nodes = {
-            0: InputContainer(self.start),
-            1: Node(self.end)
+            0: InputContainer(self.start, self),
+            1: Node(self.end, self)
         }
 
     def _create_node(self, node_type=None, props={}) -> Node:
         if node_type is None:
             node = Node(Graph.uid)
         else:
-            node = node_type(Graph.uid, **props)
+            node = node_type(Graph.uid, self, **props)
 
         Graph.uid += 1
 

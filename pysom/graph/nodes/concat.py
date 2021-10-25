@@ -7,8 +7,8 @@ import numpy as np
 """
 class Concat(Node):
 
-    def __init__(self, uid, axis):
-        super(Concat, self).__init__(uid)
+    def __init__(self, uid, graph, axis):
+        super(Concat, self).__init__(uid, graph)
         self.precon = None
         self.axis = axis
 

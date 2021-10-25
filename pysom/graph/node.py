@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pysom.graph.graph import Graph
+
 # import numpy as np
 
 
