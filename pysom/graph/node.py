@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-
-# import numpy as np
-
-
 class Node:
     """
     The default Node class used to build a SOM Node.
