@@ -1,7 +1,8 @@
 from typing import Type
 from .node import Node
 from .nodes.input_container import InputContainer
-
+from .nodes.som import SOM, gaussian_func
+from .nodes.bmu import BMU
 
 class Graph:
     """
@@ -228,27 +229,23 @@ class Graph:
 
 
 if __name__ == "__main__":
+    
     g = Graph()
 
-    # Level 1
-    # n2 = g.create(node_type=Node, data=1)
-    # n3 = g.create(node_type=Node, data=1)
+    file_path = "../datasets/sphere/sphere_256.txt"
+    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
+    data = [[float(c) for c in e] for e in datastr]
+    
+    g.set_input(data=data)
 
-    # # Printing Example Graph
-    # print(example_graph.__doc__)
+    som = g.create(node_type=SOM, props={'x':100, 'y':100, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':1,
+                                'nhood':gaussian_func, 'dist':"manhattan", 'topology':'hexagonal'})
 
-    # print("TOP BRANCH (up to n6)")
-    # print("========================")
-    # print("Result of n2:", g.find_node(n2).evaluate(), end="\n\n")
-    # print("Result of n4:", g.find_node(n4).evaluate(), end="\n\n")
-    # print("Result of n5:", g.find_node(n5).evaluate(), end="\n\n")
-    # print("Result of n6:", g.find_node(n6).evaluate(), end="\n\n")
+    bmu = g.create(node_type=BMU, props={'output':'1D'})
 
-    # print("BOTTOM BRANCH (up to n7)")
-    # print("========================")
-    # print("Result of n3:", g.find_node(n3).evaluate(), end="\n\n")
-    # print("Result of n7:", g.find_node(n7).evaluate(), end="\n\n")
-
-    # print("OVERALL (result of END)")
-    # print("========================")
-    # print("Result of END:", g.find_node(g.end).evaluate(), end="\n\n")
+    g.connect(g.start, som, slot=0)
+    g.connect(som, bmu, slot=0)
+    g.connect(bmu, g.end, slot=1)
+    
+    out = g.get_output()
+    print(out)
