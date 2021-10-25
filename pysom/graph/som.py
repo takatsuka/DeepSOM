@@ -1,8 +1,8 @@
 from __future__ import annotations
 import numpy as np
 from numpy import exp, logical_and, random, outer, linalg, zeros, arange, meshgrid, subtract, multiply, unravel_index, einsum
-from node import Node
 import matplotlib.pyplot as plt
+from graph.node import Node
 
 
 """

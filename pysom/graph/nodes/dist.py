@@ -1,5 +1,5 @@
 from __future__ import annotations
-from node import Node
+from graph.node import Node
 
 """
     Type 2

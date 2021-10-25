@@ -1,5 +1,5 @@
-from node import Node
-from nodes.input_container import *
+from graph.node import Node
+from graph.nodes.input_container import *
 
 
 class Graph:
