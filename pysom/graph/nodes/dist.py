@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from numpy import true_divide
-from graph.node import Node
+from ..node import Node
 
 """
     Type 2

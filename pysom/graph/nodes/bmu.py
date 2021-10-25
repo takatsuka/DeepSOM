@@ -2,8 +2,8 @@ from __future__ import annotations
 import numpy as np
 from numpy import exp, logical_and, random, outer, linalg, zeros, arange, array, argmin, meshgrid, subtract, multiply, unravel_index, einsum, dot
 import matplotlib.pyplot as plt
-from graph.node import Node
-from graph.nodes.som import SOM
+from ..node import Node
+from .som import SOM
 
 
 

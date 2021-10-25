@@ -1,6 +1,6 @@
 from typing import Type
-from graph.node import Node
-from graph.nodes.input_container import InputContainer
+from .node import Node
+from .nodes.input_container import InputContainer
 
 
 class Graph:
