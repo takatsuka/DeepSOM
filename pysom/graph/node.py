@@ -31,7 +31,7 @@ class Node:
         # }
 
     def __str__(self) -> str:
-        str_rep = "Empty Node {}".format(self.uid)
+        str_rep = "Default Node {}".format(self.uid)
         return str_rep
 
     def __repr__(self) -> str:
@@ -53,7 +53,7 @@ class Node:
         return self.incoming
 
     # TO DO
-    def evaluate(self) -> int:
+    def _evaluate(self) -> int:
         total = []
 
         for node, slot in self.incoming:
@@ -62,10 +62,10 @@ class Node:
             elif self.uid == 1:
                 print("-> Incoming node of {}: {} (END)".format(self, node))
             else:
-                print("-> Incoming node of {}: {}   |".format(self, node[0]))
-            total += node[0].get_output(node[1])
+                print("-> Incoming node of {}: {}   |".format(self, node))
+            total += node.get_output(slot)
 
-        return total + self.data
+        return total
 
     def get_output(self, slot: int) -> object:
         """
