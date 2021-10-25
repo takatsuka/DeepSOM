@@ -71,21 +71,23 @@ class Node:
 
     def _evaluate(self) -> int:
 
-        total = []
+        # total = []
 
-        for node, slot in self.incoming:
-            if node.uid == 0:
-                print("-> Incoming node of {}: {} (START)".format(self, node))
-            elif self.uid == 1:
-                print("-> Incoming node of {}: {} (END)".format(self, node))
-            else:
-                print("-> Incoming node of {}: {}   |".format(self, node))
-            total += node.get_output(slot)
+        # for node, slot in self.incoming:
+        #     if node.uid == 0:
+        #         print("-> Incoming node of {}: {} (START)".format(self, node))
+        #     elif self.uid == 1:
+        #         print("-> Incoming node of {}: {} (END)".format(self, node))
+        #     else:
+        #         print("-> Incoming node of {}: {}   |".format(self, node))
+        #     total += node.get_output(slot)
 
-        return total
+        return self.get_input()
 
     def get_input(self, index=0):
+        print(self.incoming)
         node, slot = self.incoming[index]
+        
         return node.get_output(slot)
 
 
@@ -141,7 +143,7 @@ class Node:
             bool: true if the outgoing edge was added successfully, false
                   otherwise
         """
-
+        print("add")
         if output_node.check_outgoing_connection(self, slot):
             self.incoming.append((output_node, slot))
             return True

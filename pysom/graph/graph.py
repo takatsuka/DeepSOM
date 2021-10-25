@@ -25,7 +25,7 @@ class Graph:
 
         return node
 
-    def create(self, node_type=None, props=None) -> int:
+    def create(self, node_type, props=None) -> int:
         node = self._create_node(node_type=node_type, props=props)
         return self._add_node(node)
 
