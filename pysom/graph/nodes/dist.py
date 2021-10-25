@@ -2,20 +2,19 @@ from __future__ import annotations
 from node import Node
 
 """
-    Type 0
+    Type 2
 """
-class SOM(Node):
+class Dist(Node):
     
     def __init__(self, uid):
-        print("Hello from SOMnode")
-        super(SOM, self).__init__(uid)
+        super(Dist, self).__init__(uid)
     
     
     """
     HELPER METHODS HERE
     """
     def __str__(self) -> str:
-        str_rep = "SOMNode {}".format(self.uid)
+        str_rep = "DistNode {}".format(self.uid)
         return str_rep
     
     """
@@ -25,12 +24,13 @@ class SOM(Node):
         return self
     
     def check_slot(self, slot: int) -> bool:
-        if (slot != 0):
-            raise RuntimeError("SOMNode can only output to slot 0")
+        if (slot == 0):
+            raise RuntimeError("Slot 0 is reserved for SOMNode")
+            return False
+        elif (slot < 0):
+            raise RuntimeError("Slots must be positive")
             return False
         else:
-            # if (slot in self.slots.keys()):
-            #     raise RuntimeError("Cannot duplicate the slot")
             return True
         
         
