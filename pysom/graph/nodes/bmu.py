@@ -11,42 +11,6 @@ from graph.nodes.som import SOM
     Type 1
 """
 
-
-def exponential_decay(lr, curr, max_iter):
-    # exponential decay to reduce lr as iters progress (also used on sigma)
-    return lr / (1 + curr / (max_iter / 2))
-
-
-# @numba.jit(nopython=True)
-def reduce_params(lr, sig, curr, max_iter):
-    return exponential_decay(lr, curr, max_iter), exponential_decay(sig, curr, max_iter)
-
-
-# @numba.jit(nopython=True)
-def gaussian_func(bmu, x_mat, y_mat, sigma):
-    # return gaussian nhood for centroid  (sigma decreases as iters progress)
-    # centroid is
-    alpha_x = exp((-(x_mat - x_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
-    # the bmu here
-    alpha_y = exp((-(y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
-    return (alpha_x * alpha_y).transpose()
-
-
-# @numba.jit(nopython=True)
-def bubble_func(bmu, x_neig, y_neig, sigma):
-    alpha_x = logical_and(x_neig > bmu[0] - sigma, x_neig < bmu[0] + sigma)
-    alpha_y = logical_and(y_neig > bmu[1] - sigma, y_neig < bmu[1] + sigma)
-    return outer(alpha_x, alpha_y)
-
-
-# @numba.jit(nopython=True)
-def mexican_func(bmu, x_mat, y_mat, sigma):
-    # return mexican hat nhood for bmu
-    m = ((x_mat - x_mat.transpose()
-         [bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
-    return ((1 - 2 * m) * exp(-m)).transpose()
-
-
 class BMU(Node):
     
     def __init__(self, uid, graph, output='2D'):
@@ -112,8 +76,4 @@ class BMU(Node):
 
     
 if __name__ == "__main__":
-    
-    file_path = "../datasets/sphere/sphere_256.txt"
-
-    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
-    data = [[float(c) for c in e] for e in datastr]
+    pass
