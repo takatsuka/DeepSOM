@@ -2,15 +2,15 @@ from graph.graph import Graph
 from graph.nodes.dist import *
 from graph.nodes.concat import *
 
+
 def example_dist():
     import numpy as np
     dat = [
-        [1,2,3],
-        [4,5,6],
-        [2,3,4]
+        [1, 2, 3],
+        [4, 5, 6],
+        [2, 3, 4]
     ]
     dat = np.array(dat)
-
 
     g = Graph()
 
@@ -24,15 +24,15 @@ def example_dist():
 
     print(g.get_output())
 
+
 def example_dist_con():
     import numpy as np
     dat = [
-        [1,2,3],
-        [4,5,6],
-        [2,3,4]
+        [1, 2, 3],
+        [4, 5, 6],
+        [2, 3, 4]
     ]
     dat = np.array(dat)
-
 
     g = Graph()
 
@@ -42,7 +42,6 @@ def example_dist_con():
     n2 = g.create(Node)
     con1 = g.create(Concat, {"axis": 1})
 
-
     g.connect(g.start, dist1, 1)
 
     g.connect(dist1, n1, 1)
@@ -50,8 +49,6 @@ def example_dist_con():
 
     g.connect(n1, con1, 1)
     g.connect(n2, con1, 1)
-    
-    
 
     g.connect(con1, g.end, 1)
 

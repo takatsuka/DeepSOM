@@ -123,7 +123,8 @@ class Node:
             object: the data object to be passed down the edge identified by
                     the user provided slot ID
         """
-        if slot == 0: return self
+        if slot == 0:
+            return self
 
         return self._evaluate()
 

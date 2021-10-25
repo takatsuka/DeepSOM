@@ -5,6 +5,8 @@ import numpy as np
 """
     Concat every input connected to this node
 """
+
+
 class Concat(Node):
 
     def __init__(self, uid, graph, axis):
@@ -18,7 +20,7 @@ class Concat(Node):
 
     def _evaluate(self):
         ins = [self.get_input(index=i) for i in range(len(self.incoming))]
-        self.precon = np.concatenate(tuple(ins),axis=self.axis)
+        self.precon = np.concatenate(tuple(ins), axis=self.axis)
 
         self.output_ready = True
 
@@ -30,8 +32,6 @@ class Concat(Node):
             self._evaluate()
 
         return self.precon
-
-
 
     def check_slot(self, slot: int) -> bool:
         return slot <= 1
