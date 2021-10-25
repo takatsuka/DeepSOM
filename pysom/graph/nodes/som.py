@@ -83,6 +83,7 @@ class SOM(Node):
     def get_output(self, slot: int) -> Node:
         if not self.check_slot(slot):
             raise RuntimeError("SOMNode can only output to slot 0")
+        
         self.train(self.get_input())
         return self
     

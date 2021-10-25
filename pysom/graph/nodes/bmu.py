@@ -30,8 +30,15 @@ class BMU(Node):
     CUSTOM METHODS HERE
     """
     def get_output(self, slot: int) -> Node:
-        self.som = self.get_input()
-        return self.output(self.som.get_input())
+
+        try:  
+            self.som = self.get_input()
+        except:
+            print("shit")
+    
+        out = self.output(self.som.get_input())
+        
+        return out
     
     def check_slot(self, slot: int) -> bool:
         if (slot == 0):
@@ -46,18 +53,12 @@ class BMU(Node):
     """
     BMU METHODS HERE
     """
-    
-    def get_weights(self):
-        return self.som.weights
 
-    def activate(self, x):
-        # using distance formulas (euclid, cosine or manhattan)
-        self.som.map = self.som.distance(x, self.som.weights)
-
-    def bmu(self, x):
+    def bmu(self, x):   # can delete?
         # find bmu for data point x, return coords
         self.som.activate(x)
         return unravel_index(self.som.map.argmin(), self.som.map.shape)
+
 
     def dist_from_weights(self, data):
         data = array(data)
@@ -67,8 +68,10 @@ class BMU(Node):
         dot_term = dot(data, flatten_weights.transpose())
         return (dot_term * data_sq * flatten_weights_sq.transpose() * -2) ** 1/2
 
+
     def get_1D(self, data):
         return argmin(self.dist_from_weights(data), axis=1)
+
 
     def get_2D(self, data):
         bmu_idx = self.get_1D(data)
