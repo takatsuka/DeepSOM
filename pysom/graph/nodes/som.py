@@ -122,13 +122,10 @@ class SOM(Node):
         # update neuron weights, decrease sigma and lr and nhood of bmu
         lr, sig = reduce_params(self.lr, self.sigma, curr, max_iter)
         if self.nhood_func == gaussian_func or self.nhood_func == mexican_func:
-            # einsum not supported by numba
             nhood = self.nhood_func(bmu, self.x_mat, self.y_mat, sig) * lr
         else:
             nhood = self.nhood_func(bmu, self.x_neig, self.y_neig, sig) * lr
-        # but 2x fast as numpy inbuilts
         self.weights += einsum('ij, ijk->ijk', nhood, x - self.weights)
-        # rewrite transpose as einsum contraction?
 
     def train(self, data):
         # train som, update each iter
