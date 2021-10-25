@@ -84,7 +84,6 @@ class Node:
         #     else:
         #         print("-> Incoming node of {}: {}   |".format(self, node))
         #     total += node.get_output(slot)
-
         return self.get_input()
 
     def get_input(self, index: int = 0) -> object:
@@ -103,7 +102,6 @@ class Node:
             object: the data returned from the incoming node indexed
         """
         node, slot = self.incoming[index]
-
         return node.get_output(slot)
 
     def get_output(self, slot: int) -> object:
@@ -122,6 +120,7 @@ class Node:
             object: the data object to be passed down the edge identified by
                     the user provided slot ID
         """
+        if slot == 0: return self
 
         return self._evaluate()
 
@@ -158,7 +157,6 @@ class Node:
             bool: True if the outgoing edge was added successfully, False
                   otherwise
         """
-        print("add")
         if output_node.check_outgoing_connection(self, slot):
             self.incoming.append((output_node, slot))
             return True

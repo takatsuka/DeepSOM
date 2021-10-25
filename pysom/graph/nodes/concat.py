@@ -1,37 +1,40 @@
 from __future__ import annotations
 from graph.node import Node
+import numpy as np
 
 """
-    Type 3
+    Concat every input connected to this node
 """
 class Concat(Node):
     
-    def __init__(self, uid):
+    def __init__(self, uid, axis):
         super(Concat, self).__init__(uid)
+        self.precon = None
+        self.axis = axis
     
-    
-    """
-    HELPER METHODS HERE
-    """
     def __str__(self) -> str:
         str_rep = "ConcatNode {}".format(self.uid)
         return str_rep
     
-    """
-    CUSTOM METHODS HERE
-    """
+    def _evaluate(self):
+        ins = [self.get_input(index=i) for i in range(len(self.incoming))]
+        self.precon = np.concatenate(tuple(ins),axis=self.axis)
+
+        self.output_ready = True
+
     def get_output(self, slot: int) -> Node:
-        return self
+        if slot == 0: 
+            return self
+
+        if not self.output_ready:
+            self._evaluate()
+
+        return self.precon
+
+        
     
     def check_slot(self, slot: int) -> bool:
-        if (slot == 0):
-            raise RuntimeError("Slot 0 is reserved for SOMNode")
-            return False
-        elif (slot < 0):
-            raise RuntimeError("Slots must be positive")
-            return False
-        else:
-            return True
+        return slot <= 1
 
 
 if __name__ == "__main__":
