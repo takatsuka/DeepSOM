@@ -100,7 +100,7 @@ class Node:
                                    of the outgoing edge. Defaults to 0.
 
         Returns:
-            object: the data
+            object: the data returned from the incoming node indexed
         """
         node, slot = self.incoming[index]
         return node.get_output(slot)
