@@ -2,7 +2,8 @@ from __future__ import annotations
 from graph.node import Node
 
 """
-    Type 2
+    Input Container
+    Contains input
 """
 class InputContainer(Node):
     
@@ -12,9 +13,3 @@ class InputContainer(Node):
     
     def get_output(self, slot: int) -> Node:
         return self.data
-    
-
-        
-        
-if __name__ == "__main__":
-    pass

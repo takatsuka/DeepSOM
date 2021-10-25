@@ -20,15 +20,9 @@ class Node:
         self.type = 0
         self.props = props  # used for storing actual SOM class
         self.incoming = list()  # 2-tuple (output_node, slot)
-        self.output_ready = False
-        # self.slots = list()
-        # {
-        #     0: DefaultConnection(self), # only in SOMNode, unused in DistNode
-        #     1: DistConnection(self, indices), # DistConnection stores the
-        #        actual indices
-        #     2: DistConnection(self, indices), # configured by user
-        #     3: DistConnection(self, indices) # configured by user
-        # }self.slot
+
+        self.output_ready = False # cachi
+
 
     def __str__(self) -> str:
         str_rep = "Default Node {}".format(self.uid)
@@ -68,8 +62,15 @@ class Node:
         """
         return self.incoming
 
-    # TO DO
+
+    # TODO: docstring, force get get_output to trigger evaluate for all incoming nodes
+    def make_input_ready(self):
+        for node, slot in self.incoming:
+            node.get_output(slot)
+
+
     def _evaluate(self) -> int:
+
         total = []
 
         for node, slot in self.incoming:
@@ -82,6 +83,11 @@ class Node:
             total += node.get_output(slot)
 
         return total
+
+    def get_input(self, index=0):
+        node, slot = self.incoming[index]
+        return node.get_output(slot)
+
 
     def get_output(self, slot: int) -> object:
         """
@@ -99,7 +105,8 @@ class Node:
             object: the data object to be passed down the edge identified by
                     the user provided slot ID
         """
-        return self.evaluate()
+
+        return self._evaluate()
 
     # Basic Node can be connected any where
     def check_slot(self, slot: int) -> bool:
