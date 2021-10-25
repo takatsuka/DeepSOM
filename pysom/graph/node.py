@@ -154,7 +154,7 @@ class Node:
                         assigned to the edge
 
         Returns:
-            bool: true if the outgoing edge was added successfully, false
+            bool: True if the outgoing edge was added successfully, False
                   otherwise
         """
 
