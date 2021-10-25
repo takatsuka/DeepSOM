@@ -4,7 +4,7 @@ from __future__ import annotations
 
 class Node:
 
-    def __init__(self, uid):
+    def __init__(self, uid: int):
         """
         The default Node class used to build a SOM Node.
 
@@ -19,8 +19,7 @@ class Node:
         self.type = 0
         self.incoming = list()  # 2-tuple (output_node, slot)
 
-        self.output_ready = False # cache
-
+        self.output_ready = False  # cache
 
     def __str__(self) -> str:
         str_rep = "Default Node {}".format(self.uid)
@@ -56,16 +55,22 @@ class Node:
         data output from these nodes during the training process.
 
         Returns:
-            list: [description]
+            list: the list of all nodes that have an outgoing edge to the
+                  current node
         """
         return self.incoming
 
+    def make_input_ready(self) -> None:
+        """
+        Helper function to prepare all incoming nodes.
 
-    # TODO: docstring, force get get_output to trigger evaluate for all incoming nodes
-    def make_input_ready(self):
+        Forcibly triggers the evaluation of all incoming nodes for
+        the current iteration. This method is idempotent for each iteration,
+        so calling this method more than once does not do anything. Method
+        does not return anything.
+        """
         for node, slot in self.incoming:
             node.get_output(slot)
-
 
     def _evaluate(self) -> int:
 
@@ -82,10 +87,23 @@ class Node:
 
         return total
 
-    def get_input(self, index=0):
+    def get_input(self, index: int = 0) -> object:
+        """
+        Getter function to retrieve the output of an incoming node.
+
+        A wrapper function allowing the extraction of data from an incoming
+        graph Node using the current node as a point of reference.
+
+        Args:
+            index (int, optional): the index of the incoming node, not
+                                   necessarily equivalent to the slot number
+                                   of the outgoing edge. Defaults to 0.
+
+        Returns:
+            object: the data
+        """
         node, slot = self.incoming[index]
         return node.get_output(slot)
-
 
     def get_output(self, slot: int) -> object:
         """

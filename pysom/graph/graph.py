@@ -41,10 +41,12 @@ class Graph:
         A node type may be specified to define custom behaviour of the graph
         node. If set to None, then it will default to the basic Node class.
         Returns a unique integer ID of the newly created node, which may be
-        later used to retrieve the Node object.        
+        later used to retrieve the actual Node object.
 
         Args:
-            node_type (Node, optional): [description]. Defaults to None.
+            node_type (Node, optional): the class of the Node to be created as
+                                        defined in graph/nodetypes. Defaults
+                                        to None.
             props ([type], optional): [description]. Defaults to None.
 
         Returns:
@@ -74,8 +76,8 @@ class Graph:
             return False
 
         return output_node.add_incoming_connection(input_node, slot)
-        
-    def set_input(self, data): 
+
+    def set_input(self, data):
         self.find_node(self.start).data = data
 
     def get_output(self):
