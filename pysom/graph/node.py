@@ -11,10 +11,10 @@ Types:
 
 class Node:
 
-    def __init__(self, uid, props=None):
+    def __init__(self, uid):
         self.uid = uid
         self.type = 0
-        self.data = data  # used for storing actual SOM class
+        self.data = None  # used for storing actual SOM class
         self.incoming = list()  # 2-tuple (output_node, slot)
 
         # self.slots = list()
@@ -48,23 +48,25 @@ class Node:
 
     # TO DO
     def evaluate(self) -> int:
-        total = 0
-        for node in self.incoming:
-            if node[0].uid == 0:
-                print("-> Incoming node of {}: {} (START)".format(self, node[0]))
+        total = []
+
+        for node, slot in self.incoming:
+            if node.uid == 0:
+                print("-> Incoming node of {}: {} (START)".format(self, node))
             elif self.uid == 1:
-                print("-> Incoming node of {}: {} (END)".format(self, node[0]))
+                print("-> Incoming node of {}: {} (END)".format(self, node))
             else:
-                print("-> Incoming node of {}: {}   |".format(self, node[0]))
-            total += node[0].get_output(node[1])
-        return total + self.data
+                print("-> Incoming node of {}: {}   |".format(self, node))
+            total += node.get_output(slot)
+
+        return total
     
-    def get_output(self, slot: int) -> int:  # change this later maybe?
+    def get_output(self, slot: int) -> object:  # change this later maybe?
         return self.evaluate()
     
-    # Defer to concrete class
+    # Basic Node can be connected any where
     def check_slot(self, slot: int) -> bool:
-        return False
+        return True
 
     # Default method for all concrete classes
     def add_incoming_connection(self, output_node: Node, slot: int) -> bool:
@@ -76,10 +78,7 @@ class Node:
 
     # Default method for all concrete classes
     def check_outgoing_connection(self, input_node: Node, slot: int) -> bool:
-        if self.check_slot(slot):
-            return True
-        else:
-            return False
+        return self.check_slot(slot)
 
 
 if __name__ == "__main__":

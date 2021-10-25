@@ -1,5 +1,5 @@
 from node import Node
-from nodetypes.som import SOM
+from nodes.input_container import *
 
 
 class Graph:
@@ -10,8 +10,8 @@ class Graph:
         self.end = 1
 
         self.nodes = {
-            0: Node(self.start, data=0),
-            1: Node(self.end, data=0)
+            0: InputContainer(self.start),
+            1: Node(self.end)
         }
 
 
@@ -54,6 +54,9 @@ class Graph:
     def set_input(self, data): 
         self.find_node(self.start).data = data
 
+    def get_output(self):
+        return self.find_node(self.end).get_output(0)
+
     """
     SORTING METHODS
     """
@@ -79,30 +82,11 @@ if __name__ == "__main__":
     # Level 1
     n2 = g.create(node_type=Node, data=1)
     n3 = g.create(node_type=Node, data=1)
-    g.connect(g.start, n2, 1)
-    g.connect(g.start, n3, 1)
-
-    # Bubble
-    n4 = g.create(node_type=Node, data=1)
-    n5 = g.create(node_type=Node, data=1)
-    g.connect(n2, n4, 1)
-    g.connect(n2, n5, 1)
-
-    # Top row
-    n6 = g.create(node_type=Node, data=1)
-    g.connect(n4, n6, 1)
-    g.connect(n5, n6, 1)
-
-    # Bottom row
-    n7 = g.create(node_type=Node, data=1)
-    g.connect(n3, n7, 1)
-
-    # Finishing Connections
-    g.connect(n6, g.end, 1)
-    g.connect(n7, g.end, 1)
-
+    
     # Printing Example Graph
     print(example_graph.__doc__)
+
+    
 
     print("TOP BRANCH (up to n6)")
     print("========================")
