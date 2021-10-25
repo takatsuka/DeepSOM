@@ -3,14 +3,32 @@ from __future__ import annotations
 
 
 class Node:
+    """
+    The default Node class used to build a SOM Node.
+    
+    TODO
+    
+    Also the parent class of all node types defined in graph/nodetypes.
+    The basic building element for the Deep SOM Model. Can be connected
+    to other SOM Nodes, and at any time may optionally hold some data for
+    evaluation during the training process.    
+
+    If the class has public attributes, they may be documented here
+    in an ``Attributes`` section and follow the same formatting as a
+    function's ``Args`` section. Alternatively, attributes may be documented
+    inline with the attribute's declaration (see __init__ method below).
+
+    Properties created with the ``@property`` decorator should be documented
+    in the property's getter method.
+
+    Attributes:
+        uid (str): Description of `attr1`.
+        incoming (:obj:`int`, optional): Description of `attr2`.
+    """
 
     def __init__(self, uid: int):
         """
-        The default Node class used to build a SOM Node.
-
-        The basic building element for the Deep SOM Model. Can be connected
-        to other SOM Nodes, and at any time may optionally hold some data for
-        evaluation during the training process.
+        The constructor for the default Node class used to build a SOM Node.
 
         Args:
             uid (int): A unique positive integer ID for the Node
