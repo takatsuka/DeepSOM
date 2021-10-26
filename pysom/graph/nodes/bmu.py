@@ -68,7 +68,7 @@ class BMU(Node):
         data_sq = (data ** 2).sum(axis=1, keepdims=True)
         flatten_weights_sq = (flatten_weights ** 2).sum(axis=1, keepdims=True)
         dot_term = dot(data, flatten_weights.transpose())
-        return (dot_term * data_sq * flatten_weights_sq.transpose() * -2) ** 1/2
+        return (dot_term * data_sq * flatten_weights_sq.transpose() * -2) ** 1 / 2
 
     def get_1D(self, data):
         # return 1D vector of bmu indices.

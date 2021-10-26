@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class Node:
     """
     The default Node class used to build a SOM Node.
@@ -15,7 +16,7 @@ class Node:
                          connection to the current Node instance
     """
 
-    def __init__(self, uid: int, graph: Graph):
+    def __init__(self, uid: int, graph):
         """
         The constructor for the default Node class used to build a SOM Node.
 

@@ -1,8 +1,8 @@
 from graph.graph import Graph
-from graph.nodes.dist import *
-from graph.nodes.concat import *
-from graph.nodes.som import *
-from graph.nodes.bmu import *
+from graph.nodes.dist import Dist
+from graph.nodes.concat import Concat
+from graph.nodes.som import SOM
+from graph.nodes.bmu import BMU
 
 
 def example_dist():
