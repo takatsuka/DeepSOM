@@ -1,6 +1,12 @@
 from typing import Type
+
+from numpy.lib.function_base import select
 from .node import Node
 from .nodes.input_container import InputContainer
+
+LOGLEVEL_NONE = 0
+LOGLEVEL_ERROR = 1
+LOGLEVEL_VERBOSE = 2
 
 class Graph:
     """
@@ -14,9 +20,11 @@ class Graph:
                       automatically assigned unique integer ID
     """
 
+
+
     uid = 2
 
-    def __init__(self):
+    def __init__(self, loglevel=LOGLEVEL_ERROR):
         """
         Constructor of the Graph class representing the deep SOM model.
 
@@ -27,6 +35,7 @@ class Graph:
         self.start = 0
         self.end = 1
         self.is_training = False
+        self.loglevel = loglevel
 
         self.nodes = {
             0: InputContainer(self.start, self),
@@ -136,7 +145,11 @@ class Graph:
         if (input_node is None) or (output_node is None):
             return False
 
-        return output_node.add_incoming_connection(input_node, slot)
+        node_happy = output_node.add_incoming_connection(input_node, slot)
+        if self.loglevel >= LOGLEVEL_ERROR and not node_happy:
+            print(f"Failed to add connection {self.find_node(uid_in)} -> {self.find_node(uid_out)}")
+
+        return node_happy
 
     def set_input(self, data: object) -> None:
         """
@@ -152,7 +165,7 @@ class Graph:
         """
         self.find_node(self.start).data = data
 
-    def get_output(self) -> object:
+    def get_output(self, slot=1) -> object:
         """
         Getter function to extract the output data of the end Node.
         
@@ -163,7 +176,7 @@ class Graph:
             object: the resultant data object output from the Graph after \
                     training
         """
-        return self.find_node(self.end).get_output(1)
+        return self.find_node(self.end).get_output(slot)
 
     def train(self):
         """

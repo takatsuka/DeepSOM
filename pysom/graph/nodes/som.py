@@ -62,19 +62,23 @@ def dist_manhattan(x, w):
 
 class SOM(Node):
 
-    def __init__(self, uid, graph, x, y, dim, sigma=0.3, lr=0.7, n_iters=1,
-                 hexagonal=False, dist=dist_euclidean, nhood=nhood_gaussian):
+    def __init__(self, uid, graph, size, dim, sigma=0.3, lr=0.7, n_iters=1,
+                 hexagonal=False, dist=dist_euclidean, nhood=nhood_gaussian, rand_state=None):
 
         super(SOM, self).__init__(uid, graph)
+        self.size = size
+        self.data_dim = dim
+
         self.lr = lr
         self.sigma = sigma
-        self.rg = random.RandomState(1)
+        self.rg = random.RandomState(rand_state)
         self.n_iters = n_iters
-        self.weights = self.rg.rand(x, y, dim) * 2 - 1
+
+        self.weights = self.rg.rand(size, size, dim) * 2 - 1
         self.weights /= linalg.norm(self.weights, axis=-1, keepdims=True)
-        self.map = zeros((x, y))
-        self.x_neig = arange(x).astype(float)
-        self.y_neig = arange(y).astype(float)
+        self.map = zeros((size, size))
+        self.x_neig = arange(size).astype(float)
+        self.y_neig = arange(size).astype(float)
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
 
         if hexagonal:
@@ -87,24 +91,8 @@ class SOM(Node):
         str_rep = "SOMNode {}".format(self.uid)
         return str_rep
 
-    def _evaluate(self):
-        self.train(self.get_input())
-        self.output_ready = True
-
-    def get_output(self, slot: int) -> Node:
-        if not self.output_ready:
-            self._evaluate()
-
-        if slot == 0:
-            return self
-
-        return None
-
-    def check_slot(self, slot: int) -> bool:
-        return slot == 0
-
     def get_weights(self):
-        return self.weights
+        return self.weights.reshape(self.size ** 2, self.data_dim)
 
     def activate(self, x):
         # using distance formulas (euclid, cosine or manhattan)
@@ -129,6 +117,25 @@ class SOM(Node):
         iters = arange(self.n_iters) % len(data)
         [self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters)
          for curr, iter in enumerate(iters)]
+
+    def _evaluate(self):
+        self.train(self.get_input())
+        self.output_ready = True
+
+    def get_output(self, slot: int) -> Node:
+        if not self.output_ready:
+            self._evaluate()
+
+        if slot == 0:
+            return self
+
+        if slot == 1:
+            return self.get_weights()
+
+        return None
+
+    def check_slot(self, slot: int) -> bool:
+        return slot <= 1
 
 
 if __name__ == "__main__":
