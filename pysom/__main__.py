@@ -3,6 +3,7 @@ from graph.nodes.dist import Dist
 from graph.nodes.concat import Concat
 from graph.nodes.som import SOM
 from graph.nodes.bmu import BMU
+from graph.node import Node
 
 
 def example_dist():
@@ -69,7 +70,7 @@ def simplesom_bmu():
     g.set_input(data=data)
 
     som = g.create(node_type=SOM, props={'size': 100, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 1,
-                                         'nhood': nhood_gaussian, 'hexagonal': False})
+                                         'hexagonal': False})
 
     bmu = g.create(node_type=BMU, props={'output': '1D'})
 
@@ -82,6 +83,7 @@ def simplesom_bmu():
 
 
 def simplesom_plot():
+    import numpy as np
     import matplotlib.pyplot as plt
     g = Graph()
 
@@ -92,7 +94,7 @@ def simplesom_plot():
     g.set_input(data=data)
 
     som = g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 10000,
-                                         'nhood': nhood_gaussian, 'hexagonal': False})
+                                         'hexagonal': False})
 
     g.connect(g.start, som, slot=1)
     g.connect(som, g.end, slot=1)
