@@ -91,3 +91,4 @@ Deep_SOM_Library.egg-info
 .prettierrc
 htmlcov/
 test-reports/
+pysom/graph/playground.py
