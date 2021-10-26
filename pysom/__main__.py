@@ -4,6 +4,7 @@ from graph.nodes.concat import *
 from graph.nodes.som import *
 from graph.nodes.bmu import *
 
+
 def example_dist():
     import numpy as np
     dat = [
@@ -64,18 +65,18 @@ def simplesom_bmu():
     file_path = "../datasets/sphere/sphere_64.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
     data = [[float(c) for c in e] for e in datastr]
-    
+
     g.set_input(data=data)
 
-    som = g.create(node_type=SOM, props={'size':100, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':1,
-                                'nhood':nhood_gaussian, 'hexagonal':False})
+    som = g.create(node_type=SOM, props={'size': 100, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 1,
+                                         'nhood': nhood_gaussian, 'hexagonal': False})
 
-    bmu = g.create(node_type=BMU, props={'output':'1D'})
+    bmu = g.create(node_type=BMU, props={'output': '1D'})
 
     g.connect(g.start, som, slot=1)
     g.connect(som, bmu, slot=0)
     g.connect(bmu, g.end, slot=1)
-    
+
     out = g.get_output()
     print(out)
 
@@ -87,26 +88,24 @@ def simplesom_plot():
     file_path = "../datasets/sphere/sphere_256.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
     data = [[float(c) for c in e] for e in datastr]
-    
+
     g.set_input(data=data)
 
-    som = g.create(node_type=SOM, props={'size':20, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':10000,
-                                'nhood':nhood_gaussian, 'hexagonal':False})
-
+    som = g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 10000,
+                                         'nhood': nhood_gaussian, 'hexagonal': False})
 
     g.connect(g.start, som, slot=1)
     g.connect(som, g.end, slot=1)
 
-    
     out = g.get_output()
-    
+
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
 
     axes = list(zip(*out))
     axes_o = list(zip(*data))
     ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
-        
+
     ax.scatter(*axes, marker='o', s=1)
     ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
     ax.set_xlabel('X')

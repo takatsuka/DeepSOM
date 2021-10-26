@@ -8,6 +8,7 @@ LOGLEVEL_NONE = 0
 LOGLEVEL_ERROR = 1
 LOGLEVEL_VERBOSE = 2
 
+
 class Graph:
     """
     Base class of the API library representing the graph of the deep SOM model.
@@ -19,8 +20,6 @@ class Graph:
         nodes (dict): the map of all Node objects indexed by their
                       automatically assigned unique integer ID
     """
-
-
 
     uid = 2
 
@@ -34,7 +33,9 @@ class Graph:
         """
         self.start = 0
         self.end = 1
-        self.is_training = False
+        self.global_params = {
+            "training": False
+        }
         self.loglevel = loglevel
 
         self.nodes = {
@@ -53,7 +54,7 @@ class Graph:
 
         return node
 
-    def create(self, node_type: Type[Node] = None, props: dict = {}) -> int:  
+    def create(self, node_type: Type[Node] = None, props: dict = {}) -> int:
         """
         Helper function to create a vertex in the graph.
 
@@ -81,7 +82,7 @@ class Graph:
     def get_nodes(self) -> dict:
         """
         Helper function to return the nodes in the graph.
-        
+
         Returns the map of all nodes currently stored and indexed by the
         current Graph instance by their unique integer node ID.
 
@@ -147,7 +148,8 @@ class Graph:
 
         node_happy = output_node.add_incoming_connection(input_node, slot)
         if self.loglevel >= LOGLEVEL_ERROR and not node_happy:
-            print(f"Failed to add connection {self.find_node(uid_in)} -> {self.find_node(uid_out)}")
+            print(
+                f"Failed to add connection {self.find_node(uid_in)} -> {self.find_node(uid_out)}")
 
         return node_happy
 
@@ -168,17 +170,17 @@ class Graph:
     def get_output(self, slot=1) -> object:
         """
         Getter function to extract the output data of the end Node.
-        
+
         Effectively retrieves the trained data at the Graph exit point after
         an iteration of training.
-        
+
         Returns:
             object: the resultant data object output from the Graph after \
                     training
         """
         return self.find_node(self.end).get_output(slot)
 
-    def train(self):
+    def set_param(self, key, value):
         """
         TODO
 
@@ -188,36 +190,6 @@ class Graph:
         Returns:
             [type]: [description]
         """
-        if self.is_training:
-            raise RuntimeError("Model is already training")
 
-        # Initiate the training process here
-        # TODO: Some actual training logic here
-
-        # End of actual training logic
-
-        self.is_training = True
-        return self.is_training
-
-    def halt_training(self):
-        """
-        TODO
-
-        Raises:
-            RuntimeError: [description]
-
-        Returns:
-            [type]: [description]
-        """        
-        
-        if not self.is_training:
-            raise RuntimeError("Cannot halt training when model is \
-                not training")
-
-        # TODO: Abort training logic here
-        # May need to handle manual interrupts
-
-        self.is_training = False
-        return self.is_training
-
-    
+        self.global_params[key] = value
+        # TODO: Update nodes if necessary
