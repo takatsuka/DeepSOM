@@ -1,7 +1,8 @@
 from graph.graph import Graph
 from graph.nodes.dist import *
 from graph.nodes.concat import *
-
+from graph.nodes.som import *
+from graph.nodes.bmu import *
 
 def example_dist():
     import numpy as np
@@ -57,4 +58,26 @@ def example_dist_con():
     print(g.get_output())
 
 
-example_dist_con()
+def simplesom_bmu():
+    g = Graph()
+
+    file_path = "../datasets/sphere/sphere_256.txt"
+    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
+    data = [[float(c) for c in e] for e in datastr]
+    
+    g.set_input(data=data)
+
+    som = g.create(node_type=SOM, props={'x':10, 'y':10, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':1,
+                                'nhood':gaussian_func, 'dist':"manhattan", 'topology':'hexagonal'})
+
+    bmu = g.create(node_type=BMU, props={'output':'2D'})
+
+    g.connect(g.start, som, slot=0)
+    g.connect(som, bmu, slot=0)
+    g.connect(bmu, g.end, slot=1)
+    
+    out = g.get_output()
+    print(out)
+
+
+simplesom_bmu()

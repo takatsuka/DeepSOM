@@ -209,43 +209,4 @@ class Graph:
         self.is_training = False
         return self.is_training
 
-    """
-    SORTING METHODS
-    """
-
-
-# def example_graph():
-#     """
-#     Example Graph:
-#     ~~~~~~~~~~~~~~
-#                      *->n4->*
-#                     /        \\               Reserved Nodes       UID   Type
-#        start-->*-->n2-->n5--->n6--*-->end     ~~~~~~~~~~~~~~       ~~~   ~~~~~
-#                 \\                /           * START (DummyNode)   0    input
-#                  *-->n3--->n7-->*             * END   (DummyNode)   1    output
-
-#     """
-#     pass
-
-
-if __name__ == "__main__":
     
-    g = Graph()
-
-    file_path = "../datasets/sphere/sphere_256.txt"
-    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
-    data = [[float(c) for c in e] for e in datastr]
-    
-    g.set_input(data=data)
-
-    som = g.create(node_type=SOM, props={'x':100, 'y':100, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':1,
-                                'nhood':gaussian_func, 'dist':"manhattan", 'topology':'hexagonal'})
-
-    bmu = g.create(node_type=BMU, props={'output':'1D'})
-
-    g.connect(g.start, som, slot=0)
-    g.connect(som, bmu, slot=0)
-    g.connect(bmu, g.end, slot=1)
-    
-    out = g.get_output()
-    print(out)
