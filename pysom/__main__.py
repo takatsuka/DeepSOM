@@ -68,7 +68,7 @@ def simplesom_bmu():
     g.set_input(data=data)
 
     som = g.create(node_type=SOM, props={'x':100, 'y':100, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':1,
-                                'nhood':nhood_gaussian, 'topology':'hexagonal'})
+                                'nhood':nhood_gaussian, 'hexagonal':False})
 
     bmu = g.create(node_type=BMU, props={'output':'2D'})
 

@@ -63,7 +63,7 @@ def dist_manhattan(x, w):
 class SOM(Node):
 
     def __init__(self, uid, graph, x, y, dim, sigma=0.3, lr=0.7, n_iters=1,
-                 topology="rectangular", dist=dist_euclidean, nhood=nhood_gaussian):
+                 hexagonal=False, dist=dist_euclidean, nhood=nhood_gaussian):
 
         super(SOM, self).__init__(uid, graph)
         self.lr = lr
@@ -77,7 +77,7 @@ class SOM(Node):
         self.y_neig = arange(y).astype(float)
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
 
-        if topology == 'hexagonal':
+        if hexagonal:
             self.x_mat[::-2] -= 0.5
 
         self.distance = dist
