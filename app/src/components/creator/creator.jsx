@@ -70,12 +70,12 @@ class Creator extends Component {
 
     const viewMenu = (
       <Menu>
-        <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
+        <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} id="menu-welcome" />
         <Divider />
-        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
+        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }} id="menu-editor" />
         <Divider />
-        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }}/>
-        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }}/>
+        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }} id="menu-scatter" />
+        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} id="menu-image" />
       </Menu>
     )
 
@@ -96,15 +96,15 @@ class Creator extends Component {
             <Navbar.Divider />
 
             <Popover content={fileMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-              <Button className="bp3-minimal" icon="document" text="File" />
+              <Button className="bp3-minimal" icon="document" text="File" id="file-btn" />
             </Popover>
 
             <Popover content={viewMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-              <Button className="bp3-minimal" icon="control" text="View" />
+              <Button className="bp3-minimal" icon="control" text="View" id="view-btn" />
             </Popover>
 
 
-            <Button className="bp3-minimal" icon="help" text="Help" />
+            <Button className="bp3-minimal" icon="help" text="Help" id="help-btn" />
 
           </Navbar.Group>
 
@@ -135,7 +135,7 @@ class Creator extends Component {
               <div className="detail-container">
                 <TabsManager ref={this.tabman}
                   activeTab={this.state.tab}
-                  onTabsListChanged={(x) => this.onTabsUpdated(x)} 
+                  onTabsListChanged={(x) => this.onTabsUpdated(x)}
                   onSwitch={(x) => this.onTabChange(x)}/>
               </div>
 
