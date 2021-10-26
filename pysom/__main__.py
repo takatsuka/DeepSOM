@@ -81,15 +81,16 @@ def simplesom_bmu():
 
 
 def simplesom_plot():
+    import matplotlib.pyplot as plt
     g = Graph()
 
-    file_path = "../datasets/sphere/sphere_64.txt"
+    file_path = "../datasets/sphere/sphere_256.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
     data = [[float(c) for c in e] for e in datastr]
     
     g.set_input(data=data)
 
-    som = g.create(node_type=SOM, props={'size':100, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':1,
+    som = g.create(node_type=SOM, props={'size':20, 'dim':3, 'sigma':6, 'lr':0.8, 'n_iters':10000,
                                 'nhood':nhood_gaussian, 'hexagonal':False})
 
 
@@ -98,7 +99,21 @@ def simplesom_plot():
 
     
     out = g.get_output()
-    print(out)
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+
+    axes = list(zip(*out))
+    axes_o = list(zip(*data))
+    ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
+        
+    ax.scatter(*axes, marker='o', s=1)
+    ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+    plt.show()
 
 
 simplesom_plot()
