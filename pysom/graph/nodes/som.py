@@ -70,31 +70,26 @@ class SOM(Node):
         self.distance = metric[dist]
         self.nhood_func = nhood
     
-    """
-    HELPER METHODS HERE
-    """
     def __str__(self) -> str:
         str_rep = "SOMNode {}".format(self.uid)
         return str_rep
-    
-    """
-    CUSTOM METHODS HERE
-    """
-    def get_output(self, slot: int) -> Node:
-        if not self.check_slot(slot):
-            raise RuntimeError("SOMNode can only output to slot 0")
-        
+
+    def _evaluate(self):
         self.train(self.get_input())
-        return self
+        self.output_ready = True
+
+    def get_output(self, slot: int) -> Node:
+        if not self.output_ready:
+            self._evaluate()
+
+        if slot == 0:
+            return self
+        
+        return None
     
     def check_slot(self, slot: int) -> bool:
-        if (slot != 0):
-            return False
-        return True
+        return slot == 0
 
-    """
-    SOM METHODS HERE
-    """
     def get_weights(self):
         return self.weights
 
