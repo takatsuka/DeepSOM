@@ -9,6 +9,8 @@ from ..node import Node
     Type 0
 """
 # @numba.jit(nopython=True)
+
+
 def exponential_decay(lr, curr, max_iter):
     # exponential decay to reduce lr as iters progress (also used on sigma)
     return lr / (1 + curr / (max_iter / 2))
@@ -20,7 +22,7 @@ def reduce_params(lr, sig, curr, max_iter):
 
 
 # @numba.jit(nopython=True)
-def gaussian_func(bmu, x_mat, y_mat, sigma):
+def nhood_gaussian(bmu, x_mat, y_mat, sigma):
     # return gaussian nhood for centroid  (sigma decreases as iters progress)
     # centroid is
     alpha_x = exp((-(x_mat - x_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
@@ -30,24 +32,38 @@ def gaussian_func(bmu, x_mat, y_mat, sigma):
 
 
 # @numba.jit(nopython=True)
-def bubble_func(bmu, x_neig, y_neig, sigma):
+def nhood_bubble(bmu, x_neig, y_neig, sigma):
     alpha_x = logical_and(x_neig > bmu[0] - sigma, x_neig < bmu[0] + sigma)
     alpha_y = logical_and(y_neig > bmu[1] - sigma, y_neig < bmu[1] + sigma)
     return outer(alpha_x, alpha_y)
 
 
 # @numba.jit(nopython=True)
-def mexican_func(bmu, x_mat, y_mat, sigma):
+def nhood_mexican(bmu, x_mat, y_mat, sigma):
     # return mexican hat nhood for bmu
     m = ((x_mat - x_mat.transpose()
          [bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
     return ((1 - 2 * m) * exp(-m)).transpose()
 
 
+def dist_cosine(x, w):
+    num = (x * w).sum(axis=2)
+    denum = multiply(linalg.norm(w, axis=2), linalg.norm(x))
+    return 1 - num / (denum + 1e-8)
+
+
+def dist_euclidean(x, w):
+    return linalg.norm(subtract(x, w), axis=-1)
+
+
+def dist_manhattan(x, w):
+    return linalg.norm(subtract(x, w), ord=1, axis=-1)
+
+
 class SOM(Node):
 
-    def __init__(self, uid, graph, x, y, dim, sigma=0.3, lr=0.7, n_iters=1, 
-        topology="rectangular", dist="euclidean", nhood=gaussian_func):
+    def __init__(self, uid, graph, x, y, dim, sigma=0.3, lr=0.7, n_iters=1,
+                 topology="rectangular", dist=dist_euclidean, nhood=nhood_gaussian):
 
         super(SOM, self).__init__(uid, graph)
         self.lr = lr
@@ -64,12 +80,9 @@ class SOM(Node):
         if topology == 'hexagonal':
             self.x_mat[::-2] -= 0.5
 
-        metric = {'euclidean': self.euclidean,
-                  'cosine': self.cosine, 'manhattan': self.manhattan}
-
-        self.distance = metric[dist]
+        self.distance = dist
         self.nhood_func = nhood
-    
+
     def __str__(self) -> str:
         str_rep = "SOMNode {}".format(self.uid)
         return str_rep
@@ -84,25 +97,14 @@ class SOM(Node):
 
         if slot == 0:
             return self
-        
+
         return None
-    
+
     def check_slot(self, slot: int) -> bool:
         return slot == 0
 
     def get_weights(self):
         return self.weights
-
-    def cosine(self, x, w):
-        num = (x * w).sum(axis=2)
-        denum = multiply(linalg.norm(w, axis=2), linalg.norm(x))
-        return 1 - num / (denum + 1e-8)
-
-    def euclidean(self, x, w):
-        return linalg.norm(subtract(x, w), axis=-1)
-
-    def manhattan(self, x, w):
-        return linalg.norm(subtract(x, w), ord=1, axis=-1)
 
     def activate(self, x):
         # using distance formulas (euclid, cosine or manhattan)
@@ -116,7 +118,7 @@ class SOM(Node):
     def update(self, x, bmu, curr, max_iter):
         # update neuron weights, decrease sigma and lr and nhood of bmu
         lr, sig = reduce_params(self.lr, self.sigma, curr, max_iter)
-        if self.nhood_func == gaussian_func or self.nhood_func == mexican_func:
+        if self.nhood_func == nhood_gaussian or self.nhood_func == nhood_mexican:
             nhood = self.nhood_func(bmu, self.x_mat, self.y_mat, sig) * lr
         else:
             nhood = self.nhood_func(bmu, self.x_neig, self.y_neig, sig) * lr

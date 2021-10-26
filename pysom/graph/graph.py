@@ -1,8 +1,6 @@
 from typing import Type
 from .node import Node
 from .nodes.input_container import InputContainer
-from .nodes.som import SOM, gaussian_func
-from .nodes.bmu import BMU
 
 class Graph:
     """
