@@ -12,13 +12,12 @@ class Api:
 
     # Class variables
     services_handle = {
-        'SOMVisualizationService': SOMVisualizationService
+        'SOMVisualizationService': SOMVisualizationService,
+        'SOMDatastoreService': SOMDatastoreService
     }
 
     services = {}
     services_n = 0
-
-    data_dict = {}
 
     def launch_service(self, key):
         if key not in self.services_handle:
@@ -99,15 +98,6 @@ class Api:
 
         open(filename, 'w').write(json.dumps(obj))
         return os.path.basename(filename)
-
-    def save_data(self, descriptor, data):
-        self.data_dict[descriptor] = data
-        return True
-
-    def extract_data(self, descriptor):
-        if descriptor not in self.data_dict.keys:
-            return None
-        return self.data_dict[descriptor]
 
     def terminate(self):
         webview.windows[0].destroy()
