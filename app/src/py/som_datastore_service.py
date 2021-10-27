@@ -1,9 +1,8 @@
-
 import webview
 
 class SOMDatastoreService:
     def __init__(self):
-        pass
+        self.cache = {}
 
     def open_csv_file(self):
         pass
@@ -24,6 +23,11 @@ class SOMDatastoreService:
     def get_graph_output(self):
         pass
 
+    def get_cache_data(self, descriptor):
+        if descriptor in self.cache.keys:
+            return self.cache[descriptor]
+        return None
+
     # Return SOM dimensions
     def store_path_to_weights(self, path):
         pass
@@ -31,3 +35,7 @@ class SOMDatastoreService:
     # Return dataset dimensions
     def store_path_to_dataset(self, path):
         pass
+
+    def store_cache_data_with_descriptor(self, descriptor, data):
+        self.cache[descriptor] = data
+        return True
