@@ -139,12 +139,8 @@ class SOM(Node):
 
 
 if __name__ == "__main__":
-
-    import numpy as np
-    import matplotlib.pyplot as plt
     
-    som = SOM(1, graph=None,
-     size=100, dim=3, sigma=13, lr=0.7, n_iters=15000, nhood=nhood_gaussian, rand_state=True)
+    som = SOM(1, graph=None, size=100, dim=3, sigma=13, lr=0.7, n_iters=15000, nhood=nhood_gaussian, rand_state=True)
     
     file_path = "../datasets/sphere/sphere_64.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
@@ -170,5 +166,3 @@ if __name__ == "__main__":
     ax.set_zlabel('Z')
 
     plt.show()
-
-    
