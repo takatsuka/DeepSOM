@@ -62,8 +62,8 @@ def dist_manhattan(x, w):
 
 class SOM(Node):
 
-    def __init__(self, uid, graph, size, dim, sigma=0.3, lr=0.7, n_iters=1,
-                 hexagonal=False, dist=dist_euclidean, nhood=nhood_gaussian, rand_state=None):
+    def __init__(self, uid, graph, size, dim, sigma=0.5, lr=0.7, n_iters=1,
+                 hexagonal=False, dist=dist_euclidean, nhood=nhood_gaussian, rand_state=False):
 
         super(SOM, self).__init__(uid, graph)
         self.size = size
@@ -139,4 +139,36 @@ class SOM(Node):
 
 
 if __name__ == "__main__":
-    pass
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    
+    som = SOM(1, graph=None,
+     size=100, dim=3, sigma=13, lr=0.7, n_iters=15000, nhood=nhood_gaussian, rand_state=True)
+    
+    file_path = "../datasets/sphere/sphere_64.txt"
+    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
+    data = [[float(c) for c in e] for e in datastr]
+
+    dat = np.array(data)
+
+    som.train(dat)
+
+    out = som.get_weights()
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+
+    axes = list(zip(*out))
+    axes_o = list(zip(*data))
+    ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
+
+    ax.scatter(*axes, marker='o', s=1)
+    ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+    plt.show()
+
+    
