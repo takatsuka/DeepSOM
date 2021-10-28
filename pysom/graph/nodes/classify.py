@@ -7,7 +7,7 @@ from graph.nodes.som import SOM
 
 
 """
-    Type 1
+    Type Classifier
 """
 
 
