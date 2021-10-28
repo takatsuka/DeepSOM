@@ -1,6 +1,6 @@
 from typing import Type
 
-from numpy.lib.function_base import select
+# from numpy.lib.function_base import select
 from .node import Node
 from .nodes.input_container import InputContainer
 
@@ -23,13 +23,18 @@ class Graph:
 
     uid = 2
 
-    def __init__(self, loglevel=LOGLEVEL_ERROR):
+    def __init__(self, loglevel: int = LOGLEVEL_ERROR):
         """
         Constructor of the Graph class representing the deep SOM model.
 
         Creates the starting input node of ID 0 and final output node of ID 0
         upon instantiation. Training flag is initially set to false and can
         be toggled using the training methods.
+
+        Args:
+            loglevel (int, optional): sets the verbosity for debugging. \
+                May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE. \
+                Defaults to LOGLEVEL_ERROR.
         """
         self.start = 0
         self.end = 1
@@ -149,7 +154,8 @@ class Graph:
         node_happy = output_node.add_incoming_connection(input_node, slot)
         if self.loglevel >= LOGLEVEL_ERROR and not node_happy:
             print(
-                f"Failed to add connection {self.find_node(uid_in)} -> {self.find_node(uid_out)}")
+                f"Failed to add connection {self.find_node(uid_in)} \
+                    -> {self.find_node(uid_out)}")
 
         return node_happy
 
@@ -180,16 +186,26 @@ class Graph:
         """
         return self.find_node(self.end).get_output(slot)
 
-    def set_param(self, key, value):
+    def set_param(self, key: str, value: object) -> None:
         """
-        TODO
+        Wrapper functionality to set property of the Graph to a value.
+
+        Key should be a string value but value can be of any generic type.
+        If key is not a string, a RuntimeError is raised.
+        Used to toggle or manage states in Graph. Useful to enforce or
+        restrict certain behaviour during training time or other busy periods.
+        If key is not an existing property in Graph, then it will be created
+        with the value set to the user provided value.
+
+        Args:
+            key (str): a property string parameter for the Graph instance
+            value (object): the associated value pair for the provided key
 
         Raises:
             RuntimeError: [description]
-
-        Returns:
-            [type]: [description]
         """
+        if not isinstance(key, str):
+            raise RuntimeError("Parameter key should be of a string type")
 
         self.global_params[key] = value
         # TODO: Update nodes if necessary
