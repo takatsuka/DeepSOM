@@ -1,9 +1,16 @@
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from graph.graph import Graph
 from graph.nodes.dist import Dist
 from graph.nodes.concat import Concat
 from graph.nodes.som import SOM
 from graph.nodes.bmu import BMU
 from graph.node import Node
+from graph.nodes.som import nhood_gaussian
+from graph.nodes.classify import Classify
+from graph.nodes.cluster import Cluster
 
 
 def example_dist():
@@ -182,4 +189,25 @@ def dist_som_concat():
     plt.show()
 
 
-dist_som_concat()
+def classify_iris():
+    
+    iris = load_iris()
+
+    data = np.apply_along_axis(lambda x: x / np.linalg.norm(x), 1, iris.data)  # normalizing data
+
+    X_train, X_test, y_train, y_test = train_test_split(data, iris.target)
+
+    g = Graph()
+    som = g.create(node_type=SOM, props={'size': 7, 'dim': 4, 'sigma': 3, 'lr': 0.5, 'n_iters': 500, 'nhood': nhood_gaussian, 'rand_state': True})
+    g.connect(g.start, som, 1)
+    clssfyr = g.create(node_type=Classify, props={'labels': y_train, 'test': X_test})
+
+    g.connect(som, clssfyr, 0)
+    g.connect(clssfyr, g.end, 1)
+    
+    g.set_input(X_train)
+    print(classification_report(y_test, g.get_output()))
+    print(g.get_output())
+
+    
+classify_iris()
