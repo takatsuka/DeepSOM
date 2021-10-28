@@ -128,7 +128,7 @@ def dist_som_concat():
     import numpy as np
     import matplotlib.pyplot as plt
 
-    file_path = "datasets/sphere/sphere_64.txt"
+    file_path = "../datasets/sphere/sphere_64.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
     data = [[float(c) for c in e] for e in datastr]
 
