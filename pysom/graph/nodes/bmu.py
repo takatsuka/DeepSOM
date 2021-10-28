@@ -1,65 +1,116 @@
 from __future__ import annotations
 import numpy as np
-from numpy import exp, logical_and, random, outer, linalg, zeros, arange, array, argmin, meshgrid, subtract, multiply, unravel_index, einsum, dot
-import matplotlib.pyplot as plt
-from graph.node import Node
-from graph.nodes.som import SOM
-
-
-"""
-    Type 1
-"""
+# from numpy import exp, logical_and, random, outer, linalg, zeros, arange, \
+#     array, argmin, meshgrid, subtract, multiply, unravel_index, einsum, dot
+from numpy import array, argmin, unravel_index, dot
+# import matplotlib.pyplot as plt
+from ..node import Node
+# from .som import SOM
 
 
 class BMU(Node):
+    """
+    Node that finds the Best Matching Unit for an associated SOM node.
 
-    def __init__(self, uid, graph, output='2D'):
+    Attributes:
+        uid (str): the unique integer ID of the BMU node instance
+        incoming (list): the list of all incoming Node objects that have a
+            connection to the current BMU Node instance
+    """
+
+    def __init__(self, uid: int, graph, output: str = '2D'):
+        """
+        Constructor of the BMU class used to build the BMU finding unit.
+
+        Args:
+            uid (str): the unique integer ID of the BMU node instance
+            graph (Graph): the containing Graph instance holding the
+                           constructed BMU node
+            output (str, optional): defines whether to output the coordinate \
+                vector of the BMU to 1D or 2D. Defaults to '2D'.
+        Raises:
+            RuntimeError: when the output is not defined as '1D' or '2D'
+        """
+        if output != '1D' and output != '2D':
+            raise RuntimeError("Output should be either '1D' or '2D' only")
+
         super(BMU, self).__init__(uid, graph)
         self.som = None
         ret_bmu = {'1D': self.get_1D,
                    '2D': self.get_2D}
         self.get_bmu = ret_bmu[output]
-    """
-    HELPER METHODS HERE
-    """
 
     def __str__(self) -> str:
         str_rep = "BMUNode {}".format(self.uid)
         return str_rep
 
-    """
-    CUSTOM METHODS HERE
-    """
+    def get_output(self, slot: int) -> object:
+        """
+        Getter function to return the BMU from an associated SOM node.
 
-    def get_output(self, slot: int) -> Node:
+        Pulls the SOM data directly into the BMU Node and prepares it for
+        evaluation of the actual Best Matching Unit. BMU expects only 1 input
+        node, and will thus always request data from slot 0 of the input
+        edges. Then it evaluates and returns the BMU as a numpy array.
+
+        Args:
+            slot (int): not used by the BMU, but conforms to the function
+                        signature of the Node parent class.
+
+        Returns:
+            object: returns the BMU vector/array with shape determined by \
+                the output parameter in the constructor
+        """
         if not self.check_slot(slot):
             return
 
         self.som = self.get_input()
 
-        # 1D vector (indices) or 2D vector (weights) of bmu for each row in data
+        # 1D vector (indices) or 2D vector (weights) of bmu for each row
         return self.get_bmu(self.som.get_input())
 
     def check_slot(self, slot: int) -> bool:
+        """
+        A verification method to confirm if a proposed slot ID can be used.
+
+        No limitation is imposed on the BMU class with regards to valid slot
+        values other than that it must be a positive integer. Otherwise, it
+        will check if the slot is in use, and returns True if it isn't, else
+        a RunetimeError is raised.
+
+        Args:
+            slot (int): a proposed integer slot ID to be checked
+
+        Raises:
+            RuntimeError: if the slot is zero or negative
+
+        Returns:
+            bool: True if the slot is a positive integer, or False otherwise
+        """
         if (slot == 0):
             raise RuntimeError("Slot 0 is reserved for SOMNode")
-            return False
         elif (slot < 0):
             raise RuntimeError("Slots must be positive")
-            return False
         else:
             return True
-
-    """
-    BMU METHODS HERE
-    """
 
     def bmu(self, x):   # can delete?
         # find bmu for data point x, and return coords.
         self.som.activate(x)
         return unravel_index(self.som.map.argmin(), self.som.map.shape)
 
-    def dist_from_weights(self, data):
+    def dist_from_weights(self, data: np.ndarray) -> np.ndarray:
+        """
+        [summary]
+
+        Args:
+            data (np.ndarray): the weights array to be received from an
+                               associated output SOM node
+
+        Returns:
+            np.ndarray: the grid of distances between the example data \
+                        and the SOM
+        """
         # helper method to return a grid of distances dist[i,j], i.e.,
         # distances between data point x[i] and weight at j.
         data = array(data)
@@ -68,16 +119,36 @@ class BMU(Node):
         data_sq = (data ** 2).sum(axis=1, keepdims=True)
         flatten_weights_sq = (flatten_weights ** 2).sum(axis=1, keepdims=True)
         dot_term = dot(data, flatten_weights.transpose())
-        return (dot_term * data_sq * flatten_weights_sq.transpose() * -2) ** 1 / 2
+        res = dot_term * data_sq * flatten_weights_sq.transpose() * -2
+        return res ** 1 / 2
 
-    def get_1D(self, data):
+    def get_1D(self, data: np.ndarray) -> np.ndarray:
+        """
+        Helper function to return the BMU as a 1-dimensional vector.
+
+        Args:
+            data (np.ndarray): the array of distances to be checked
+
+        Returns:
+            np.ndarray: the vector of BMU indices
+        """
         # return 1D vector of bmu indices.
         return argmin(self.dist_from_weights(data), axis=1)
 
-    def get_2D(self, data):
+    def get_2D(self, data: np.ndarray) -> np.ndarray:
+        """
+        Helper function to return the BMU as a 1-dimensional array.
+
+        Args:
+            data (np.ndarray): the array of distances to be checked
+
+        Returns:
+            np.ndarray: the array of BMU weights
+        """
         bmu_idx = self.get_1D(data)
         # return 2D vector of bmu weights.
-        return self.som.weights[unravel_index(bmu_idx, self.som.weights.shape[:2])]
+        return self.som.weights[unravel_index(bmu_idx,
+                                              self.som.weights.shape[:2])]
 
 
 if __name__ == "__main__":

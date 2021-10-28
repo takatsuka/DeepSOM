@@ -137,9 +137,8 @@ class Node:
             slot (int): a proposed integer slot ID to be checked
 
         Returns:
-            bool: True if the slot is not reserved and not in use, or \
-                  False otherwise. Returns True by default in the Node \
-                  superclass.
+            bool: True if the slot is valid, or False otherwise. \
+                  Returns True by default in the Node superclass.
         """
         return True
 
