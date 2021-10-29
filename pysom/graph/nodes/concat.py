@@ -32,7 +32,7 @@ class Concat(Node):
         Getter function to return the concatenation of associated input nodes.
 
         Args:
-            slot (int): 
+            slot (int):
 
         Returns:
             Node: [description]
