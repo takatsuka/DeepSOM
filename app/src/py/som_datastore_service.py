@@ -63,7 +63,7 @@ class SOMDatastoreService:
 
         # Write JSON graph configuration to path
         instance = json.dumps(graph)
-        open(filename, 'w').write(content)
+        open(filename, 'w').write(instance)
 
         # Check if descriptor string already exists in data instances
         descriptor = self.validate_unique_descriptor(os.path.basename(filename))
@@ -71,7 +71,7 @@ class SOMDatastoreService:
         self.data_instances[descriptor] = instance
         return descriptor
 
-    # Returns true if the descriptor exists as the name of an open data instance; false if not 
+    # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
         return descriptor in self.data_instances.keys
 
@@ -86,7 +86,7 @@ class SOMDatastoreService:
     # Allows insertion of custom data instance
     def open_custom_instance_with_descriptor(self, descriptor, instance):
         # Check if descriptor string already exists in data instances
-        descriptor = self.validate_unique_descriptor(os.path.basename(filename))
+        descriptor = self.validate_unique_descriptor(descriptor)
         self.data_instances[descriptor] = instance
         return descriptor
 
@@ -106,5 +106,3 @@ class SOMDatastoreService:
         while descriptor in self.data_instances.keys:
             descriptor += 'copy'
         return descriptor
-
-
