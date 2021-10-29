@@ -14,15 +14,12 @@ class SOMDatastoreService:
             "SCATTER_WEIGHTS_EDGES": None
         }
 
-    # Calculate which epoch the percentage would result in
-    # and update the current weights being shown
-    def update_scatter_som_weights_by_training_percentage(self, percentage):
+    # Update the current weights being shown according to epoch
+    def update_scatter_som_weights_by_training_epoch(self, epoch):
         if not self.cache['SCATTER_WEIGHTS']:
             return None
 
-        n_weights = len(self.cache['SCATTER_WEIGHTS'])
-        return_n = int(n_weights * percentage)
-        weights = self.cache["SCATTER_WEIGHTS"]["weightspb"][str(return_n)]
+        weights = self.cache["SCATTER_WEIGHTS"]["weightspb"][str(epoch)]
         width = self.cache["SCATTER_WEIGHTS"]["w"]
         height = self.cache["SCATTER_WEIGHTS"]["h"]
         nodes = []
@@ -61,7 +58,7 @@ class SOMDatastoreService:
         self.cache["SCATTER_DATASET"] = scatter
 
     def get_scatter_som_weights(self):
-        return self.cache["SCATTER_WEIGHTS_NODES"], self.cache["SCATTER_WEIGHTS_EDGES"]
+        return [self.cache["SCATTER_WEIGHTS_NODES"], self.cache["SCATTER_WEIGHTS_EDGES"]]
     
     # Return dataset points and axes
     def get_scatter_dataset(self):
@@ -82,14 +79,14 @@ class SOMDatastoreService:
 
         fields = json.loads(open(filename).read())
         self.cache['SCATTER_WEIGHTS'] = fields
-        self.update_scatter_som_weights_by_training_percentage(0)
+        self.update_scatter_som_weights_by_training_epoch(0)
         return len(fields['weights'])
 
     # (TODO) Function can be called from backend API that directly uploads weights from training
     def upload_scatter_weights_from_api(self, path):
         fields = json.loads(open(path).read())
         self.cache['SCATTER_WEIGHTS'] = fields
-        self.update_scatter_som_weights_by_training_percentage(0)
+        self.update_scatter_som_weights_by_training_epoch(0)
         return len(fields["weightspb"])
 
     # Return dataset dimensions
@@ -138,7 +135,3 @@ class SOMDatastoreService:
             "SCATTER_WEIGHTS_NODES": None,
             "SCATTER_WEIGHTS_EDGES": None
         }
-
-
-# ds = SOMDatastoreService()
-# ds.upload_scatter_weights_from_api("../../../playgrounds/numba_npsom_perf_analysis/out.json")

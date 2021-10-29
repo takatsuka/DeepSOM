@@ -252,10 +252,10 @@ class ScatterView3D extends Component {
             console.log(this.state.showTraining);
             if (this.state.showTraining) {
                 // Scatter should show weights and edges
-                window.pywebview.api.call_service(this.state.services, "get_scatter_som_weights", []).then((nodes, edges) => {
+                window.pywebview.api.call_service(this.state.services, "get_scatter_som_weights", []).then((weights) => {
                     // Draw weight nodes and edges
-                    this.drawPoints(this.state.point3d(nodes));
-                    this.drawEdges(this.state.weights3d(edges));
+                    this.drawPoints(this.state.point3d(weights[0]));
+                    this.drawEdges(this.state.weights3d(weights[1]));
                 })
             } else {
                 // Scatter should show dataset points
@@ -378,8 +378,8 @@ class ScatterView3D extends Component {
             if (this.state.services != null) {
                 window.pywebview.api.call_service(
                     this.state.services, 
-                    "update_scatter_som_weights_by_training_percentage", 
-                    [float(this.state.weightsId/this.state.nSomWeights)]).then(() => (this.drawPlot()))
+                    "update_scatter_som_weights_by_training_epoch", 
+                    [this.state.weightsId]).then(() => (this.drawPlot()))
             }
         });
     }
@@ -420,7 +420,7 @@ class ScatterView3D extends Component {
 
                 <div className="graph-area">
                     <svg className="scatterview-svg-render" ref={this.d3view} />
-                    {this.state.trainingData == null ? <></> :
+                    {!this.state.hasTraining ? <></> :
                         <div className="slider">
                             <Slider
                                 disabled={!this.state.showTraining}
