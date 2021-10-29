@@ -6,6 +6,7 @@ import json
 from time import time
 
 from py.som_viz_service import SOMVisualizationService
+from py.som_viz_service import SOMDatastoreService
 
 
 class Api:

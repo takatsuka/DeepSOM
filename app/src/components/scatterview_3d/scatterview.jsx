@@ -208,7 +208,6 @@ class ScatterView3D extends Component {
         this.drawPlot(data, 0);
     }
 
-    // Hard coded for now
     loadWeights(data) {
         let lines = [];
         let nodes = [];
@@ -248,7 +247,6 @@ class ScatterView3D extends Component {
 
 
     // Function to run when file is successfully loaded and contents are read in
-    // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     loadData(data) {
         var scatter = [], xLine = [], yLine = [], zLine = [];
         var counter = 0; // For assigning point IDs
@@ -488,7 +486,7 @@ class ScatterView3D extends Component {
                             <Slider
                                 disabled={!this.state.showTraining}
                                 min={0}
-                                max={Object.keys(this.state.trainingData).length} // This is hardcoded for now, TODO: JSON file need to include size 
+                                max={Object.keys(this.state.trainingData).length}
                                 stepSize={1}
                                 labelStepSize={20}
                                 onChange={this.handleWeightsIdChange("weightsId")}
