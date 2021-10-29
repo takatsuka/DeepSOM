@@ -3,6 +3,7 @@ import numpy as np
 import webview
 import os
 
+
 class SOMScatterviewService:
     def __init__(self):
         self.cache = {
@@ -48,7 +49,7 @@ class SOMScatterviewService:
 
     def update_scatter_dataset(self, data):
         scatter = []
-        counter = 0 
+        counter = 0
 
         # Iterate through each line of coordinates
         for i in range(len(data)):
