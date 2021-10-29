@@ -249,7 +249,6 @@ class ScatterView3D extends Component {
         this.drawAxis(this.state.yScale3d(this.axes[2]), 'z', this.state.zScale3d);
 
         if (this.state.services != null) {
-            console.log(this.state.showTraining);
             if (this.state.showTraining) {
                 // Scatter should show weights and edges
                 window.pywebview.api.call_service(this.state.services, "get_scatter_som_weights", []).then((weights) => {
