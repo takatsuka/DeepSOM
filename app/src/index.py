@@ -6,7 +6,7 @@ import json
 from time import time
 
 from py.som_viz_service import SOMVisualizationService
-from py.som_datastore_service import SOMDatastoreService
+from py.som_scatterview_service import SOMScatterviewService
 
 
 class Api:
@@ -14,7 +14,7 @@ class Api:
     # Class variables
     services_handle = {
         'SOMVisualizationService': SOMVisualizationService,
-        'SOMDatastoreService': SOMDatastoreService
+        'SOMScatterviewService': SOMScatterviewService
     }
 
     services = {}

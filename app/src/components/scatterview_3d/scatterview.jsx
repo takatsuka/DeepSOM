@@ -55,12 +55,12 @@ class ScatterView3D extends Component {
             [yLine],
             [zLine]
         ];
-
-        // Add listener for window resize events
-        window.addEventListener('resize', this.updateWindow);
     }
 
     componentDidMount() {
+        // Add listener for window resize events
+        window.addEventListener('resize', this.updateWindow);
+        
         var state = this.props.pullState();
         if (state != null && state.hasDataset) {
             // If there was a previous dataset already loaded
@@ -223,7 +223,7 @@ class ScatterView3D extends Component {
 
     // To accept a data file from the upload point on ScatterView
     importDataFile() {
-        window.pywebview.api.launch_service("SOMDatastoreService").then((datastore) => (
+        window.pywebview.api.launch_service("SOMScatterviewService").then((datastore) => (
             this.setState({ services: datastore }, () => (
                 window.pywebview.api.call_service(this.state.services, "upload_scatter_dataset", []).then((filename) => (
                     this.setState({ datasetName: filename, hasDataset: true }, () => (this.drawPlot()))
