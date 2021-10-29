@@ -69,6 +69,8 @@ class SOMScatterviewService:
     def upload_scatter_weights_from_json_file(self):
         # Get weights json file
         filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
+
+        # Validate json file
         if filename == None:
             return None
 
@@ -78,6 +80,7 @@ class SOMScatterviewService:
         if not os.path.exists(filename):
             return None
 
+        # Open and process json file
         fields = json.loads(open(filename).read())
         self.cache['WEIGHTS'] = fields
         self.update_scatter_som_weights_by_training_epoch(0)
