@@ -1,9 +1,12 @@
+import numpy as np
 from graph.graph import Graph
 from graph.nodes.dist import Dist
 from graph.nodes.concat import Concat
 from graph.nodes.som import SOM
 from graph.nodes.bmu import BMU
 from graph.node import Node
+from graph.nodes.som import nhood_gaussian
+from graph.nodes.classify import Classify
 
 
 def example_dist():
@@ -128,7 +131,7 @@ def dist_som_concat():
     import numpy as np
     import matplotlib.pyplot as plt
 
-    file_path = "datasets/sphere/sphere_64.txt"
+    file_path = "datasets/sphere/sphere_256.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
     data = [[float(c) for c in e] for e in datastr]
 
@@ -141,8 +144,8 @@ def dist_som_concat():
 
     g.connect(g.start, dist1, 1)
 
-    som1 = g.create(node_type=SOM, props={'size': 20, 'dim': 2, 'sigma': 6, 'lr': 0.8, 'n_iters': 10000, 'hexagonal': False})
-    som2 = g.create(node_type=SOM, props={'size': 20, 'dim': 1, 'sigma': 6, 'lr': 0.8, 'n_iters': 10000, 'hexagonal': False})
+    som1 = g.create(node_type=SOM, props={'size': 100, 'dim': 2, 'sigma': 13, 'lr': 0.8, 'n_iters': 10000, 'hexagonal': False})
+    som2 = g.create(node_type=SOM, props={'size': 100, 'dim': 1, 'sigma': 13, 'lr': 0.8, 'n_iters': 10000, 'hexagonal': False})
 
     g.connect(dist1, som1, 1)
     g.connect(dist1, som2, 2)
@@ -158,7 +161,7 @@ def dist_som_concat():
     g.connect(bmu1, con1, 1)
     g.connect(bmu2, con1, 1)
 
-    som3 = g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 10000, 'hexagonal': False})
+    som3 = g.create(node_type=SOM, props={'size': 100, 'dim': 3, 'sigma': 13, 'lr': 0.8, 'n_iters': 10000, 'hexagonal': False})
 
     g.connect(con1, som3, 1)
     g.connect(som3, g.end, 1)
@@ -182,4 +185,29 @@ def dist_som_concat():
     plt.show()
 
 
+def classify_iris():
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report
+    
+    iris = load_iris()
+
+    data = np.apply_along_axis(lambda x: x / np.linalg.norm(x), 1, iris.data)  # normalizing data
+
+    X_train, X_test, y_train, y_test = train_test_split(data, iris.target)
+
+    g = Graph()
+    som = g.create(node_type=SOM, props={'size': 7, 'dim': 4, 'sigma': 3, 'lr': 0.5, 'n_iters': 500, 'nhood': nhood_gaussian, 'rand_state': True})
+    g.connect(g.start, som, 1)
+    clssfyr = g.create(node_type=Classify, props={'labels': y_train, 'test': X_test})
+
+    g.connect(som, clssfyr, 0)
+    g.connect(clssfyr, g.end, 1)
+    
+    g.set_input(X_train)
+    print(classification_report(y_test, g.get_output()))
+    print(g.get_output())
+
+    
+# classify_iris()
 dist_som_concat()

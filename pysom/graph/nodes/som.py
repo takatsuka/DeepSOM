@@ -1,9 +1,9 @@
 from __future__ import annotations
 import numpy as np
-from numpy import exp, logical_and, random, outer, linalg, zeros, arange, meshgrid, subtract, multiply, unravel_index, einsum
+from numpy import exp, cov, argsort, transpose, linspace, logical_and, random, outer, linalg, zeros, arange, meshgrid, subtract, multiply, unravel_index, einsum
 import matplotlib.pyplot as plt
 from ..node import Node
-
+from collections import Counter, defaultdict
 
 """
     Type 0
@@ -114,6 +114,7 @@ class SOM(Node):
 
     def train(self, data):
         # train som, update each iter
+     
         iters = arange(self.n_iters) % len(data)
         [self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters)
          for curr, iter in enumerate(iters)]
@@ -121,6 +122,14 @@ class SOM(Node):
     def _evaluate(self):
         self.train(self.get_input())
         self.output_ready = True
+
+    def map_labels(self, data, labels):
+        label_map = defaultdict(list)
+        for neuron, lab in zip(data, labels):
+            label_map[self.bmu(neuron)].append(lab)
+        for pos in label_map:
+            label_map[pos] = Counter(label_map[pos])
+        return label_map
 
     def get_output(self, slot: int) -> Node:
         if not self.output_ready:

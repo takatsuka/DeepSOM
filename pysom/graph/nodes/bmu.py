@@ -1,11 +1,7 @@
 from __future__ import annotations
 import numpy as np
-# from numpy import exp, logical_and, random, outer, linalg, zeros, arange, \
-#     array, argmin, meshgrid, subtract, multiply, unravel_index, einsum, dot
 from numpy import array, argmin, unravel_index, dot
-# import matplotlib.pyplot as plt
 from ..node import Node
-# from .som import SOM
 
 
 class BMU(Node):
