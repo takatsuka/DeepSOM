@@ -10,6 +10,7 @@ import { some } from 'd3-array';
 import { timeHours } from 'd3-time';
 
 import { PrimaryToaster } from '../common/toaster';
+import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
 
 class DragDropSOM extends Component {
     constructor(props) {
@@ -138,6 +139,24 @@ class DragDrop extends Component {
                 )
             },
 
+            bypass: {
+                name: "Identity",
+                fixed: true,
+                style: { backgroundColor: "#202B33", width: "50px", height: "50px" },
+                node_props: { dim: 3 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center', marginTop: "-9px", marginLeft:"-9px" }}>
+                        <Icon icon="flow-linear" size={30} />
+                    </div>
+                ),
+
+                contextMenu: (d) => (
+                    <div>
+                        <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                    </div>
+                )
+            },
+
             get_bmu: {
                 name: "get_bmu_",
                 style: { backgroundColor: "#D9822B", width: "180px", height: "50px" },
@@ -153,6 +172,77 @@ class DragDrop extends Component {
                         <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
                         <Divider />
                         <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => this.wrapSOMS(() => (d.props.shape = t.target.value))} />
+                    </div>
+                )
+            },
+
+            dist: {
+                name: "dist",
+                style: { backgroundColor: "#00998C", width: "70px", height: "100px" },
+                node_props: { selections: [{ type: "idx", sel: [0, 1] }], axis: 1 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center', marginTop: "15px" }}>
+                        <Icon icon="one-to-many" size={30} />
+                    </div>
+                ),
+
+                updateInput: function (old, text) {
+                    var n = text.split(",").map((a) => parseInt(a))
+                    if (n.some((n) => isNaN(n))) return old
+
+                    return n
+                },
+
+                contextMenu: (d) => (
+                    <div>
+
+                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <NumericInput
+                            value={d.props.axis} onValueChange={(t) => this.wrapSOMS(() => (d.props.axis = t))}
+                            rightElement={<Button disabled minimal>Axis</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                        <Divider />
+                        {d.props === null ? <></> : d.props.selections.map(function (sel, idx) {
+                            return (
+                                <div key={idx}>
+                                    <InputGroup placeholder="crap" value={d.props.selections[idx].sel}
+                                        onChange={(t) => this.wrapSOMS(() => (d.props.selections[idx].sel = this.node_templates[d.template].updateInput(d.props.selections[idx].sel, t.target.value)))} />
+                                </div>
+                            )
+
+                        }.bind(this))}
+
+
+                        <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
+                            <Button icon="plus" intent="success"
+                                onClick={() => this.wrapSOMS(() => (d.props.selections = [...d.props.selections, { type: "idx", sel: [0, 1] }]))}
+                            >
+                                Add
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+                )
+            },
+
+            concat: {
+                name: "concat",
+                style: { backgroundColor: "#00998C", width: "70px", height: "100px" },
+                node_props: { selections: [{ type: "idx", sel: [0, 1] }], axis: 1 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center', marginTop: "15px" }}>
+                        <Icon icon="many-to-one" size={30} />
+                    </div>
+                ),
+
+                contextMenu: (d) => (
+                    <div>
+
+                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <NumericInput
+                            value={d.props.axis} onValueChange={(t) => this.wrapSOMS(() => (d.props.axis = t))}
+                            rightElement={<Button disabled minimal>Axis</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                        <Divider />
                     </div>
                 )
             },
@@ -372,7 +462,7 @@ class DragDrop extends Component {
     }
 
     remove_link(lk) {
-        this.links = this.links.filter(l => (l.from !== lk.from && l.to !== lk.to)) 
+        this.links = this.links.filter(l => (l.from !== lk.from && l.to !== lk.to))
         this.setState({}) // force render
     }
 
@@ -472,8 +562,10 @@ class DragDrop extends Component {
 
         const addMenu = (
             <Menu>
-                <MenuItem icon="one-to-many" text="Distributor" />
-                <MenuItem icon="many-to-one" text="Concatenator" />
+                <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
+                <Divider />
+                <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
+                <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
                 <Divider />
                 <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
                 <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
@@ -554,10 +646,10 @@ class DragDrop extends Component {
                                             <div key={idx} className="editor-edge-item">
                                                 <p className="editor-edge-item-text">{other.name}</p>
                                                 <div className="editor-edge-item-slot">
-                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)}/>
+                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
                                                 </div>
 
-                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)}/>
+                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
                                             </div>
                                         )
 
@@ -573,10 +665,10 @@ class DragDrop extends Component {
                                             <div key={idx} className="editor-edge-item">
                                                 <p className="editor-edge-item-text">{other.name}</p>
                                                 <div className="editor-edge-item-slot">
-                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)}/>
+                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
                                                 </div>
 
-                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)}/>
+                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
                                             </div>
                                         )
 
