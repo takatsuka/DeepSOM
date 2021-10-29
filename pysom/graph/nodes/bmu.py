@@ -97,7 +97,7 @@ class BMU(Node):
 
     def dist_from_weights(self, data: np.ndarray) -> np.ndarray:
         """
-        [summary]
+        Outputs a grid of distances of an example to SOM weights.
 
         Args:
             data (np.ndarray): the weights array to be received from an

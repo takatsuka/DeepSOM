@@ -2,13 +2,16 @@ from __future__ import annotations
 from ..node import Node
 import numpy as np
 
-"""
-    Concat every input connected to this node
-"""
-
 
 class Concat(Node):
+    """
+    Node that accepts input and concatenates them
 
+    Attributes:
+        uid (str): the unique integer ID of the Concat node instance
+        incoming (list): the list of all incoming Node objects that have a
+            connection to the current BMU Node instance
+    """
     def __init__(self, uid, graph, axis):
         super(Concat, self).__init__(uid, graph)
         self.precon = None
@@ -24,7 +27,16 @@ class Concat(Node):
 
         self.output_ready = True
 
-    def get_output(self, slot: int) -> Node:
+    def get_output(self, slot: int) -> object:
+        """
+        Getter function to return the concatenation of associated input nodes.
+
+        Args:
+            slot (int): 
+
+        Returns:
+            Node: [description]
+        """
         if slot == 0:
             return self
 

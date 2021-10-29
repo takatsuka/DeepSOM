@@ -1,6 +1,6 @@
 from __future__ import annotations
 import numpy as np
-from graph.node import Node
+from ..node import Node
 
 
 """
