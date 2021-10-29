@@ -21,7 +21,7 @@ class Graph:
                       automatically assigned unique integer ID
     """
 
-    uid = 2
+    uid = 3
 
     def __init__(self, loglevel: int = LOGLEVEL_ERROR):
         """
@@ -36,16 +36,16 @@ class Graph:
                 May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE. \
                 Defaults to LOGLEVEL_ERROR.
         """
-        self.start = 0
-        self.end = 1
+        self.start = 1
+        self.end = 2
         self.global_params = {
             "training": False
         }
         self.loglevel = loglevel
 
         self.nodes = {
-            0: InputContainer(self.start, self),
-            1: Node(self.end, self)
+            1: InputContainer(self.start, self),
+            2: Node(self.end, self)
         }
 
     def _create_node(self, node_type: Type[Node] = None,
