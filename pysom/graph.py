@@ -16,6 +16,15 @@ class Graph:
     Holds all the methods necessary for constructing the graphs. May
     construct vertices and join vertices.
 
+    Creates the starting input node of ID 0 and final output node of ID 0
+    upon instantiation. Training flag is initially set to false and can
+    be toggled using the training methods.
+
+    Args:
+        loglevel (int, optional): sets the verbosity for debugging. \
+            May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE in \
+            increasing levels of verbosity. Defaults to LOGLEVEL_ERROR.
+
     Attributes:
         nodes (dict): the map of all Node objects indexed by their
                       automatically assigned unique integer ID
@@ -24,18 +33,6 @@ class Graph:
     uid = 2
 
     def __init__(self, loglevel: int = LOGLEVEL_ERROR):
-        """
-        Constructor of the Graph class representing the deep SOM model.
-
-        Creates the starting input node of ID 0 and final output node of ID 0
-        upon instantiation. Training flag is initially set to false and can
-        be toggled using the training methods.
-
-        Args:
-            loglevel (int, optional): sets the verbosity for debugging. \
-                May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE. \
-                Defaults to LOGLEVEL_ERROR.
-        """
         self.start = 0
         self.end = 1
         self.global_params = {

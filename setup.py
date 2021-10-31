@@ -11,8 +11,7 @@ setup(
     url='https://bitbucket.org/ChristopherIrving/deep-som-dome/',
     packages=find_packages(),
     package_dir={'pysom': 'pysom',
-                 'pysom.graph': 'pysom/graph',
-                 'pysom.graph.nodes': 'pysom/graph/nodes'},
+                 'pysom.nodes': 'pysom/nodes'},
     tests_require=['pytest'],
     install_requires=['numpy']
 )

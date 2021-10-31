@@ -8,25 +8,23 @@ class BMU(Node):
     """
     Node that finds the Best Matching Unit for an associated SOM node.
 
+    Args:
+        uid (int): the unique integer ID of the BMU node instance
+        graph (Graph): the containing Graph instance holding the
+                        constructed BMU node
+        output (str, optional): defines whether to output the coordinate \
+            vector of the BMU to 1D or 2D. Defaults to '2D'.
+
+    Raises:
+        RuntimeError: when the output is not defined as '1D' or '2D'
+
     Attributes:
         uid (str): the unique integer ID of the BMU node instance
         incoming (list): the list of all incoming Node objects that have a
-            connection to the current BMU Node instance
+            connection to the current BMU node instance
     """
 
     def __init__(self, uid: int, graph, output: str = '2D'):
-        """
-        Constructor of the BMU class used to build the BMU finding unit.
-
-        Args:
-            uid (str): the unique integer ID of the BMU node instance
-            graph (Graph): the containing Graph instance holding the
-                           constructed BMU node
-            output (str, optional): defines whether to output the coordinate \
-                vector of the BMU to 1D or 2D. Defaults to '2D'.
-        Raises:
-            RuntimeError: when the output is not defined as '1D' or '2D'
-        """
         if output != '1D' and output != '2D':
             raise RuntimeError("Output should be either '1D' or '2D' only")
 
@@ -50,15 +48,18 @@ class BMU(Node):
         edges. Then it evaluates and returns the BMU as a numpy array.
 
         Args:
-            slot (int): not used by the BMU, but conforms to the function
-                        signature of the Node parent class.
+            slot (int): the slot id of the incoming SOM node, which may \
+                only be 0
+
+        Raises:
+            RuntimeError: if the user provided slot ID is not 0
 
         Returns:
             object: returns the BMU vector/array with shape determined by \
                 the output parameter in the constructor
         """
         if not self.check_slot(slot):
-            return
+            raise RuntimeError("Can only get output from slot 0")
 
         self.som = self.get_input()
 
@@ -70,9 +71,8 @@ class BMU(Node):
         A verification method to confirm if a proposed slot ID can be used.
 
         No limitation is imposed on the BMU class with regards to valid slot
-        values other than that it must be a positive integer. Otherwise, it
-        will check if the slot is in use, and returns True if it isn't, else
-        a RunetimeError is raised.
+        values other than that it must be a positive integer. Returns True if
+        it is valid, else a RuntimeError is raised.
 
         Args:
             slot (int): a proposed integer slot ID to be checked
@@ -81,7 +81,7 @@ class BMU(Node):
             RuntimeError: if the slot is zero or negative
 
         Returns:
-            bool: True if the slot is a positive integer, or False otherwise
+            bool: True if the slot is a positive integer
         """
         if (slot == 0):
             raise RuntimeError("Slot 0 is reserved for SOMNode")
@@ -90,10 +90,10 @@ class BMU(Node):
         else:
             return True
 
-    def bmu(self, x):   # can delete?
-        # find bmu for data point x, and return coords.
-        self.som.activate(x)
-        return unravel_index(self.som.map.argmin(), self.som.map.shape)
+    # def bmu(self, x):   # can delete?
+    #     # find bmu for data point x, and return coords.
+    #     self.som.activate(x)
+    #     return unravel_index(self.som.map.argmin(), self.som.map.shape)
 
     def dist_from_weights(self, data: np.ndarray) -> np.ndarray:
         """

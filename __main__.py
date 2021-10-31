@@ -1,12 +1,12 @@
 import numpy as np
-from graph.graph import Graph
-from graph.nodes.dist import Dist
-from graph.nodes.concat import Concat
-from graph.nodes.som import SOM
-from graph.nodes.bmu import BMU
-from graph.node import Node
-from graph.nodes.som import nhood_gaussian
-from graph.nodes.classify import Classify
+from pysom.graph import Graph
+from pysom.nodes.dist import Dist
+from pysom.nodes.concat import Concat
+from pysom.nodes.som import SOM
+from pysom.nodes.bmu import BMU
+from pysom.node import Node
+from pysom.nodes.som import nhood_gaussian
+from pysom.nodes.classify import Classify
 
 
 def example_dist():

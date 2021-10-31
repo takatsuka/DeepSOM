@@ -92,3 +92,6 @@ Deep_SOM_Library.egg-info
 htmlcov/
 test-reports/
 pysom/graph/playground.py
+
+# Local testers
+mytest.py
