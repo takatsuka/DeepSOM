@@ -2,12 +2,15 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal } from "@blueprintjs/core";
+import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
 
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import "./drag-drop.scss"
 import { some } from 'd3-array';
 import { timeHours } from 'd3-time';
+
+import { PrimaryToaster } from '../common/toaster';
+import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
 
 class DragDropSOM extends Component {
     constructor(props) {
@@ -136,6 +139,24 @@ class DragDrop extends Component {
                 )
             },
 
+            bypass: {
+                name: "Identity",
+                fixed: true,
+                style: { backgroundColor: "#202B33", width: "50px", height: "50px" },
+                node_props: { dim: 3 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center', marginTop: "-9px", marginLeft:"-9px" }}>
+                        <Icon icon="flow-linear" size={30} />
+                    </div>
+                ),
+
+                contextMenu: (d) => (
+                    <div>
+                        <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                    </div>
+                )
+            },
+
             get_bmu: {
                 name: "get_bmu_",
                 style: { backgroundColor: "#D9822B", width: "180px", height: "50px" },
@@ -151,6 +172,77 @@ class DragDrop extends Component {
                         <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
                         <Divider />
                         <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => this.wrapSOMS(() => (d.props.shape = t.target.value))} />
+                    </div>
+                )
+            },
+
+            dist: {
+                name: "dist",
+                style: { backgroundColor: "#00998C", width: "70px", height: "100px" },
+                node_props: { selections: [{ type: "idx", sel: [0, 1] }], axis: 1 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center', marginTop: "15px" }}>
+                        <Icon icon="one-to-many" size={30} />
+                    </div>
+                ),
+
+                updateInput: function (old, text) {
+                    var n = text.split(",").map((a) => parseInt(a))
+                    if (n.some((n) => isNaN(n))) return old
+
+                    return n
+                },
+
+                contextMenu: (d) => (
+                    <div>
+
+                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <NumericInput
+                            value={d.props.axis} onValueChange={(t) => this.wrapSOMS(() => (d.props.axis = t))}
+                            rightElement={<Button disabled minimal>Axis</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                        <Divider />
+                        {d.props === null ? <></> : d.props.selections.map(function (sel, idx) {
+                            return (
+                                <div key={idx}>
+                                    <InputGroup placeholder="crap" value={d.props.selections[idx].sel}
+                                        onChange={(t) => this.wrapSOMS(() => (d.props.selections[idx].sel = this.node_templates[d.template].updateInput(d.props.selections[idx].sel, t.target.value)))} />
+                                </div>
+                            )
+
+                        }.bind(this))}
+
+
+                        <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
+                            <Button icon="plus" intent="success"
+                                onClick={() => this.wrapSOMS(() => (d.props.selections = [...d.props.selections, { type: "idx", sel: [0, 1] }]))}
+                            >
+                                Add
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+                )
+            },
+
+            concat: {
+                name: "concat",
+                style: { backgroundColor: "#00998C", width: "70px", height: "100px" },
+                node_props: { selections: [{ type: "idx", sel: [0, 1] }], axis: 1 },
+                render: (d) => (
+                    <div style={{ textAlign: 'center', marginTop: "15px" }}>
+                        <Icon icon="many-to-one" size={30} />
+                    </div>
+                ),
+
+                contextMenu: (d) => (
+                    <div>
+
+                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
+                        <NumericInput
+                            value={d.props.axis} onValueChange={(t) => this.wrapSOMS(() => (d.props.axis = t))}
+                            rightElement={<Button disabled minimal>Axis</Button>}
+                            fill buttonPosition="left" placeholder="10" />
+                        <Divider />
                     </div>
                 )
             },
@@ -268,7 +360,7 @@ class DragDrop extends Component {
 
         var restored = this.props.pullState()
 
-        if(restored != null && "state" in restored && "links" in restored){
+        if (restored != null && "state" in restored && "links" in restored) {
             this.links = restored.links
             this.state = restored.state
             this.i = restored.i
@@ -291,7 +383,7 @@ class DragDrop extends Component {
     }
 
     componentWillUnmount() {
-        this.props.saveState({state: this.state, links: this.links, i: this.i})
+        this.props.saveState({ state: this.state, links: this.links, i: this.i })
     }
 
     wrapSOMS(thing) {
@@ -321,6 +413,29 @@ class DragDrop extends Component {
 
     }
 
+    push_link() {
+        if (this.links.some(l => (l.from == this.new_link_nodes[0] && l.to == this.new_link_nodes[1]))) {
+            PrimaryToaster.show({
+                message: "Cannot add link - an identical link exists.",
+                intent: Intent.DANGER,
+            });
+
+            return
+        }
+
+        var nl = {
+            from: this.new_link_nodes[0],
+            to: this.new_link_nodes[1],
+            props: {
+                slot: 0,
+                order: 0
+            }
+        }
+        this.links.push(nl);
+
+        this.setState({ add_link_active: false, add_link_step: -1 });
+    }
+
     add_link_init() {
         this.setState({ add_link_active: true, add_link_step: 1 });
     }
@@ -337,13 +452,26 @@ class DragDrop extends Component {
             this.setState({ add_link_step: 2 });
         } else if (this.state.add_link_step == 2) {
             this.new_link_nodes[1] = id;
-            if (!this.links.some(l => (l[0] == this.new_link_nodes[0] && l[1] == this.new_link_nodes[1]))) {
-                this.links.push(this.new_link_nodes.slice(0));
-            } else {
-                alert("Cannot add link - an identical link exists");
-            }
-            this.setState({ add_link_active: false, add_link_step: -1 });
+            this.push_link()
         }
+    }
+
+    update_link_slot(lk, slot) {
+        lk.props.slot = slot
+        this.setState({}) // force render
+    }
+
+    remove_link(lk) {
+        this.links = this.links.filter(l => (l.from !== lk.from && l.to !== lk.to))
+        this.setState({}) // force render
+    }
+
+    links_for_node(id, out) {
+        if (out) {
+            return this.links.filter(l => l.from === id)
+        }
+
+        return this.links.filter(l => l.to === id)
     }
 
     remove_handler(id) {
@@ -369,7 +497,11 @@ class DragDrop extends Component {
     }
 
     export_som() {
-        return { nodes: this.state.soms, connections: this.links }
+        return {
+            nodes: this.state.soms,
+            connections: this.links,
+            i: this.i
+        }
     }
 
     closeSideMenu() {
@@ -387,6 +519,7 @@ class DragDrop extends Component {
     loadSessionFromFile() {
         window.pywebview.api.open_json_file().then(function (x) {
             this.links = x.connections
+            this.i = x.id
             this.setState({ soms: x.nodes })
         }.bind(this))
     }
@@ -416,10 +549,23 @@ class DragDrop extends Component {
             </Menu>
         )
 
+        const runtimeMenu = (
+            <Menu>
+                <MenuItem icon="add-to-artifact" text="Data" disabled />
+                <Divider />
+                <MenuItem icon="ungroup-objects" text="Allocate" disabled />
+                <MenuItem icon="repeat" text="Restart" disabled />
+                <Divider />
+                <MenuItem icon="play" text="Run" disabled />
+            </Menu>
+        )
+
         const addMenu = (
             <Menu>
-                <MenuItem icon="one-to-many" text="Distributor" />
-                <MenuItem icon="many-to-one" text="Concatenator" />
+                <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
+                <Divider />
+                <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
+                <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
                 <Divider />
                 <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
                 <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
@@ -442,6 +588,10 @@ class DragDrop extends Component {
                         <Divider />
                         <Popover content={sessionMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
                             <Button className="bp3-minimal" icon="code-block" text="Session" />
+                        </Popover>
+
+                        <Popover content={runtimeMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
+                            <Button className="bp3-minimal" icon="code-block" text="Runtime" />
                         </Popover>
 
                         <Divider />
@@ -484,8 +634,51 @@ class DragDrop extends Component {
                             <div className={Classes.DRAWER_BODY}>
                                 <div className={Classes.DIALOG_BODY}>
 
+                                    <h3>Fields:</h3>
                                     {this.state.editing == null ? <></> : this.node_templates[editingNode.template].contextMenu(editingNode)}
 
+                                    <Divider />
+                                    <h3>Incoming:</h3>
+                                    {this.state.editing == null ? <></> : this.links_for_node(editingNode.id, false).map(function (l, idx) {
+                                        let other = this.state.soms[l.from]
+                                        console.log(other)
+                                        return (
+                                            <div key={idx} className="editor-edge-item">
+                                                <p className="editor-edge-item-text">{other.name}</p>
+                                                <div className="editor-edge-item-slot">
+                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
+                                                </div>
+
+                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
+                                            </div>
+                                        )
+
+                                    }.bind(this))}
+
+
+                                    <Divider />
+                                    <h3>Outgoing:</h3>
+                                    {this.state.editing == null ? <></> : this.links_for_node(editingNode.id, true).map(function (l, idx) {
+                                        let other = this.state.soms[l.to]
+                                        console.log(other)
+                                        return (
+                                            <div key={idx} className="editor-edge-item">
+                                                <p className="editor-edge-item-text">{other.name}</p>
+                                                <div className="editor-edge-item-slot">
+                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
+                                                </div>
+
+                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
+                                            </div>
+                                        )
+
+                                    }.bind(this))}
+
+
+
+
+
+                                    <Divider />
                                 </div>
                             </div>
                             <div className={Classes.DRAWER_FOOTER}>
@@ -502,7 +695,7 @@ class DragDrop extends Component {
                             return (<DragDropSOM key={d.id} node={d} template={this.node_templates[d.template]} parent={this_obj} />);
                         }.bind(this))}
                         {this.links.map(function (d, idx) {
-                            return (<Xarrow key={idx} start={"ddn_" + d[0]} end={"ddn_" + d[1]} dashness={{ animation: 0.5 }} />);
+                            return (<Xarrow key={idx} start={"ddn_" + d.from} end={"ddn_" + d.to} dashness={{ animation: 0.5 }} />);
                         })}
                     </div>
                 </div>

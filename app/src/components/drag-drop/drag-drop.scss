@@ -46,8 +46,8 @@
     width: 100%;
     height: calc(100% - 40px);
     background-size: 25px 25px;
-    background-image: radial-gradient(circle, #1F4B99 1px, rgba(0, 0, 0, 0) 1px);
-    top:40px;
+    background-image: radial-gradient(circle, #1f4b99 1px, rgba(0, 0, 0, 0) 1px);
+    top: 40px;
     user-select: none;
 }
 
@@ -65,4 +65,23 @@
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+}
+
+.editor-edge-item {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.editor-edge-item-text {
+    padding-top: 5px;
+    padding-right: 10px;
+    flex-grow: 4;
+}
+
+.editor-edge-item-slot {
+    width: 70px;
 }

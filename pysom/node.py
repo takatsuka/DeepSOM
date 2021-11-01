@@ -10,6 +10,12 @@ class Node:
     to other SOM Nodes, and at any time may optionally hold some data for
     evaluation during the training process.
 
+
+    Args:
+        uid (int): a unique positive integer ID for the Node
+        graph (Graph): the containing Graph instance holding the
+                        constructed Node
+
     Attributes:
         uid (str): the unique integer ID of the Node instance
         incoming (list): the list of all incoming Node objects that have a
@@ -17,14 +23,6 @@ class Node:
     """
 
     def __init__(self, uid: int, graph):
-        """
-        The constructor for the default Node class used to build a SOM Node.
-
-        Args:
-            uid (int): a unique positive integer ID for the Node
-            graph (Graph): the containing Graph instance holding the
-                           constructed Node
-        """
         self.uid = uid
         self.graph = graph
         self.type = 0
@@ -137,9 +135,8 @@ class Node:
             slot (int): a proposed integer slot ID to be checked
 
         Returns:
-            bool: True if the slot is not reserved and not in use, or \
-                  False otherwise. Returns True by default in the Node \
-                  superclass.
+            bool: True if the slot is valid, or False otherwise. \
+                  Returns True by default in the Node superclass.
         """
         return True
 
@@ -180,10 +177,9 @@ class Node:
                         to be created
 
         Returns:
-            bool: True if the slot is not reserved and not in use, or \
-                  False otherwise
+            bool: True by default
         """
-        return self.check_slot(slot)
+        return input_node.check_slot(slot)
 
 
 if __name__ == "__main__":
