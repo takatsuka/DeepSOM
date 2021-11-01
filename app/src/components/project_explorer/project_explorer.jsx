@@ -4,6 +4,7 @@ import { Component } from 'react';
 
 import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup } from "@blueprintjs/core";
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
+import { TAG_INPUT_VALUES } from '@blueprintjs/core/lib/esm/common/classes';
 
 
 class ProjectExplorer extends Component {
@@ -14,91 +15,49 @@ class ProjectExplorer extends Component {
             {
                 id: 0,
                 hasCaret: true,
+                isExpanded: true,
                 icon: "folder-close",
                 label: "Data",
-            },
-
-            {
-                id: 1,
-                hasCaret: true,
-                isExpanded: true,
-                icon: "graph",
-                label: "deepsom",
-                childNodes: [
-                    {
-                        id: 2,
-                        icon: "regression-chart",
-                        label: "LVQ",
-                    },
-                    {
-                        id: 3,
-                        icon: "layout-grid",
-                        label: "top_som",
-                    },
-                    {
-                        id: 4,
-                        icon: "many-to-one",
-                        label: "sampler2",
-                        hasCaret: true,
-                    },
-                ]
-            },
-
-            {
-                id: 2,
-                hasCaret: true,
-                isExpanded: false,
-                icon: "graph",
-                label: "not_so_deepsom",
-                childNodes: [
-                    {
-                        id: 4,
-                        icon: "regression-chart",
-                        label: "LVQ",
-                    },
-                    {
-                        id: 5,
-                        icon: "layout-grid",
-                        label: "top_som",
-                    },
-                    {
-                        id: 7,
-                        icon: "many-to-one",
-                        label: "sampler2",
-                        hasCaret: true,
-                    },
-                ]
-            },
-            {
-                id: 3,
-                hasCaret: true,
-                isExpanded: false,
-                icon: "folder-close",
-                label: "Vis",
-                childNodes: [
-                    {
-                        id: 3,
-                        icon: "heatmap",
-                        label: "sphere_viz",
-
-                    },
-                    {
-                        id: 4,
-                        icon: "heatmap",
-                        label: "donut_viz",
-
-                    },
-                ]
+                childNodes: []
             },
         ]
 
         this.state = {
-            tree: treeContent
+            services: null,
+            tree: treeContent,
+            nInstances: 0,
         }
     }
 
     componentDidMount() {
 
+    }
+
+    openCsvFile() {
+        window.pywebview.api.call_service(this.state.services, "open_csv_file_instance", []).then((descriptor) => {
+            let newInstance = {
+                id: this.state.nInstances++,
+                icon: "database",
+                label: descriptor,
+            }
+            this.state.tree[0].childNodes.push(newInstance);
+            this.setState((state) => {
+                return { tree: state.tree, nInstances: state.nInstances };
+            });
+        });
+    }
+
+    addDataInstance() {
+        if (this.state.services == null) {
+            window.pywebview.api.launch_service("SOMDatastoreService").then((datastore) => (
+                this.setState({ services: datastore }, () => {
+                    this.openCsvFile();
+                })
+            ));
+        } else {
+            this.openCsvFile();
+        }
+        
     }
 
     updateTree(thing){

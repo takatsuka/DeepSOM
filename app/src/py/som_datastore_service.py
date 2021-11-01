@@ -4,8 +4,7 @@ import webview
 
 
 class SOMDatastoreService:
-    def __init__(self):
-        self.data_instances = {}
+    data_instances = {}
 
     # Imports CSV data from a file upload point and returns string descriptor
     def open_csv_file_instance(self):
@@ -73,7 +72,7 @@ class SOMDatastoreService:
 
     # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
-        return descriptor in self.data_instances.keys
+        return descriptor in self.data_instances.keys()
 
     # Returns all open data instances
     def get_all_instances(self):
@@ -82,6 +81,9 @@ class SOMDatastoreService:
     # Closes all open data instances
     def close_all_instances(self):
         self.data_instances = {}
+
+    def get_all_instance_descriptors(self):
+        return list(self.data_instances.keys())
 
     # Allows insertion of custom data instance
     def open_custom_instance_with_descriptor(self, descriptor, instance):
@@ -103,6 +105,12 @@ class SOMDatastoreService:
 
     # Helper function to ensure unique string descriptors for all data instances
     def validate_unique_descriptor(self, descriptor):
-        while descriptor in self.data_instances.keys:
-            descriptor += 'copy'
+        while descriptor in self.data_instances.keys():
+            descriptor += " copy"
         return descriptor
+
+
+# ds = SOMDatastoreService()
+# print(ds.open_custom_instance_with_descriptor("test", 1))
+# print(ds.open_custom_instance_with_descriptor("test", 2))
+# print(ds.get_all_instances())

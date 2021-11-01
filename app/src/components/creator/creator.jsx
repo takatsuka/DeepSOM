@@ -23,6 +23,7 @@ class Creator extends Component {
     super(props)
 
     this.tabman = React.createRef();
+    this.explorerman = React.createRef();
 
     this.state = {
       tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]],
@@ -64,7 +65,7 @@ class Creator extends Component {
         <MenuItem icon="git-push" text="Save Project" />
         <Divider />
         <MenuItem icon="layout-auto" text="New SOM" />
-        <MenuItem icon="graph" text="Import Data" />
+        <MenuItem icon="graph" text="Import Data" onClick={() => { console.log("import data"); this.explorerman.current.addDataInstance() }} />
       </Menu>
     )
 
@@ -117,7 +118,7 @@ class Creator extends Component {
           <SplitPane split="vertical" minSize={180} style={{height:'calc(100% - 50px)'}} >
 
             <div className="leftpanel">
-              <ProjectExplorer />
+              <ProjectExplorer ref={this.explorerman}/>
 
             </div>
 
