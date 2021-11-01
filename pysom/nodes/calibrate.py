@@ -51,8 +51,10 @@ class Calibrate(Node):
 
         self.som = self.get_input()
         label_map = self.som.map_labels(self.som.get_input(), self.labels)
-
-        return self.calibrate(label_map)
+        
+        if self.test:
+            return self.calibrate(label_map)
+        return label_map
 
     def check_slot(self, slot: int) -> bool:
         """
