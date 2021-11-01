@@ -70,6 +70,62 @@ class SOMDatastoreService:
         self.data_instances[descriptor] = instance
         return descriptor
 
+    def load_som_container(self):
+        descriptor = self.open_json_file_instance()
+        if descriptor == None:
+            return None
+
+        fields = self.data_instances[descriptor]
+        label = fields['som']
+        data_files = fields['data_files']
+        files = []
+
+        for f in data_files:
+            name = self.validate_unique_descriptor(f['filename'])
+            self.data_instances[name] = f['data']
+            files.append(name)
+                 
+        som = {
+            "label": label,
+            "childNodes": files
+        }
+
+        return som
+
+    def save_som_container(self, som):
+        # Get save point
+        filename = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
+        if filename == None:
+            return False
+
+        files = som["childNodes"]
+        files_with_data = []
+        for f in files:
+            files_with_data.append({
+                "filename": f['label'],
+                "data": self.data_instances[f['label']]
+            })
+
+        container = {
+            "som": os.path.basename(filename),
+            "data_files": files_with_data,
+        }
+
+        container = json.dumps(container)
+        open(filename, 'w').write(container)
+        return True
+
+    def create_som_container(self, descriptor):
+        descriptor = self.validate_unique_descriptor(descriptor)
+        self.data_instances[descriptor] = []
+        return descriptor
+
+    def add_file_to_som(self, som_descriptor, file_descriptor):
+        if som_descriptor not in self.data_instances.keys():
+            return False
+        self.data_instances[som_descriptor].append(file_descriptor)
+        return True
+
     # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
         return descriptor in self.data_instances.keys()

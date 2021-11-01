@@ -11,21 +11,12 @@ class ProjectExplorer extends Component {
     constructor(props) {
         super(props)
 
-        var treeContent = [
-            {
-                id: 0,
-                hasCaret: true,
-                isExpanded: true,
-                icon: "folder-close",
-                label: "Data",
-                childNodes: []
-            },
-        ]
+        var treeContent = []
 
         this.state = {
             services: null,
             tree: treeContent,
-            nInstances: 0,
+            nModels: 0,
         }
     }
 
@@ -33,18 +24,91 @@ class ProjectExplorer extends Component {
 
     }
 
-    addDataInstance() {
-        window.pywebview.api.call_service(this.props.datastore, "open_csv_file_instance", []).then((descriptor) => {
-            let newInstance = {
-                id: this.state.nInstances++,
-                icon: "database",
-                label: descriptor,
+    loadModel() {
+        window.pywebview.api.call_service(this.props.datastore, "load_som_container", []).then((som) => {
+            if (som != null) {
+                let childNodes = []
+
+                for (let i = 0; i < som.childNodes.length; i++) {
+                    console.log(som.childNodes[i])
+                    childNodes.push({
+                        icon: "database",
+                        label: som.childNodes[i],
+                    })
+                }
+
+                console.log(childNodes);
+
+                let model = {
+                    isExpanded: true,
+                    icon: "folder-close",
+                    label: som.label,
+                    childNodes: childNodes
+                }
+
+                this.state.nModels++;
+                this.state.tree.push(model);
+                this.setState((state) => {
+                    return { tree: state.tree }
+                })
             }
-            this.state.tree[0].childNodes.push(newInstance);
+        })
+    }
+
+    // The explorer works like a stack at the moment, this is the push operation
+    // (TODO) Should be the SOM container that is selected by the user
+    addNewModel() {
+        window.pywebview.api.call_service(this.props.datastore, "create_som_container", ["SOM Model " + this.state.nModels]).then((descriptor) => {
+            let newModel = {
+                isExpanded: true,
+                icon: "folder-close",
+                label: descriptor,
+                childNodes: []
+            }
+            this.state.nModels++;
+            this.state.tree.push(newModel)
             this.setState((state) => {
-                return { tree: state.tree, nInstances: state.nInstances };
+                return { tree: state.tree };
             });
-        });
+        })
+    }
+
+    // The explorer works like a stack at the moment, this is the pop operation
+    // (TODO) Should be the SOM container that is selected by the user
+    saveNewModel() {
+        if (this.state.nModels > 0) {
+            let somContainer = this.state.tree[this.state.nModels-1];
+            window.pywebview.api.call_service(this.props.datastore, "save_som_container", [somContainer]).then((finish) => {
+                if (finish) {
+                    this.state.tree.pop();
+                    this.setState((state) => {
+                        return { tree: state.tree };
+                    })
+                }
+            });
+        }
+    }
+
+    addDataInstance() {
+        if (this.state.nModels > 0) {
+            window.pywebview.api.call_service(this.props.datastore, "open_csv_file_instance", []).then((descriptor) => {
+                // (TODO) Should be the SOM container that is selected by the user
+                let som_label = this.state.tree[this.state.nModels-1].label;
+                let newInstance = {
+                    icon: "database",
+                    label: descriptor,
+                }
+                window.pywebview.api.call_service(this.props.datastore, "add_file_to_som", [som_label, descriptor]).then((finish) => {
+                    if (finish) {
+                        // (TODO) Should be the SOM container that is selected by the user
+                        this.state.tree[this.state.nModels-1].childNodes.push(newInstance);
+                        this.setState((state) => {
+                            return { tree: state.tree };
+                        });
+                    }
+                })
+            });
+        }
     }
 
     updateTree(thing){
