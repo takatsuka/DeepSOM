@@ -5,7 +5,7 @@ from pysom.nodes.concat import Concat
 from pysom.nodes.som import SOM
 from pysom.nodes.bmu import BMU
 from pysom.node import Node
-from pysom.nodes.som import nhood_gaussian
+from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
 from pysom.nodes.calibrate import Calibrate
 
 
@@ -208,6 +208,68 @@ def classify_iris():
     print(classification_report(y_test, g.get_output()))
     print(g.get_output())
 
+
+def train_animal():
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.preprocessing import minmax_scale, scale
+
+    animal = ['Dove', 'Chicken', 'Duck', 'Goose', 'Owl', 'Hawk',
+              'Eagle', 'Fox', 'Dog', 'Wolf', 'Cat', 'Tiger', 'Lion',
+              'Horse', 'Zebra', 'Cow']
+
+    attribute = [
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0],    # Dove
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],    # Chicken
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1],    # Duck
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1],    # Goose
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0],    # Owl
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0],    # Hawk
+        [0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0],    # Eagle
+        [0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0],    # Fox
+        [0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],    # Dog
+        [0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0],    # Wolf
+        [1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0],    # Cat
+        [0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],    # Tiger
+        [0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0],    # Lion
+        [0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0],    # Horse
+        [0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0],    # Zebra
+        [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0]     # Cow
+    ]
+   
+    attr = pd.DataFrame(attribute)
+    attr.columns = ['Small', 'Medium', 'Big', '2-legs', '4-legs',
+                    'Hair', 'Hooves', 'Mane', 'Feathers', 'Hunt',
+                    'Run', 'Fly', 'Swim']
+    size = 5
+    g = Graph()
+
+    som = g.create(SOM, props={'size': size, 'dim': 13, "nhood": nhood_mexican, 'sigma': 13, 'lr': 0.8, 'n_iters': 10000})
+    g.connect(g.start, som, 1)
     
-classify_iris()
+    cal = g.create(Calibrate, props={"labels": animal})
+
+    g.connect(som, cal, 0)
+    g.connect(cal, g.end, 1)
+
+    data = scale(attr.values)
+    g.set_input(data)
+
+    out = g.get_output()
+
+    for idx, animal in out.items():
+        animal = list(animal)
+        print(animal)
+        
+        for i in range(len(animal)):
+            plt.text(idx[0] + 0.1, idx[1] + (i + 1) / len(animal) - 0.35, animal[i], fontsize=10)
+
+    plt.xticks(np.arange(size + 1))
+    plt.yticks(np.arange(size + 1))
+    plt.grid()
+    plt.show()
+
+
+train_animal()
+# classify_iris()
 # dist_som_concat()
