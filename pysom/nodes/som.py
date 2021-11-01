@@ -112,8 +112,7 @@ def nhood_mexican(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
             applied
     """
     # return mexican hat nhood for bmu
-    m = ((x_mat - x_mat.transpose()[bmu]) ** 2 +
-         (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
+    m = ((x_mat - x_mat.transpose()[bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
     return ((1 - 2 * m) * exp(-m)).transpose()
 
 
@@ -277,8 +276,7 @@ class SOM(Node):
         """
         # update neuron weights, decrease sigma and lr and nhood of bmu
         lr, sig = reduce_params(self.lr, self.sigma, curr, max_iter)
-        if (self.nhood_func == nhood_gaussian or
-                self.nhood_func == nhood_mexican):
+        if (self.nhood_func == nhood_gaussian or self.nhood_func == nhood_mexican):
 
             nhood = self.nhood_func(bmu, self.x_mat, self.y_mat, sig) * lr  # TODO: Is this supposed to double up on lr for exponential decay?
         else:
