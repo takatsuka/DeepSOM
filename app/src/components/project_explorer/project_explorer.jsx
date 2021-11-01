@@ -33,8 +33,8 @@ class ProjectExplorer extends Component {
 
     }
 
-    openCsvFile() {
-        window.pywebview.api.call_service(this.state.services, "open_csv_file_instance", []).then((descriptor) => {
+    addDataInstance() {
+        window.pywebview.api.call_service(this.props.datastore, "open_csv_file_instance", []).then((descriptor) => {
             let newInstance = {
                 id: this.state.nInstances++,
                 icon: "database",
@@ -45,19 +45,6 @@ class ProjectExplorer extends Component {
                 return { tree: state.tree, nInstances: state.nInstances };
             });
         });
-    }
-
-    addDataInstance() {
-        if (this.state.services == null) {
-            window.pywebview.api.launch_service("SOMDatastoreService").then((datastore) => (
-                this.setState({ services: datastore }, () => {
-                    this.openCsvFile();
-                })
-            ));
-        } else {
-            this.openCsvFile();
-        }
-        
     }
 
     updateTree(thing){

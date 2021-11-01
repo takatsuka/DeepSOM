@@ -22,17 +22,20 @@ class Creator extends Component {
   constructor(props) {
     super(props)
 
+    this.launchDatastore = this.launchDatastore.bind(this)
+
     this.tabman = React.createRef();
     this.explorerman = React.createRef();
 
     this.state = {
       tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]],
-      tabs: []
+      tabs: [],
+      datastore: null,
     }
   }
 
   componentDidMount() {
-
+    window.addEventListener('pywebviewready', this.launchDatastore)
   }
 
   onTabChange(x) {
@@ -44,7 +47,14 @@ class Creator extends Component {
     this.setState({ tabs: list, tab: list[0].id })
   }
 
+  launchDatastore() {
+    window.pywebview.api.launch_service("SOMDatastoreService").then((ds) => (
+      this.setState({ datastore: ds })
+    ))
+  }
+
   requestTerminate() {
+    window.removeEventListener('pywebviewready', this.launchDatastore)
     window.pywebview.api.terminate()
   }
 
@@ -118,7 +128,7 @@ class Creator extends Component {
           <SplitPane split="vertical" minSize={180} style={{height:'calc(100% - 50px)'}} >
 
             <div className="leftpanel">
-              <ProjectExplorer ref={this.explorerman}/>
+              <ProjectExplorer ref={this.explorerman} datastore={this.state.datastore} />
 
             </div>
 

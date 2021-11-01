@@ -108,9 +108,3 @@ class SOMDatastoreService:
         while descriptor in self.data_instances.keys():
             descriptor += " copy"
         return descriptor
-
-
-# ds = SOMDatastoreService()
-# print(ds.open_custom_instance_with_descriptor("test", 1))
-# print(ds.open_custom_instance_with_descriptor("test", 2))
-# print(ds.get_all_instances())
