@@ -7,6 +7,12 @@ from pysom.nodes.bmu import BMU
 from pysom.node import Node
 from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
 from pysom.nodes.calibrate import Calibrate
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import scale
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 
 
 def example_dist():
@@ -86,8 +92,6 @@ def simplesom_bmu():
 
 
 def simplesom_plot():
-    import numpy as np
-    import matplotlib.pyplot as plt
     g = Graph()
 
     file_path = "datasets/sphere/sphere_256.txt"
@@ -128,9 +132,6 @@ def dist_som_concat():
                 \\          /
                 som2 -> bmu2
     """
-    import numpy as np
-    import matplotlib.pyplot as plt
-
     file_path = "datasets/sphere/sphere_256.txt"
     datastr = [l.strip().split(',') for l in open(file_path).readlines()]
     data = [[float(c) for c in e] for e in datastr]
@@ -186,10 +187,6 @@ def dist_som_concat():
 
 
 def classify_iris():
-    from sklearn.datasets import load_iris
-    from sklearn.model_selection import train_test_split
-    from sklearn.metrics import classification_report
-
     iris = load_iris()
 
     data = np.apply_along_axis(lambda x: x / np.linalg.norm(x), 1, iris.data)  # normalizing data
@@ -210,15 +207,9 @@ def classify_iris():
 
 
 def train_animal():
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from sklearn.preprocessing import minmax_scale, scale
 
-    animal = ['Dove', 'Chicken', 'Duck', 'Goose', 'Owl', 'Hawk',
-              'Eagle', 'Fox', 'Dog', 'Wolf', 'Cat', 'Tiger', 'Lion',
-              'Horse', 'Zebra', 'Cow']
-
-    attribute = [
+    animal = ['Dove', 'Chicken', 'Duck', 'Goose', 'Owl', 'Hawk', 'Eagle', 'Fox', 'Dog', 'Wolf', 'Cat', 'Tiger', 'Lion', 'Horse', 'Zebra', 'Cow']
+    features = [
         [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0],    # Dove
         [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],    # Chicken
         [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1],    # Duck
@@ -237,10 +228,8 @@ def train_animal():
         [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0]     # Cow
     ]
    
-    attr = pd.DataFrame(attribute)
-    attr.columns = ['Small', 'Medium', 'Big', '2-legs', '4-legs',
-                    'Hair', 'Hooves', 'Mane', 'Feathers', 'Hunt',
-                    'Run', 'Fly', 'Swim']
+    feats = pd.DataFrame(features)
+    feats.columns = ['Small', 'Medium', 'Big', '2-legs', '4-legs', 'Hair', 'Hooves', 'Mane', 'Feathers', 'Hunt', 'Run', 'Fly', 'Swim']
     size = 5
     g = Graph()
 
@@ -252,7 +241,7 @@ def train_animal():
     g.connect(som, cal, 0)
     g.connect(cal, g.end, 1)
 
-    data = scale(attr.values)
+    data = scale(feats.values)
     g.set_input(data)
 
     out = g.get_output()
@@ -270,6 +259,102 @@ def train_animal():
     plt.show()
 
 
-train_animal()
+def train_deep_animal():
+    """           *->som(size)->bmu(size)->*
+                 /                          \\
+                /--->som(legs)->bmu(legs)----\\
+    animal -> dist                          concat -> som -> calibrate(labels)
+                \\-->som(char)->bmu(char)----/
+                 \\                         /
+                  *->som(move)->bmu(move)->*
+    """
+    animal = ['Dove', 'Chicken', 'Duck', 'Goose', 'Owl', 'Hawk', 'Eagle', 'Fox', 'Dog', 'Wolf', 'Cat', 'Tiger', 'Lion', 'Horse', 'Zebra', 'Cow']
+    features = [
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0],    # Dove
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],    # Chicken
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1],    # Duck
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1],    # Goose
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0],    # Owl
+        [1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0],    # Hawk
+        [0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0],    # Eagle
+        [0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0],    # Fox
+        [0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],    # Dog
+        [0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0],    # Wolf
+        [1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0],    # Cat
+        [0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],    # Tiger
+        [0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0],    # Lion
+        [0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0],    # Horse
+        [0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0],    # Zebra
+        [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0]     # Cow
+    ]
+
+    feats = pd.DataFrame(features)
+    feats.columns = ['Small', 'Medium', 'Big', '2-legs', '4-legs', 'Hair', 'Hooves', 'Mane', 'Feathers', 'Hunt', 'Run', 'Fly', 'Swim']
+    size = 5
+    g = Graph()
+
+    sel = [(1, [0, 1, 2]), (1, [3, 4]), (1, [5, 6, 7, 8]), (1, [9, 10, 11, 12])]
+
+    dist = g.create(Dist, props={"selections": sel})
+    g.connect(g.start, dist, 1)
+
+    som_size = g.create(SOM, props={"size": 16, "dim": 3, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som_legs = g.create(SOM, props={"size": 16, "dim": 2, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som_char = g.create(SOM, props={"size": 16, "dim": 4, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som_move = g.create(SOM, props={"size": 16, "dim": 4, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+
+    g.connect(dist, som_size, 1)
+    g.connect(dist, som_legs, 2)
+    g.connect(dist, som_char, 3)
+    g.connect(dist, som_move, 4)
+
+    bmu_size = g.create(BMU, props={"output": "2D"})
+    bmu_legs = g.create(BMU, props={"output": "2D"})
+    bmu_char = g.create(BMU, props={"output": "2D"})
+    bmu_move = g.create(BMU, props={"output": "2D"})
+
+    g.connect(som_size, bmu_size, 0)
+    g.connect(som_legs, bmu_legs, 0)
+    g.connect(som_char, bmu_char, 0)
+    g.connect(som_move, bmu_move, 0)
+
+    concat = g.create(Concat, props={"axis": 1})
+
+    g.connect(bmu_size, concat, 1)
+    g.connect(bmu_legs, concat, 1)
+    g.connect(bmu_char, concat, 1)
+    g.connect(bmu_move, concat, 1)
+
+    size = 5
+
+    som = g.create(SOM, props={'size': size, 'dim': 13, "nhood": nhood_mexican, 'sigma': 13, 'lr': 0.8, 'n_iters': 10000})
+   
+    g.connect(concat, som, 1)
+
+    cal = g.create(Calibrate, props={"labels": animal})
+
+    g.connect(som, cal, 0)
+    g.connect(cal, g.end, 1)
+
+    data = scale(feats.values)
+    g.set_input(data)
+
+    out = g.get_output()
+    
+    for idx, animal in out.items():
+        animal = list(animal)
+        print(animal)
+
+        for i in range(len(animal)):
+            plt.text(idx[0] + 0.1, idx[1] + (i + 1) / len(animal) - 0.35, animal[i], fontsize=10)
+
+    plt.xticks(np.arange(size + 1))
+    plt.yticks(np.arange(size + 1))
+    plt.grid()
+    plt.show()
+
+
+train_deep_animal()
+# train_animal()
 # classify_iris()
 # dist_som_concat()
