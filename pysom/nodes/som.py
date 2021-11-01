@@ -1,8 +1,5 @@
 from __future__ import annotations
 import numpy as np
-# from numpy import exp, cov, argsort, transpose, linspace, logical_and,
-# random, outer, linalg, zeros, arange, meshgrid, subtract, multiply,
-# unravel_index, einsum
 from numpy import exp, logical_and, random, outer, linalg, zeros, arange
 from numpy import meshgrid, subtract, multiply, unravel_index, einsum
 import matplotlib.pyplot as plt
@@ -229,6 +226,7 @@ class SOM(Node):
         Returns:
             np.ndarray: the weights matrix of the BMU
         """
+        # returns weights with (x * y) rows and data_dim input columns
         return self.weights.reshape(self.size ** 2, self.data_dim)
 
     def activate(self, x: np.ndarray) -> None:
@@ -274,25 +272,60 @@ class SOM(Node):
             curr (int): an integer value of the current iteration
             max_iter (int): an integer value of the maximum iteration
         """
-        # update neuron weights, decrease sigma and lr and nhood of bmu
+        # Calculate reduced lr and sigma (nhood range) according to the curr num of iters
         lr, sig = reduce_params(self.lr, self.sigma, curr, max_iter)
         if (self.nhood_func == nhood_gaussian or self.nhood_func == nhood_mexican):
-
+            # Lr defines the radius of nhood, as iter increases, lr decreases AND nhood decreases as a factor of lr
             nhood = self.nhood_func(bmu, self.x_mat, self.y_mat, sig) * lr  # TODO: Is this supposed to double up on lr for exponential decay?
         else:
             nhood = self.nhood_func(bmu, self.x_neig, self.y_neig, sig) * lr
+
+        # weights_ij(curr + 1) = weights_ij(curr) + weights_correction_ij(curr)
+        # weights_correction_ij(curr) = lr(curr) * nhood(curr) * (x - weights_ij(curr))
+        # weights_correction_ij(curr) is determined by lr and nhood func of bmu at curr iter
+        # closer a node is to bmu the more its weights are altered
+        # nodes within nhood of bmu altered to look more like the input x
+        
         self.weights += einsum('ij, ijk->ijk', nhood, x - self.weights)
+        """ Example
+        X = [0.3 0.6] (input vector)
+
+        initial weight vectors Wj:
+        W1 = [0.1, 0.5]
+        W2 = [0.2, 0.7]
+        W3 = [0.4, 0.3]
+
+        Find BMU j(X):  (eucl dist example)
+        d1 = sqrt{(0.3-0.1)^2 + (0.6-0.5)^2} = 0.22
+        d2 = sqrt{(0.3-0.2)^2 + (0.6-0.7)^2} = 0.14
+        d3 = sqrt{(0.3-0.4)^2 + (0.6-0.3)^2} = 0.32
+
+        Node 3 is winner and W3 is updated according to curr LR (eg 0.2)
+        corr_W13 = LR(X1 - W13) = 0.2(0.3 - 0.2) = 0.02
+        corr_W23 = LR(X2 - W23) = 0.2(0.6 - 0.7) = -0.02
+
+        Updated Weight W3 at curr+1 iters:
+        W3(curr+1) = W3(curr) + corr_W3(curr) = [0.2 0.7] + [0.02 -0.02] = [0.22 0.68]
+
+        W3 of BMU is closer to input X at each iter
+        """
 
     def train(self, data):
         """
-        [summary]
+        Trains SOM, updating SOM weights based on input data for each iter and bmu for each input data[iter],
+        updating weights as a factor of LR and Sigma, reducing nhood radius of each bmu as iter value increases.
 
         Args:
-            data ([type]): [description]
+            data (np.ndarray): The input data to train the SOM on.
         """
-        # train som, update each iter
-
+        # organizes iters from [0 .. len(data)) for partitions of data
+        # e.g. n_iters = 999, len(data) = 256
+        # iters = [0 .. 255 0 .. 255 0 .. 255 0 .. 255 0 .. 230]
         iters = arange(self.n_iters) % len(data)
+
+        # enumerating iters s.t. weights[i] results from bmu(data[i]) at curr=i and n_iters=999
+        # iter value goes from 0-255, and repeats until n_iters is reached
+        # (lr and sigma are calculated within update as a factor of curr and n_iters)
         [self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters)
          for curr, iter in enumerate(iters)]
 
@@ -301,6 +334,19 @@ class SOM(Node):
         self.output_ready = True
 
     def map_labels(self, data, labels):
+        """
+        Returns a default dictionary mapping the coords[i,j] for each bmu of the input data, to a
+        list of labels counted by frequency of mappings (of each label) to the bmu with coords[i,j].
+       
+        Args:
+            data (np.ndarray): The input data the SOM is trained on.
+            labels (np.ndarray): Corresponding labels for each row in input data.
+        
+        Returns:
+            label_map (defaultdict): Default dictionary where:
+                - Key is coordinate tuple (x,y) for the BMU of each row (vector) in data
+                - Value is list [Counter("lab1": count1, "lab2": count2, "lab3": count3)]
+        """
         label_map = defaultdict(list)
         for neuron, lab in zip(data, labels):
             label_map[self.bmu(neuron)].append(lab)
