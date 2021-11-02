@@ -206,6 +206,20 @@ def classify_iris():
     print(g.get_output())
 
 
+def plot_features(size, out):
+    for bmu, labels in out.items():
+        labels = list(labels)
+        print(labels)
+
+        for i in range(len(labels)):
+            plt.text(bmu[0] + 0.1, bmu[1] + (i + 1) / len(labels) - 0.35, labels[i], fontsize=10)
+
+    plt.xticks(np.arange(size + 1))
+    plt.yticks(np.arange(size + 1))
+    plt.grid()
+    plt.show()
+
+
 def train_animal():
 
     animal = ['Dove', 'Chicken', 'Duck', 'Goose', 'Owl', 'Hawk', 'Eagle', 'Fox', 'Dog', 'Wolf', 'Cat', 'Tiger', 'Lion', 'Horse', 'Zebra', 'Cow']
@@ -245,18 +259,7 @@ def train_animal():
     g.set_input(data)
 
     out = g.get_output()
-
-    for idx, animal in out.items():
-        animal = list(animal)
-        print(animal)
-        
-        for i in range(len(animal)):
-            plt.text(idx[0] + 0.1, idx[1] + (i + 1) / len(animal) - 0.35, animal[i], fontsize=10)
-
-    plt.xticks(np.arange(size + 1))
-    plt.yticks(np.arange(size + 1))
-    plt.grid()
-    plt.show()
+    plot_features(size, out)
 
 
 def train_deep_animal():
@@ -340,20 +343,11 @@ def train_deep_animal():
     g.set_input(data)
 
     out = g.get_output()
+
+    print(out)
+    plot_features(size, out)
     
-    for idx, animal in out.items():
-        animal = list(animal)
-        print(animal)
-
-        for i in range(len(animal)):
-            plt.text(idx[0] + 0.1, idx[1] + (i + 1) / len(animal) - 0.35, animal[i], fontsize=10)
-
-    plt.xticks(np.arange(size + 1))
-    plt.yticks(np.arange(size + 1))
-    plt.grid()
-    plt.show()
-
-
+    
 train_deep_animal()
 # train_animal()
 # classify_iris()
