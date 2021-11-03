@@ -183,8 +183,4 @@ class Node:
 
 
 if __name__ == "__main__":
-
-    x1 = Node()
-    x2 = Node()
-    print(x1)
-    print(x2)
+    pass
