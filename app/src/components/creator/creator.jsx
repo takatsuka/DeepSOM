@@ -84,7 +84,7 @@ class Creator extends Component {
         <Divider />
         <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
         <Divider />
-        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }}/>
+        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }}/>
         <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }}/>
       </Menu>
     )

@@ -37,8 +37,6 @@ class ProjectExplorer extends Component {
                     })
                 }
 
-                console.log(childNodes);
-
                 let model = {
                     isExpanded: true,
                     icon: "folder-close",
@@ -93,6 +91,9 @@ class ProjectExplorer extends Component {
         if (this.state.nModels > 0) {
             window.pywebview.api.call_service(this.props.datastore, "open_csv_file_instance", []).then((descriptor) => {
                 // (TODO) Should be the SOM container that is selected by the user
+                if (descriptor == null) {
+                    return;
+                }
                 let som_label = this.state.tree[this.state.nModels-1].label;
                 let newInstance = {
                     icon: "database",
