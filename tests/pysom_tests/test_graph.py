@@ -23,7 +23,3 @@ class TestGraph:
         props = dict()
         nid = g.create(Node, props)
         assert nid > 1
-
-# def test_mck(mocker):
-#     # mocker.patch(pysom.Node, )
-#     pass
