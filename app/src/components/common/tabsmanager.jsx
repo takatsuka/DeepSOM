@@ -29,13 +29,14 @@ class TabsManager extends Component {
         }
     }
 
-    openTab(cont, displayName, active) {
+    openTab(cont, displayName, active, datastore = null) {
         var tabs = this.state.openedTabs
         let asid = this.tabIDCounter
         this.tabIDCounter = this.tabIDCounter + 1
         var c = React.cloneElement(cont, {
             key: asid,
             tabID: asid,
+            datastore: datastore,
             saveState: (state) => this.storeState(asid, state),
             pullState: () => this.getState(asid)
         })
