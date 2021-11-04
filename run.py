@@ -5,7 +5,7 @@ from pysom.nodes.concat import Concat
 from pysom.nodes.som import SOM
 from pysom.nodes.bmu import BMU
 from pysom.node import Node
-from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
+from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican, dist_cosine, dist_manhattan
 from pysom.nodes.calibrate import Calibrate
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -241,7 +241,7 @@ def train_animal():
         [0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0],    # Zebra
         [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0]     # Cow
     ]
-   
+    
     feats = pd.DataFrame(features)
     feats.columns = ['Small', 'Medium', 'Big', '2-legs', '4-legs', 'Hair', 'Hooves', 'Mane', 'Feathers', 'Hunt', 'Run', 'Fly', 'Swim']
     size = 5
@@ -575,9 +575,9 @@ def train_deep_animal_layer():
     dist = g.create(Dist, props={"selections": sel})
     g.connect(g.start, dist, 1)
 
-    som11 = g.create(SOM, props={"size": 16, "dim": 5, "sigma": 15, "lr": 0.8, "n_iters": 10000})
-    som12 = g.create(SOM, props={"size": 16, "dim": 4, "sigma": 15, "lr": 0.8, "n_iters": 10000})
-    som13 = g.create(SOM, props={"size": 16, "dim": 5, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som11 = g.create(SOM, props={"size": 16, "dim": 5, "sigma": 15, "lr": 0.8, "nhood": nhood_bubble, "hexagonal": True, "n_iters": 1000})
+    som12 = g.create(SOM, props={"size": 16, "dim": 4, "sigma": 15, "lr": 0.8, "dist": dist_manhattan, "n_iters": 10000})
+    som13 = g.create(SOM, props={"size": 16, "dim": 5, "sigma": 15, "dist": dist_cosine, "lr": 0.8, "n_iters": 1000})
 
     g.connect(dist, som11, 1)
     g.connect(dist, som12, 2)
@@ -602,7 +602,7 @@ def train_deep_animal_layer():
     dist_flyswim_24run = g.create(Dist, props={"selections": [(1, [3, 4]), (1, [1, 6, 8])]})
     
     g.connect(con11, dist_flyswim_24run, 1)
-    som_flyswim = g.create(SOM, props={"size": 16, "dim": 2, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som_flyswim = g.create(SOM, props={"size": 16, "hexagonal": True, "nhood": nhood_bubble, "dim": 2, "sigma": 15, "lr": 0.8, "n_iters": 10000})
 
     g.connect(dist_flyswim_24run, som_flyswim, 1)
     bmu_flyswim = g.create(BMU, props={"output": "2D"})
@@ -613,7 +613,7 @@ def train_deep_animal_layer():
 
     dist_hunt = g.create(Dist, props={"selections": [(1, [4])]})
     g.connect(con12, dist_hunt, 1)
-    som_hunt = g.create(SOM, props={"size": 16, "dim": 1, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som_hunt = g.create(SOM, props={"size": 16, "dim": 1, "sigma": 15, "lr": 1, "hexagonal": True, "n_iters": 10000})
     g.connect(dist_hunt, som_hunt, 1)
     bmu_hunt = g.create(BMU, props={"output": "2D"})
     g.connect(som_hunt, bmu_hunt, 0)
@@ -626,7 +626,7 @@ def train_deep_animal_layer():
 
     dist_sml_feats = g.create(Dist, props={"selections": [(1, [0, 5, 9, 2, 7, 8, 9])]})
     g.connect(con2, dist_sml_feats, 1)
-    som_sml_feats = g.create(SOM, props={"size": 16, "dim": 7, "sigma": 15, "lr": 0.8, "n_iters": 10000})
+    som_sml_feats = g.create(SOM, props={"size": 16, "dim": 7, "sigma": 5, "lr": 0.8, "hexagonal": True, "n_iters": 1000})
     g.connect(dist_sml_feats, som_sml_feats, 1)
     bmu_sml_feats = g.create(BMU, props={"output": "2D"})
     g.connect(som_sml_feats, bmu_sml_feats, 0)
@@ -638,8 +638,8 @@ def train_deep_animal_layer():
     g.connect(bmu_sml_feats, con3, 1)
     g.connect(node_24run, con3, 1)
 
-    size = 6
-    som = g.create(SOM, props={'size': size, 'dim': 13, "nhood": nhood_mexican, 'sigma': 13, 'lr': 0.8, 'n_iters': 10000})
+    size = 7
+    som = g.create(SOM, props={'size': size, 'dim': 13, "dist": dist_cosine, "hexagonal": True, "nhood": nhood_bubble, 'sigma': 13, 'lr': 0.6, 'n_iters': 1000})
     g.connect(con3, som, 1)
     cal = g.create(Calibrate, props={"labels": animal})
 
@@ -650,12 +650,4 @@ def train_deep_animal_layer():
     out = g.get_output()
     print(out)
     plot_features(size, out)
-
-
-train_deep_animal_layer()
-# train_deep_animal2()
-# train_deep_animal_hunt()
-# train_deep_animal()
-# train_animal()
-# classify_iris()
-# dist_som_concat()
+    
