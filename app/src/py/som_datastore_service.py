@@ -1,11 +1,15 @@
 import json
 import os
 import re
+import numpy as np
 import webview
 
 
 class SOMDatastoreService:
-    data_instances = {}
+    def __init__(self):
+        self.data_instances = {}
+        self.ws_path = None
+        self.ws_name = "lol"
 
     # Helper function to ensure unique string descriptors for all data instances
     def ensure_unique(self, k):
@@ -19,43 +23,46 @@ class SOMDatastoreService:
                 k += "_(1)"
         return k
 
+    def open_file(self):
+        p = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
+
+        if p == None:
+            return None
+        if len(p) < 1:
+            return None
+        p = p[0]
+        if not os.path.exists(p):
+            return None
+
+        return p
+
     # Imports CSV data from a file upload point and returns string descriptor
-    def open_csv_file_instance(self):
+    def import_data_from_csv(self):
         # Get CSV file from application file upload dialog
-        filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
-
-        # Check if CSV file is valid
-        if filename == None:
-            return None
-        if len(filename) < 1:
-            return None
-        filename = filename[0]
-        if not os.path.exists(filename):
+        filename = self.open_file()
+        if not filename:
             return None
 
-        # Open CSV file and store as new instance
-        lines = open(filename).readlines()
-        lines = [line.strip().split(",") for line in lines]
+        # Open CSV file and parse to np.array
+        # TODO: Shall we use Pandas instead?
+        # Which will bring extra features for cleaning up data, but that's just extra.
+        datastr = [l.strip().split(',') for l in open(filename).readlines()]
+        data = np.array([[float(c) for c in e]
+                        for e in datastr], dtype=np.float64)
 
         # Check if descriptor string already exists in data instances
         descriptor = self.ensure_unique(
-            os.path.basename(filename))
+            os.path.basename(filename)
+        )
 
-        self.data_instances[descriptor] = lines
+        self.data_instances[descriptor] = {'type': 'matrix', 'content': data}
         return descriptor
 
-    # Imports JSON data from a file upload point and returns string descriptor
-    def open_json_file_instance(self):
+    # Imports Model data
+    def import_model(self):
         # Get JSON file
-        filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
-
-        # Check if JSON file is valid
-        if filename == None:
-            return None
-        if len(filename) < 1:
-            return None
-        filename = filename[0]
-        if not os.path.exists(filename):
+        filename = self.open_file()
+        if not filename:
             return None
 
         # Open and process JSON file
@@ -65,89 +72,97 @@ class SOMDatastoreService:
         descriptor = self.ensure_unique(
             os.path.basename(filename))
 
-        self.data_instances[descriptor] = fields
+        self.data_instances[descriptor] = {'type': 'model', 'content': fields}
         return descriptor
 
-    # Saves JSON data from the drag and drop editor
-    def save_json_instance(self, graph):
-        # Get save point
-        filename = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
-        if filename == None:
-            return None
-
-        # Write JSON graph configuration to path
-        instance = json.dumps(graph)
-        open(filename, 'w').write(instance)
-
-        # Check if descriptor string already exists in data instances
-        descriptor = self.ensure_unique(
-            os.path.basename(filename))
-
-        self.data_instances[descriptor] = instance
-        return descriptor
+    def current_workspace_name(self):
+        return self.ws_name
 
     def load_workspace(self):
-        self.close_all_instances()
-        descriptor = self.open_json_file_instance()
-        if descriptor == None:
-            return None
-
-        fields = self.data_instances[descriptor]
-        label = fields['workspace']
-        data_files = fields['data_files']
-        som_files = fields['som_files']
-        data = []
-        som = []
-
-        for f in data_files:
-            name = self.ensure_unique(f['filename'])
-            self.data_instances[name] = f['data']
-            data.append(name)
-
-        for f in som_files:
-            name = self.ensure_unique(f['filename'])
-            self.data_instances[name] = f['data']
-            som.append(name)
-
-        workspace = {
-            "label": label,
-            "data": data,
-            "som": som
+        loaders = {
+            "matrix": lambda x: np.array(x, dtype=np.float64),
+            "model": lambda x: x
         }
 
-        return workspace
+        self.close_all_instances()
 
-    def save_workspace(self, workspace):
-        filename = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
-        if filename == None:
+        filename = self.open_file()
+        if not filename:
             return None
+        fields = json.loads(open(filename).read())
 
-        files = workspace["childNodes"]
-        files_with_data = []
-        files_with_soms = []
-        for f in files:
-            if f["icon"] == "database":
-                files_with_data.append({
-                    "filename": f['label'],
-                    "data": self.data_instances[f['label']]
-                })
-            else:
-                files_with_soms.append({
-                    "filename": f['label'],
-                    "data": self.data_instances[f['label']]
-                })
+        label = fields['workspace']
+        data_files = fields['items']
+
+        for k, v in data_files.items():
+            name = self.ensure_unique(k)
+            t = v['type']
+            # Cry without saying.
+            if t not in loaders:
+                continue
+
+            self.data_instances[name] = {
+                'type': t, 'content': loaders[t](v['content'])}
+
+        self.ws_path = filename
+        self.ws_name = label
+
+    def new_workspace(self):
+        self.ws_path = None
+        self.ws_name = "untitled"
+        self.data_instances = {}
+
+        return self.ws_name
+
+    def save_current_workspace(self):
+        self.save_workspace()
+
+    def save_workspace_as(self):
+        self.ws_path = None
+        self.save_workspace()
+
+    def save_workspace(self, filename=None):
+        dumpers = {
+            "matrix": lambda x: x.tolist(),
+            "model": lambda x: x
+        }
+
+        if filename == None:
+            filename = self.ws_path
+
+        # Ask user if this is call without filename and the workspace is not initialized.
+        if filename == None:
+            filename = webview.windows[0].create_file_dialog(
+                webview.SAVE_DIALOG)
+
+        files_with_data = {}
+        for k, v in self.data_instances.items():
+            t = v['type']
+            # Cry without saying.
+            if t not in dumpers:
+                continue
+
+            files_with_data[k] = {'type': t,
+                                  'content': dumpers[t](v['content'])}
 
         save_workspace = {
             "workspace": os.path.basename(filename),
-            "data_files": files_with_data,
-            "som_files": files_with_soms,
+            "items": files_with_data,
         }
 
         save_workspace = json.dumps(save_workspace)
         open(filename, 'w').write(save_workspace)
-        return os.path.basename(filename)
+
+        self.ws_name = os.path.basename(filename)
+        self.ws_path = filename
+
+    def fetch_objects(self, type):
+        if type == '':
+            return self.data_instances.keys()
+        return [k for k, v in self.data_instances.items() if v['type'] == type]
 
     # Returns true if the descriptor exists as the name of an open data instance; false if not
+
     def has_instance_by_descriptor(self, descriptor):
         return descriptor in self.data_instances.keys()
 

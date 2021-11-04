@@ -14,17 +14,25 @@ class Api:
 
     # Class variables
     services_handle = {
-        'SOMDatastoreService': SOMDatastoreService,
         'SOMScatterviewService': SOMScatterviewService,
         'SOMVisualizationService': SOMVisualizationService,
     }
 
-    services = {}
-    services_n = 0
+    global_services = {
+        'SOMDatastoreService': -1
+    }
+
+    def __init__(self):
+        self.services = {-1: SOMDatastoreService()}
+        self.services_n = 0
 
     def launch_service(self, key):
+        if key in self.global_services:
+            return self.global_services[key]
+
         if key not in self.services_handle:
             return
+
         s = self.services_handle[key]()
 
         sid = self.services_n

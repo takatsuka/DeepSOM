@@ -48,9 +48,10 @@ class Creator extends Component {
   }
 
   launchDatastore() {
-    window.pywebview.api.launch_service("SOMDatastoreService").then((ds) => (
+    window.pywebview.api.launch_service("SOMDatastoreService").then((ds) => {
       this.setState({ datastore: ds })
-    ))
+    })
+    
   }
 
   requestTerminate() {
@@ -74,8 +75,8 @@ class Creator extends Component {
         <MenuItem icon="git-repo" text="New Workspace" onClick={() => { this.explorerman.current.createNewWorkspace() }} />
         <MenuItem icon="git-push" text="Save Workspace" onClick={() => { this.explorerman.current.saveWorkspace() }} />
         <Divider />
-        <MenuItem icon="database" text="Import Data" onClick={() => { this.explorerman.current.addCsvFileToWorkspace() }} />
-        <MenuItem icon="polygon-filter" text="Import SOM" onClick={() => { this.explorerman.current.addJsonFileToWorkspace() }} />
+        <MenuItem icon="database" text="Import Data" onClick={() => { this.explorerman.current.importData() }} />
+        <MenuItem icon="polygon-filter" text="Import Model" onClick={() => { this.explorerman.current.addSOM() }} />
       </Menu>
     )
 
