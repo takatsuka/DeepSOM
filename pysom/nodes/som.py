@@ -20,9 +20,8 @@ def exponential_decay(lr: float, curr: int, max_iter: int) -> float:
     Returns:
         float: the exponential decay correction factor
     """
-    if not max_iter:
-        msg = f"max_iter must be positive"
-        raise ValueError(msg)
+    if max_iter <= 0:
+        raise ValueError("max_iter must be positive")
 
     # exponential decay to reduce lr as iters progress (also used on sigma)
     return lr / (1 + curr / (max_iter / 2))
@@ -132,7 +131,7 @@ def dist_cosine(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
         msg = f"input is {str(type(typ))[7:][:-1]}, expecting 'numpy.ndarray'"
         raise ValueError(msg)
 
-    num = (data * weights).sum(axis=2)  
+    num = (data * weights).sum(axis=2)
     denum = multiply(linalg.norm(weights, axis=2), linalg.norm(data))
     return 1 - num / (denum + 1 * 10 ** -8)
 
@@ -228,7 +227,7 @@ class SOM(Node):
         return str_rep
 
     def _check_dims(self, x: np.ndarray) -> bool:
-        if self.data_dim != len(x[0]): 
+        if self.data_dim != len(x[0]):
             msg = f"Expecting {self.data_dim} dimensions, input has {len(x[0])}"
             raise ValueError(msg)
 
