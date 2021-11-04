@@ -6,6 +6,9 @@ import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, But
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
 import { TAG_INPUT_VALUES } from '@blueprintjs/core/lib/esm/common/classes';
 
+import DragDropSOM from '../drag-drop/drag-drop';
+import ImageView from '../imageview/imageview';
+import ScatterView3D from '../scatterview_3d/scatterview';
 
 class ProjectExplorer extends Component {
     constructor(props) {
@@ -99,6 +102,28 @@ class ProjectExplorer extends Component {
         this.setState({ tree: this.state.tree })
     }
 
+    handleOpen(id){
+        if(id == 143) {
+            this.props.openTab(<DragDropSOM />, "deepsom", true, "/Volumes/Sweep\ SSD/comp3988pre/dsom.json")
+        }
+
+        if(id == 22) {
+            this.props.openTab(<DragDropSOM />, "not_so_deepsom", true, "/Volumes/Sweep\ SSD/comp3988pre/som.json")
+        }
+
+        if(id == 96) {
+            this.props.openTab(<ImageView />, "fashion_imgset", true, "load")
+        }
+
+        if(id == 98) {
+            this.props.openTab(<ScatterView3D />, "sphere_viz", true, {d: "/Volumes/Sweep\ SSD/comp3988pre/sphere_64.txt", t: "/Volumes/Sweep\ SSD/comp3988pre/sphere.json"})
+        }
+
+        if(id == 111) {
+            this.props.openTab(<ScatterView3D />, "donut_viz", true, {d: "/Volumes/Sweep\ SSD/comp3988pre/donut_512.txt", t: "/Volumes/Sweep\ SSD/comp3988pre/donut.json"})
+        }
+    }
+
     render() {
 
         return (
@@ -111,6 +136,7 @@ class ProjectExplorer extends Component {
                 <Tree elevation={Elevation.FOUR}
                     onNodeExpand={(x) => (this.updateTree(() => x.isExpanded = true))}
                     onNodeCollapse={(x) => (this.updateTree(() => x.isExpanded = false))}
+                    onNodeClick={(x) => this.handleOpen(x.id)}
                     contents={this.state.tree}
 
 

@@ -51,7 +51,7 @@ class Creator extends Component {
     window.pywebview.api.launch_service("SOMDatastoreService").then((ds) => {
       this.setState({ datastore: ds })
     })
-    
+
   }
 
   requestTerminate() {
@@ -86,10 +86,10 @@ class Creator extends Component {
       <Menu>
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <Divider />
-        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
+        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
         <Divider />
-        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }}/>
-        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }}/>
+        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
+        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
       </Menu>
     )
 
@@ -128,10 +128,12 @@ class Creator extends Component {
         </Navbar>
 
         <div className="detail">
-          <SplitPane split="vertical" minSize={180} style={{height:'calc(100% - 50px)'}} >
+          <SplitPane split="vertical" minSize={180} style={{ height: 'calc(100% - 50px)' }} >
 
             <div className="leftpanel">
-              <ProjectExplorer ref={this.explorerman} datastore={this.state.datastore} />
+              <ProjectExplorer ref={this.explorerman} datastore={this.state.datastore}
+                openTab={(a, b, c, d) => this.tabman.current.openTab(a, b, c, d)}
+              />
 
             </div>
 
@@ -140,7 +142,7 @@ class Creator extends Component {
               <div className="submenubar">
                 <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
                   {this.state.tabs.map((t) => (
-                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)}/> </Tab>
+                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)} /> </Tab>
                   ))}
                 </Tabs>
               </div>
@@ -149,8 +151,8 @@ class Creator extends Component {
               <div className="detail-container">
                 <TabsManager ref={this.tabman}
                   activeTab={this.state.tab}
-                  onTabsListChanged={(x) => this.onTabsUpdated(x)} 
-                  onSwitch={(x) => this.onTabChange(x)}/>
+                  onTabsListChanged={(x) => this.onTabsUpdated(x)}
+                  onSwitch={(x) => this.onTabChange(x)} />
               </div>
 
             </div>

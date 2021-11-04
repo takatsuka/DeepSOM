@@ -88,6 +88,14 @@ class Api:
         lines = open(filename).readlines()
         return os.path.basename(filename), [l.strip().split(',') for l in lines]
 
+    def open_csv_file_at(self, path):
+        filename = path
+        if not os.path.exists(filename):
+            return None
+
+        lines = open(filename).readlines()
+        return os.path.basename(filename), [l.strip().split(',') for l in lines]
+
     def open_json_file(self):
         filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
         if filename == None:
@@ -96,6 +104,14 @@ class Api:
         if len(filename) < 1:
             return None
         filename = filename[0]
+        if not os.path.exists(filename):
+            return None
+
+        fields = json.loads(open(filename).read())
+        return fields
+
+    def open_json_file_at(self, path):
+        filename = path
         if not os.path.exists(filename):
             return None
 
