@@ -11,6 +11,16 @@ class SOMDatastoreService:
         self.ws_path = None
         self.ws_name = "lol"
 
+        self.loaders = {
+            "matrix": lambda x: np.array(x, dtype=np.float64),
+            "model": lambda x: x
+        }
+
+        self.dumpers = {
+            "matrix": lambda x: x.tolist(),
+            "model": lambda x: x
+        }
+
     # Helper function to ensure unique string descriptors for all data instances
     def ensure_unique(self, k):
 
@@ -59,7 +69,7 @@ class SOMDatastoreService:
         return descriptor
 
     # Imports Model data
-    def import_model(self):
+    def import_json(self, type):
         # Get JSON file
         filename = self.open_file()
         if not filename:
@@ -72,18 +82,18 @@ class SOMDatastoreService:
         descriptor = self.ensure_unique(
             os.path.basename(filename))
 
-        self.data_instances[descriptor] = {'type': 'model', 'content': fields}
+        self.data_instances[descriptor] = {'type': type, 'content': fields}
         return descriptor
+
+    def save_json(self, key, type, obj):
+        des = self.ensure_unique(key)
+        self.data_instances[des] = {'type': type, 'content': obj}
 
     def current_workspace_name(self):
         return self.ws_name
 
     def load_workspace(self):
-        loaders = {
-            "matrix": lambda x: np.array(x, dtype=np.float64),
-            "model": lambda x: x
-        }
-
+        loaders = self.loaders
         self.close_all_instances()
 
         filename = self.open_file()
@@ -122,10 +132,7 @@ class SOMDatastoreService:
         self.save_workspace()
 
     def save_workspace(self, filename=None):
-        dumpers = {
-            "matrix": lambda x: x.tolist(),
-            "model": lambda x: x
-        }
+        dumpers = self.dumpers
 
         if filename == None:
             filename = self.ws_path
@@ -155,6 +162,17 @@ class SOMDatastoreService:
 
         self.ws_name = os.path.basename(filename)
         self.ws_path = filename
+
+    def fetch_object(self, key):
+        if key not in self.data_instances:
+            return None
+        
+        item = self.data_instances[key]
+        type = item['type']
+        if type not in self.dumpers:
+            return None
+
+        return self.dumpers[type](item['content'])
 
     def fetch_objects(self, type):
         if type == '':

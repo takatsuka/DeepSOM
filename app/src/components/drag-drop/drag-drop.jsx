@@ -490,10 +490,18 @@ class DragDrop extends Component {
         this.setState({ advanced_open: !this.state.advanced_open });
     }
 
-    import_som(e) {
-        const data = JSON.parse(event.target.value);
-        this.links = data['links'];
-        this.setState({ soms: data['soms'] });
+    closeSideMenu() {
+        this.setState({ side_menu: false, editing: null })
+    }
+
+    openSideMenu(som) {
+        this.setState({ side_menu: true, editing: som.props.node.id })
+    }
+
+    import_som(x) {
+        this.links = x.connections
+        this.i = x.id
+        this.setState({ soms: x.nodes })
     }
 
     export_som() {
@@ -504,23 +512,21 @@ class DragDrop extends Component {
         }
     }
 
-    closeSideMenu() {
-        this.setState({ side_menu: false, editing: null })
+    saveSession(){
+
     }
 
-    openSideMenu(som) {
-        this.setState({ side_menu: true, editing: som.props.node.id })
+    loadSession(){
+        
     }
 
-    saveSession() {
+    saveSessionToFile() {
         window.pywebview.api.save_json_file(this.export_som()).then((e) => (console.log(e)))
     }
 
     loadSessionFromFile() {
         window.pywebview.api.open_json_file().then(function (x) {
-            this.links = x.connections
-            this.i = x.id
-            this.setState({ soms: x.nodes })
+            this.import_som(x)
         }.bind(this))
     }
 
@@ -544,7 +550,7 @@ class DragDrop extends Component {
 
         const sessionMenu = (
             <Menu>
-                <MenuItem icon="document-share" text="Save" onClick={() => this.saveSession()} />
+                <MenuItem icon="document-share" text="Save" onClick={() => this.saveSessionToFile()} />
                 <MenuItem icon="document-open" text="Load" onClick={() => this.loadSessionFromFile()} />
             </Menu>
         )
@@ -611,8 +617,6 @@ class DragDrop extends Component {
                     <Collapse isOpen={this.state.advanced_open}>
                         <Icon icon="export" /> Export SOM
                         <TextArea id="export_som" value={JSON.stringify({ "soms": this.state.soms, "links": this.links })} growVertically={true} />
-                        <Icon icon="import" /> Import SOM
-                        <TextArea id="import_som" growVertically={true} onChange={this.import_som} />
                     </Collapse>
                 </div>
 
