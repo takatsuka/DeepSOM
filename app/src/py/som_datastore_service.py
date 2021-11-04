@@ -1,10 +1,23 @@
 import json
 import os
+import re
 import webview
 
 
 class SOMDatastoreService:
     data_instances = {}
+
+    # Helper function to ensure unique string descriptors for all data instances
+    def ensure_unique(self, k):
+
+        # use `in` directly on dict will use O(1) hashmap look up.
+        while k in self.data_instances:
+            if re.fullmatch(r".*_\([\d]+\)", k):
+                k = re.sub(r"_\([\d]+\)",
+                           lambda g: f"_({int(g.group(0)[2: -1]) + 1})", k)
+            else:
+                k += "_(1)"
+        return k
 
     # Imports CSV data from a file upload point and returns string descriptor
     def open_csv_file_instance(self):
@@ -19,14 +32,15 @@ class SOMDatastoreService:
         filename = filename[0]
         if not os.path.exists(filename):
             return None
-        
+
         # Open CSV file and store as new instance
         lines = open(filename).readlines()
         lines = [line.strip().split(",") for line in lines]
 
         # Check if descriptor string already exists in data instances
-        descriptor = self.validate_unique_descriptor(os.path.basename(filename))
-        
+        descriptor = self.ensure_unique(
+            os.path.basename(filename))
+
         self.data_instances[descriptor] = lines
         return descriptor
 
@@ -48,8 +62,9 @@ class SOMDatastoreService:
         fields = json.loads(open(filename).read())
 
         # Check if descriptor string already exists in data instances
-        descriptor = self.validate_unique_descriptor(os.path.basename(filename))
-        
+        descriptor = self.ensure_unique(
+            os.path.basename(filename))
+
         self.data_instances[descriptor] = fields
         return descriptor
 
@@ -65,7 +80,8 @@ class SOMDatastoreService:
         open(filename, 'w').write(instance)
 
         # Check if descriptor string already exists in data instances
-        descriptor = self.validate_unique_descriptor(os.path.basename(filename))
+        descriptor = self.ensure_unique(
+            os.path.basename(filename))
 
         self.data_instances[descriptor] = instance
         return descriptor
@@ -81,10 +97,10 @@ class SOMDatastoreService:
         files = []
 
         for f in data_files:
-            name = self.validate_unique_descriptor(f['filename'])
+            name = self.ensure_unique(f['filename'])
             self.data_instances[name] = f['data']
             files.append(name)
-                 
+
         som = {
             "label": label,
             "childNodes": files
@@ -116,7 +132,7 @@ class SOMDatastoreService:
         return True
 
     def create_som_container(self, descriptor):
-        descriptor = self.validate_unique_descriptor(descriptor)
+        descriptor = self.ensure_unique(descriptor)
         self.data_instances[descriptor] = []
         return descriptor
 
@@ -144,7 +160,7 @@ class SOMDatastoreService:
     # Allows insertion of custom data instance
     def open_custom_instance_with_descriptor(self, descriptor, instance):
         # Check if descriptor string already exists in data instances
-        descriptor = self.validate_unique_descriptor(descriptor)
+        descriptor = self.ensure_unique(descriptor)
         self.data_instances[descriptor] = instance
         return descriptor
 
@@ -158,9 +174,3 @@ class SOMDatastoreService:
     def close_instance_with_descriptor(self, descriptor):
         obj = self.data_instances.pop(descriptor)
         return obj
-
-    # Helper function to ensure unique string descriptors for all data instances
-    def validate_unique_descriptor(self, descriptor):
-        while descriptor in self.data_instances.keys():
-            descriptor += " copy"
-        return descriptor
