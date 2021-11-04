@@ -89,6 +89,32 @@ class SOMDatastoreService:
         des = self.ensure_unique(key)
         self.data_instances[des] = {'type': type, 'content': obj}
 
+    def save_object(self, key, type, object, replace):
+        des = key if replace else self.ensure_unique(key)
+        if type not in self.loaders:
+            return False
+
+        obj = self.loaders[type](object)
+        self.data_instances[des] = {'type': type, 'content': obj}
+        return True
+
+    def get_object(self, key):
+        if key not in self.data_instances:
+            return None
+
+        item = self.data_instances[key]
+        type = item['type']
+        if type not in self.dumpers:
+            return None
+
+        return self.dumpers[type](item['content'])
+
+    # Fetch list of object keys with given type
+    def fetch_objects(self, type):
+        if type == '':
+            return self.data_instances.keys()
+        return [k for k, v in self.data_instances.items() if v['type'] == type]
+
     def current_workspace_name(self):
         return self.ws_name
 
@@ -162,22 +188,6 @@ class SOMDatastoreService:
 
         self.ws_name = os.path.basename(filename)
         self.ws_path = filename
-
-    def fetch_object(self, key):
-        if key not in self.data_instances:
-            return None
-        
-        item = self.data_instances[key]
-        type = item['type']
-        if type not in self.dumpers:
-            return None
-
-        return self.dumpers[type](item['content'])
-
-    def fetch_objects(self, type):
-        if type == '':
-            return self.data_instances.keys()
-        return [k for k, v in self.data_instances.items() if v['type'] == type]
 
     # Returns true if the descriptor exists as the name of an open data instance; false if not
 

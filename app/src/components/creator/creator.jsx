@@ -71,6 +71,8 @@ class Creator extends Component {
 
     const fileMenu = (
       <Menu>
+        <MenuItem icon="layout-auto" text="New Model" onClick={() => { this.explorerman.current.loadWorkspace() }} />
+        <Divider />
         <MenuItem icon="label" text="Open Workspace" onClick={() => { this.explorerman.current.loadWorkspace() }} />
         <MenuItem icon="git-repo" text="New Workspace" onClick={() => { this.explorerman.current.createNewWorkspace() }} />
         <MenuItem icon="git-push" text="Save Workspace" onClick={() => { this.explorerman.current.saveWorkspace() }} />

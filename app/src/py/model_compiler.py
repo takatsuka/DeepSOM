@@ -14,17 +14,20 @@ template_2_node = {
     "get_bmu": BMU
 }
 
+
 def dist_props(dict):
     axis = dict['axis']
     return {"selections": [(axis, k['sel']) for k in dict['selections']]}
 
+
 def concat_props(dict):
     return {"axis": dict['axis']}
+
 
 node_props = {
     "inout": None,
     "dist": dist_props,
-    "bypass": lambda x : {},
+    "bypass": lambda x: {},
     "concat": concat_props,
 }
 
@@ -43,12 +46,11 @@ def parse_dict(dict):
 
         pp = node_props[n['template']](n['props'])
         g.create(node_type=type, props=pp)
-    
+
     for l in links:
         g.connect(l['from'], l['to'], l['props']['slot'])
 
     return g
-        
 
 
 if __name__ == "__main__":
@@ -70,4 +72,3 @@ if __name__ == "__main__":
     graph.set_input(dat)
 
     print(graph.get_output())
-    
