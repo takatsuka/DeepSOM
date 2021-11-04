@@ -21,5 +21,5 @@ class TestGraph:
 
     def test_graph_add_single(cls):
         props = dict()
-        nid = g.create(Node, props)
+        nid = g.create(Node, props=props)
         assert nid > 1

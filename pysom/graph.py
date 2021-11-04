@@ -183,12 +183,12 @@ class Graph:
         """
         return self.find_node(self.end).get_output(slot)
 
-    def set_param(self, key: str, value: object) -> None:
+    def set_param(self, key: str, value: object) -> bool:
         """
         Wrapper functionality to set property of the Graph to a value.
 
         Key should be a string value but value can be of any generic type.
-        If key is not a string, a RuntimeError is raised.
+        If key is not a string, then returns False immediately.
         Used to toggle or manage states in Graph. Useful to enforce or
         restrict certain behaviour during training time or other busy periods.
         If key is not an existing property in Graph, then it will be created
@@ -198,11 +198,14 @@ class Graph:
             key (str): a property string parameter for the Graph instance
             value (object): the associated value pair for the provided key
 
-        Raises:
-            RuntimeError: [description]
+        Returns:
+            bool: True if the parameter was modified, False otherwise.
         """
         if not isinstance(key, str):
-            raise RuntimeError("Parameter key should be of a string type")
+            if self.loglevel >= LOGLEVEL_ERROR:
+                print("Parameter key should be of a string type")
+            return False
 
         self.global_params[key] = value
+        return True
         # TODO: Update nodes if necessary
