@@ -46,6 +46,16 @@ def reduce_params(lr: float, sig: float, curr: int, max_iter: int) -> tuple:
         exponential_decay(sig, curr, max_iter)
 
 
+# helper method to check if bmu coords given are in grid
+def verify_pos(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray) -> bool:
+    x_tran, y_tran = x_mat.transpose(), y_mat.transpose()
+    if bmu[0] >= len(x_mat) or bmu[0] >= len(x_tran):
+        raise ValueError("At least the x coordinate of BMU is out of bounds!")
+    if bmu[1] >= len(y_mat) or bmu[1] >= len(y_tran):
+        raise ValueError("The y coordinate of BMU is out of bounds!")
+    return True
+
+
 # @jit(nopython=True)
 def nhood_gaussian(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
                    sigma: float) -> np.ndarray:
@@ -65,8 +75,8 @@ def nhood_gaussian(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
         np.ndarray: the resultant array after the neighbourhood function is \
             applied
     """
-    # return gaussian nhood for centroid  (sigma decreases as iters progress)
-    # centroid is
+    verify_pos(bmu, x_mat, y_mat)   # check bmu in grid
+    # return gaussian nhood for bmu  (sigma decreases as iters progress)
     alpha_x = exp((-(x_mat - x_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
     # the bmu here
     alpha_y = exp((-(y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
@@ -110,6 +120,7 @@ def nhood_mexican(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
         np.ndarray: the resultant array after the neighbourhood function is \
             applied
     """
+    verify_pos(bmu, x_mat, y_mat)  # check bmu in grid
     # return mexican hat nhood for bmu
     m = ((x_mat - x_mat.transpose()[bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
     return ((1 - 2 * m) * exp(-m)).transpose()
@@ -226,10 +237,16 @@ class SOM(Node):
         str_rep = "SOMNode {}".format(self.uid)
         return str_rep
 
-    def _check_dims(self, x: np.ndarray) -> bool:
-        if self.data_dim != len(x[0]):
-            msg = f"Expecting {self.data_dim} dimensions, input has {len(x[0])}"
+    def _check_dims(self, data: np.ndarray) -> bool:
+        if self.data_dim != len(data[0]):
+            msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
             raise ValueError(msg)
+        for i in range(0, len(data)):
+            if self.data_dim != len(data[i]):
+                msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
+                raise ValueError(msg)
+
+        return True
 
     def get_weights(self) -> np.ndarray:
         """
@@ -345,6 +362,7 @@ class SOM(Node):
         Args:
             data (np.ndarray): The input data to train the SOM on.
         """
+        self._check_dims(data)
         # organizes iters from [0 .. len(data)) for partitions of data
         # e.g. n_iters = 999, len(data) = 256
         # iters = [0 .. 255 0 .. 255 0 .. 255 0 .. 255 0 .. 230]
