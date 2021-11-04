@@ -49,7 +49,6 @@ class TabsManager extends Component {
         var c = React.cloneElement(cont, {
             key: asid,
             tabID: asid,
-            datastore: datastore,
             saveState: (state) => this.storeState(asid, state),
             pullState: () => this.getState(asid),
             pullInit: () => this.getTabInit(asid)

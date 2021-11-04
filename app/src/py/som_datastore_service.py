@@ -92,11 +92,11 @@ class SOMDatastoreService:
     def save_object(self, key, type, object, replace):
         des = key if replace else self.ensure_unique(key)
         if type not in self.loaders:
-            return False
+            return None
 
         obj = self.loaders[type](object)
         self.data_instances[des] = {'type': type, 'content': obj}
-        return True
+        return des
 
     def get_object(self, key):
         if key not in self.data_instances:
@@ -114,6 +114,11 @@ class SOMDatastoreService:
         if type == '':
             return self.data_instances.keys()
         return [k for k, v in self.data_instances.items() if v['type'] == type]
+
+    def remove_object(self, key):
+        if key not in self.data_instances:
+            return
+        self.data_instances.pop(key)
 
     def current_workspace_name(self):
         return self.ws_name

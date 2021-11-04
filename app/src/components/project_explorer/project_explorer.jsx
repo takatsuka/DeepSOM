@@ -10,6 +10,9 @@ import DragDropSOM from '../drag-drop/drag-drop';
 import ImageView from '../imageview/imageview';
 import ScatterView3D from '../scatterview_3d/scatterview';
 
+import { PrimaryToaster } from '../common/toaster';
+import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
+
 class ProjectExplorer extends Component {
     constructor(props) {
         super(props)
@@ -18,12 +21,14 @@ class ProjectExplorer extends Component {
             workspaceName: "new",
             tree: [
                 {
+                    id: 0,
                     isExpanded: false,
                     icon: "folder-close",
                     label: 'Objects',
                     childNodes: []
                 },
                 {
+                    id: 1,
                     isExpanded: false,
                     icon: "folder-close",
                     label: 'Models',
@@ -49,11 +54,23 @@ class ProjectExplorer extends Component {
                 id: id,
                 hasCaret: false,
                 icon: "database",
-                label: e,  
+                label: e,
             }))
 
             this.state.tree[0].childNodes = l
-            this.setState({tree: this.state.tree})
+            this.setState({ tree: this.state.tree })
+        });
+
+        window.pywebview.api.call_service(this.props.datastore, "fetch_objects", ["model"]).then((e) => {
+            let l = e.map((e, id) => ({
+                id: { "type": "model", "key": e },
+                hasCaret: false,
+                icon: "layout-auto",
+                label: e,
+            }))
+
+            this.state.tree[1].childNodes = l
+            this.setState({ tree: this.state.tree })
         });
     }
 
@@ -97,31 +114,50 @@ class ProjectExplorer extends Component {
         });
     }
 
+    newSOM(open) {
+        window.pywebview.api.call_service(this.props.datastore, "save_object", ["SOM", "model", null, false]).then((descriptor) => {
+            this.refresh()
+            if (open) {
+                this.props.openTab(<DragDropSOM />, descriptor, true, descriptor)
+            }
+        });
+
+    }
+
     updateTree(thing) {
         thing()
         this.setState({ tree: this.state.tree })
     }
 
-    handleOpen(id){
-        if(id == 143) {
-            this.props.openTab(<DragDropSOM />, "deepsom", true, "/Volumes/Sweep\ SSD/comp3988pre/dsom.json")
+    handleOpen(item) {
+        if (item.id.type === "model") {
+            this.props.openTab(<DragDropSOM />, item.id.key, true, item.id.key)
         }
+    }
 
-        if(id == 22) {
-            this.props.openTab(<DragDropSOM />, "not_so_deepsom", true, "/Volumes/Sweep\ SSD/comp3988pre/som.json")
-        }
+    handleDelete(item) {
+        if(item.id.key === null) return
 
-        if(id == 96) {
-            this.props.openTab(<ImageView />, "fashion_imgset", true, "load")
-        }
+        window.pywebview.api.call_service(this.props.datastore, "remove_object", [item.id.key]).then((descriptor) => {
+            this.refresh()
+        });
+    }
 
-        if(id == 98) {
-            this.props.openTab(<ScatterView3D />, "sphere_viz", true, {d: "/Volumes/Sweep\ SSD/comp3988pre/sphere_64.txt", t: "/Volumes/Sweep\ SSD/comp3988pre/sphere.json"})
-        }
+    handleCtxMenu(item, p, e) {
+        e.preventDefault()
 
-        if(id == 111) {
-            this.props.openTab(<ScatterView3D />, "donut_viz", true, {d: "/Volumes/Sweep\ SSD/comp3988pre/donut_512.txt", t: "/Volumes/Sweep\ SSD/comp3988pre/donut.json"})
-        }
+        PrimaryToaster.show({
+            message: "Cannot add link - an identical link exists.",
+            intent: Intent.WARNING,
+            action: {
+                text: "Yes",
+                onClick: function () {
+                    this.handleDelete(item)
+                }.bind(this)
+            }
+        });
+
+        return false
     }
 
     render() {
@@ -136,9 +172,9 @@ class ProjectExplorer extends Component {
                 <Tree elevation={Elevation.FOUR}
                     onNodeExpand={(x) => (this.updateTree(() => x.isExpanded = true))}
                     onNodeCollapse={(x) => (this.updateTree(() => x.isExpanded = false))}
-                    onNodeClick={(x) => this.handleOpen(x.id)}
                     contents={this.state.tree}
-
+                    onNodeClick={this.handleOpen.bind(this)}
+                    onNodeContextMenu={this.handleCtxMenu.bind(this)}
 
                 />
 

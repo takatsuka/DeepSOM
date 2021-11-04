@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Menu, MenuDivider, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
 import "./creator.scss"
 import Welcome from "../welcome/welcome"
@@ -71,12 +71,13 @@ class Creator extends Component {
 
     const fileMenu = (
       <Menu>
-        <MenuItem icon="layout-auto" text="New Model" onClick={() => { this.explorerman.current.loadWorkspace() }} />
-        <Divider />
-        <MenuItem icon="label" text="Open Workspace" onClick={() => { this.explorerman.current.loadWorkspace() }} />
-        <MenuItem icon="git-repo" text="New Workspace" onClick={() => { this.explorerman.current.createNewWorkspace() }} />
-        <MenuItem icon="git-push" text="Save Workspace" onClick={() => { this.explorerman.current.saveWorkspace() }} />
-        <Divider />
+        <MenuDivider title="Create" />
+        <MenuItem icon="layout-auto" text="New Model" onClick={() => { this.explorerman.current.newSOM(true) }} />
+        <MenuDivider title="Workspace" />
+        <MenuItem icon="label" text="Open" onClick={() => { this.explorerman.current.loadWorkspace() }} />
+        <MenuItem icon="git-repo" text="New" onClick={() => { this.explorerman.current.createNewWorkspace() }} />
+        <MenuItem icon="git-push" text="Save" onClick={() => { this.explorerman.current.saveWorkspace() }} />
+        <MenuDivider title="Dataset" />
         <MenuItem icon="database" text="Import Data" onClick={() => { this.explorerman.current.importData() }} />
         <MenuItem icon="polygon-filter" text="Import Model" onClick={() => { this.explorerman.current.addSOM() }} />
       </Menu>
