@@ -11,12 +11,13 @@ class ProjectExplorer extends Component {
     constructor(props) {
         super(props)
 
-        var treeContent = []
-
         this.state = {
-            services: null,
-            tree: treeContent,
-            nModels: 0,
+            tree: [{
+                isExpanded: true,
+                icon: "folder-close",
+                label: 'New Workspace',
+                childNodes: []
+            }],
         }
     }
 
@@ -24,28 +25,31 @@ class ProjectExplorer extends Component {
 
     }
 
-    loadModel() {
-        window.pywebview.api.call_service(this.props.datastore, "load_som_container", []).then((som) => {
-            if (som != null) {
-                let childNodes = []
-
-                for (let i = 0; i < som.childNodes.length; i++) {
-                    console.log(som.childNodes[i])
-                    childNodes.push({
+    loadWorkspace() {
+        window.pywebview.api.call_service(this.props.datastore, "load_workspace", []).then((workspace) => {
+            if (workspace != null) {
+                let children = []
+                for (let i = 0; i < workspace.data.length; i++) {
+                    children.push({
                         icon: "database",
-                        label: som.childNodes[i],
+                        label: workspace.data[i],
                     })
                 }
 
-                let model = {
-                    isExpanded: true,
-                    icon: "folder-close",
-                    label: som.label,
-                    childNodes: childNodes
+                for (let i = 0; i < workspace.som.length; i++) {
+                    children.push({
+                        icon: "polygon-filter",
+                        label: workspace.som[i],
+                    })
                 }
 
-                this.state.nModels++;
-                this.state.tree.push(model);
+                this.state.tree = [{
+                    isExpanded: true,
+                    icon: "folder-close",
+                    label: workspace.label,
+                    childNodes: children
+                }];
+
                 this.setState((state) => {
                     return { tree: state.tree }
                 })
@@ -53,63 +57,70 @@ class ProjectExplorer extends Component {
         })
     }
 
-    // The explorer works like a stack at the moment, this is the push operation
-    // (TODO) Should be the SOM container that is selected by the user
-    addNewModel() {
-        window.pywebview.api.call_service(this.props.datastore, "create_som_container", ["SOM Model " + this.state.nModels]).then((descriptor) => {
-            let newModel = {
+    createNewWorkspace() {
+        window.pywebview.api.call_service(this.props.datastore, "close_all_instances", []).then(() => {
+            this.state.tree = [{
                 isExpanded: true,
                 icon: "folder-close",
-                label: descriptor,
+                label: 'New Workspace',
                 childNodes: []
-            }
-            this.state.nModels++;
-            this.state.tree.push(newModel)
+            }];
             this.setState((state) => {
                 return { tree: state.tree };
             });
-        })
+        });
     }
 
-    // The explorer works like a stack at the moment, this is the pop operation
-    // (TODO) Should be the SOM container that is selected by the user
-    saveNewModel() {
-        if (this.state.nModels > 0) {
-            let somContainer = this.state.tree[this.state.nModels-1];
-            window.pywebview.api.call_service(this.props.datastore, "save_som_container", [somContainer]).then((finish) => {
-                if (finish) {
-                    this.state.tree.pop();
-                    this.setState((state) => {
-                        return { tree: state.tree };
-                    })
-                }
-            });
-        }
+    saveWorkspace() {
+        let workspace = this.state.tree[0];
+        window.pywebview.api.call_service(this.props.datastore, "save_workspace", [workspace]).then((name) => {
+            if (name == null) {
+                return;
+            }
+            this.state.tree = [{
+                isExpanded: true,
+                icon: 'folder-close',
+                label: name,
+                childNodes: workspace.childNodes
+            }];
+            this.setState((state) => {
+                return { tree: state.tree };
+            })
+        });
     }
 
-    addDataInstance() {
-        if (this.state.nModels > 0) {
-            window.pywebview.api.call_service(this.props.datastore, "open_csv_file_instance", []).then((descriptor) => {
-                // (TODO) Should be the SOM container that is selected by the user
-                if (descriptor == null) {
-                    return;
-                }
-                let som_label = this.state.tree[this.state.nModels-1].label;
-                let newInstance = {
-                    icon: "database",
-                    label: descriptor,
-                }
-                window.pywebview.api.call_service(this.props.datastore, "add_file_to_som", [som_label, descriptor]).then((finish) => {
-                    if (finish) {
-                        // (TODO) Should be the SOM container that is selected by the user
-                        this.state.tree[this.state.nModels-1].childNodes.push(newInstance);
-                        this.setState((state) => {
-                            return { tree: state.tree };
-                        });
-                    }
-                })
+    addCsvFileToWorkspace() {
+        window.pywebview.api.call_service(this.props.datastore, "open_csv_file_instance", []).then((descriptor) => {
+            console.log(descriptor);
+            if (descriptor == null) {
+                return;
+            }
+            let workspaceIdentifier = this.state.tree[0].label;
+            let newInstance = {
+                icon: "database",
+                label: descriptor,
+            }
+            this.state.tree[0].childNodes.push(newInstance);
+            this.setState((state) => {
+                return { tree: state.tree };
             });
-        }
+        });
+    }
+
+    addJsonFileToWorkspace() {
+        window.pywebview.api.call_service(this.props.datastore, "open_json_file_instance", []).then((descriptor) => {
+            if (descriptor == null) {
+                return;
+            }
+            let newInstance = {
+                icon: "polygon-filter",
+                label: descriptor,
+            }
+            this.state.tree[0].childNodes.push(newInstance);
+            this.setState((state) => {
+                return { tree: state.tree };
+            });
+        });
     }
 
     updateTree(thing){

@@ -70,11 +70,12 @@ class Creator extends Component {
 
     const fileMenu = (
       <Menu>
-        <MenuItem icon="label" text="Open Project" onClick={() => { this.explorerman.current.loadModel() }} />
-        <MenuItem icon="git-repo" text="New Project" onClick={() => { this.explorerman.current.addNewModel() }} />
-        <MenuItem icon="git-push" text="Save Project" onClick={() => { this.explorerman.current.saveNewModel() }} />
+        <MenuItem icon="label" text="Open Workspace" onClick={() => { this.explorerman.current.loadWorkspace() }} />
+        <MenuItem icon="git-repo" text="New Workspace" onClick={() => { this.explorerman.current.createNewWorkspace() }} />
+        <MenuItem icon="git-push" text="Save Workspace" onClick={() => { this.explorerman.current.saveWorkspace() }} />
         <Divider />
-        <MenuItem icon="graph" text="Import Data" onClick={() => { this.explorerman.current.addDataInstance() }} />
+        <MenuItem icon="database" text="Import Data" onClick={() => { this.explorerman.current.addCsvFileToWorkspace() }} />
+        <MenuItem icon="polygon-filter" text="Import SOM" onClick={() => { this.explorerman.current.addJsonFileToWorkspace() }} />
       </Menu>
     )
 

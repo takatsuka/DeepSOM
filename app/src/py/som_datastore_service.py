@@ -86,61 +86,66 @@ class SOMDatastoreService:
         self.data_instances[descriptor] = instance
         return descriptor
 
-    def load_som_container(self):
+    def load_workspace(self):
+        self.close_all_instances()
         descriptor = self.open_json_file_instance()
         if descriptor == None:
             return None
 
         fields = self.data_instances[descriptor]
-        label = fields['som']
+        label = fields['workspace']
         data_files = fields['data_files']
-        files = []
+        som_files = fields['som_files']
+        data = []
+        som = []
 
         for f in data_files:
             name = self.ensure_unique(f['filename'])
             self.data_instances[name] = f['data']
-            files.append(name)
+            data.append(name)
 
-        som = {
+        for f in som_files:
+            name = self.ensure_unique(f['filename'])
+            self.data_instances[name] = f['data']
+            som.append(name)
+
+        workspace = {
             "label": label,
-            "childNodes": files
+            "data": data,
+            "som": som
         }
 
-        return som
+        return workspace
 
-    def save_som_container(self, som):
-        # Get save point
+    def save_workspace(self, workspace):
         filename = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG)
         if filename == None:
-            return False
+            return None
 
-        files = som["childNodes"]
+        files = workspace["childNodes"]
         files_with_data = []
+        files_with_soms = []
         for f in files:
-            files_with_data.append({
-                "filename": f['label'],
-                "data": self.data_instances[f['label']]
-            })
+            if f["icon"] == "database":
+                files_with_data.append({
+                    "filename": f['label'],
+                    "data": self.data_instances[f['label']]
+                })
+            else:
+                files_with_soms.append({
+                    "filename": f['label'],
+                    "data": self.data_instances[f['label']]
+                })
 
-        container = {
-            "som": os.path.basename(filename),
+        save_workspace = {
+            "workspace": os.path.basename(filename),
             "data_files": files_with_data,
+            "som_files": files_with_soms,
         }
 
-        container = json.dumps(container)
-        open(filename, 'w').write(container)
-        return True
-
-    def create_som_container(self, descriptor):
-        descriptor = self.ensure_unique(descriptor)
-        self.data_instances[descriptor] = []
-        return descriptor
-
-    def add_file_to_som(self, som_descriptor, file_descriptor):
-        if som_descriptor not in self.data_instances.keys():
-            return False
-        self.data_instances[som_descriptor].append(file_descriptor)
-        return True
+        save_workspace = json.dumps(save_workspace)
+        open(filename, 'w').write(save_workspace)
+        return os.path.basename(filename)
 
     # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
