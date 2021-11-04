@@ -179,12 +179,8 @@ class Node:
         Returns:
             bool: True by default
         """
-        return input_node.check_slot(slot)
+        return self.check_slot(slot)
 
 
 if __name__ == "__main__":
-
-    x1 = Node()
-    x2 = Node()
-    print(x1)
-    print(x2)
+    pass
