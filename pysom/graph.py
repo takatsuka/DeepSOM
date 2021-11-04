@@ -36,7 +36,7 @@ class Graph:
         """
         Constructor of the Graph class representing the deep SOM model.
 
-        Creates the starting input node of ID 0 and final output node of ID 0
+        Creates the starting input node of ID 0 and final output node of ID 1
         upon instantiation. Training flag is initially set to false and can
         be toggled using the training methods.
 
@@ -45,8 +45,8 @@ class Graph:
                 May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE. \
                 Defaults to LOGLEVEL_ERROR.
         """
-        self.start = 1
-        self.end = 2
+        self.start = 0
+        self.end = 1
         self.global_params = {
             "training": False
         }
