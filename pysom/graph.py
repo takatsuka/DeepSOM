@@ -78,6 +78,8 @@ class Graph:
         Returns:
             int: the automatically assigned unique integer ID of the node
         """
+        if (node_type is None):
+            node_type = Node
         node = self._create_node(node_type=node_type, props=props)
         return self._add_node(node)
 
