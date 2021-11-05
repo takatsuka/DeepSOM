@@ -9,7 +9,7 @@ setup(
     description='Powerful, extensible Self-Organizing Map library for Python',
     author='COMP3988_T17_01_Group2',
     url='https://bitbucket.org/ChristopherIrving/deep-som-dome/',
-    packages=find_packages(),
+    packages=find_packages(".", exclude=["*test*"]),
     package_dir={'pysom': 'pysom',
                  'pysom.nodes': 'pysom/nodes'},
     tests_require=['pytest'],
