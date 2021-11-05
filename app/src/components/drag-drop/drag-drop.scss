@@ -1,3 +1,5 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
 .dd-som {
     // background-color: #669EFF;
     color: white;
@@ -49,6 +51,12 @@
     background-image: radial-gradient(circle, #1f4b99 1px, rgba(0, 0, 0, 0) 1px);
     top: 40px;
     user-select: none;
+}
+
+.bp3-dark .drag-drop-box {
+    background-color: $dark-gray2;
+    background-image: radial-gradient(circle, $indigo5 1px, rgba(0, 0, 0, 0) 1px);
+    border: 0;
 }
 
 .som-box {
