@@ -8,6 +8,7 @@ from .model_compiler import parse_dict as do_compile
 # Model training service
 class ModelService:
     def __init__(self, ds):
+        self.ds = ds
         self.input_key = None
         self.graph = None
         
@@ -42,7 +43,8 @@ class ModelService:
             return {'status': False, 'msg': 'Input data not set.'}
         
 
-        
+        data = self.ds.object_data(self.input_key)
+        self.graph.set_input(data)
 
 
         return {'status': True, 'msg': 'Training finished.'}

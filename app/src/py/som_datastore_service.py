@@ -98,6 +98,13 @@ class SOMDatastoreService:
         self.data_instances[des] = {'type': type, 'content': obj}
         return des
 
+    def object_data(self, key):
+        if key not in self.data_instances:
+            return None
+        item = self.data_instances[key]
+        return item['content']
+        
+
     def get_object(self, key):
         if key not in self.data_instances:
             return None
