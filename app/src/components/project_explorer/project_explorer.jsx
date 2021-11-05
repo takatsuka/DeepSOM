@@ -35,6 +35,13 @@ class ProjectExplorer extends Component {
                     label: 'Models',
                     childNodes: []
                 },
+                {
+                    id: 2,
+                    isExpanded: false,
+                    icon: "data-connection",
+                    label: 'Opaques',
+                    childNodes: []
+                },
             ],
 
             data_picker: false,

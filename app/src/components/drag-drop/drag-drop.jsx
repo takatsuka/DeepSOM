@@ -418,7 +418,8 @@ class DragDrop extends Component {
 
         const runtimeMenu = (
             <Menu>
-                <MenuItem icon="add-to-artifact" text="Input Data" onClick={() => this.pickInput()} />
+                <MenuDivider title="Prepare" />
+                <MenuItem icon="add-to-artifact" text="Select Input" onClick={() => this.pickInput()} />
                 <MenuDivider title="Action" />
                 <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()} />
                 <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
@@ -433,14 +434,14 @@ class DragDrop extends Component {
         const addMenu = (
             <Menu>
                 <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
-                <Divider />
+                <MenuDivider title="Utility" />
                 <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
                 <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
-                <Divider />
+                <MenuDivider title="Self-organizing maps" />
                 <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
                 <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
                 <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.add_som("minipatch")} />
-                <Divider />
+                <MenuDivider title="Functional" />
                 <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} />
                 <MenuItem icon="function" text="Random Sample" />
 

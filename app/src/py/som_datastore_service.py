@@ -187,7 +187,9 @@ class SOMDatastoreService:
         files_with_data = {}
         for k, v in self.data_instances.items():
             t = v['type']
+
             # Cry without saying.
+            # This will also skip temp opaque data as they were never mean to be saved
             if t not in dumpers:
                 continue
 
