@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup, Dialog, MenuItem } from "@blueprintjs/core";
+import { Classes, Icon, Intent, MenuDivider, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup, Dialog, MenuItem, ContextMenu, Menu } from "@blueprintjs/core";
 import { Suggest } from "@blueprintjs/select";
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
 import { TAG_INPUT_VALUES } from '@blueprintjs/core/lib/esm/common/classes';
@@ -38,7 +38,7 @@ class ProjectExplorer extends Component {
             ],
 
             data_picker: false,
-            
+
             dp_type: "",
             dp_msg: "what the f?",
             dp_query: "",
@@ -48,7 +48,7 @@ class ProjectExplorer extends Component {
     }
 
     componentDidMount() {
-        
+
     }
 
     refresh() {
@@ -60,7 +60,7 @@ class ProjectExplorer extends Component {
 
         window.pywebview.api.call_service(this.props.datastore, "fetch_objects", ["matrix"]).then((e) => {
             let l = e.map((e, id) => ({
-                id: id,
+                id: { "type": "matrix", "key": e },
                 hasCaret: false,
                 icon: "database",
                 label: e,
@@ -153,19 +153,18 @@ class ProjectExplorer extends Component {
     }
 
     handleCtxMenu(item, p, e) {
-        if (item.icon === "folder-close") return
+        // if (item.icon === "folder-close") return
         e.preventDefault()
+        console.log(item)
+        let menu = (
+            <Menu>
+                <MenuDivider title={item.label} />
+                <MenuItem icon="paperclip" text="Rename" />
+                <MenuItem icon="trash" intent={Intent.DANGER} text="Delete" onClick={() => this.handleDelete(item)} />
+            </Menu>
+        )
 
-        PrimaryToaster.show({
-            message: "Are you sure you want to delete: " + item.id.key + "?",
-            intent: Intent.WARNING,
-            action: {
-                text: "Yes",
-                onClick: function () {
-                    this.handleDelete(item)
-                }.bind(this)
-            }
-        });
+        ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
 
         return false
     }
@@ -188,9 +187,9 @@ class ProjectExplorer extends Component {
         console.log(e)
     }
 
-    dpConfirm(){
+    dpConfirm() {
         this.state.dp_cb(this.state.dp_query)
-        this.setState({data_picker: false})
+        this.setState({ data_picker: false })
     }
 
     render() {
@@ -212,13 +211,13 @@ class ProjectExplorer extends Component {
                         <Suggest
 
                             inputValueRenderer={(e) => (e)}
-                            itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick}/>}
+                            itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
                             items={this.state.dp_items}
                             onItemSelect={(e) => this.setState({ dp_query: e })}
                             popoverProps={{ minimal: true }}
                             query={this.state.dp_query}
                             onQueryChange={(q) => { this.setState({ dp_query: q }) }}
-                            itemPredicate={(a,b) => b.toLowerCase().includes(a.toLowerCase())}
+                            itemPredicate={(a, b) => b.toLowerCase().includes(a.toLowerCase())}
                             noResults={<MenuItem disabled={true} text="No results. Maybe import them first?" />}
                         />
 
