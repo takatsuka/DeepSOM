@@ -573,7 +573,7 @@ class DragDrop extends Component {
                                 Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
                                 As stated in our license, we are not responsible for any data loss.
                             </p>
-                            <img src={teacher} style={{marginLeft:'90px'}} height={250}/>
+                            <img src={teacher} style={{position: "relative", top: "-220px", left: "420px", marginBottom: "-250px"}} height={250}/>
                         </div>
                     </Dialog>
 
