@@ -152,6 +152,13 @@ class ProjectExplorer extends Component {
         });
     }
 
+    handleRename(item) {
+        PrimaryToaster.show({
+            message: "Rename failed, not implemented yet :(",
+            intent: Intent.WARNING,
+        });
+    }
+
     handleCtxMenu(item, p, e) {
         if (item.icon === "folder-close") return
         e.preventDefault()
@@ -159,7 +166,7 @@ class ProjectExplorer extends Component {
         let menu = (
             <Menu>
                 <MenuDivider title={item.label} />
-                <MenuItem icon="paperclip" text="Rename" />
+                <MenuItem icon="paperclip" text="Rename" onClick={() => this.handleRename(item)}/>
                 <MenuItem icon="trash" intent={Intent.DANGER} text="Delete" onClick={() => this.handleDelete(item)} />
             </Menu>
         )

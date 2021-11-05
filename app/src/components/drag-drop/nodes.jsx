@@ -152,8 +152,8 @@ export const NodeTemplates = {
                 <div style={{ textAlign: 'left', marginTop: "20px" }}>
                     <strong style={{}}> Dimension:</strong><br />
                     <div style={{ paddingLeft: "10px", marginBottom: '10px' }}>
-                        Data: {d.props.inputDim} <br />
-                        Internal: {d.props.dim}
+                        Input: {d.props.inputDim} <br />
+                        Map Size: {d.props.dim}
                     </div>
                     <strong style={{}}> Shape: </strong> {d.props.shape}<br />
                 </div>
@@ -164,14 +164,17 @@ export const NodeTemplates = {
             <div>
                 <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
+                <h4>Dimensions</h4>
                 <NumericInput
                     value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
-                    rightElement={<Button disabled minimal>Dimension</Button>}
+                    rightElement={<Button disabled minimal>Input</Button>}
                     fill buttonPosition="left" placeholder="10" />
                 <NumericInput
                     value={d.props.inputDim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.inputDim = t))}
-                    rightElement={<Button disabled minimal>Input Dimension</Button>}
+                    rightElement={<Button disabled minimal>Map Size</Button>}
                     fill buttonPosition="left" placeholder="10" />
+
+                <h4>Shape</h4>
                 <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => editor.wrapSOMS(() => (d.props.shape = t.target.value))} />
             </div>
         )
