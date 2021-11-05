@@ -15,7 +15,7 @@ template_2_node = {
     "bypass": Node,
     "concat": Concat,
     "som": SOM,
-    # "get_bmu": BMU
+    "get_bmu": BMU
 }
 
 
@@ -29,11 +29,13 @@ def concat_props(dict):
 
 
 def som_props(dict):
-    nh = {"gaussian": nhood_gaussian, "bubble": nhood_bubble, "mexican": nhood_mexican}
-    dist = {"cosine": dist_cosine, "euclidean": dist_euclidean, "manhattan": dist_manhattan}
+    nh = {"gaussian": nhood_gaussian,
+          "bubble": nhood_bubble, "mexican": nhood_mexican}
+    dist = {"cosine": dist_cosine, "euclidean": dist_euclidean,
+            "manhattan": dist_manhattan}
     return {
         "size": dict['dim'],
-        "dim" : dict['inputDim'],
+        "dim": dict['inputDim'],
         "sigma": dict['sigma'],
         "lr": dict['lr'],
         "n_iters": dict['train_iter'],
@@ -43,12 +45,21 @@ def som_props(dict):
     }
 
 
+def bmu_props(dict):
+    output = {'index': '1D', 'weights': 'w'}
+
+    return {
+        "output": output[dict['shape']],
+    }
+
+
 node_props = {
     "inout": None,
     "dist": dist_props,
     "bypass": lambda x: {},
     "concat": concat_props,
-    "som": som_props
+    "som": som_props,
+    "get_bmu": bmu_props
 }
 
 
@@ -60,7 +71,8 @@ def parse_dict(dict):
     for k, n in nodes.items():
         k = int(k)
         if n['template'] not in template_2_node:
-            raise GraphCompileError(f"Node with type {n['template']} is not supported.")
+            raise GraphCompileError(
+                f"Node with type {n['template']} is not supported.")
 
         type = template_2_node[n['template']]
         if type is None:
@@ -68,7 +80,6 @@ def parse_dict(dict):
 
         pp = node_props[n['template']](n['props'])
         g.create_with_id(k, type, pp)
-
 
     for l in links:
         res = g.connect(l['from'], l['to'], l['props']['slot'])

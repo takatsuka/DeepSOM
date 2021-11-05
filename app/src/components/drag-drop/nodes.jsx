@@ -52,10 +52,10 @@ export const NodeTemplates = {
     get_bmu: {
         name: "get_bmu_",
         styleClass: "get_bmu_node",
-        node_props: { shape: '2d_dis' },
+        node_props: { shape: 'weights' },
         render: (d) => (
             <div style={{ textAlign: 'center', marginTop: "-7px" }}>
-                <i style={{ fontSize: '18px' }}>Get BMU({d.props.shape})</i>
+                <i style={{ fontSize: '16px' }}>Get BMU({d.props.shape})</i>
             </div>
         ),
 
@@ -63,7 +63,17 @@ export const NodeTemplates = {
             <div>
                 <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
-                <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => editor.wrapSOMS(() => (d.props.shape = t.target.value))} />
+                <Suggest
+                    inputValueRenderer={(e) => (e)}
+                    itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
+                    items={["index", "weights"]}
+                    onItemSelect={(e) => editor.wrapSOMS(() => (d.props.shape = e))}
+                    popoverProps={{ minimal: true }}
+                    query={d.props.shape}
+                    onQueryChange={(q) => editor.wrapSOMS(() => (d.props.shape = q))}
+                    itemPredicate={(a, b) => true}
+                    noResults={<MenuItem disabled={true} text="No shape matches." />}
+                />
             </div>
         )
     },
