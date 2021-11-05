@@ -277,6 +277,7 @@ class DragDrop extends Component {
     remove_handler(id) {
         var s = this.state.soms
         delete s[id]
+        this.links = this.links.filter(l => !(l.from === id || l.to === id))
         this.setState({ soms: s, side_menu: false, editing: null });
     }
 
@@ -550,7 +551,7 @@ class DragDrop extends Component {
                             </div>
                             <div className={Classes.DRAWER_FOOTER}>
                                 <Button icon="trash" intent="danger" disabled={editingNode && 'fixed' in this.node_templates[editingNode.template]} minimal onClick={() => this.remove_handler(this.state.editing)}> Delete </Button>
-                                <Button icon="help" intent="success" minimal> Open Manual </Button>
+                                <Button icon="help" intent="success" minimal disabled> Open Manual </Button>
                             </div>
                         </Drawer>
                     </div>
