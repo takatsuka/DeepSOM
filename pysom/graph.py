@@ -9,8 +9,11 @@ LOGLEVEL_ERROR = 1
 LOGLEVEL_VERBOSE = 2
 LOGLEVEL_ALLEXCEPTION = 3
 
+
 class GraphCompileError(Exception):
     pass
+
+
 class Graph:
     """
     Base class of the API library representing the graph of the deep SOM model.
@@ -32,8 +35,6 @@ class Graph:
                       automatically assigned unique integer ID
     """
 
-    
-
     def __init__(self, loglevel: int = LOGLEVEL_ERROR):
         """
         Constructor of the Graph class representing the deep SOM model.
@@ -48,8 +49,8 @@ class Graph:
                 Defaults to LOGLEVEL_ERROR.
         """
         self.uid = 3
-        self.start = 1
-        self.end = 2
+        self.start = 0
+        self.end = 1
         self.global_params = {
             "training": True
         }
@@ -72,7 +73,7 @@ class Graph:
         return node
 
     def _log_ex(self, msg):
-        if self.loglevel < LOGLEVEL_ALLEXCEPTION: 
+        if self.loglevel < LOGLEVEL_ALLEXCEPTION:
             print(msg)
             return
         
@@ -86,7 +87,6 @@ class Graph:
         node.uid = id
         self.uid = max(node.uid + 1, self.uid)
         self._add_node(node)
-
 
     def create(self, node_type: Type[Node] = None, props: dict = {}) -> int:
         """
@@ -188,7 +188,6 @@ class Graph:
                     -> {self.find_node(uid_out)}"
             self._log_ex(msg)
 
-
         return node_happy
 
     def set_input(self, data: object) -> None:
@@ -209,7 +208,7 @@ class Graph:
         """
         Getter function to extract the output data of the end Node.
         
-        This will trigger the evaluation of all node, if the result was not present, 
+        This will trigger the evaluation of all node, if the result was not present,
         effectively train all attached stateful nodes.
 
         Returns:

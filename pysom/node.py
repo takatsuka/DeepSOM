@@ -123,7 +123,7 @@ class Node:
 
         return self._evaluate()
 
-    # Basic Node can be connected any where - not true, now we only allow 
+    # Basic Node can be connected any where - not true, now we only allow
     # 0 and 1
     def check_slot(self, slot: int) -> bool:
         """

@@ -112,8 +112,8 @@ def nhood_mexican(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
 
     Args:
         bmu (tuple): the index of the best matching unit
-        x_neig (np.ndarry): first array to be searched
-        y_neig (np.ndarray): second array to be searched
+        x_mat (np.ndarry): first array to be searched
+        y_mat (np.ndarray): second array to be searched
         sigma (float): the neighbourhood radius
 
     Returns:
@@ -122,7 +122,8 @@ def nhood_mexican(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
     """
     verify_pos(bmu, x_mat, y_mat)  # check bmu in grid
     # return mexican hat nhood for bmu
-    m = ((x_mat - x_mat.transpose()[bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
+    m = ((x_mat - x_mat.transpose()
+         [bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
     return ((1 - 2 * m) * exp(-m)).transpose()
 
 
@@ -212,26 +213,25 @@ class SOM(Node):
                  hexagonal: bool = None, dist: callable = dist_euclidean,
                  nhood: callable = nhood_gaussian, rand_state: int = False):
         super(SOM, self).__init__(uid, graph)
-        self.size = size
-        self.data_dim = dim
 
-        self.lr = lr
-        self.sigma = sigma
-        self.rg = random.RandomState(rand_state)
-        self.n_iters = n_iters
-
-        self.weights = self.rg.rand(size, size, dim) * 2 - 1
+        # set size of grid and dims (size, size, dims)
+        self.size, self.data_dim = size, dim
+        # set LR, sigma, and max num of iters
+        self.lr, self.sigma, self.n_iters = lr, sigma, n_iters
+        # set distance metric, and nhood function
+        self.distance, self.nhood_func = dist, nhood
+        self.weights = random.RandomState(rand_state).rand(size, size, dim) * 2 - 1  # randomize weights grid
+        # normalize weight values
         self.weights /= linalg.norm(self.weights, axis=-1, keepdims=True)
+        # initialize nhood map with size of grid
         self.map = zeros((size, size))
-        self.x_neig = arange(size).astype(float)
-        self.y_neig = arange(size).astype(float)
+        self.x_neig = self.y_neig = arange(size).astype(float)  # set x and y to be 0..size
+        # arrange x y as horizontal and vert axis
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
 
         if hexagonal:
+            # offset every second row if hexagonal grid used
             self.x_mat[::-2] -= 0.5
-
-        self.distance = dist
-        self.nhood_func = nhood
 
     def __str__(self) -> str:
         str_rep = "SOMNode {}".format(self.uid)
@@ -239,15 +239,12 @@ class SOM(Node):
 
     def _check_dims(self, data: np.ndarray) -> bool:
         if self.data_dim != len(data[0]):
-            msg = f"{self} Expecting {self.data_dim} dimensions, input has {len(data[0])}"
-            self.graph._log_ex(msg)
-            return False
-
+            msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
+            raise ValueError(msg)
         for i in range(0, len(data)):
             if self.data_dim != len(data[i]):
-                msg = f"{self} Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
-                self.graph._log_ex(msg)
-                return False
+                msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
+                raise ValueError(msg)
 
         return True
 
@@ -308,9 +305,9 @@ class SOM(Node):
         lr, sig = reduce_params(self.lr, self.sigma, curr, max_iter)
         if (self.nhood_func == nhood_gaussian or self.nhood_func == nhood_mexican):
             # Lr defines the radius of nhood, as iter increases, lr decreases AND nhood decreases as a factor of lr
-            nhood = self.nhood_func(bmu, self.x_mat, self.y_mat, sig) * lr  # TODO: Is this supposed to double up on lr for exponential decay?
+            nhood = lr * self.nhood_func(bmu, self.x_mat, self.y_mat, sig)
         else:
-            nhood = self.nhood_func(bmu, self.x_neig, self.y_neig, sig) * lr
+            nhood = lr * self.nhood_func(bmu, self.x_neig, self.y_neig, sig)
 
         # weights_ij(curr + 1) = weights_ij(curr) + weights_correction_ij(curr)
         # weights_correction_ij(curr) = lr(curr) * nhood(curr) * (x - weights_ij(curr))
@@ -378,9 +375,7 @@ class SOM(Node):
          for curr, iter in enumerate(iters)]
 
     def _evaluate(self):
-        if self.graph.global_params['training']:
-            self.train(self.get_input())
-            
+        self.train(self.get_input())
         self.output_ready = True
 
     def map_labels(self, data, labels):
@@ -417,10 +412,8 @@ class SOM(Node):
         return None
 
     def check_slot(self, slot: int) -> bool:
-        if not (0 <= slot <= 1):
-            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
-            return False
-        else:
-            return True
+        return slot <= 1
 
 
+if __name__ == "__main__":
+    pass

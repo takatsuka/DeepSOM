@@ -10,6 +10,7 @@ from py.som_scatterview_service import SOMScatterviewService
 from py.som_viz_service import SOMVisualizationService
 from py.model_service import ModelService
 
+
 class Api:
 
     # Class variables

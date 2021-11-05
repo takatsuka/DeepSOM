@@ -107,7 +107,7 @@ class SOMDatastoreService:
 
         obj = self.loaders[type](object)
         self.data_instances[des] = {'type': type, 'content': obj}
-        return des        
+        return des
 
     def get_object(self, key):
         if key not in self.data_instances:

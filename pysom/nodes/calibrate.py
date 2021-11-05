@@ -2,6 +2,7 @@ from __future__ import annotations
 import numpy as np
 from ..node import Node
 
+
 class Calibrate(Node):
     """
     TODO Node that provides a label to associated SOM index (usually BMU).
@@ -45,7 +46,7 @@ class Calibrate(Node):
                 in the constructor if slot is not 0. Else, the Concat node \
                 is returned.
         """
-        if slot == 0: 
+        if slot == 0:
             return self
 
         self.som = self.get_input()
