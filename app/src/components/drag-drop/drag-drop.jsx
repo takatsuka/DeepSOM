@@ -369,8 +369,8 @@ class DragDrop extends Component {
 
     }
 
-    saveGraphOutput() {
-        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name+"_out"]).then((e) => {
+    saveGraphOutput(opq) {
+        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name+"_out", opq]).then((e) => {
             PrimaryToaster.show({
                 message: (e.status ? "Exported as: "  : "Failed: ") + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
@@ -423,8 +423,9 @@ class DragDrop extends Component {
                 <MenuDivider title="Action" />
                 <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()} />
                 <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
-                <MenuDivider title="Result" />
-                <MenuItem icon="play" text="Save Output" onClick={() => this.saveGraphOutput()} />
+                <MenuDivider title="Save Result as" />
+                <MenuItem icon="play" text="Data" onClick={() => this.saveGraphOutput(false)} />
+                <MenuItem icon="play" text="Opaque" onClick={() => this.saveGraphOutput(true)} />
                 <MenuDivider title="Debug" />
                 <MenuItem icon="database" text="Show Output" onClick={() => this.debugShowOutput()} />
 

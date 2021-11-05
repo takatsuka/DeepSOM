@@ -63,14 +63,14 @@ class ModelService:
 
         return {'status': True, 'msg': 'Training finished.'}
 
-    def export_output(self, name):
+    def export_output(self, name, opaque):
         if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
         
-        if not isinstance(self.model_output, np.ndarray):
+        if not opaque and not isinstance(self.model_output, np.ndarray):
             return {'status': False, 'msg': 'Output data format is not supported for export. Please check the output connection of your graph.'}
 
-        key = self.ds.save_object_data('matrix', name, self.model_output)
+        key = self.ds.save_object_data('opaque' if opaque else 'matrix', name, self.model_output)
         return {'status': True, 'msg': key}
 
     def debug_output_str(self):

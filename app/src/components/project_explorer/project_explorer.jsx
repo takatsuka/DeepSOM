@@ -88,6 +88,18 @@ class ProjectExplorer extends Component {
             this.state.tree[1].childNodes = l
             this.setState({ tree: this.state.tree })
         });
+
+        window.pywebview.api.call_service(this.props.datastore, "fetch_objects", ["opaque"]).then((e) => {
+            let l = e.map((e, id) => ({
+                id: { "type": "opaque", "key": e },
+                hasCaret: false,
+                icon: "data-connection",
+                label: e,
+            }))
+
+            this.state.tree[2].childNodes = l
+            this.setState({ tree: this.state.tree })
+        });
     }
 
     loadWorkspace() {
