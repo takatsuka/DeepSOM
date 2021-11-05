@@ -2,7 +2,11 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuDivider, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Menu, MenuDivider, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay, Switch } from "@blueprintjs/core";
+
+// https://stackoverflow.com/a/52814399
+import { FocusStyleManager } from "@blueprintjs/core";
+FocusStyleManager.onlyShowFocusOnTabs();
 
 import "./creator.scss"
 import Welcome from "../welcome/welcome"
@@ -31,6 +35,7 @@ class Creator extends Component {
       tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]],
       tabs: [],
       datastore: null,
+      dark: true,
     }
   }
 
@@ -57,6 +62,15 @@ class Creator extends Component {
   requestTerminate() {
     window.removeEventListener('pywebviewready', this.launchDatastore)
     window.pywebview.api.terminate()
+  }
+
+  darkModeToggle() {
+    if (this.state.dark) {
+      document.body.classList.remove('bp3-dark');
+    } else {
+      document.body.classList.add('bp3-dark');
+    }
+    this.setState(prevState => ({dark: !prevState.dark}));
   }
 
   embedCard(whatever) {
@@ -127,6 +141,7 @@ class Creator extends Component {
           </Navbar.Group>
 
           <Navbar.Group align={Alignment.RIGHT}>
+            <Switch checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
             <Button className="bp3-minimal" icon="cross" onClick={() => this.requestTerminate()} />
           </Navbar.Group>
         </Navbar>
