@@ -38,7 +38,7 @@ class Graph:
         """
         Constructor of the Graph class representing the deep SOM model.
 
-        Creates the starting input node of ID 0 and final output node of ID 0
+        Creates the starting input node of ID 0 and final output node of ID 1
         upon instantiation. Training flag is initially set to false and can
         be toggled using the training methods.
 

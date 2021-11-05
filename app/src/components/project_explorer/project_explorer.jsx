@@ -153,10 +153,11 @@ class ProjectExplorer extends Component {
     }
 
     handleCtxMenu(item, p, e) {
+        if (item.icon === "folder-close") return
         e.preventDefault()
 
         PrimaryToaster.show({
-            message: "Cannot add link - an identical link exists.",
+            message: "Are you sure you want to delete: " + item.id.key + "?",
             intent: Intent.WARNING,
             action: {
                 text: "Yes",
