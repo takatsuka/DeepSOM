@@ -2,7 +2,6 @@ from __future__ import annotations
 import numpy as np
 from numpy import exp, logical_and, random, outer, linalg, zeros, arange
 from numpy import meshgrid, subtract, multiply, unravel_index, einsum
-import matplotlib.pyplot as plt
 from ..node import Node
 from collections import Counter, defaultdict
 
@@ -370,32 +369,32 @@ class SOM(Node):
         return slot <= 1
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    som = SOM(1, graph=None, size=100, dim=3, sigma=13, lr=0.7, n_iters=15000,
-              nhood=nhood_gaussian, rand_state=True)
+#     som = SOM(1, graph=None, size=100, dim=3, sigma=13, lr=0.7, n_iters=15000,
+#               nhood=nhood_gaussian, rand_state=True)
 
-    file_path = "../datasets/sphere/sphere_64.txt"
-    datastr = [x.strip().split(',') for x in open(file_path).readlines()]
-    data = [[float(c) for c in e] for e in datastr]
+#     file_path = "../datasets/sphere/sphere_64.txt"
+#     datastr = [x.strip().split(',') for x in open(file_path).readlines()]
+#     data = [[float(c) for c in e] for e in datastr]
 
-    dat = np.array(data)
+#     dat = np.array(data)
 
-    som.train(dat)
+#     som.train(dat)
 
-    out = som.get_weights()
+#     out = som.get_weights()
 
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
+#     fig = plt.figure()
+#     ax = fig.add_subplot(projection='3d')
 
-    axes = list(zip(*out))
-    axes_o = list(zip(*data))
-    ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
+#     axes = list(zip(*out))
+#     axes_o = list(zip(*data))
+#     ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
 
-    ax.scatter(*axes, marker='o', s=1)
-    ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
+#     ax.scatter(*axes, marker='o', s=1)
+#     ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
+#     ax.set_xlabel('X')
+#     ax.set_ylabel('Y')
+#     ax.set_zlabel('Z')
 
-    plt.show()
+#     plt.show()

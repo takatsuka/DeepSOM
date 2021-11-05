@@ -37,7 +37,7 @@ class ProjectExplorer extends Component {
                 },
             ],
 
-            data_picker: true,
+            data_picker: false,
             
             dp_type: "",
             dp_msg: "what the f?",
@@ -48,7 +48,7 @@ class ProjectExplorer extends Component {
     }
 
     componentDidMount() {
-
+        
     }
 
     refresh() {

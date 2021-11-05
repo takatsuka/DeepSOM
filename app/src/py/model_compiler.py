@@ -1,9 +1,11 @@
-from pysom.graph.graph import Graph
-from pysom.graph.node import Node
-from pysom.graph.nodes.dist import Dist
-from pysom.graph.nodes.concat import Concat
-from pysom.graph.nodes.som import SOM
-from pysom.graph.nodes.bmu import BMU
+from pysom.graph import Graph
+from pysom.nodes.dist import Dist
+from pysom.nodes.concat import Concat
+from pysom.nodes.som import SOM
+from pysom.nodes.bmu import BMU
+from pysom.node import Node
+from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
+from pysom.nodes.calibrate import Calibrate
 
 template_2_node = {
     "inout": None,

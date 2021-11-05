@@ -96,7 +96,9 @@ class DragDrop extends Component {
             add_link_step: 1,
             advanced_open: false,
             side_menu: false,
-            editing: null
+            editing: null,
+
+            service: null
         };
 
         // Bind functions
@@ -359,6 +361,12 @@ class DragDrop extends Component {
             }
         }
 
+        window.pywebview.api.launch_service("ModelService").then((x) => (
+            this.setState({
+                service: x
+            })
+        ))
+
         var init = this.props.pullInit()
         if (init != null) {
 
@@ -390,6 +398,8 @@ class DragDrop extends Component {
 
 
         this.init_model(false)
+
+
     }
 
     init_model(updateState) {
@@ -557,6 +567,13 @@ class DragDrop extends Component {
         }.bind(this))
     }
 
+    trainModel(){
+        console.log(this.state.service)
+        window.pywebview.api.call_service(this.state.service, "compile", []).then((e) => {
+            console.log(e)
+        });
+    }
+
     render() {
         const add_som_enable = true;
         const add_link_active = this.state.add_link_active;
@@ -586,12 +603,12 @@ class DragDrop extends Component {
 
         const runtimeMenu = (
             <Menu>
-                <MenuItem icon="add-to-artifact" text="Data" disabled />
+                <MenuItem icon="add-to-artifact" text="Input Data" disabled />
                 <Divider />
-                <MenuItem icon="ungroup-objects" text="Allocate" disabled />
-                <MenuItem icon="repeat" text="Restart" disabled />
+                <MenuItem icon="ungroup-objects" text="Compile" disabled />
+                <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
                 <Divider />
-                <MenuItem icon="play" text="Run" disabled />
+                <MenuItem icon="play" text="Save Output" disabled />
             </Menu>
         )
 
