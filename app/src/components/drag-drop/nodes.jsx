@@ -3,7 +3,7 @@ import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
 import { Label, Popover, Collapse, MenuDivider, ProgressBar, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Dialog, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
-
+import { Suggest } from "@blueprintjs/select";
 
 
 export const NodeTemplates = {
@@ -142,7 +142,7 @@ export const NodeTemplates = {
     som: {
         name: "SOM",
         styleClass: "som_node",
-        node_props: { dim: 10, shape: 'rect', inputDim: 3 },
+        node_props: { dim: 10, shape: 'rect', inputDim: 3, train_iter: 1000, distance_func: "euclidean", nhood_func: "gaussian", sigma: 2, lr: 0.7 },
         render: (d) => (
             <div style={{ textAlign: 'center' }}>
 
@@ -166,16 +166,67 @@ export const NodeTemplates = {
                 <Divider />
                 <h4>Dimensions</h4>
                 <NumericInput
-                    value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
+                    value={d.props.inputDim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.inputDim = t))}
                     rightElement={<Button disabled minimal>Input</Button>}
                     fill buttonPosition="left" placeholder="10" />
                 <NumericInput
-                    value={d.props.inputDim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.inputDim = t))}
+                    value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
                     rightElement={<Button disabled minimal>Map Size</Button>}
                     fill buttonPosition="left" placeholder="10" />
 
+                <h4>Training</h4>
+                <NumericInput
+                    value={d.props.train_iter} onValueChange={(t) => editor.wrapSOMS(() => (d.props.train_iter = t))}
+                    rightElement={<Button disabled minimal>Training Iterations</Button>}
+                    fill buttonPosition="left" />
+                <NumericInput
+                    value={d.props.sigma} onValueChange={(t) => editor.wrapSOMS(() => (d.props.sigma = t))} stepSize={0.2}
+                    rightElement={<Button disabled minimal>Sigma</Button>}
+                    fill buttonPosition="left" />
+                <NumericInput
+                    value={d.props.lr} onValueChange={(t) => editor.wrapSOMS(() => (d.props.lr = t))} stepSize={0.1}
+                    rightElement={<Button disabled minimal>Learning Rate</Button>}
+                    fill buttonPosition="left" />
+
                 <h4>Shape</h4>
-                <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => editor.wrapSOMS(() => (d.props.shape = t.target.value))} />
+                <Suggest
+                    inputValueRenderer={(e) => (e)}
+                    itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
+                    items={["rect", "hex"]}
+                    onItemSelect={(e) => editor.wrapSOMS(() => (d.props.shape = e))}
+                    popoverProps={{ minimal: true }}
+                    query={d.props.shape}
+                    onQueryChange={(q) => editor.wrapSOMS(() => (d.props.shape = q))}
+                    itemPredicate={(a, b) => true}
+                    noResults={<MenuItem disabled={true} text="No shape matches." />}
+                />
+
+                <h4>Distance</h4>
+                <Suggest
+                    inputValueRenderer={(e) => (e)}
+                    itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
+                    items={["manhattan", "euclidean", "cosine"]}
+                    onItemSelect={(e) => editor.wrapSOMS(() => (d.props.distance_func = e))}
+                    popoverProps={{ minimal: true }}
+                    query={d.props.distance_func}
+                    onQueryChange={(q) => editor.wrapSOMS(() => (d.props.distance_func = q))}
+                    itemPredicate={(a, b) => true}
+                    noResults={<MenuItem disabled={true} text="No shape matches." />}
+                />
+
+                <h4>N_Hood</h4>
+                <Suggest
+                    inputValueRenderer={(e) => (e)}
+                    itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
+                    items={["mexican", "bubble", "gaussian"]}
+                    onItemSelect={(e) => editor.wrapSOMS(() => (d.props.nhood_func = e))}
+                    popoverProps={{ minimal: true }}
+                    query={d.props.nhood_func}
+                    onQueryChange={(q) => editor.wrapSOMS(() => (d.props.nhood_func = q))}
+                    itemPredicate={(a, b) => true}
+                    noResults={<MenuItem disabled={true} text="No shape matches." />}
+                />
+
             </div>
         )
     },

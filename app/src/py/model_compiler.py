@@ -5,7 +5,9 @@ from pysom.nodes.som import SOM
 from pysom.nodes.bmu import BMU
 from pysom.node import Node
 from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
+from pysom.nodes.som import dist_cosine, dist_euclidean, dist_manhattan
 from pysom.nodes.calibrate import Calibrate
+from pysom.graph import GraphCompileError
 
 template_2_node = {
     "inout": None,
@@ -13,7 +15,7 @@ template_2_node = {
     "bypass": Node,
     "concat": Concat,
     "som": SOM,
-    "get_bmu": BMU
+    # "get_bmu": BMU
 }
 
 
@@ -26,11 +28,27 @@ def concat_props(dict):
     return {"axis": dict['axis']}
 
 
+def som_props(dict):
+    nh = {"gaussian": nhood_gaussian, "bubble": nhood_bubble, "mexican": nhood_mexican}
+    dist = {"cosine": dist_cosine, "euclidean": dist_euclidean, "manhattan": dist_manhattan}
+    return {
+        "size": dict['dim'],
+        "dim" : dict['inputDim'],
+        "sigma": dict['sigma'],
+        "lr": dict['lr'],
+        "n_iters": dict['train_iter'],
+        "hexagonal": dict['shape'] == 'hex',
+        "dist": dist[dict['distance_func']],
+        "nhood": nh[dict['nhood_func']],
+    }
+
+
 node_props = {
     "inout": None,
     "dist": dist_props,
     "bypass": lambda x: {},
     "concat": concat_props,
+    "som": som_props
 }
 
 
@@ -42,20 +60,20 @@ def parse_dict(dict):
     for k, n in nodes.items():
         k = int(k)
         if n['template'] not in template_2_node:
-            raise Exception(f"Node with type {type} is not supported.")
+            raise GraphCompileError(f"Node with type {n['template']} is not supported.")
 
         type = template_2_node[n['template']]
         if type is None:
             continue
 
         pp = node_props[n['template']](n['props'])
-        g.create_with_id(k, type, **pp)
+        g.create_with_id(k, type, pp)
 
 
     for l in links:
         res = g.connect(l['from'], l['to'], l['props']['slot'])
         if not res:
-            raise Exception(f"Unable to connect {l}.")
+            raise GraphCompileError(f"Unable to connect {l}.")
 
     return g
 

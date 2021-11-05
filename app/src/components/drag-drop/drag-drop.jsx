@@ -346,9 +346,9 @@ class DragDrop extends Component {
     }
 
     trainModel() {
-        this.setState({training: true})
+        this.setState({ training: true })
         window.pywebview.api.call_service(this.state.service, "train", []).then((e) => {
-            this.setState({training: false})
+            this.setState({ training: false })
             PrimaryToaster.show({
                 message: e.status ? "Model training finished." : "Failed: " + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
@@ -370,9 +370,9 @@ class DragDrop extends Component {
     }
 
     saveGraphOutput(opq) {
-        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name+"_out", opq]).then((e) => {
+        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name + "_out", opq]).then((e) => {
             PrimaryToaster.show({
-                message: (e.status ? "Exported as: "  : "Failed: ") + e.msg,
+                message: (e.status ? "Exported as: " : "Failed: ") + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
             });
             this.props.fileman.refresh()
@@ -382,7 +382,7 @@ class DragDrop extends Component {
     debugShowOutput() {
         window.pywebview.api.call_service(this.state.service, "debug_output_str", []).then((e) => {
             PrimaryToaster.show({
-                message: (e.status ? ":"  : "Failed: ") + e.msg,
+                message: (e.status ? ":" : "Failed: ") + e.msg,
                 intent: e.status ? Intent.PRIMARY : Intent.DANGER,
             });
             this.props.fileman.refresh()
@@ -571,11 +571,17 @@ class DragDrop extends Component {
                             <p style={{ marginTop: "15px" }}>
                                 To reduce potential bugs, the application will not respond until this is completed.
                             </p>
+
                             <p style={{ marginTop: "15px" }}>
                                 Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
                                 As stated in our license, we are not responsible for any data loss.
                             </p>
-                            <img src={teacher} style={{position: "relative", top: "-220px", left: "420px", marginBottom: "-250px"}} height={250}/>
+
+                            <p style={{ marginTop: "15px" }}>
+                                Looking for faster training? 
+                                Try out our premium cloud training services with a 30-days free trial and only $9.99 per-month after.
+                            </p>
+                            <img src={teacher} style={{ position: "relative", top: "-220px", left: "420px", marginBottom: "-250px" }} height={250} />
                         </div>
                     </Dialog>
 

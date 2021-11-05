@@ -49,7 +49,7 @@ class ModelService:
         
 
         data = self.ds.get_object_data(self.input_key)
-        
+        # return {'status': False, 'msg': data}
         if data is None:
             return {'status': False, 'msg': 'Input data does not exist.'}
 
@@ -57,8 +57,10 @@ class ModelService:
             self.graph.set_input(data)
             self.graph.set_param("training", True)
             self.model_output = self.graph.get_output()
+        except GraphCompileError as e:
+            return {'status': False, 'msg': f"{str(e)}"}
         except Exception as e:
-            return {'status': False, 'msg': f"Error ocurred during evaluations: {str(e)}"}
+            return {'status': False, 'msg': f"Error ocurred during evaluations: {traceback.format_exc()}"}
 
 
         return {'status': True, 'msg': 'Training finished.'}

@@ -23,12 +23,12 @@ class SOMDatastoreService:
         }
 
         self.importers = {
-            "matrix": lambda x: np.frombuffer(base64.b64decode(x), dtype=np.float64),
+            "matrix": lambda x: np.frombuffer(base64.b64decode(x[1]), dtype=np.float64).reshape(x[0]),
             "model": lambda x: x
         }
 
         self.exporters = {
-            "matrix": lambda x: base64.b64encode(x).decode('ascii'),
+            "matrix": lambda x: [x.shape, base64.b64encode(x).decode('ascii')],
             "model": lambda x: x
         }
 
