@@ -13,6 +13,7 @@ class ModelService:
         self.graph = None
         
         self.model_export = None
+        self.model_output = None
 
     def set_input(self, key):
         self.input_key = key
@@ -44,8 +45,27 @@ class ModelService:
         
 
         data = self.ds.object_data(self.input_key)
-        self.graph.set_input(data)
+        if data == None:
+            return {'status': False, 'msg': 'Input data does not exist.'}
+
+        try:
+            self.graph.set_input(data)
+            self.graph.set_param("training", True)
+            self.model_output = self.graph.get_output()
+        except Exception as e:
+            return {'status': False, 'msg': f"Error ocurred during evaluations: {str(e)}"}
 
 
         return {'status': True, 'msg': 'Training finished.'}
+
+    def export_output(self, name):
+        if self.model_output == None:
+            return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
+        
+        if not isinstance(self.model_output, np.ndarray):
+            return {'status': False, 'msg': 'Output data format is not supported for export. Please check the output connection of your graph.'}
+
+        key = self.ds.save_object_data('matrix', name, self.model_output)
+        return {'status': True, 'msg': key}
+
 

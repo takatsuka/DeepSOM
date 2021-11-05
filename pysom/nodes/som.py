@@ -329,7 +329,9 @@ class SOM(Node):
          for curr, iter in enumerate(iters)]
 
     def _evaluate(self):
-        self.train(self.get_input())
+        if self.graph.global_params['training']:
+            self.train(self.get_input())
+            
         self.output_ready = True
 
     def map_labels(self, data, labels):

@@ -48,7 +48,7 @@ class Graph:
         self.start = 1
         self.end = 2
         self.global_params = {
-            "training": False
+            "training": True
         }
         self.loglevel = loglevel
 
@@ -185,13 +185,12 @@ class Graph:
     def get_output(self, slot=1) -> object:
         """
         Getter function to extract the output data of the end Node.
-
-        Effectively retrieves the trained data at the Graph exit point after
-        an iteration of training.
+        
+        This will trigger the evaluation of all node, if the result was not present, 
+        effectively train all attached stateful nodes.
 
         Returns:
-            object: the resultant data object output from the Graph after \
-                    training
+            object: the resulting data object flowed to output node in the Graph
         """
         return self.find_node(self.end).get_output(slot)
 

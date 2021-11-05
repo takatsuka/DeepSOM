@@ -13,6 +13,8 @@ import { PrimaryToaster } from '../common/toaster';
 import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
 
 import { NodeTemplates } from './nodes'
+import teacher from './imgs/training.gif';
+
 
 class DragDropSOM extends Component {
     constructor(props) {
@@ -100,7 +102,8 @@ class DragDrop extends Component {
             side_menu: false,
             editing: null,
 
-            service: null
+            service: null,
+            training: false
         };
 
         // Bind functions
@@ -342,16 +345,9 @@ class DragDrop extends Component {
     }
 
     trainModel() {
+        this.setState({training: true})
         window.pywebview.api.call_service(this.state.service, "train", []).then((e) => {
-
-            <ProgressBar
-                className={classNames("docs-toast-progress", {
-                    [Classes.PROGRESS_NO_STRIPES]: amount >= 100,
-                })}
-                intent={amount < 100 ? Intent.PRIMARY : Intent.SUCCESS}
-                value={amount / 100}
-            />
-
+            this.setState({training: false})
             PrimaryToaster.show({
                 message: e.status ? "Model training finished." : "Failed: " + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
@@ -537,21 +533,23 @@ class DragDrop extends Component {
                     </div>
 
 
-                    <Dialog isOpen={true} title="Training in progress" icon="data-lineage" isCloseButtonShown={false}>
+                    <Dialog isOpen={this.state.training} title="Training in progress" icon="data-lineage" isCloseButtonShown={false}>
                         <div className={Classes.DIALOG_BODY}>
                             <p>
                                 <strong>
                                     Grab a coffee, this won't take long. ☕️
                                     <br />
-
                                 </strong>
-
                             </p>
                             <ProgressBar intent={Intent.PRIMARY} />
                             <p style={{ marginTop: "15px" }}>
                                 To reduce potential bugs, the application will not respond until this is completed.
-                                
                             </p>
+                            <p style={{ marginTop: "15px" }}>
+                                Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
+                                As stated in our license, we are not responsible for any data loss.
+                            </p>
+                            <img src={teacher} style={{marginLeft:'90px'}} height={250}/>
                         </div>
                     </Dialog>
 

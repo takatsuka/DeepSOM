@@ -96,14 +96,7 @@ class SOMDatastoreService:
 
         obj = self.loaders[type](object)
         self.data_instances[des] = {'type': type, 'content': obj}
-        return des
-
-    def object_data(self, key):
-        if key not in self.data_instances:
-            return None
-        item = self.data_instances[key]
-        return item['content']
-        
+        return des        
 
     def get_object(self, key):
         if key not in self.data_instances:
@@ -201,8 +194,21 @@ class SOMDatastoreService:
         self.ws_name = os.path.basename(filename)
         self.ws_path = filename
 
-    # Returns true if the descriptor exists as the name of an open data instance; false if not
+    # Used by other Python services to access pointer to data object
+    def get_object_data(self, key):
+        if key not in self.data_instances:
+            return None
+        item = self.data_instances[key]
+        return item['content']
+    
+    # Used by other Python services to save data object
+    def save_object_data(self, type, key, data):
+        des = self.ensure_unique(key)
+        self.data_instances[des] = {'type': type, 'content': data}
 
+        return des
+
+    # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
         return descriptor in self.data_instances.keys()
 
