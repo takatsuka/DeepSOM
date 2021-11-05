@@ -378,6 +378,16 @@ class DragDrop extends Component {
         });
     }
 
+    debugShowOutput() {
+        window.pywebview.api.call_service(this.state.service, "debug_output_str", []).then((e) => {
+            PrimaryToaster.show({
+                message: (e.status ? ":"  : "Failed: ") + e.msg,
+                intent: e.status ? Intent.PRIMARY : Intent.DANGER,
+            });
+            this.props.fileman.refresh()
+        });
+    }
+
     render() {
         const add_som_enable = true;
         const add_link_active = this.state.add_link_active;
@@ -408,11 +418,14 @@ class DragDrop extends Component {
         const runtimeMenu = (
             <Menu>
                 <MenuItem icon="add-to-artifact" text="Input Data" onClick={() => this.pickInput()} />
-                <Divider />
+                <MenuDivider title="Action" />
                 <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()} />
                 <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
-                <Divider />
+                <MenuDivider title="Result" />
                 <MenuItem icon="play" text="Save Output" onClick={() => this.saveGraphOutput()} />
+                <MenuDivider title="Debug" />
+                <MenuItem icon="database" text="Show Output" onClick={() => this.debugShowOutput()} />
+
             </Menu>
         )
 

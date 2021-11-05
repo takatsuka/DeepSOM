@@ -35,19 +35,22 @@ node_props = {
 
 
 def parse_dict(dict):
-    g = Graph()
+    g = Graph(loglevel=1000)
     nodes = dict['nodes']
     links = dict['connections']
 
-    for k in nodes:
-        n = nodes[k]
-        type = template_2_node[n['template']]
+    for k, n in nodes.items():
+        k = int(k)
+        if n['template'] not in template_2_node:
+            raise Exception(f"Node with type {type} is not supported.")
 
-        if not type:
+        type = template_2_node[n['template']]
+        if type is None:
             continue
 
         pp = node_props[n['template']](n['props'])
-        g.create(node_type=type, props=pp)
+        g.create_with_id(k, type, **pp)
+
 
     for l in links:
         res = g.connect(l['from'], l['to'], l['props']['slot'])

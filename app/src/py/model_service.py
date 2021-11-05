@@ -4,6 +4,8 @@ import re
 import numpy as np
 import webview
 from .model_compiler import parse_dict as do_compile
+from pysom.graph import GraphCompileError
+import traceback
 
 # Model training service
 class ModelService:
@@ -28,8 +30,10 @@ class ModelService:
         g = None
         try:
             g = do_compile(self.model_export)
+        except GraphCompileError as e:
+            return {'status': False, 'msg': f"{str(e)}"}
         except Exception as e:
-            return {'status': False, 'msg': str(e)}
+            return {'status': False, 'msg': f"{str(e)} \n {traceback.format_exc()}"}
 
         self.graph = g
 
@@ -68,5 +72,11 @@ class ModelService:
 
         key = self.ds.save_object_data('matrix', name, self.model_output)
         return {'status': True, 'msg': key}
+
+    def debug_output_str(self):
+        if self.model_output is None:
+            return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
+        
+        return {'status': True, 'msg': str(self.model_output)}
 
 
