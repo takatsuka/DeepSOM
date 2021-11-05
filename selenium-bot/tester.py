@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 
-DELAY = 0.05
+DELAY = 0.2
 
 
 def click_button_by_id(css_id):
@@ -25,6 +25,8 @@ PYSOM_URL = "http://localhost:1234/"
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.maximize_window()
+
+time.sleep(1)
 
 driver.get(PYSOM_URL)
 
