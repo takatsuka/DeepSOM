@@ -119,7 +119,7 @@ def test_get_nodes_multiple():
     nid2 = g.create()
     nodes = g.get_nodes()
 
-    assert (len(nodes) == 4)    
+    assert (len(nodes) == 4)
 
     node1 = g.find_node(nid1)
     node2 = g.find_node(nid2)
