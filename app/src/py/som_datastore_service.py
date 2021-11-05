@@ -23,12 +23,12 @@ class SOMDatastoreService:
         }
 
         self.importers = {
-            "matrix": lambda x: np.frombuffer(base64.b64decode(x), dtype=np.float64),
+            "matrix": lambda x: np.frombuffer(base64.b64decode(x[1]), dtype=np.float64).reshape(x[0]),
             "model": lambda x: x
         }
 
         self.exporters = {
-            "matrix": lambda x: base64.b64encode(x).decode('ascii'),
+            "matrix": lambda x: [x.shape, base64.b64encode(x).decode('ascii')],
             "model": lambda x: x
         }
 
@@ -187,7 +187,9 @@ class SOMDatastoreService:
         files_with_data = {}
         for k, v in self.data_instances.items():
             t = v['type']
+
             # Cry without saying.
+            # This will also skip temp opaque data as they were never mean to be saved
             if t not in dumpers:
                 continue
 

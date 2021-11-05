@@ -151,8 +151,8 @@ def dist_som_concat():
     g.connect(dist1, som1, 1)
     g.connect(dist1, som2, 2)
 
-    bmu1 = g.create(node_type=BMU, props={'output': '2D'})
-    bmu2 = g.create(node_type=BMU, props={'output': '2D'})
+    bmu1 = g.create(node_type=BMU, props={'output': 'w'})
+    bmu2 = g.create(node_type=BMU, props={'output': 'w'})
 
     g.connect(som1, bmu1, 0)
     g.connect(som2, bmu2, 0)
@@ -310,10 +310,10 @@ def train_deep_animal():
     g.connect(dist, som_char, 3)
     g.connect(dist, som_move, 4)
 
-    bmu_size = g.create(BMU, props={"output": "2D"})
-    bmu_legs = g.create(BMU, props={"output": "2D"})
-    bmu_char = g.create(BMU, props={"output": "2D"})
-    bmu_move = g.create(BMU, props={"output": "2D"})
+    bmu_size = g.create(BMU, props={"output": "w"})
+    bmu_legs = g.create(BMU, props={"output": "w"})
+    bmu_char = g.create(BMU, props={"output": "w"})
+    bmu_move = g.create(BMU, props={"output": "w"})
 
     g.connect(som_size, bmu_size, 0)
     g.connect(som_legs, bmu_legs, 0)
@@ -407,11 +407,11 @@ def train_deep_animal_hunt():
     g.connect(dist, som_hunt, 4)
     g.connect(dist, som_move, 5)
 
-    bmu_size = g.create(BMU, props={"output": "2D"})
-    bmu_legs = g.create(BMU, props={"output": "2D"})
-    bmu_char = g.create(BMU, props={"output": "2D"})
-    bmu_hunt = g.create(BMU, props={"output": "2D"})
-    bmu_move = g.create(BMU, props={"output": "2D"})
+    bmu_size = g.create(BMU, props={"output": "w"})
+    bmu_legs = g.create(BMU, props={"output": "w"})
+    bmu_char = g.create(BMU, props={"output": "w"})
+    bmu_hunt = g.create(BMU, props={"output": "w"})
+    bmu_move = g.create(BMU, props={"output": "w"})
 
     g.connect(som_size, bmu_size, 0)
     g.connect(som_legs, bmu_legs, 0)
@@ -498,9 +498,9 @@ def train_deep_animal2():
     g.connect(dist, som2, 2)
     g.connect(dist, som3, 3)
 
-    bmu1 = g.create(BMU, props={"output": "2D"})
-    bmu2 = g.create(BMU, props={"output": "2D"})
-    bmu3 = g.create(BMU, props={"output": "2D"})
+    bmu1 = g.create(BMU, props={"output": "w"})
+    bmu2 = g.create(BMU, props={"output": "w"})
+    bmu3 = g.create(BMU, props={"output": "w"})
   
     g.connect(som1, bmu1, 0)
     g.connect(som2, bmu2, 0)
@@ -583,9 +583,9 @@ def train_deep_animal_layer():
     g.connect(dist, som12, 2)
     g.connect(dist, som13, 3)
 
-    bmu11 = g.create(BMU, props={"output": "2D"})
-    bmu12 = g.create(BMU, props={"output": "2D"})
-    bmu13 = g.create(BMU, props={"output": "2D"})
+    bmu11 = g.create(BMU, props={"output": "w"})
+    bmu12 = g.create(BMU, props={"output": "w"})
+    bmu13 = g.create(BMU, props={"output": "w"})
 
     g.connect(som11, bmu11, 0)
     g.connect(som12, bmu12, 0)
@@ -605,7 +605,7 @@ def train_deep_animal_layer():
     som_flyswim = g.create(SOM, props={"size": 16, "hexagonal": True, "nhood": nhood_bubble, "dim": 2, "sigma": 15, "lr": 0.8, "n_iters": 10000})
 
     g.connect(dist_flyswim_24run, som_flyswim, 1)
-    bmu_flyswim = g.create(BMU, props={"output": "2D"})
+    bmu_flyswim = g.create(BMU, props={"output": "w"})
     g.connect(som_flyswim, bmu_flyswim, 0)
     
     node_24run = g.create(Node)
@@ -615,7 +615,7 @@ def train_deep_animal_layer():
     g.connect(con12, dist_hunt, 1)
     som_hunt = g.create(SOM, props={"size": 16, "dim": 1, "sigma": 15, "lr": 1, "hexagonal": True, "n_iters": 10000})
     g.connect(dist_hunt, som_hunt, 1)
-    bmu_hunt = g.create(BMU, props={"output": "2D"})
+    bmu_hunt = g.create(BMU, props={"output": "w"})
     g.connect(som_hunt, bmu_hunt, 0)
 
     con2 = g.create(Concat, props={"axis": 1})
@@ -628,7 +628,7 @@ def train_deep_animal_layer():
     g.connect(con2, dist_sml_feats, 1)
     som_sml_feats = g.create(SOM, props={"size": 16, "dim": 7, "sigma": 5, "lr": 0.8, "hexagonal": True, "n_iters": 1000})
     g.connect(dist_sml_feats, som_sml_feats, 1)
-    bmu_sml_feats = g.create(BMU, props={"output": "2D"})
+    bmu_sml_feats = g.create(BMU, props={"output": "w"})
     g.connect(som_sml_feats, bmu_sml_feats, 0)
 
     con3 = g.create(Concat, props={"axis": 1})

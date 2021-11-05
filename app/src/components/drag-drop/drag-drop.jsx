@@ -346,9 +346,9 @@ class DragDrop extends Component {
     }
 
     trainModel() {
-        this.setState({training: true})
+        this.setState({ training: true })
         window.pywebview.api.call_service(this.state.service, "train", []).then((e) => {
-            this.setState({training: false})
+            this.setState({ training: false })
             PrimaryToaster.show({
                 message: e.status ? "Model training finished." : "Failed: " + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
@@ -369,10 +369,10 @@ class DragDrop extends Component {
 
     }
 
-    saveGraphOutput() {
-        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name+"_out"]).then((e) => {
+    saveGraphOutput(opq) {
+        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name + "_out", opq]).then((e) => {
             PrimaryToaster.show({
-                message: (e.status ? "Exported as: "  : "Failed: ") + e.msg,
+                message: (e.status ? "Exported as: " : "Failed: ") + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
             });
             this.props.fileman.refresh()
@@ -382,7 +382,7 @@ class DragDrop extends Component {
     debugShowOutput() {
         window.pywebview.api.call_service(this.state.service, "debug_output_str", []).then((e) => {
             PrimaryToaster.show({
-                message: (e.status ? ":"  : "Failed: ") + e.msg,
+                message: (e.status ? ":" : "Failed: ") + e.msg,
                 intent: e.status ? Intent.PRIMARY : Intent.DANGER,
             });
             this.props.fileman.refresh()
@@ -418,12 +418,14 @@ class DragDrop extends Component {
 
         const runtimeMenu = (
             <Menu>
-                <MenuItem icon="add-to-artifact" text="Input Data" onClick={() => this.pickInput()} />
+                <MenuDivider title="Prepare" />
+                <MenuItem icon="add-to-artifact" text="Select Input" onClick={() => this.pickInput()} />
                 <MenuDivider title="Action" />
                 <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()} />
                 <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
-                <MenuDivider title="Result" />
-                <MenuItem icon="play" text="Save Output" onClick={() => this.saveGraphOutput()} />
+                <MenuDivider title="Save Result as" />
+                <MenuItem icon="play" text="Data" onClick={() => this.saveGraphOutput(false)} />
+                <MenuItem icon="play" text="Opaque" onClick={() => this.saveGraphOutput(true)} />
                 <MenuDivider title="Debug" />
                 <MenuItem icon="database" text="Show Output" onClick={() => this.debugShowOutput()} />
 
@@ -433,14 +435,14 @@ class DragDrop extends Component {
         const addMenu = (
             <Menu>
                 <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
-                <Divider />
+                <MenuDivider title="Utility" />
                 <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
                 <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
-                <Divider />
+                <MenuDivider title="Self-organizing maps" />
                 <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
                 <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
                 <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.add_som("minipatch")} />
-                <Divider />
+                <MenuDivider title="Functional" />
                 <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} />
                 <MenuItem icon="function" text="Random Sample" />
 
@@ -569,11 +571,17 @@ class DragDrop extends Component {
                             <p style={{ marginTop: "15px" }}>
                                 To reduce potential bugs, the application will not respond until this is completed.
                             </p>
+
                             <p style={{ marginTop: "15px" }}>
                                 Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
                                 As stated in our license, we are not responsible for any data loss.
                             </p>
-                            <img src={teacher} style={{position: "relative", top: "-220px", left: "420px", marginBottom: "-250px"}} height={250}/>
+
+                            <p style={{ marginTop: "15px" }}>
+                                Looking for faster training? 
+                                Try out our premium cloud training services with a 30-days free trial and only $9.99 per-month after.
+                            </p>
+                            <img src={teacher} style={{ position: "relative", top: "-220px", left: "420px", marginBottom: "-250px" }} height={250} />
                         </div>
                     </Dialog>
 

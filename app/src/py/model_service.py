@@ -49,7 +49,7 @@ class ModelService:
         
 
         data = self.ds.get_object_data(self.input_key)
-        
+        # return {'status': False, 'msg': data}
         if data is None:
             return {'status': False, 'msg': 'Input data does not exist.'}
 
@@ -57,20 +57,22 @@ class ModelService:
             self.graph.set_input(data)
             self.graph.set_param("training", True)
             self.model_output = self.graph.get_output()
+        except GraphCompileError as e:
+            return {'status': False, 'msg': f"{str(e)}"}
         except Exception as e:
-            return {'status': False, 'msg': f"Error ocurred during evaluations: {str(e)}"}
+            return {'status': False, 'msg': f"Error ocurred during evaluations: {traceback.format_exc()}"}
 
 
         return {'status': True, 'msg': 'Training finished.'}
 
-    def export_output(self, name):
+    def export_output(self, name, opaque):
         if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
         
-        if not isinstance(self.model_output, np.ndarray):
+        if not opaque and not isinstance(self.model_output, np.ndarray):
             return {'status': False, 'msg': 'Output data format is not supported for export. Please check the output connection of your graph.'}
 
-        key = self.ds.save_object_data('matrix', name, self.model_output)
+        key = self.ds.save_object_data('opaque' if opaque else 'matrix', name, self.model_output)
         return {'status': True, 'msg': key}
 
     def debug_output_str(self):

@@ -13,10 +13,10 @@ class BMU(Node):
         graph (Graph): the containing Graph instance holding the
                         constructed BMU node
         output (str, optional): defines whether to output the coordinate \
-            vector of the BMU to 1D or 2D. Defaults to '2D'.
+            vector of the BMU to 1D or weight themself. Defaults to 'w'.
 
     Raises:
-        RuntimeError: when the output is not defined as '1D' or '2D'
+        RuntimeError: when the output is not defined as '1D' or 'w'
 
     Attributes:
         uid (str): the unique integer ID of the BMU node instance
@@ -24,14 +24,14 @@ class BMU(Node):
             connection to the current BMU node instance
     """
 
-    def __init__(self, uid: int, graph, output: str = '2D'):
-        if output != '1D' and output != '2D':
-            raise RuntimeError("Output should be either '1D' or '2D' only")
+    def __init__(self, uid: int, graph, output: str = 'w'):
+        if output != '1D' and output != 'w':
+            raise RuntimeError("Output should be either '1D' or 'w' only")
 
         super(BMU, self).__init__(uid, graph)
         self.som = None
         ret_bmu = {'1D': self.get_1D,
-                   '2D': self.get_2D}
+                   'w': self.get_weight}
         self.get_bmu = ret_bmu[output]
 
     def __str__(self) -> str:
@@ -58,8 +58,8 @@ class BMU(Node):
             object: returns the BMU vector/array with shape determined by \
                 the output parameter in the constructor
         """
-        if not self.check_slot(slot):
-            raise RuntimeError("Can only get output from slot 0")
+        if slot == 0:
+            return self
 
         self.som = self.get_input()
 
@@ -83,10 +83,9 @@ class BMU(Node):
         Returns:
             bool: True if the slot is a positive integer
         """
-        if (slot == 0):
-            raise RuntimeError("Slot 0 is reserved for SOMNode")
-        elif (slot < 0):
-            raise RuntimeError("Slots must be positive")
+        if not (0 <= slot <= 1):
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
         else:
             return True
 
@@ -131,9 +130,9 @@ class BMU(Node):
         # return 1D vector of bmu indices.
         return argmin(self.dist_from_weights(data), axis=1)
 
-    def get_2D(self, data: np.ndarray) -> np.ndarray:
+    def get_weight(self, data: np.ndarray) -> np.ndarray:
         """
-        Helper function to return the BMU as a 1-dimensional array.
+        Helper function to return the BMU themself.
 
         Args:
             data (np.ndarray): the array of distances to be checked

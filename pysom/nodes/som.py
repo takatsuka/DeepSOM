@@ -239,12 +239,15 @@ class SOM(Node):
 
     def _check_dims(self, data: np.ndarray) -> bool:
         if self.data_dim != len(data[0]):
-            msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
-            raise ValueError(msg)
+            msg = f"{self} Expecting {self.data_dim} dimensions, input has {len(data[0])}"
+            self.graph._log_ex(msg)
+            return False
+
         for i in range(0, len(data)):
             if self.data_dim != len(data[i]):
-                msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
-                raise ValueError(msg)
+                msg = f"{self} Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
+                self.graph._log_ex(msg)
+                return False
 
         return True
 
@@ -414,6 +417,10 @@ class SOM(Node):
         return None
 
     def check_slot(self, slot: int) -> bool:
-        return slot <= 1
+        if not (0 <= slot <= 1):
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
+        else:
+            return True
 
 
