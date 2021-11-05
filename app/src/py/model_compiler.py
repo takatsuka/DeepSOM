@@ -50,7 +50,9 @@ def parse_dict(dict):
         g.create(node_type=type, props=pp)
 
     for l in links:
-        g.connect(l['from'], l['to'], l['props']['slot'])
+        res = g.connect(l['from'], l['to'], l['props']['slot'])
+        if not res:
+            raise Exception(f"Unable to connect {l}.")
 
     return g
 

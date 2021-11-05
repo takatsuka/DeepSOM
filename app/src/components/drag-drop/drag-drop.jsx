@@ -144,7 +144,7 @@ class DragDrop extends Component {
 
             bypass: {
                 name: "Identity",
-                fixed: true,
+                fixed: false,
                 style: { backgroundColor: "#202B33", width: "50px", height: "50px" },
                 node_props: { dim: 3 },
                 render: (d) => (
@@ -567,11 +567,39 @@ class DragDrop extends Component {
         }.bind(this))
     }
 
-    trainModel(){
+    compileModel() {
         console.log(this.state.service)
-        window.pywebview.api.call_service(this.state.service, "compile", []).then((e) => {
-            console.log(e)
+        window.pywebview.api.call_service(this.state.service, "update_model", [this.export_som()]).then((e) => {
+            window.pywebview.api.call_service(this.state.service, "compile", []).then((e) => {
+                PrimaryToaster.show({
+                    message: e.status ? "Model compiled successfully." : "Failed: " + e.msg,
+                    intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+                });
+            });
         });
+
+    }
+
+    trainModel() {
+        window.pywebview.api.call_service(this.state.service, "train", []).then((e) => {
+            PrimaryToaster.show({
+                message: e.status ? "Model training finished." : "Failed: " + e.msg,
+                intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+            });
+        });
+    }
+
+    pickInput() {
+        this.props.fileman.ask_user_pick_data("Select a data to use for training.","matrix", (k) => {
+            console.log(k)
+            window.pywebview.api.call_service(this.state.service, "set_input", [k]).then((e) => {
+                PrimaryToaster.show({
+                    message: "Training data set to: " + e.msg,
+                    intent: Intent.SUCCESS
+                });
+            });
+        })
+        
     }
 
     render() {
@@ -603,9 +631,9 @@ class DragDrop extends Component {
 
         const runtimeMenu = (
             <Menu>
-                <MenuItem icon="add-to-artifact" text="Input Data" disabled />
+                <MenuItem icon="add-to-artifact" text="Input Data" onClick={() => this.pickInput()}/>
                 <Divider />
-                <MenuItem icon="ungroup-objects" text="Compile" disabled />
+                <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()}/>
                 <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
                 <Divider />
                 <MenuItem icon="play" text="Save Output" disabled />

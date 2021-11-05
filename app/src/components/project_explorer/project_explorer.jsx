@@ -187,6 +187,11 @@ class ProjectExplorer extends Component {
         console.log(e)
     }
 
+    dpConfirm(){
+        this.state.dp_cb(this.state.dp_query)
+        this.setState({data_picker: false})
+    }
+
     render() {
 
         return (
@@ -208,7 +213,7 @@ class ProjectExplorer extends Component {
                             inputValueRenderer={(e) => (e)}
                             itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick}/>}
                             items={this.state.dp_items}
-                            onItemSelect={(e) => console.log(e)}
+                            onItemSelect={(e) => this.setState({ dp_query: e })}
                             popoverProps={{ minimal: true }}
                             query={this.state.dp_query}
                             onQueryChange={(q) => { this.setState({ dp_query: q }) }}
@@ -220,7 +225,7 @@ class ProjectExplorer extends Component {
                             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
 
                                 <Button onClick={() => this.setState({ data_picker: false })}>Cancel</Button>
-                                <Button intent={Intent.SUCCESS} onClick={() => this.state.dp_cb(this.state.query)}>Confirm</Button>
+                                <Button intent={Intent.SUCCESS} onClick={() => this.dpConfirm()}>Confirm</Button>
 
                             </div>
                         </div>

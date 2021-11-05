@@ -15,15 +15,35 @@ class ModelService:
 
     def set_input(self, key):
         self.input_key = key
+        return {'status': True, 'msg': key}
 
     def update_model(self, mod):
         self.model_export = mod
 
-    def compile():
+    def compile(self):
+        if self.model_export == None:
+            return {'status': False, 'msg': 'Missing model data?'}
+        g = None
+        try:
+            g = do_compile(self.model_export)
+        except Exception as e:
+            return {'status': False, 'msg': str(e)}
+
+        self.graph = g
+
+        return {'status': True, 'msg': "good"}
+
+
+    def train(self):
         if self.graph == None:
-            raise Exception("Model not compiled")
+            return {'status': False, 'msg': 'Model not present.'}
+
+        if self.input_key == None:
+            return {'status': False, 'msg': 'Input data not set.'}
+        
+
         
 
 
-        return True
+        return {'status': True, 'msg': 'Training finished.'}
 
