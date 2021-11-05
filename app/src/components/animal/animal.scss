@@ -1,0 +1,113 @@
+.animal-viz-container {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  perspective: 1000px;
+  background: #000046;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%234286f4' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%23ffffd8' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%234177cf' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%23ebffde' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%234068aa' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%23dafee7' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%233f5987' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%23cefcf1' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%233c4a65' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%23c9f7fa' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%23373b44' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%23caf2ff' points='943 900 1210 900 971 687'/%3E%3C/svg%3E"), linear-gradient(to bottom, #000428, #004e92);
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.platform {
+  width: 840px;
+  height: 840px;
+  position: absolute;
+  left: 40%;
+  top: 35%;
+  margin-left: -315px;
+  margin-top: -405px;
+  transition: 0.3s;
+  transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg);
+  transform-style: preserve-3d;
+}
+
+input[type=checkbox]:checked + .platform {
+  margin-top: -310px;
+  transform: rotateX(0) rotateY(0) rotateZ(0);
+}
+
+.tile {
+  width: 200px;
+  height: 200px;
+  float: left;
+  margin: 0 10px 10px 0;
+  position: relative;
+  cursor: pointer;
+}
+
+.tile:before {
+    background-color: #e5e5f7;
+  opacity: 0.8;
+  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #e5e5f7 10px ), repeating-linear-gradient( #22e65055, #22e650 );
+  content: '';
+  height: 100%;
+  position: absolute;
+  transition: 0.3s;
+  transform: translateZ(0px);
+  width: 100%;
+  z-index: 2;
+}
+
+.tile:hover:before {
+    opacity: 1;
+  transform: translateZ(20px);
+}
+
+/* http://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
+.tile:after {
+  box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.3);
+  content: '';
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+  transition: 0.3s;
+  transform: scale(0.8) translateZ(20px);
+  width: 100%;
+  z-index: 1;
+}
+
+.tile:hover:after {
+  opacity: 1;
+  transform: scale(1) translateZ(20px);
+}
+
+.tile:active:before {
+  transform: translateZ(100px) rotateZ(45deg) rotateY(45deg)
+}
+
+.tile:active:after {
+  opacity: 0;
+  transform: translateZ(100px) rotateZ(45deg) rotateY(45deg)
+}
+
+@keyframes pop {
+    0% { transform: translate(0%, 0%) scale(1.25, 0.75); }
+    50% { transform: translate(0%, -25%) scale(1, 1); }
+    55% { transform: translate(0%, -25%) rotate(15deg); }
+    60% { transform: translate(0%, -25%) rotate(-15deg); }
+    65% { transform: translate(0%, -25%) rotate(15deg); }
+    70% { transform: translate(0%, -25%) rotate(-15deg); }
+    100% { transform: translate(0%, 0%) scale(1.25, 0.75); }
+}
+
+.animal-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    transition: 0.3s;
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(-45deg);
+}
+
+.animal-icon {
+    width: 150px;
+    height: 150px;
+    margin: 25px 25px;
+    animation: pop 1.2s infinite;
+}
+
+input[type=checkbox]:checked + .platform .animal-box {
+    transition: 0.3s;
+    transform: rotateX(0) rotateY(0) rotateZ(0);
+}

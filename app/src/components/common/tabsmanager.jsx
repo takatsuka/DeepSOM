@@ -5,6 +5,7 @@ import { NonIdealState } from "@blueprintjs/core";
 import Welcome from "../welcome/welcome"
 import ImageView from "../imageview/imageview"
 import DragDropSOM from "../drag-drop/drag-drop"
+import Animal from "../animal/animal"
 
 class TabsManager extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class TabsManager extends Component {
     componentDidMount() {
 
         this.openTab(<Welcome />, "Welcome to PySOM", true)
+        this.openTab(<Animal />, "Animal", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
