@@ -2,7 +2,8 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup } from "@blueprintjs/core";
+import { Classes, Icon, Intent, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup, Dialog, MenuItem } from "@blueprintjs/core";
+import { Suggest } from "@blueprintjs/select";
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
 import { TAG_INPUT_VALUES } from '@blueprintjs/core/lib/esm/common/classes';
 
@@ -35,6 +36,14 @@ class ProjectExplorer extends Component {
                     childNodes: []
                 },
             ],
+
+            data_picker: true,
+            
+            dp_type: "",
+            dp_msg: "what the f?",
+            dp_query: "",
+            dp_items: [],
+            dp_cb: null
         }
     }
 
@@ -136,7 +145,7 @@ class ProjectExplorer extends Component {
     }
 
     handleDelete(item) {
-        if(item.id.key === null) return
+        if (item.id.key === null) return
 
         window.pywebview.api.call_service(this.props.datastore, "remove_object", [item.id.key]).then((descriptor) => {
             this.refresh()
@@ -160,6 +169,24 @@ class ProjectExplorer extends Component {
         return false
     }
 
+    ask_user_pick_data(message, type, finish) {
+
+        window.pywebview.api.call_service(this.props.datastore, "fetch_objects", [type]).then((e) => {
+            this.setState({
+                data_picker: true,
+                dp_type: type,
+                dp_msg: message,
+                dp_items: e,
+                dp_cb: finish
+            })
+        });
+
+    }
+
+    dpHandleClick(e) {
+        console.log(e)
+    }
+
     render() {
 
         return (
@@ -168,6 +195,37 @@ class ProjectExplorer extends Component {
                     <Button active={true} >{this.state.workspaceName}</Button>
 
                 </ButtonGroup>
+
+                <Dialog isOpen={this.state.data_picker} title="Select a data" onClose={() => this.setState({ data_picker: false })}>
+                    <div className={Classes.DIALOG_BODY}>
+                        <p>
+                            <strong>
+                                {this.state.dp_msg}
+                            </strong>
+                        </p>
+                        <Suggest
+
+                            inputValueRenderer={(e) => (e)}
+                            itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick}/>}
+                            items={this.state.dp_items}
+                            onItemSelect={(e) => console.log(e)}
+                            popoverProps={{ minimal: true }}
+                            query={this.state.dp_query}
+                            onQueryChange={(q) => { this.setState({ dp_query: q }) }}
+                            itemPredicate={(a,b) => b.toLowerCase().includes(a.toLowerCase())}
+                            noResults={<MenuItem disabled={true} text="No results. Maybe import them first?" />}
+                        />
+
+                        <div className={Classes.DIALOG_FOOTER}>
+                            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+
+                                <Button onClick={() => this.setState({ data_picker: false })}>Cancel</Button>
+                                <Button intent={Intent.SUCCESS} onClick={() => this.state.dp_cb(this.state.query)}>Confirm</Button>
+
+                            </div>
+                        </div>
+                    </div>
+                </Dialog>
 
                 <Tree elevation={Elevation.FOUR}
                     onNodeExpand={(x) => (this.updateTree(() => x.isExpanded = true))}
