@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
+import { Label, Popover, Collapse, MenuDivider, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
 
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import "./drag-drop.scss"
@@ -88,6 +88,7 @@ class DragDrop extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            model_name: "?",
             soms: {
 
             },
@@ -145,7 +146,7 @@ class DragDrop extends Component {
                 style: { backgroundColor: "#202B33", width: "50px", height: "50px" },
                 node_props: { dim: 3 },
                 render: (d) => (
-                    <div style={{ textAlign: 'center', marginTop: "-9px", marginLeft:"-9px" }}>
+                    <div style={{ textAlign: 'center', marginTop: "-9px", marginLeft: "-9px" }}>
                         <Icon icon="flow-linear" size={30} />
                     </div>
                 ),
@@ -358,6 +359,26 @@ class DragDrop extends Component {
             }
         }
 
+        var init = this.props.pullInit()
+        if (init != null) {
+
+            window.pywebview.api.call_service(-1, "get_object", [init]).then((e) => {
+                if (e !== null) {
+                    this.import_som(e)
+                }
+                else {
+                    this.init_model(false)
+                }
+
+                this.setState({
+                    model_name: init,
+                    soms: this.state.soms
+                })
+            });
+
+            return
+        }
+
         var restored = this.props.pullState()
 
         if (restored != null && "state" in restored && "links" in restored) {
@@ -367,6 +388,11 @@ class DragDrop extends Component {
             return
         }
 
+
+        this.init_model(false)
+    }
+
+    init_model(updateState) {
         var input = this.create_som("inout")
         input.x = 100
         input.y = 200
@@ -379,7 +405,7 @@ class DragDrop extends Component {
         output.name = "Output"
         output.props.dim = 2
         this.state.soms[output.id] = output
-
+        if (updateState) this.setState({ soms: this.state.soms })
     }
 
     componentWillUnmount() {
@@ -490,10 +516,18 @@ class DragDrop extends Component {
         this.setState({ advanced_open: !this.state.advanced_open });
     }
 
-    import_som(e) {
-        const data = JSON.parse(event.target.value);
-        this.links = data['links'];
-        this.setState({ soms: data['soms'] });
+    closeSideMenu() {
+        this.setState({ side_menu: false, editing: null })
+    }
+
+    openSideMenu(som) {
+        this.setState({ side_menu: true, editing: som.props.node.id })
+    }
+
+    import_som(x) {
+        this.links = x.connections
+        this.i = x.i
+        this.setState({ soms: x.nodes })
     }
 
     export_som() {
@@ -504,23 +538,22 @@ class DragDrop extends Component {
         }
     }
 
-    closeSideMenu() {
-        this.setState({ side_menu: false, editing: null })
-    }
-
-    openSideMenu(som) {
-        this.setState({ side_menu: true, editing: som.props.node.id })
-    }
-
     saveSession() {
+        window.pywebview.api.call_service(-1, "save_object", [this.state.model_name, "model", this.export_som(), true]).then((descriptor) => {
+        });
+    }
+
+    loadSession() {
+
+    }
+
+    saveSessionToFile() {
         window.pywebview.api.save_json_file(this.export_som()).then((e) => (console.log(e)))
     }
 
     loadSessionFromFile() {
         window.pywebview.api.open_json_file().then(function (x) {
-            this.links = x.connections
-            this.i = x.id
-            this.setState({ soms: x.nodes })
+            this.import_som(x)
         }.bind(this))
     }
 
@@ -545,7 +578,9 @@ class DragDrop extends Component {
         const sessionMenu = (
             <Menu>
                 <MenuItem icon="document-share" text="Save" onClick={() => this.saveSession()} />
-                <MenuItem icon="document-open" text="Load" onClick={() => this.loadSessionFromFile()} />
+                <MenuDivider title="External" />
+                <MenuItem icon="document-share" text="Save to file" onClick={() => this.saveSessionToFile()} />
+                <MenuItem icon="document-open" text="Load from file" onClick={() => this.loadSessionFromFile()} />
             </Menu>
         )
 
@@ -584,7 +619,7 @@ class DragDrop extends Component {
                 <div className="submenu">
 
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
-                        <Button disabled={true} >not_so_deep_som</Button>
+                        {/* <Button disabled={true} >not_so_deep_som</Button> */}
                         <Divider />
                         <Popover content={sessionMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
                             <Button className="bp3-minimal" icon="code-block" text="Session" />
@@ -611,8 +646,6 @@ class DragDrop extends Component {
                     <Collapse isOpen={this.state.advanced_open}>
                         <Icon icon="export" /> Export SOM
                         <TextArea id="export_som" value={JSON.stringify({ "soms": this.state.soms, "links": this.links })} growVertically={true} />
-                        <Icon icon="import" /> Import SOM
-                        <TextArea id="import_som" growVertically={true} onChange={this.import_som} />
                     </Collapse>
                 </div>
 

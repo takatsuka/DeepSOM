@@ -14,17 +14,25 @@ class Api:
 
     # Class variables
     services_handle = {
-        'SOMDatastoreService': SOMDatastoreService,
         'SOMScatterviewService': SOMScatterviewService,
         'SOMVisualizationService': SOMVisualizationService,
     }
 
-    services = {}
-    services_n = 0
+    global_services = {
+        'SOMDatastoreService': -1
+    }
+
+    def __init__(self):
+        self.services = {-1: SOMDatastoreService()}
+        self.services_n = 0
 
     def launch_service(self, key):
+        if key in self.global_services:
+            return self.global_services[key]
+
         if key not in self.services_handle:
             return
+
         s = self.services_handle[key]()
 
         sid = self.services_n
@@ -80,6 +88,14 @@ class Api:
         lines = open(filename).readlines()
         return os.path.basename(filename), [l.strip().split(',') for l in lines]
 
+    def open_csv_file_at(self, path):
+        filename = path
+        if not os.path.exists(filename):
+            return None
+
+        lines = open(filename).readlines()
+        return os.path.basename(filename), [l.strip().split(',') for l in lines]
+
     def open_json_file(self):
         filename = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
         if filename == None:
@@ -88,6 +104,14 @@ class Api:
         if len(filename) < 1:
             return None
         filename = filename[0]
+        if not os.path.exists(filename):
+            return None
+
+        fields = json.loads(open(filename).read())
+        return fields
+
+    def open_json_file_at(self, path):
+        filename = path
         if not os.path.exists(filename):
             return None
 

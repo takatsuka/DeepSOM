@@ -35,4 +35,4 @@ d = {'type':'som_cp', 'som':'simple_not_deep_fashion', 'w': SWID, 'h': SHEI,
 
 
 
-open('out.json','w').write(json.dumps(d))
+open('donut.json','w').write(json.dumps(d))

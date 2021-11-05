@@ -72,6 +72,11 @@ class ScatterView3D extends Component {
 
         } else {
             // If there wasn't a previous dataset loaded
+            window.pywebview.api.launch_service("SOMScatterviewService").then((service) => (
+                window.pywebview.api.call_service(service, "set_datastore", [this.props.datastore]).then(() => (
+                    this.setState({ services: service })
+                ))
+            ))
             this.initView();
             this.updateWindow();
         }
@@ -223,13 +228,11 @@ class ScatterView3D extends Component {
 
     // To accept a data file from the upload point on ScatterView
     importDataFile() {
-        window.pywebview.api.launch_service("SOMScatterviewService").then((datastore) => (
-            this.setState({ services: datastore }, () => (
-                window.pywebview.api.call_service(this.state.services, "upload_scatter_dataset", []).then((filename) => (
-                    this.setState({ datasetName: filename, hasDataset: true }, () => (this.drawPlot()))
-                ))
+        if (this.state.services != null) {
+            window.pywebview.api.call_service(this.state.services, "upload_scatter_dataset", []).then((filename) => (
+                this.setState({ datasetName: filename, hasDataset: true }, () => (this.drawPlot()))
             ))
-        ))
+        }
     }
 
     // To accept a weights file from the upload point on ScatterView

@@ -2,13 +2,12 @@ from __future__ import annotations
 import numpy as np
 from numpy import exp, logical_and, random, outer, linalg, zeros, arange
 from numpy import meshgrid, subtract, multiply, unravel_index, einsum
-import matplotlib.pyplot as plt
 from ..node import Node
+# from numba import jit
 from collections import Counter, defaultdict
 
-# @numba.jit(nopython=True)
 
-
+# @jit(nopython=True)
 def exponential_decay(lr: float, curr: int, max_iter: int) -> float:
     """
     Classless utility exponential decay function.
@@ -21,11 +20,14 @@ def exponential_decay(lr: float, curr: int, max_iter: int) -> float:
     Returns:
         float: the exponential decay correction factor
     """
+    if max_iter <= 0:
+        raise ValueError("max_iter must be positive")
+
     # exponential decay to reduce lr as iters progress (also used on sigma)
     return lr / (1 + curr / (max_iter / 2))
 
 
-# @numba.jit(nopython=True)
+# @jit(nopython=True)
 def reduce_params(lr: float, sig: float, curr: int, max_iter: int) -> tuple:
     """
     Classless helper method applying exponential decay to lr and sig.
@@ -44,7 +46,17 @@ def reduce_params(lr: float, sig: float, curr: int, max_iter: int) -> tuple:
         exponential_decay(sig, curr, max_iter)
 
 
-# @numba.jit(nopython=True)
+# helper method to check if bmu coords given are in grid
+def verify_pos(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray) -> bool:
+    x_tran, y_tran = x_mat.transpose(), y_mat.transpose()
+    if bmu[0] >= len(x_mat) or bmu[0] >= len(x_tran):
+        raise ValueError("At least the x coordinate of BMU is out of bounds!")
+    if bmu[1] >= len(y_mat) or bmu[1] >= len(y_tran):
+        raise ValueError("The y coordinate of BMU is out of bounds!")
+    return True
+
+
+# @jit(nopython=True)
 def nhood_gaussian(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
                    sigma: float) -> np.ndarray:
     """
@@ -63,15 +75,15 @@ def nhood_gaussian(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
         np.ndarray: the resultant array after the neighbourhood function is \
             applied
     """
-    # return gaussian nhood for centroid  (sigma decreases as iters progress)
-    # centroid is
+    verify_pos(bmu, x_mat, y_mat)   # check bmu in grid
+    # return gaussian nhood for bmu  (sigma decreases as iters progress)
     alpha_x = exp((-(x_mat - x_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
     # the bmu here
     alpha_y = exp((-(y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
     return (alpha_x * alpha_y).transpose()  # Elementwise
 
 
-# @numba.jit(nopython=True)
+# @jit(nopython=True)
 def nhood_bubble(bmu: tuple, x_neig: np.ndarray, y_neig: np.ndarray,
                  sigma: float) -> np.ndarray:
     """
@@ -92,7 +104,7 @@ def nhood_bubble(bmu: tuple, x_neig: np.ndarray, y_neig: np.ndarray,
     return outer(alpha_x, alpha_y)
 
 
-# @numba.jit(nopython=True)
+# @jit(nopython=True)
 def nhood_mexican(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
                   sigma: float) -> np.ndarray:
     """
@@ -108,53 +120,59 @@ def nhood_mexican(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
         np.ndarray: the resultant array after the neighbourhood function is \
             applied
     """
+    verify_pos(bmu, x_mat, y_mat)  # check bmu in grid
     # return mexican hat nhood for bmu
     m = ((x_mat - x_mat.transpose()[bmu]) ** 2 + (y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2)
     return ((1 - 2 * m) * exp(-m)).transpose()
 
 
-def dist_cosine(x: np.ndarray, w: np.ndarray) -> np.ndarray:
+def dist_cosine(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """
     Utility distance function using cosine distance
 
     Args:
-        x (np.ndarray): the first array
-        w (np.ndarray): the second array
+        data (np.ndarray): the first array
+        weights (np.ndarray): the second array
 
     Returns:
         np.ndarray: array of computed distances based on cosine distance
     """
-    num = (x * w).sum(axis=2)
-    denum = multiply(linalg.norm(w, axis=2), linalg.norm(x))
-    return 1 - num / (denum + 1e-8)
+    if not (isinstance(data, np.ndarray) and isinstance(weights, np.ndarray)):
+        typ = weights if isinstance(data, np.ndarray) else data
+        msg = f"input is {str(type(typ))[7:][:-1]}, expecting 'numpy.ndarray'"
+        raise ValueError(msg)
+
+    num = (data * weights).sum(axis=2)
+    denum = multiply(linalg.norm(weights, axis=2), linalg.norm(data))
+    return 1 - num / (denum + 1 * 10 ** -8)
 
 
-def dist_euclidean(x: np.ndarray, w: np.ndarray) -> np.ndarray:
+def dist_euclidean(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """
     Utility distance function using Euclidean distance
 
     Args:
-        x (np.ndarray): the first array
-        w (np.ndarray): the second array
+        data (np.ndarray): the first array
+        weights (np.ndarray): the second array
 
     Returns:
         np.ndarray: array of computed distances based on Euclidean distance
     """
-    return linalg.norm(subtract(x, w), axis=-1)
+    return linalg.norm(subtract(data, weights), axis=-1)
 
 
-def dist_manhattan(x: np.ndarray, w: np.ndarray) -> np.ndarray:
+def dist_manhattan(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """
     Utility distance function using Manhattan distance
 
     Args:
-        x (np.ndarray): the first array
-        w (np.ndarray): the second array
+        data (np.ndarray): the first array
+        weights (np.ndarray): the second array
 
     Returns:
         np.ndarray: array of computed distances based on Manhattan distance
     """
-    return linalg.norm(subtract(x, w), ord=1, axis=-1)
+    return linalg.norm(subtract(data, weights), ord=1, axis=-1)
 
 
 class SOM(Node):
@@ -218,6 +236,17 @@ class SOM(Node):
     def __str__(self) -> str:
         str_rep = "SOMNode {}".format(self.uid)
         return str_rep
+
+    def _check_dims(self, data: np.ndarray) -> bool:
+        if self.data_dim != len(data[0]):
+            msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
+            raise ValueError(msg)
+        for i in range(0, len(data)):
+            if self.data_dim != len(data[i]):
+                msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
+                raise ValueError(msg)
+
+        return True
 
     def get_weights(self) -> np.ndarray:
         """
@@ -285,7 +314,22 @@ class SOM(Node):
         # weights_correction_ij(curr) is determined by lr and nhood func of bmu at curr iter
         # closer a node is to bmu the more its weights are altered
         # nodes within nhood of bmu altered to look more like the input x
+        """
+       [[x11 y11 z11]      [[wx11 wy11 wz11]                       [[nx1(x11-wx11) nx1(y11-wy11) nx1(z11-wz11)]
+        [x12 y12 z12]   -   [wx12 wy12 wz12]                        [ny1(x12-wx12) ny1(y12-wy12) ny1(z12-wz12)]
+        [x13 y13 y13]       [wx13 wy13 wz13]                        [nz1(x13-wx13) nz1(x13-wz13) nz1(x13-wz13)]]
+
+        [x21 y21 z21]       [wx21 wy21 wz21]     [[nx1 ny1 nz1]    [[nx2(x21-wx21) nx2(y21-wy21) nx2(z21-wz21)]
+        [x22 y22 z22]   -   [wx22 wy22 wz22]   *  [nx2 ny2 nz2]  =  [ny2(x21-wx21) ny2(y22-wy22) ny2(z22-wz22)]
+        [x23 y23 z23]       [wx23 wy23 wz23]      [nx3 ny3 nz3]]    [nz2(x23-wx23) nz2(y23-wy23) nz2(z23-wz23)]]
+
+        [x31 y31 z31]       [wx31 wy31 wz31]                       [[nx3(x31-wx31) nx3(y31-wy31) nx3(z31-wz31)]
+        [x32 y32 z32]   -   [wx32 wy32 wz32]                        [ny3(x32-wx32) ny3(y32-wy32) ny3(z32-wz32)]
+        [x33 y33 z33]]      [wx33 wy33 wz33]]                       [nz3(x33-wx33) nz3(y33-wy33) nz3(z33-wz33)]]
         
+        (3 x 3 x 3)          (3 x 3 x 3)            (3 x 3)                 (3 x 3 x 3)
+        """
+
         self.weights += einsum('ij, ijk->ijk', nhood, x - self.weights)
         """ Example
         X = [0.3 0.6] (input vector)
@@ -318,6 +362,7 @@ class SOM(Node):
         Args:
             data (np.ndarray): The input data to train the SOM on.
         """
+        self._check_dims(data)
         # organizes iters from [0 .. len(data)) for partitions of data
         # e.g. n_iters = 999, len(data) = 256
         # iters = [0 .. 255 0 .. 255 0 .. 255 0 .. 255 0 .. 230]
@@ -371,31 +416,4 @@ class SOM(Node):
 
 
 if __name__ == "__main__":
-
-    som = SOM(1, graph=None, size=100, dim=3, sigma=13, lr=0.7, n_iters=15000,
-              nhood=nhood_gaussian, rand_state=True)
-
-    file_path = "../datasets/sphere/sphere_64.txt"
-    datastr = [x.strip().split(',') for x in open(file_path).readlines()]
-    data = [[float(c) for c in e] for e in datastr]
-
-    dat = np.array(data)
-
-    som.train(dat)
-
-    out = som.get_weights()
-
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
-
-    axes = list(zip(*out))
-    axes_o = list(zip(*data))
-    ax.set_box_aspect((np.ptp(axes[0]), np.ptp(axes[1]), np.ptp(axes[2])))
-
-    ax.scatter(*axes, marker='o', s=1)
-    ax.scatter(*axes_o, marker='o', s=1.4, color="magenta")
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-
-    plt.show()
+    pass

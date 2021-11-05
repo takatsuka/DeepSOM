@@ -30,9 +30,21 @@ class Graph:
                       automatically assigned unique integer ID
     """
 
-    uid = 2
+    uid = 3
 
     def __init__(self, loglevel: int = LOGLEVEL_ERROR):
+        """
+        Constructor of the Graph class representing the deep SOM model.
+
+        Creates the starting input node of ID 0 and final output node of ID 1
+        upon instantiation. Training flag is initially set to false and can
+        be toggled using the training methods.
+
+        Args:
+            loglevel (int, optional): sets the verbosity for debugging. \
+                May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE. \
+                Defaults to LOGLEVEL_ERROR.
+        """
         self.start = 0
         self.end = 1
         self.global_params = {
@@ -41,8 +53,8 @@ class Graph:
         self.loglevel = loglevel
 
         self.nodes = {
-            0: InputContainer(self.start, self),
-            1: Node(self.end, self)
+            1: InputContainer(self.start, self),
+            2: Node(self.end, self)
         }
 
     def _create_node(self, node_type: Type[Node] = None,

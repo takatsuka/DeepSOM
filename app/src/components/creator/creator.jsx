@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Menu, MenuDivider, MenuItem, Position, Button, Divider, ButtonGroup, Tab, Tabs, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
 import "./creator.scss"
 import Welcome from "../welcome/welcome"
@@ -22,16 +22,20 @@ class Creator extends Component {
   constructor(props) {
     super(props)
 
+    this.launchDatastore = this.launchDatastore.bind(this)
+
     this.tabman = React.createRef();
+    this.explorerman = React.createRef();
 
     this.state = {
       tab: "sum", temp_vizData: [[1.0, 1.0, 1.0], [-1.0, -1.0, -1.0]],
-      tabs: []
+      tabs: [],
+      datastore: null,
     }
   }
 
   componentDidMount() {
-
+    window.addEventListener('pywebviewready', this.launchDatastore)
   }
 
   onTabChange(x) {
@@ -43,7 +47,15 @@ class Creator extends Component {
     this.setState({ tabs: list, tab: list[0].id })
   }
 
+  launchDatastore() {
+    window.pywebview.api.launch_service("SOMDatastoreService").then((ds) => {
+      this.setState({ datastore: ds })
+    })
+
+  }
+
   requestTerminate() {
+    window.removeEventListener('pywebviewready', this.launchDatastore)
     window.pywebview.api.terminate()
   }
 
@@ -59,12 +71,15 @@ class Creator extends Component {
 
     const fileMenu = (
       <Menu>
-        <MenuItem icon="label" text="Open Project" />
-        <MenuItem icon="git-repo" text="New Project" />
-        <MenuItem icon="git-push" text="Save Project" />
-        <Divider />
-        <MenuItem icon="layout-auto" text="New SOM" />
-        <MenuItem icon="graph" text="Import Data" />
+        <MenuDivider title="Create" />
+        <MenuItem icon="layout-auto" text="New Model" onClick={() => { this.explorerman.current.newSOM(true) }} />
+        <MenuDivider title="Workspace" />
+        <MenuItem icon="label" text="Open" onClick={() => { this.explorerman.current.loadWorkspace() }} />
+        <MenuItem icon="git-repo" text="New" onClick={() => { this.explorerman.current.createNewWorkspace() }} />
+        <MenuItem icon="git-push" text="Save" onClick={() => { this.explorerman.current.saveWorkspace() }} />
+        <MenuDivider title="Dataset" />
+        <MenuItem icon="database" text="Import Data" onClick={() => { this.explorerman.current.importData() }} />
+        <MenuItem icon="polygon-filter" text="Import Model" onClick={() => { this.explorerman.current.addSOM() }} />
       </Menu>
     )
 
@@ -72,10 +87,10 @@ class Creator extends Component {
       <Menu>
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <Divider />
-        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "Editor", true) }}/>
+        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
         <Divider />
-        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true) }}/>
-        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }}/>
+        <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
+        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
       </Menu>
     )
 
@@ -114,10 +129,12 @@ class Creator extends Component {
         </Navbar>
 
         <div className="detail">
-          <SplitPane split="vertical" minSize={180} style={{height:'calc(100% - 50px)'}} >
+          <SplitPane split="vertical" minSize={180} style={{ height: 'calc(100% - 50px)' }} >
 
             <div className="leftpanel">
-              <ProjectExplorer />
+              <ProjectExplorer ref={this.explorerman} datastore={this.state.datastore}
+                openTab={(a, b, c, d) => this.tabman.current.openTab(a, b, c, d)}
+              />
 
             </div>
 
@@ -126,7 +143,7 @@ class Creator extends Component {
               <div className="submenubar">
                 <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
                   {this.state.tabs.map((t) => (
-                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)}/> </Tab>
+                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)} /> </Tab>
                   ))}
                 </Tabs>
               </div>
@@ -135,8 +152,8 @@ class Creator extends Component {
               <div className="detail-container">
                 <TabsManager ref={this.tabman}
                   activeTab={this.state.tab}
-                  onTabsListChanged={(x) => this.onTabsUpdated(x)} 
-                  onSwitch={(x) => this.onTabChange(x)}/>
+                  onTabsListChanged={(x) => this.onTabsUpdated(x)}
+                  onSwitch={(x) => this.onTabChange(x)} />
               </div>
 
             </div>
