@@ -34,7 +34,6 @@ export const NodeTemplates = {
 
     bypass: {
         name: "Identity",
-        fixed: false,
         style: { backgroundColor: "#202B33", width: "50px", height: "50px" },
         node_props: { dim: 3 },
         render: (d) => (

@@ -23,7 +23,7 @@ class ModelService:
         self.model_export = mod
 
     def compile(self):
-        if self.model_export == None:
+        if self.model_export is None:
             return {'status': False, 'msg': 'Missing model data?'}
         g = None
         try:
@@ -37,15 +37,16 @@ class ModelService:
 
 
     def train(self):
-        if self.graph == None:
+        if self.graph is None:
             return {'status': False, 'msg': 'Model not present.'}
 
-        if self.input_key == None:
+        if self.input_key is None:
             return {'status': False, 'msg': 'Input data not set.'}
         
 
-        data = self.ds.object_data(self.input_key)
-        if data == None:
+        data = self.ds.get_object_data(self.input_key)
+        
+        if data is None:
             return {'status': False, 'msg': 'Input data does not exist.'}
 
         try:
@@ -59,7 +60,7 @@ class ModelService:
         return {'status': True, 'msg': 'Training finished.'}
 
     def export_output(self, name):
-        if self.model_output == None:
+        if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
         
         if not isinstance(self.model_output, np.ndarray):

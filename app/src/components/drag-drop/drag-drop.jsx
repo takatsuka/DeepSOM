@@ -368,6 +368,16 @@ class DragDrop extends Component {
 
     }
 
+    saveGraphOutput() {
+        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name+"_out"]).then((e) => {
+            PrimaryToaster.show({
+                message: (e.status ? "Exported as: "  : "Failed: ") + e.msg,
+                intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+            });
+            this.props.fileman.refresh()
+        });
+    }
+
     render() {
         const add_som_enable = true;
         const add_link_active = this.state.add_link_active;
@@ -402,7 +412,7 @@ class DragDrop extends Component {
                 <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()} />
                 <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
                 <Divider />
-                <MenuItem icon="play" text="Save Output" disabled />
+                <MenuItem icon="play" text="Save Output" onClick={() => this.saveGraphOutput()} />
             </Menu>
         )
 
