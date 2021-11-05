@@ -8,7 +8,7 @@ from time import time
 from py.som_datastore_service import SOMDatastoreService
 from py.som_scatterview_service import SOMScatterviewService
 from py.som_viz_service import SOMVisualizationService
-
+from py.model_service import ModelService
 
 class Api:
 
@@ -16,6 +16,7 @@ class Api:
     services_handle = {
         'SOMScatterviewService': SOMScatterviewService,
         'SOMVisualizationService': SOMVisualizationService,
+        "ModelService": ModelService
     }
 
     global_services = {
@@ -23,7 +24,8 @@ class Api:
     }
 
     def __init__(self):
-        self.services = {-1: SOMDatastoreService()}
+        self.datastore = SOMDatastoreService()
+        self.services = {-1: self.datastore}
         self.services_n = 0
 
     def launch_service(self, key):
@@ -33,7 +35,7 @@ class Api:
         if key not in self.services_handle:
             return
 
-        s = self.services_handle[key]()
+        s = self.services_handle[key](self.datastore)
 
         sid = self.services_n
         self.services[sid] = s

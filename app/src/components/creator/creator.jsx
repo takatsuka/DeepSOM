@@ -80,6 +80,9 @@ class Creator extends Component {
         <MenuDivider title="Dataset" />
         <MenuItem icon="database" text="Import Data" onClick={() => { this.explorerman.current.importData() }} />
         <MenuItem icon="polygon-filter" text="Import Model" onClick={() => { this.explorerman.current.addSOM() }} />
+
+        <MenuDivider title="DEBUG" />
+        <MenuItem icon="database" text="Picker" onClick={() => { this.explorerman.current.ask_user_pick_data("Select a data to do nothing.","matrix", (k) => console.log(k)) }} />
       </Menu>
     )
 
@@ -153,7 +156,8 @@ class Creator extends Component {
                 <TabsManager ref={this.tabman}
                   activeTab={this.state.tab}
                   onTabsListChanged={(x) => this.onTabsUpdated(x)}
-                  onSwitch={(x) => this.onTabChange(x)} />
+                  onSwitch={(x) => this.onTabChange(x)}
+                  fileman={this.explorerman.current} />
               </div>
 
             </div>

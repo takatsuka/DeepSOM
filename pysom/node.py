@@ -123,7 +123,8 @@ class Node:
 
         return self._evaluate()
 
-    # Basic Node can be connected any where
+    # Basic Node can be connected any where - not true, now we only allow 
+    # 0 and 1
     def check_slot(self, slot: int) -> bool:
         """
         A verification method to confirm if a proposed slot ID can be used.
@@ -138,7 +139,7 @@ class Node:
             bool: True if the slot is valid, or False otherwise. \
                   Returns True by default in the Node superclass.
         """
-        return True
+        return 0 <= slot <= 1
 
     # Default method for all concrete classes
     def add_incoming_connection(self, output_node: Node, slot: int) -> bool:

@@ -14,7 +14,7 @@
     "frontend:prod": "parcel build src/index.html --public-url . --no-source-maps -d gui",
     "init": "npm install && run-script-os",
     "init:windows": "virtualenv -p python venv && .\\venv\\Scripts\\pip install -r requirements.txt",
-    "init:default": "virtualenv -p python venv && ./venv/bin/pip install -r requirements.txt",
+    "init:default": "virtualenv -p python venv && ./venv/bin/pip install -r requirements.txt && ./venv/bin/pip install ../.",
     "start": "npm run frontend:dev && run-script-os",
     "start:windows": ".\\venv\\Scripts\\python src\\index.py",
     "start:default": "./venv/bin/python src/index.py",

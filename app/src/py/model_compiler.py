@@ -1,9 +1,11 @@
-from pysom.graph.graph import Graph
-from pysom.graph.node import Node
-from pysom.graph.nodes.dist import Dist
-from pysom.graph.nodes.concat import Concat
-from pysom.graph.nodes.som import SOM
-from pysom.graph.nodes.bmu import BMU
+from pysom.graph import Graph
+from pysom.nodes.dist import Dist
+from pysom.nodes.concat import Concat
+from pysom.nodes.som import SOM
+from pysom.nodes.bmu import BMU
+from pysom.node import Node
+from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
+from pysom.nodes.calibrate import Calibrate
 
 template_2_node = {
     "inout": None,
@@ -33,22 +35,27 @@ node_props = {
 
 
 def parse_dict(dict):
-    g = Graph()
+    g = Graph(loglevel=1000)
     nodes = dict['nodes']
     links = dict['connections']
 
-    for k in nodes:
-        n = nodes[k]
-        type = template_2_node[n['template']]
+    for k, n in nodes.items():
+        k = int(k)
+        if n['template'] not in template_2_node:
+            raise Exception(f"Node with type {type} is not supported.")
 
-        if not type:
+        type = template_2_node[n['template']]
+        if type is None:
             continue
 
         pp = node_props[n['template']](n['props'])
-        g.create(node_type=type, props=pp)
+        g.create_with_id(k, type, **pp)
+
 
     for l in links:
-        g.connect(l['from'], l['to'], l['props']['slot'])
+        res = g.connect(l['from'], l['to'], l['props']['slot'])
+        if not res:
+            raise Exception(f"Unable to connect {l}.")
 
     return g
 

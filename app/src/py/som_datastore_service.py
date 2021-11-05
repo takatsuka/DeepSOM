@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import base64
 import numpy as np
 import webview
 
@@ -18,6 +19,16 @@ class SOMDatastoreService:
 
         self.dumpers = {
             "matrix": lambda x: x.tolist(),
+            "model": lambda x: x
+        }
+
+        self.importers = {
+            "matrix": lambda x: np.frombuffer(base64.b64decode(x), dtype=np.float64),
+            "model": lambda x: x
+        }
+
+        self.exporters = {
+            "matrix": lambda x: base64.b64encode(x).decode('ascii'),
             "model": lambda x: x
         }
 
@@ -96,7 +107,7 @@ class SOMDatastoreService:
 
         obj = self.loaders[type](object)
         self.data_instances[des] = {'type': type, 'content': obj}
-        return des
+        return des        
 
     def get_object(self, key):
         if key not in self.data_instances:
@@ -124,7 +135,7 @@ class SOMDatastoreService:
         return self.ws_name
 
     def load_workspace(self):
-        loaders = self.loaders
+        loaders = self.importers
         self.close_all_instances()
 
         filename = self.open_file()
@@ -163,7 +174,7 @@ class SOMDatastoreService:
         self.save_workspace()
 
     def save_workspace(self, filename=None):
-        dumpers = self.dumpers
+        dumpers = self.exporters
 
         if filename == None:
             filename = self.ws_path
@@ -194,8 +205,21 @@ class SOMDatastoreService:
         self.ws_name = os.path.basename(filename)
         self.ws_path = filename
 
-    # Returns true if the descriptor exists as the name of an open data instance; false if not
+    # Used by other Python services to access pointer to data object
+    def get_object_data(self, key):
+        if key not in self.data_instances:
+            return None
+        item = self.data_instances[key]
+        return item['content']
+    
+    # Used by other Python services to save data object
+    def save_object_data(self, type, key, data):
+        des = self.ensure_unique(key)
+        self.data_instances[des] = {'type': type, 'content': data}
 
+        return des
+
+    # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
         return descriptor in self.data_instances.keys()
 
