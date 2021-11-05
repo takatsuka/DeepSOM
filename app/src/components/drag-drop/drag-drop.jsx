@@ -65,7 +65,7 @@ class DragDropSOM extends Component {
     render() {
         var n = this.props.node
         var t = this.props.template
-        var s = t.style
+        var s = t.styleClass
 
         return (
             <div className="dd-som" id={"ddn_" + n.id}
@@ -74,7 +74,7 @@ class DragDropSOM extends Component {
                 onContextMenu={this.contextMenu.bind(this)}
             >
 
-                <Card style={{ backgroundColor: s.backgroundColor, width: s.width, height: s.height }} interactive={true} elevation={Elevation.THREE}>
+                <Card className={s} interactive={true} elevation={Elevation.THREE}>
                     {t.render(n)}
                     {this.props.parent.state.add_link_active ? (
                         <Button icon="add" intent="success" onClick={() => this.props.parent.add_link_node(n.id)} />

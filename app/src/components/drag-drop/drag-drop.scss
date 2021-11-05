@@ -93,3 +93,54 @@
 .editor-edge-item-slot {
     width: 70px;
 }
+
+// Using ID selector to gai higher priority without !important
+.dd-som[id^="ddn_"] {
+    .inout_node {
+        background-color: #738694;
+        width: 100px;
+        height: 100px;
+    }
+
+    .bypass_node {
+        background-color: #202B33 !important;
+        width: 50px;
+        height: 50px;
+    }
+
+    .get_bmu_node {
+        background-color: #D9822B !important;
+        width: 180px;
+        height: 50px;
+    }
+
+    .dist_node {
+        background-color: #00998C;
+        width: 70px;
+        height: 100px;
+    }
+
+    .concat_node {
+        background-color: #00998C;
+        width: 70px;
+        height: 100px;
+    }
+
+    .som_node {
+        background-color: #137CBD;
+        width: 200px;
+        height: 200px;
+    }
+
+    .sampler_node {
+        background-color: #DB2C6F;
+        width: 190px;
+        height: 140px;
+    }
+
+    .minipatch_node {
+        background-color: #00B3A4;
+        width: 190px;
+        height: 185px;
+    }
+}

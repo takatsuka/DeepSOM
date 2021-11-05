@@ -11,7 +11,7 @@ export const NodeTemplates = {
     inout: {
         name: "Input",
         fixed: true,
-        style: { backgroundColor: "#738694", width: "100px", height: "100px" },
+        styleClass: "inout_node",
         node_props: { dim: 3 },
         render: (d) => (
             <div style={{ textAlign: 'center' }}>
@@ -34,7 +34,7 @@ export const NodeTemplates = {
 
     bypass: {
         name: "Identity",
-        style: { backgroundColor: "#202B33", width: "50px", height: "50px" },
+        styleClass: "bypass_node",
         node_props: { dim: 3 },
         render: (d) => (
             <div style={{ textAlign: 'center', marginTop: "-9px", marginLeft: "-9px" }}>
@@ -51,7 +51,7 @@ export const NodeTemplates = {
 
     get_bmu: {
         name: "get_bmu_",
-        style: { backgroundColor: "#D9822B", width: "180px", height: "50px" },
+        styleClass: "get_bmu_node",
         node_props: { shape: '2d_dis' },
         render: (d) => (
             <div style={{ textAlign: 'center', marginTop: "-7px" }}>
@@ -70,7 +70,7 @@ export const NodeTemplates = {
 
     dist: {
         name: "dist",
-        style: { backgroundColor: "#00998C", width: "70px", height: "100px" },
+        styleClass: "dist_node",
         node_props: { selections: [{ type: "idx", sel: [0, 1] }], axis: 1 },
         render: (d) => (
             <div style={{ textAlign: 'center', marginTop: "15px" }}>
@@ -118,7 +118,7 @@ export const NodeTemplates = {
 
     concat: {
         name: "concat",
-        style: { backgroundColor: "#00998C", width: "70px", height: "100px" },
+        styleClass: "concat_node",
         node_props: { selections: [{ type: "idx", sel: [0, 1] }], axis: 1 },
         render: (d) => (
             <div style={{ textAlign: 'center', marginTop: "15px" }}>
@@ -141,7 +141,7 @@ export const NodeTemplates = {
 
     som: {
         name: "SOM",
-        style: { backgroundColor: "#137CBD", width: "200px", height: "200px" },
+        styleClass: "som_node",
         node_props: { dim: 10, shape: 'rect', inputDim: 3 },
         render: (d) => (
             <div style={{ textAlign: 'center' }}>
@@ -179,7 +179,7 @@ export const NodeTemplates = {
 
     sampler: {
         name: "Sampler",
-        style: { backgroundColor: "#DB2C6F", width: "190px", height: "140px" },
+        styleClass: "sampler_node",
         node_props: { dim: 100 },
         render: (d) => (
             <div style={{ textAlign: 'center' }}>
@@ -208,7 +208,7 @@ export const NodeTemplates = {
 
     minipatch: {
         name: "mini patcher",
-        style: { backgroundColor: "#00B3A4", width: "190px", height: "185px" },
+        styleClass: "minipatch_node",
         node_props: { dim: 100, kernel: 10, stride: 2 },
         render: (d) => (
             <div style={{ textAlign: 'center' }}>
