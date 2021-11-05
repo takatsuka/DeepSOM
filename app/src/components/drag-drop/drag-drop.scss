@@ -95,6 +95,7 @@
 }
 
 // Using ID selector to gai higher priority without !important
+
 .dd-som[id^="ddn_"] {
     .inout_node {
         background-color: #738694;
@@ -103,13 +104,13 @@
     }
 
     .bypass_node {
-        background-color: #202B33 !important;
-        width: 50px;
-        height: 50px;
+        background-color: #202B33;
+        width: 52px;
+        height: 52px;
     }
 
     .get_bmu_node {
-        background-color: #D9822B !important;
+        background-color: #D9822B;
         width: 180px;
         height: 50px;
     }
@@ -143,4 +144,12 @@
         width: 190px;
         height: 185px;
     }
+}
+
+.bp3-dark .dd-som[id^="ddn_"] {
+
+    .bypass_node, .bypass_node:hover {
+        box-shadow: -3px 0px 10px 5px rgba(255, 0, 34, 0.7), 3px 0px 10px 5px rgba(92, 126, 250, 0.8);
+    }
+
 }
