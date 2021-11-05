@@ -503,7 +503,7 @@ class DragDrop extends Component {
                                 <div className={Classes.DIALOG_BODY}>
 
                                     <h3>Fields:</h3>
-                                    {this.state.editing == null ? <></> : this.node_templates[editingNode.template].contextMenu(editingNode)}
+                                    {this.state.editing == null ? <></> : this.node_templates[editingNode.template].contextMenu(editingNode, this)}
 
                                     <Divider />
                                     <h3>Incoming:</h3>

@@ -153,7 +153,7 @@ class ProjectExplorer extends Component {
     }
 
     handleCtxMenu(item, p, e) {
-        // if (item.icon === "folder-close") return
+        if (item.icon === "folder-close") return
         e.preventDefault()
         console.log(item)
         let menu = (
