@@ -36,7 +36,14 @@ class Dist(Node):
         return self.pre_chopped[slot - 1]
 
     def check_slot(self, slot: int) -> bool:
-        return slot <= len(self.sel)
+        if slot < 0:
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
+        
+        if slot > len(self.sel):
+            self.graph._log_ex(f"Slots {slot} was assigned from {self} while only {len(self.sel)} outputs are available")
+
+        return True
 
 
 if __name__ == "__main__":

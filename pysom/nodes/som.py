@@ -414,6 +414,10 @@ class SOM(Node):
         return None
 
     def check_slot(self, slot: int) -> bool:
-        return slot <= 1
+        if not (0 <= slot <= 1):
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
+        else:
+            return True
 
 

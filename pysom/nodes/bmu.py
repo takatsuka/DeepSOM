@@ -58,8 +58,8 @@ class BMU(Node):
             object: returns the BMU vector/array with shape determined by \
                 the output parameter in the constructor
         """
-        if not self.check_slot(slot):
-            raise RuntimeError("Can only get output from slot 0")
+        if slot == 0:
+            return self
 
         self.som = self.get_input()
 
@@ -83,10 +83,9 @@ class BMU(Node):
         Returns:
             bool: True if the slot is a positive integer
         """
-        if (slot == 0):
-            raise RuntimeError("Slot 0 is reserved for SOMNode")
-        elif (slot < 0):
-            raise RuntimeError("Slots must be positive")
+        if not (0 <= slot <= 1):
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
         else:
             return True
 

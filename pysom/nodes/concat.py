@@ -88,10 +88,10 @@ class Concat(Node):
         Returns:
             bool: True if the slot is a positive integer
         """
-        if (slot == 0):
-            raise RuntimeError("Slot 0 is reserved for SOMNode")
-        elif (slot < 0):
-            raise RuntimeError("Slots must be positive")
+
+        if not (0 <= slot <= 1):
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
         else:
             return True
 
