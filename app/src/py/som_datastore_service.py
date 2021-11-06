@@ -138,7 +138,6 @@ class SOMDatastoreService:
         value = self.data_instances.pop(old_key)
         self.data_instances[new_key] = value
         return True
-        
 
     def current_workspace_name(self):
         return self.ws_name

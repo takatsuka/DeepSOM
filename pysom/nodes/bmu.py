@@ -52,7 +52,7 @@ class BMU(Node):
 
         Args:
             slot (int): the slot id of the incoming SOM node. If defined as \
-                        0, then the BMU object itself is returned. 
+                        0, then the BMU object itself is returned.
 
         Returns:
             object: returns the BMU vector/array with BMU data determined by \
@@ -139,4 +139,3 @@ class BMU(Node):
         bmu_idx = self.get_1D(data)
         # return 2D vector of bmu weights.
         return self.som.weights[unravel_index(bmu_idx, self.som.weights.shape[:2])]
-.0

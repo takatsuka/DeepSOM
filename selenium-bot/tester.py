@@ -12,6 +12,7 @@ def click_button_by_id(css_id):
     driver.find_element(By.ID, css_id).click()
     time.sleep(DELAY)
 
+
 def drag_drop_to_location(css_id, x, y):
     elem = driver.find_element(By.ID, css_id)
     start_pos = elem.location
@@ -20,6 +21,7 @@ def drag_drop_to_location(css_id, x, y):
     action = ActionChains(driver)
     action.drag_and_drop_by_offset(elem, x, y).perform()
     time.sleep(DELAY)
+
 
 PYSOM_URL = "http://localhost:1234/"
 
@@ -44,7 +46,7 @@ output_node_btn_id = "ddn_add_2"
 drag_drop_to_location(input_node_id, 250, 150)
 drag_drop_to_location(output_node_id, 1750, 950)
 
-for i in range(3,15):
+for i in range(3, 15):
     click_button_by_id("add-node-btn")
     click_button_by_id("single-som-btn")
 

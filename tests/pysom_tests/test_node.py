@@ -16,9 +16,11 @@ def setup_function():
 def teardown_function():
     pass
 
+
 """
 Getter and setter tests
 """
+
 
 def test_get_id_basic():
     node = Node(1, g)
