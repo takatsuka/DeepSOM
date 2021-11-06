@@ -64,7 +64,7 @@ class Graph:
     def _create_node(self, node_type: Type[Node] = None,
                      props: dict = {}) -> Node:
         if node_type is None:
-            node = Node(self.uid)
+            node = Node(self.uid, self)
         else:
             node = node_type(self.uid, self, **props)
 
@@ -76,17 +76,20 @@ class Graph:
         if self.loglevel < LOGLEVEL_ALLEXCEPTION:
             print(msg)
             return
-        
+
         raise GraphCompileError(msg)
 
-    def create_with_id(self, id: int, node_type: Type[Node] = None, props: dict = {}):
+    def create_with_id(self, id: int, node_type: Type[Node] = None,
+                       props: dict = {}) -> int:
         if id in self.nodes:
             self._log_ex(f"Unable to create, node with {id} already exist.")
-        
+            return -1
+
         node = self._create_node(node_type=node_type, props=props)
         node.uid = id
         self.uid = max(node.uid + 1, self.uid)
         self._add_node(node)
+        return node.uid
 
     def create(self, node_type: Type[Node] = None, props: dict = {}) -> int:
         """
@@ -199,7 +202,7 @@ class Graph:
         back to the caller.
 
         Args:
-            data (object): the data object to be passed and set as the data
+            data (object): the data object to be passed and set as the data \
                            input starting Node
         """
         self.find_node(self.start).data = data
@@ -207,14 +210,23 @@ class Graph:
     def get_output(self, slot=1) -> object:
         """
         Getter function to extract the output data of the end Node.
-        
-        This will trigger the evaluation of all node, if the result was not present,
-        effectively train all attached stateful nodes.
+
+        This will trigger the evaluation of all node, if the result was not
+        present, effectively train all attached stateful nodes.
 
         Returns:
-            object: the resulting data object flowed to output node in the Graph
+            object: the resulting data object flowed to output node in the \
+                    Graph
         """
-        return self.find_node(self.end).get_output(slot)
+        output = None
+        try:
+            output = self.find_node(self.end).get_output(slot)
+        except IndexError:
+            if self.loglevel >= LOGLEVEL_ERROR:
+                msg = f"Cannot request slot {slot}, connection wasn't added \
+                        for it"
+                self._log_ex(msg)
+        return output
 
     def set_param(self, key: str, value: object) -> None:
         """

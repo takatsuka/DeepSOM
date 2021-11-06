@@ -1,4 +1,4 @@
-
+import pytest
 from pysom.graph import Graph
 from pysom.node import Node
 from pysom.nodes.bmu import BMU
@@ -18,15 +18,8 @@ def setup_function():
     g = Graph()
 
 
-<<<<<<< HEAD
-    def test_graph_init(cls):
-        assert g.start == 1
-        assert g.end == 2
-        assert len(g.get_nodes()) == 2
-=======
-def teardown_function():
-    pass
->>>>>>> api-logger-extension
+# def teardown_function():
+#     pass
 
 
 """
@@ -35,14 +28,14 @@ Construction tests
 
 
 def test_graph_init():
-    assert g.start == 0
-    assert g.end == 1
+    assert g.start == 1
+    assert g.end == 2
     assert len(g.get_nodes()) == 2
 
 
 def test_graph_add_single():
     nid = g.create()
-    assert nid > 1
+    assert nid > 2
 
 
 def test_graph_add_single_default():
@@ -95,8 +88,39 @@ def test_graph_add_subtype_som():
     assert (type(g.find_node(nid)) is SOM)
 
 
+def test_graph_custom_id_basic():
+    nid = g.create_with_id(10)
+    assert (nid == 10)
+    assert (g.find_node(10) is not None)
+
+
+def test_graph_custom_id_override_inbuilts():
+    nid1 = g.create_with_id(1)  # Start
+    nid2 = g.create_with_id(2)  # End
+
+    assert (len(g.get_nodes()) == 2)
+    assert (nid1 == -1)
+    assert (nid2 == -1)
+
+    assert (g.find_node(nid1) is None)
+    assert (g.find_node(nid2) is None)
+
+
+def test_graph_custom_id_duplicate():
+    nid1 = g.create_with_id(3)  # Start
+    nid2 = g.create_with_id(3)  # End
+
+    assert (nid1 != -1)
+    assert (nid2 == -1)
+
+    assert (g.find_node(nid1) is not None)
+    assert (g.find_node(nid2) is None)
+
+    assert (len(g.get_nodes()) == 3)
+
+
 """
-Getter Tests
+Getter and Setter Tests
 """
 
 
@@ -137,6 +161,46 @@ def test_get_nodes_multiple():
     assert (nodes[nid2] is node2)
 
 
+def test_extract_output_untrained():
+    g.create_with_id(100)
+    g.set_input(g.find_node(100))
+    g.connect(g.start, g.end, 1)
+
+    end_out = g.get_output(1)
+
+    assert (end_out is not None)  # return type is not strict
+
+
+def test_extract_output_bad_slot():
+    end_out = g.get_output(1)
+    assert (end_out is None)
+
+
+def test_extract_output_identity():
+    end_out = g.get_output(0)
+
+    assert (end_out is g.find_node(g.end))
+
+
+def test_set_param():
+    try:
+        g.set_param("the truth", True)
+    except Exception:
+        pytest.fail("Should have passed")
+
+
+def test_set_param_empty():
+    try:
+        g.set_param("", None)
+    except Exception:
+        pytest.fail("Should have passed")
+
+
+def test_set_param_nonstring():
+    with pytest.raises(Exception):
+        g.set_param(1, "one")
+
+
 """
 Connection Tests
 """
@@ -144,10 +208,6 @@ Connection Tests
 
 def test_graph_connect_default_good():
     assert (g.connect(g.start, g.end, 1) is True)
-
-
-def test_graph_connect_default_reserved():
-    assert (g.connect(g.start, g.end, 0) is False)  # Only for SOM
 
 
 def test_graph_connect_default_self():
@@ -170,6 +230,13 @@ def test_graph_backwards():
     assert (g.connect(g.end, g.start, 1) is True)
 
 
+# This should be mocked honestly...
+def test_bad_connection_default_node():
+    nid = g.create()
+
+    assert (g.connect(nid, g.end, 2) is False)  # Node requires 0 or 1
+
+
 def test_graph_add_connect_single_path():
     nid = g.create()
     start = g.find_node(g.start)
@@ -181,7 +248,7 @@ def test_graph_add_connect_single_path():
     assert (len(end.get_incoming()) == 0)
 
     assert (g.connect(g.start, nid, 1) is True)
-    assert (g.connect(nid, g.end, 2) is True)
+    assert (g.connect(nid, g.end, 1) is True)
 
     assert (len(start.get_incoming()) == 0)
     assert (len(mid.get_incoming()) == 1)
@@ -244,3 +311,39 @@ def test_graph_add_multiple_long_path():
     assert (len(node3.get_incoming()) == 1)
     assert (len(node4.get_incoming()) == 1)
     assert (len(end.get_incoming()) == 1)
+
+
+def test_graph_branched_paths():
+    nid1 = g.create()
+    nid2 = g.create()
+    nid3 = g.create()
+    nid4 = g.create()
+
+    node1 = g.find_node(nid1)
+    node2 = g.find_node(nid2)
+    node3 = g.find_node(nid3)
+    node4 = g.find_node(nid4)
+
+    assert (node1 is not None)
+    assert (node2 is not None)
+    assert (node3 is not None)
+    assert (node4 is not None)
+
+    assert (len(g.get_nodes()) == 6)
+
+    assert (g.connect(g.start, nid1, 1) is True)
+    assert (g.connect(g.start, nid2, 1) is True)
+    assert (g.connect(nid1, nid3, 1) is True)
+    assert (g.connect(nid2, nid4, 1) is True)
+    assert (g.connect(nid3, g.end, 1) is True)
+    assert (g.connect(nid4, g.end, 1) is True)
+
+    start = g.find_node(g.start)
+    end = g.find_node(g.end)
+
+    assert (len(start.get_incoming()) == 0)
+    assert (len(node1.get_incoming()) == 1)
+    assert (len(node2.get_incoming()) == 1)
+    assert (len(node3.get_incoming()) == 1)
+    assert (len(node4.get_incoming()) == 1)
+    assert (len(end.get_incoming()) == 2)
