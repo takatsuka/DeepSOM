@@ -77,7 +77,7 @@ class DragDropSOM extends Component {
                 <Card className={s} interactive={true} elevation={Elevation.THREE}>
                     {t.render(n)}
                     {this.props.parent.state.add_link_active ? (
-                        <Button icon="add" intent="success" onClick={() => this.props.parent.add_link_node(n.id)} />
+                        <Button icon="add" intent="success" onClick={() => this.props.parent.add_link_node(n.id)} id={"ddn_add_" + n.id}/>
                     ) : (
                         <></>
                     )}
@@ -434,17 +434,17 @@ class DragDrop extends Component {
 
         const addMenu = (
             <Menu>
-                <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
+                <MenuItem icon="flow-linear" text="Bypass" id="bypass-btn" onClick={() => this.add_som("bypass")} />
                 <MenuDivider title="Utility" />
-                <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
-                <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
+                <MenuItem icon="one-to-many" text="Distributor" id="distributor-btn" onClick={() => this.add_som("dist")} />
+                <MenuItem icon="many-to-one" text="Concatenator" id="concatenator-btn" onClick={() => this.add_som("concat")} />
                 <MenuDivider title="Self-organizing maps" />
-                <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
-                <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
-                <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.add_som("minipatch")} />
+                <MenuItem icon="layout-skew-grid" text="Single SOM" id="single-som-btn" onClick={() => this.add_som("som")} />
+                <MenuItem icon="heat-grid" text="Sampler" id="sampler-btn" onClick={() => this.add_som("sampler")} />
+                <MenuItem icon="new-grid-item" text="Mini Patcher" id="mini-patcher-btn" onClick={() => this.add_som("minipatch")} />
                 <MenuDivider title="Functional" />
-                <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} />
-                <MenuItem icon="function" text="Random Sample" />
+                <MenuItem icon="function" text="Get BMU" id="get-bmu-btn" onClick={() => this.add_som("get_bmu")} />
+                <MenuItem icon="function" text="Random Sample" id="rand-sample-btn" />
 
 
             </Menu>
@@ -459,7 +459,7 @@ class DragDrop extends Component {
                         {/* <Button disabled={true} >not_so_deep_som</Button> */}
                         <Divider />
                         <Popover content={sessionMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-                            <Button className="bp3-minimal" icon="code-block" text="Session" />
+                            <Button className="bp3-minimal" icon="code-block" text="Session" id="session-btn" />
                         </Popover>
 
                         <Popover content={runtimeMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
@@ -469,14 +469,14 @@ class DragDrop extends Component {
                         <Divider />
 
                         <Popover content={addMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-                            <Button icon="add" text="Add Node" />
+                            <Button icon="add" text="Add Node" id="add-node-btn" />
                         </Popover>
 
                         <Popover content={add_link_content} popoverClassName="bp3-popover-content-sizing" onClose={this.add_link_cancel} interactionKind="CLICK_TARGET_ONLY" isOpen={add_link_active} >
-                            <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active} />
+                            <Button icon="new-link" text="Add Link" onClick={this.add_link_init} active={add_link_active} id="add-link-btn" />
                         </Popover>
 
-                        <Button icon="cog" onClick={this.advanced_toggle}>
+                        <Button icon="cog" onClick={this.advanced_toggle} id="adv-toggle-btn" >
                             {this.state.advanced_open ? "Hide" : "Show"} Advanced Options
                         </Button>
                     </ButtonGroup>
@@ -578,7 +578,7 @@ class DragDrop extends Component {
                             </p>
 
                             <p style={{ marginTop: "15px" }}>
-                                Looking for faster training? 
+                                Looking for faster training?
                                 Try out our premium cloud training services with a 30-days free trial and only $9.99 per-month after.
                             </p>
                             <img src={teacher} style={{ position: "relative", top: "-220px", left: "420px", marginBottom: "-250px" }} height={250} />

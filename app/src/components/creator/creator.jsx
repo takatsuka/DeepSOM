@@ -102,10 +102,10 @@ class Creator extends Component {
 
     const viewMenu = (
       <Menu>
-        
+
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <Divider />
-        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
+        <MenuItem icon="layout-auto" text="Editor" id="menu-editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
         <MenuDivider title="Visualization" />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
         <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
@@ -131,15 +131,15 @@ class Creator extends Component {
             <Navbar.Divider />
 
             <Popover content={fileMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-              <Button className="bp3-minimal" icon="document" text="File" />
+              <Button className="bp3-minimal" icon="document" text="File" id="file-btn" />
             </Popover>
 
             <Popover content={viewMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
-              <Button className="bp3-minimal" icon="control" text="View" />
+              <Button className="bp3-minimal" icon="control" text="View" id="view-btn" />
             </Popover>
 
 
-            <Button className="bp3-minimal" icon="help" text="Help" />
+            <Button className="bp3-minimal" icon="help" text="Help" id="help-btn" />
 
           </Navbar.Group>
 
