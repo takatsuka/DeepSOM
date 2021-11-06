@@ -103,7 +103,8 @@ class DragDrop extends Component {
             editing: null,
 
             service: null,
-            training: false
+            training: false,
+            training_time: 0
         };
 
         // Bind functions
@@ -120,6 +121,9 @@ class DragDrop extends Component {
         this.new_link_nodes = [-1, -1];
         this.links = [];
         this.i = 0;
+
+        this.train_bar_seconds = 8;
+        this.training_apology_seconds = 13;
 
 
         this.node_templates = NodeTemplates
@@ -346,9 +350,16 @@ class DragDrop extends Component {
     }
 
     trainModel() {
-        this.setState({ training: true })
+        this.setState({ training: true, training_time: 0 });
+        let timer = setInterval(() => {
+            this.setState((prevState, props) => ({
+                training_time: prevState.training_time + 0.5
+            }));
+        }, 500);
+
         window.pywebview.api.call_service(this.state.service, "train", []).then((e) => {
-            this.setState({ training: false })
+            this.setState({ training: false });
+            clearInterval(timer);
             PrimaryToaster.show({
                 message: e.status ? "Model training finished." : "Failed: " + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
@@ -567,21 +578,23 @@ class DragDrop extends Component {
                                     <br />
                                 </strong>
                             </p>
-                            <ProgressBar intent={Intent.PRIMARY} />
+                            <ProgressBar intent={Intent.PRIMARY} value={(this.state.training_time % this.train_bar_seconds) / this.train_bar_seconds }/>
                             <p style={{ marginTop: "15px" }}>
                                 To reduce potential bugs, the application will not respond until this is completed.
                             </p>
 
-                            <p style={{ marginTop: "15px" }}>
-                                Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
-                                As stated in our license, we are not responsible for any data loss.
-                            </p>
+                            <div className={this.state.training_time > this.training_apology_seconds ? "" : Classes.SKELETON}>
+                                <p style={{ marginTop: "15px" }}>
+                                    Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
+                                    As stated in our license, we are not responsible for any data loss.
+                                </p>
 
-                            <p style={{ marginTop: "15px" }}>
-                                Looking for faster training?
-                                Try out our premium cloud training services with a 30-days free trial and only $9.99 per-month after.
-                            </p>
-                            <img src={teacher} style={{ position: "relative", top: "-220px", left: "420px", marginBottom: "-250px" }} height={250} />
+                                <p style={{ marginTop: "15px" }}>
+                                    Looking for faster training?
+                                    Try out our premium cloud training services with a 30-days free trial and only $9.99 per-month after.
+                                </p>
+                            </div>
+                            <img src={teacher} style={{ position: "relative", top: "-285px", left: "420px", marginBottom: "-300px" }} height={300} />
                         </div>
                     </Dialog>
 
