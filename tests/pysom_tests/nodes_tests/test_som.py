@@ -1,7 +1,6 @@
-from attr import s
 from pysom.nodes.som import SOM, dist_manhattan, dist_euclidean, dist_cosine, exponential_decay, reduce_params, nhood_gaussian, nhood_mexican, nhood_bubble, meshgrid, arange
 from numpy.testing import assert_array_equal, assert_array_almost_equal, assert_almost_equal
-from numpy import zeros, ones, sqrt, array, linalg, ravel
+from numpy import zeros, sqrt, array, linalg
 import pytest
 
 
