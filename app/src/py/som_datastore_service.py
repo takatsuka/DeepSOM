@@ -131,6 +131,15 @@ class SOMDatastoreService:
             return
         self.data_instances.pop(key)
 
+    def rename_object(self, old_key, new_key):
+        if old_key not in self.data_instances:
+            return False
+        new_key = self.ensure_unique(new_key)
+        value = self.data_instances.pop(old_key)
+        self.data_instances[new_key] = value
+        return True
+        
+
     def current_workspace_name(self):
         return self.ws_name
 
