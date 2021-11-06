@@ -15,8 +15,8 @@ class TestGraph:
         pass
 
     def test_graph_init(cls):
-        assert g.start == 0
-        assert g.end == 1
+        assert g.start == 1
+        assert g.end == 2
         assert len(g.get_nodes()) == 2
 
     def test_graph_add_single(cls):

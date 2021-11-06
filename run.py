@@ -650,3 +650,6 @@ def train_deep_animal_layer():
     out = g.get_output()
     print(out)
     plot_features(size, out)
+
+
+train_animal()

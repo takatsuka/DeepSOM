@@ -78,7 +78,6 @@ def nhood_gaussian(bmu: tuple, x_mat: np.ndarray, y_mat: np.ndarray,
     verify_pos(bmu, x_mat, y_mat)   # check bmu in grid
     # return gaussian nhood for bmu  (sigma decreases as iters progress)
     alpha_x = exp((-(x_mat - x_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
-    # the bmu here
     alpha_y = exp((-(y_mat - y_mat.transpose()[bmu]) ** 2) / (2 * sigma ** 2))
     return (alpha_x * alpha_y).transpose()  # Elementwise
 
@@ -99,8 +98,16 @@ def nhood_bubble(bmu: tuple, x_neig: np.ndarray, y_neig: np.ndarray,
         np.ndarray: the resultant array after the neighbourhood function is \
             applied
     """
+    # won't throw an error if bmu outside range, will just return true/false if in radius
+
+    # In a grid of size 3, if bmu = (1,1)   If sigma = 2,
+    # then bubble returns if sigma = 1.     then bubble returns:
+    # 0 0 0                                 1 1 1
+    # 0 1 0                                 1 1 1
+    # 0 0 0                                 1 1 1
     alpha_x = logical_and(x_neig > bmu[0] - sigma, x_neig < bmu[0] + sigma)
     alpha_y = logical_and(y_neig > bmu[1] - sigma, y_neig < bmu[1] + sigma)
+
     return outer(alpha_x, alpha_y)
 
 
@@ -392,6 +399,8 @@ class SOM(Node):
                 - Key is coordinate tuple (x,y) for the BMU of each row (vector) in data
                 - Value is list [Counter("lab1": count1, "lab2": count2, "lab3": count3)]
         """
+        self._check_dims(data)
+
         label_map = defaultdict(list)
         for neuron, lab in zip(data, labels):
             label_map[self.bmu(neuron)].append(lab)
