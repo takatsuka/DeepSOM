@@ -235,6 +235,8 @@ class SOM(Node):
         self.x_neig = self.y_neig = arange(size).astype(float)  # set x and y to be 0..size
         # arrange x y as horizontal and vert axis
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
+        
+        self.graph = graph
 
         if hexagonal:
             # offset every second row if hexagonal grid used
@@ -408,7 +410,26 @@ class SOM(Node):
             label_map[pos] = Counter(label_map[pos])
         return label_map
 
-    def get_output(self, slot: int) -> Node:
+    def get_output(self, slot: int) -> object:
+        """
+        Getter function to return the trained weights of the SOM.
+
+        Will trigger the training of the SOM if not done so already for the
+        current iteration. May define a slot of 0 for the identity (returns
+        itself), otherwise it will return the trained weights if slot is 1.
+        All other values of slot are invalid and the method will effectively
+        fail in this scenario.
+
+        Args:
+            slot (int): if 0, then the SOM node instance is returned. \
+                        If 1, weights of the SOM node after training is \
+                        returned. Else, slot is invalid and None is returned.
+
+        Returns:
+            object: returns the SOM node if slot is 0. Returns the weights \
+                    of the SOM as an np.ndarray is slot is 1. Returns None \
+                    otherwise.
+        """
         if not self.output_ready:
             self._evaluate()
 
@@ -421,4 +442,22 @@ class SOM(Node):
         return None
 
     def check_slot(self, slot: int) -> bool:
-        return slot <= 1
+        """
+        A verification method to confirm if a proposed slot ID can be used.
+
+        The SOM class may only accept slot value of either 0 or 1.
+        Returns True if it is valid, else False is returned.
+
+        Args:
+            slot (int): a proposed integer slot ID to be checked. May only be
+                        0 or 1.
+
+        Returns:
+            bool: True if the slot is valid, else returns False
+        """
+
+        if not (0 <= slot <= 1):
+            # self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
+        else:
+            return True
