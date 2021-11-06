@@ -1,5 +1,5 @@
 import pytest
-from pysom.graph import Graph
+from pysom.graph import LOGLEVEL_ALLEXCEPTION, Graph, GraphCompileError
 from pysom.node import Node
 from pysom.nodes.bmu import BMU
 from pysom.nodes.calibrate import Calibrate
@@ -18,8 +18,19 @@ def setup_function():
     g = Graph()
 
 
-# def teardown_function():
-#     pass
+def teardown_function():
+    pass
+
+
+"""
+Misc tests
+"""
+
+
+def test_exception_handler():
+    with pytest.raises(GraphCompileError):
+        g2 = Graph(loglevel=LOGLEVEL_ALLEXCEPTION)
+        g2.create_with_id(1)
 
 
 """

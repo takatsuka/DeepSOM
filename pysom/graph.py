@@ -223,8 +223,7 @@ class Graph:
             output = self.find_node(self.end).get_output(slot)
         except IndexError:
             if self.loglevel >= LOGLEVEL_ERROR:
-                msg = f"Cannot request slot {slot}, connection wasn't added \
-                        for it"
+                msg = f"Cannot request slot {slot}, connection wasn't added"
                 self._log_ex(msg)
         return output
 
