@@ -378,7 +378,6 @@ class DragDrop extends Component {
 
     pickInput() {
         this.props.fileman.ask_user_pick_data("Select a data to use for training.", "matrix", (k) => {
-            console.log(k)
             window.pywebview.api.call_service(this.state.service, "set_input", [k]).then((e) => {
                 PrimaryToaster.show({
                     message: "Training data set to: " + e.msg,
@@ -464,7 +463,7 @@ class DragDrop extends Component {
                 <MenuItem icon="new-grid-item" text="Mini Patcher" id="mini-patcher-btn" onClick={() => this.add_som("minipatch")} />
                 <MenuDivider title="Functional" />
                 <MenuItem icon="function" text="Get BMU" id="get-bmu-btn" onClick={() => this.add_som("get_bmu")} />
-                <MenuItem icon="function" text="Random Sample" id="rand-sample-btn" />
+                <MenuItem icon="function" text="Calibrate" onClick={() => this.add_som("calibrate")} />
 
 
             </Menu>

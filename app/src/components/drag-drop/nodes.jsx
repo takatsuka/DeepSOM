@@ -78,6 +78,28 @@ export const NodeTemplates = {
         )
     },
 
+    calibrate: {
+        name: "calibrate",
+        styleClass: "calibrate_node",
+        node_props: { label_key: "" },
+        render: (d) => (
+            <div style={{ textAlign: 'center', marginTop: "-7px" }}>
+                <i style={{ fontSize: '16px' }}>Calibrate()</i>
+            </div>
+        ),
+
+        contextMenu: (d, editor) => (
+            <div>
+                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <Divider />
+                <h4>Label Data</h4>
+                <p>{d.props.label_key == "" ? "Not yet selected." : d.props.label_key}</p>
+                <Button intent={Intent.PRIMARY} onClick={() => editor.props.fileman.ask_user_pick_data("Select a label data from current input.", "matrix",
+                    (k) => editor.wrapSOMS(() => (d.props.label_key = k)))}>Select</Button>
+            </div>
+        )
+    },
+
     dist: {
         name: "dist",
         styleClass: "dist_node",
