@@ -4,7 +4,6 @@ from numpy import array
 from pysom.nodes.bmu import BMU
 from pysom.nodes.som import SOM
 from pysom.graph import Graph
-from pysom.node import Node
 import pytest
 
 
@@ -133,3 +132,11 @@ def test_inputs(resource):
     assert isinstance(found_som, SOM)
     assert found_som == expected_som
     assert_array_equal(found_som.get_input(), data)
+
+
+def test_check_slot(resource):
+    g = resource['graph']
+    bmu = resource['bmu']
+    assert g.find_node(bmu).check_slot(0)
+    assert g.find_node(bmu).check_slot(1)
+    assert not g.find_node(bmu).check_slot(2)

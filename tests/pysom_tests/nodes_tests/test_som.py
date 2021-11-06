@@ -1,6 +1,8 @@
 from pysom.nodes.som import SOM, dist_manhattan, dist_euclidean, dist_cosine, exponential_decay, reduce_params, nhood_gaussian, nhood_mexican, nhood_bubble, meshgrid, arange
 from numpy.testing import assert_array_equal, assert_array_almost_equal, assert_almost_equal
 from numpy import zeros, sqrt, array, linalg
+from pysom.graph import Graph
+import numpy as np
 import pytest
 
 
@@ -296,3 +298,22 @@ def test_slot(som_resource):
     assert som_resource.check_slot(slot=1)
     assert som_resource.check_slot(slot=0)
     assert not som_resource.check_slot(slot=2)
+
+
+@pytest.fixture()
+def g_resource():
+    g = Graph()
+    som = g.create(SOM, props={'size': 3, 'dim': 1})
+    g.connect(g.start, som, 1)
+    g.connect(som, g.end, 1)
+    data = [[0]]
+    g.set_input(data)
+    yield {'graph': g, 'som': som}
+
+
+def test_get_output_slot(g_resource):
+    g = g_resource['graph']
+    som = g_resource['som']
+    assert isinstance(g.find_node(som).get_output(0), SOM)
+    assert isinstance(g.find_node(som).get_output(1), np.ndarray)
+    assert g.find_node(som).get_output(2) is None

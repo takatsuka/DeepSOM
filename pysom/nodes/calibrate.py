@@ -52,7 +52,7 @@ class Calibrate(Node):
         self.som = self.get_input()
         label_map = self.som.map_labels(self.som.get_input(), self.labels)
         
-        if self.test:
+        if self.test is not None:
             return self.calibrate(label_map)
         return label_map
 
@@ -121,7 +121,3 @@ class Calibrate(Node):
                 # else, map most common label (default) to this row in data
                 result.append(default)
         return result
-
-
-if __name__ == "__main__":
-    pass
