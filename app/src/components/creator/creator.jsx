@@ -102,12 +102,15 @@ class Creator extends Component {
 
     const viewMenu = (
       <Menu>
+        
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <Divider />
         <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
-        <Divider />
+        <MenuDivider title="Visualization" />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
         <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
+        <MenuDivider title="Appearance" />
+        <Switch style={{marginLeft:"10px", marginTop:"10px"}} large checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
       </Menu>
     )
 
@@ -141,7 +144,6 @@ class Creator extends Component {
           </Navbar.Group>
 
           <Navbar.Group align={Alignment.RIGHT}>
-            <Switch checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
             <Button className="bp3-minimal" icon="cross" onClick={() => this.requestTerminate()} />
           </Navbar.Group>
         </Navbar>
