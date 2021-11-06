@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 import "./animal.scss";
 
+import { Switch, Button, ButtonGroup } from "@blueprintjs/core";
+
 import bear from '../../../imgs/animal/__bear.png';
 import bird from '../../../imgs/animal/__bird.png';
 import bull from '../../../imgs/animal/__bull.png';
@@ -32,22 +34,23 @@ class AnimalTile extends Component {
     render() {
         let tiles = [];
         for (var i = 0; i < this.props.data.length; i++) {
+            let row = [];
             for (var j = 0; j < this.props.data[i].length; j++) {
                 if (this.props.data[i][j] == null) {
-                    tiles.push(<div class="tile"></div>);
+                    row.push(<div class="tile"></div>);
                 } else {
-                    tiles.push(<div class="tile"><div class="animal-box"><img src={this.props.data[i][j]} class="animal-icon"/></div></div>);
+                    let cell = [];
+                    for (var k = 0; k < this.props.data[i][j].length; k++) {
+                        cell.push(<div class="animal-icon-flex"><img src={this.props.data[i][j][k]} class="animal-icon"/></div>);
+                    }
+                    row.push(<div class="tile"><div class="animal-box">{cell}</div></div>);
                 }
             }
+            tiles.push(<div className="animal-row">{row}</div>);
         }
-        return <div class="animal-viz-container">
-                        <img src={bear}/>
-                  <label for="ossm">Rotation</label>
-                  <input type="checkbox" id="ossm" name="ossm"/>
-                  <div class="platform">
+        return <div class="platform">
                   {tiles}
-                  </div>
-                </div>;
+            </div>;
     }
 }
 
@@ -55,14 +58,16 @@ class Animal extends Component {
     constructor(props) {
         super(props);
         this.shark = this.shark.bind(this);
+        this.projection_toggle = this.projection_toggle.bind(this);
         this.state = {
             data: [
-                [bear, elephant, chicken, null],
-                [bird, bull, cat, null],
-                [turtle, pig, hippo, null],
-                [null, null, null, null]
+                [[bear], [elephant], [chicken], null],
+                [[bird], [bull, gorilla], [cat], null],
+                [[turtle], [pig], [hippo], null],
+                [null, null, null, null],
             ],
-            iter: 0
+            iter: 0,
+            isometric: true,
         };
         this.sharkindex = [
             [3, 0],
@@ -93,7 +98,7 @@ class Animal extends Component {
             iter %= that.sharkindex.length;
 
             idx = that.sharkindex[iter];
-            that.state.data[idx[0]][idx[1]] = shark;
+            that.state.data[idx[0]][idx[1]] = [shark];
 
             that.setState({
                 iter: iter,
@@ -104,11 +109,27 @@ class Animal extends Component {
         }, 150)
     }
 
+    projection_toggle() {
+        if (this.state.isometric) {
+            document.getElementById('animal-viz').classList.remove('isometric');
+        } else {
+            document.getElementById('animal-viz').classList.add('isometric');
+        }
+        this.setState(prevState => ({isometric: !prevState.isometric}));
+    }
+
     render() {
         return <div>
-        <button onClick={this.shark}>Baby shark</button>
+            <div className="submenu">
+                <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
+                    <Button className="bp3-minimal" icon="presentation" text="Baby Shark Mode" onClick={this.shark}/>
+                    <Switch style={{marginLeft:"10px", marginTop:"5px"}} large checked={this.state.isometric} innerLabel="Planar" innerLabelChecked="Isometric" onChange={this.projection_toggle} />
+                </ButtonGroup>
+            </div>
 
-        <AnimalTile data={this.state.data}/>
+            <div className="animal-viz-container isometric" id="animal-viz">
+                <AnimalTile data={this.state.data}/>
+            </div>
 
         </div>;
     }
