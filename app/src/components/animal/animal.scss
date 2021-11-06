@@ -33,6 +33,7 @@
 .isometric .platform {
     margin-top: 0;
     transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg);
+    transform-style: preserve-3d;
 }
 
 .animal-row {
@@ -45,7 +46,6 @@
     flex: 1;
     margin: 0 10px 10px 0;
     position: relative;
-    cursor: pointer;
 }
 
 .tile:before {
@@ -59,37 +59,6 @@
     transform: translateZ(0px);
     width: 100%;
     z-index: 2;
-}
-
-.tile:hover:before {
-    opacity: 1;
-    transform: translateZ(20px);
-}
-/* http://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
-.tile:after {
-    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.3);
-    content: '';
-    height: 100%;
-    opacity: 0;
-    position: absolute;
-    transition: 0.3s;
-    transform: scale(0.8) translateZ(20px);
-    width: 100%;
-    z-index: 1;
-}
-
-.tile:hover:after {
-    opacity: 1;
-    transform: scale(1) translateZ(20px);
-}
-
-.tile:active:before {
-    transform: translateZ(100px) rotateZ(45deg) rotateY(45deg);
-}
-
-.tile:active:after {
-    opacity: 0;
-    transform: translateZ(100px) rotateZ(45deg) rotateY(45deg);
 }
 
 .animal-box {
@@ -117,5 +86,5 @@
 }
 
 .isometric .platform .animal-icon {
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(-45deg);
+    transform: rotateZ(-45deg) rotateY(0deg) rotateX(0deg);
 }
