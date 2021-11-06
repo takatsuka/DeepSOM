@@ -105,7 +105,7 @@ class Creator extends Component {
 
         <MenuItem icon="chat" text="Welcome" onClick={() => { this.tabman.current.openTab(<Welcome />, "Welcome PySOM", true) }} />
         <Divider />
-        <MenuItem icon="layout-auto" text="Editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
+        <MenuItem icon="layout-auto" text="Editor" id="menu-editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
         <MenuDivider title="Visualization" />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
         <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />

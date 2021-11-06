@@ -57,3 +57,5 @@ for i in range(3,15):
     click_button_by_id(output_node_btn_id)
 
     drag_drop_to_location(f"ddn_{i}", 150 * i, 500)
+
+driver.quit()

@@ -434,17 +434,17 @@ class DragDrop extends Component {
 
         const addMenu = (
             <Menu>
-                <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
+                <MenuItem icon="flow-linear" text="Bypass" id="bypass-btn" onClick={() => this.add_som("bypass")} />
                 <MenuDivider title="Utility" />
-                <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
-                <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
+                <MenuItem icon="one-to-many" text="Distributor" id="distributor-btn" onClick={() => this.add_som("dist")} />
+                <MenuItem icon="many-to-one" text="Concatenator" id="concatenator-btn" onClick={() => this.add_som("concat")} />
                 <MenuDivider title="Self-organizing maps" />
-                <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
-                <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
-                <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.add_som("minipatch")} />
+                <MenuItem icon="layout-skew-grid" text="Single SOM" id="single-som-btn" onClick={() => this.add_som("som")} />
+                <MenuItem icon="heat-grid" text="Sampler" id="sampler-btn" onClick={() => this.add_som("sampler")} />
+                <MenuItem icon="new-grid-item" text="Mini Patcher" id="mini-patcher-btn" onClick={() => this.add_som("minipatch")} />
                 <MenuDivider title="Functional" />
-                <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} />
-                <MenuItem icon="function" text="Random Sample" />
+                <MenuItem icon="function" text="Get BMU" id="get-bmu-btn" onClick={() => this.add_som("get_bmu")} />
+                <MenuItem icon="function" text="Random Sample" id="rand-sample-btn" />
 
 
             </Menu>
