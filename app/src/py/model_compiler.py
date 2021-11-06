@@ -9,26 +9,29 @@ from pysom.nodes.som import dist_cosine, dist_euclidean, dist_manhattan
 from pysom.nodes.calibrate import Calibrate
 from pysom.graph import GraphCompileError
 
+import numpy as np
+
 template_2_node = {
     "inout": None,
     "dist": Dist,
     "bypass": Node,
     "concat": Concat,
     "som": SOM,
-    "get_bmu": BMU
+    "get_bmu": BMU,
+    "calibrate": Calibrate
 }
 
 
-def dist_props(dict):
+def dist_props(dict, *_):
     axis = dict['axis']
     return {"selections": [(axis, k['sel']) for k in dict['selections']]}
 
 
-def concat_props(dict):
+def concat_props(dict, *_):
     return {"axis": dict['axis']}
 
 
-def som_props(dict):
+def som_props(dict, *_):
     nh = {"gaussian": nhood_gaussian,
           "bubble": nhood_bubble, "mexican": nhood_mexican}
     dist = {"cosine": dist_cosine, "euclidean": dist_euclidean,
@@ -45,13 +48,26 @@ def som_props(dict):
     }
 
 
-def bmu_props(dict):
+def bmu_props(dict, *_):
     output = {'index': '1D', 'weights': 'w'}
 
     return {
         "output": output[dict['shape']],
     }
 
+def calibrate_props(dict, ds, n, *_):
+    key = dict['label_key']
+    dat = ds.get_object_data(key)
+
+    if dat is None:
+        raise GraphCompileError(f"Data object {key} expected by {n['name']} is missing.")
+
+    if not isinstance(dat, np.ndarray):
+        raise GraphCompileError(f"Data object {key} expected by {n['name']}: bad format. {str(dat.__class__)}")
+
+    return {
+        "labels": dat.reshape(len(dat)).tolist()
+    }
 
 node_props = {
     "inout": None,
@@ -59,11 +75,12 @@ node_props = {
     "bypass": lambda x: {},
     "concat": concat_props,
     "som": som_props,
-    "get_bmu": bmu_props
+    "get_bmu": bmu_props,
+    "calibrate": calibrate_props
 }
 
 
-def parse_dict(dict):
+def parse_dict(dict, ds):
     g = Graph(loglevel=1000)
     nodes = dict['nodes']
     links = dict['connections']
@@ -78,7 +95,7 @@ def parse_dict(dict):
         if type is None:
             continue
 
-        pp = node_props[n['template']](n['props'])
+        pp = node_props[n['template']](n['props'], ds, n)
         g.create_with_id(k, type, pp)
 
     for l in links:

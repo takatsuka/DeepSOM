@@ -30,7 +30,7 @@ class ModelService:
             return {'status': False, 'msg': 'Missing model data?'}
         g = None
         try:
-            g = do_compile(self.model_export)
+            g = do_compile(self.model_export, self.ds)
         except GraphCompileError as e:
             return {'status': False, 'msg': f"{str(e)}"}
         except Exception as e:
