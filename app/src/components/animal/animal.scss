@@ -98,8 +98,11 @@
     height: 100%;
     z-index: 10;
     display: grid;
-    grid-gap: 1vh;
-    grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
+}
+
+.animal-box.tight {
+    grid-template-columns: repeat(auto-fit, minmax(33%, 1fr));
 }
 
 .animal-icon {

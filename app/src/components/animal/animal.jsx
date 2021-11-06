@@ -37,18 +37,25 @@ class AnimalTile extends Component {
             let row = [];
             for (var j = 0; j < this.props.data[i].length; j++) {
                 if (this.props.data[i][j] == null) {
-                    row.push(<div class="tile"></div>);
+                    row.push(<div className="tile"></div>);
                 } else {
                     let cell = [];
+
                     for (var k = 0; k < this.props.data[i][j].length; k++) {
-                        cell.push(<div class="animal-icon"><img src={this.props.data[i][j][k]}/></div>);
+                        cell.push(<div className="animal-icon"><img src={this.props.data[i][j][k]}/></div>);
                     }
-                    row.push(<div class="tile"><div class="animal-box">{cell}</div></div>);
+
+                    if (this.props.data[i][j].length <= 4) {
+                        row.push(<div className="tile"><div className="animal-box">{cell}</div></div>);
+                    } else {
+                        // tight layout if animals > 4
+                        row.push(<div className="tile"><div className="animal-box tight">{cell}</div></div>);
+                    }
                 }
             }
             tiles.push(<div className="animal-row">{row}</div>);
         }
-        return <div class="platform">
+        return <div className="platform">
                   {tiles}
             </div>;
     }
@@ -62,8 +69,8 @@ class Animal extends Component {
         this.state = {
             data: [
                 [[bear], [elephant], [chicken], null],
-                [[bird], [bull, gorilla, pig, octopus], [cat], null],
-                [[turtle], [pig], [hippo], null],
+                [[bird], [bull, gorilla, pig, bull, gorilla, pig, bull, gorilla, pig], [cat], null],
+                [[turtle], [hen, hippo, elephant, duck, dog, pig], [hippo, elephant, duck, dog], null],
                 [null, null, null, null],
             ],
             iter: 0,
