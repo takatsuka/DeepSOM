@@ -28,9 +28,10 @@ pipelines:
             image: node
             name: NPM
             script:
-              - cd app
-              - apt-get update
-              - apt-get install python3-pip -y
-              - pip3 install virtualenv
-              - npm run init
-              - timeout 1m npm run dev || [ $? -eq 124 ] && echo time limit reached
+                - echo "temporarily disabled"
+        #       - cd app
+        #       - apt-get update
+        #       - apt-get install python3-pip -y
+        #       - pip3 install virtualenv
+        #       - npm run init
+        #       - timeout 1m npm run dev || [ $? -eq 124 ] && echo time limit reached
