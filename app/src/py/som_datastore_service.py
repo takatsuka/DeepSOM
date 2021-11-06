@@ -137,7 +137,7 @@ class SOMDatastoreService:
 
         if old_key not in self.data_instances:
             return {"status": False, "msg": "Object does not exist."}
-        
+
         if new_key in self.data_instances:
             return {"status": False, "msg": "New key already exist."}
 
@@ -231,7 +231,7 @@ class SOMDatastoreService:
             return None
         item = self.data_instances[key]
         return item['content']
-    
+
     # Used by other Python services to save data object
     def save_object_data(self, type, key, data):
         des = self.ensure_unique(key)

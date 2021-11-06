@@ -218,6 +218,15 @@ class DragDrop extends Component {
     }
 
     push_link() {
+        if(this.new_link_nodes[0] === this.new_link_nodes[1]) {
+            PrimaryToaster.show({
+                message: "Cannot add link - self loop not allowed.",
+                intent: Intent.DANGER,
+            });
+
+            return
+        }
+
         if (this.links.some(l => (l.from == this.new_link_nodes[0] && l.to == this.new_link_nodes[1]))) {
             PrimaryToaster.show({
                 message: "Cannot add link - an identical link exists.",
@@ -266,7 +275,7 @@ class DragDrop extends Component {
     }
 
     remove_link(lk) {
-        this.links = this.links.filter(l => (l.from !== lk.from && l.to !== lk.to))
+        this.links = this.links.filter(l => !(l.from === lk.from && l.to === lk.to))
         this.setState({}) // force render
     }
 
