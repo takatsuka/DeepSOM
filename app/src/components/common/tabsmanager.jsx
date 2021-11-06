@@ -21,7 +21,6 @@ class TabsManager extends Component {
     componentDidMount() {
 
         this.openTab(<Welcome />, "Welcome to PySOM", true)
-        this.openTab(<Animal />, "Animal", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
