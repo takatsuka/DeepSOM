@@ -81,7 +81,28 @@ class Graph:
 
     def create_with_id(self, id: int, node_type: Type[Node] = None,
                        props: dict = {}) -> int:
-        if id in self.nodes:
+        """
+        Helper function to create a vertex with defined id in the Graph.
+
+        The conditions of create() also apply here, except the graph attempts
+        to create a Node with an id matching the user provided id. Will not
+        create the node if the provided id is already assigned to a node
+        attached to the graph. Else, the node is created, and added to the
+        graph and the same id is returned.
+
+        Args:
+            id (int): the id to be prescribed to the generated Node.
+            node_type (Type[Node], optional): [description]. Defaults to None.
+            props (dict, optional): property parameters that may be unpacked
+                                    and interpreted by the constructor of the
+                                    Node. Defaults to an empty dictionary.
+
+        Returns:
+            int: the integer id of the newly created Node. Will not be \
+                 negative, or smaller than previously generated Node ids if
+                 valid. If invalid, then a value of -1 is returned.
+        """
+        if id in self.nodes.keys():
             self._log_ex(f"Unable to create, node with {id} already exist.")
             return -1
 
@@ -93,7 +114,7 @@ class Graph:
 
     def create(self, node_type: Type[Node] = None, props: dict = {}) -> int:
         """
-        Helper function to create a vertex in the graph.
+        Helper function to create a vertex in the Graph.
 
         A node type may be specified to define custom behaviour of the graph
         node. If set to None, then it will default to the basic Node class.
@@ -108,7 +129,7 @@ class Graph:
                                               a parent Node instance.
             props (dict, optional): property parameters that may be unpacked
                                     and interpreted by the constructor of the
-                                    Node. Defaults to None.
+                                    Node. Defaults to an empty dictionary.
 
         Returns:
             int: the automatically assigned unique integer ID of the node
@@ -147,9 +168,8 @@ class Graph:
             Node: the matching Node object with an ID matching the provided \
                   uid. Will return None if no suitable match is found.
         """
-        for node in self.nodes.values():
-            if node.get_id() == uid:
-                return node
+        if uid in self.nodes.keys():
+            return self.nodes[uid]
         return None
 
     def connect(self, uid_in: int, uid_out: int, slot: int) -> bool:
@@ -172,7 +192,9 @@ class Graph:
 
         Returns:
             bool: True if an edge was able to be created. False if any node \
-                  could not be found, or if the provided IDs were equal
+                  could not be found, or if the provided IDs were equal, or \
+                  if the connection could not be established between the \
+                  nodes.
         """
         if uid_in == uid_out:
             self._log_ex(f"Can not connect to node itself: {uid_in}")
@@ -214,9 +236,14 @@ class Graph:
         This will trigger the evaluation of all node, if the result was not
         present, effectively train all attached stateful nodes.
 
+        Args:
+            slot (int, optional): the output slot of the finishing node \
+                                  of the Graph instance. Defaults to 1.
+
         Returns:
             object: the resulting data object flowed to output node in the \
-                    Graph
+                    Graph. Returns None if the output could not be retrieved \
+                    due to a malformed Graph or Node(s) structure.
         """
         output = None
         try:
@@ -225,6 +252,7 @@ class Graph:
             if self.loglevel >= LOGLEVEL_ERROR:
                 msg = f"Cannot request slot {slot}, connection wasn't added"
                 self._log_ex(msg)
+                return None
         return output
 
     def set_param(self, key: str, value: object) -> None:
@@ -232,7 +260,7 @@ class Graph:
         Wrapper functionality to set property of the Graph to a value.
 
         Key should be a string value but value can be of any generic type.
-        If key is not a string, a RuntimeError is raised.
+        If key is not a string, a GraphCompileError is raised.
         Used to toggle or manage states in Graph. Useful to enforce or
         restrict certain behaviour during training time or other busy periods.
         If key is not an existing property in Graph, then it will be created
@@ -243,10 +271,9 @@ class Graph:
             value (object): the associated value pair for the provided key
 
         Raises:
-            RuntimeError: [description]
+            GraphCompileError: [description]
         """
         if not isinstance(key, str):
             raise GraphCompileError("Parameter key should be of a string type")
 
         self.global_params[key] = value
-        # TODO: Update nodes if necessary

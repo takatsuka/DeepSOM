@@ -112,7 +112,8 @@ class Node:
 
         Args:
             slot (int): the slot ID representing a stream of data where the
-                        output is to be passed down
+                        output is to be passed down. If set to 0, then the
+                        Node object itself is returned.
 
         Returns:
             object: the data object to be passed down the edge identified by \
@@ -131,9 +132,12 @@ class Node:
 
         Typically deferred to implementing classes to manage whether a slot ID
         can be used when a connection is to be established between two nodes.
+        A Node object can only accept two slot values to enforce multiplicity
+        constraints of Node connectivity.
 
         Args:
-            slot (int): a proposed integer slot ID to be checked
+            slot (int): a proposed integer slot ID to be checked. Can only be
+                        0 or 1.
 
         Returns:
             bool: True if the slot is valid, or False otherwise. \
