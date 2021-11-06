@@ -46,16 +46,15 @@ class ProjectExplorer extends Component {
             ],
 
             data_picker: false,
-            rename: false,
-            filterValue: "",
-            renameFile: "",
-            nameExists: false,
-
             dp_type: "",
             dp_msg: "what the f?",
             dp_query: "",
             dp_items: [],
-            dp_cb: null
+            dp_cb: null,
+
+            rename: false,
+            renameFrom: "",
+            renameTo: ""
         }
     }
 
@@ -157,6 +156,19 @@ class ProjectExplorer extends Component {
 
     }
 
+    renameObject() {
+        window.pywebview.api.call_service(-1, "rename_object", [this.state.renameFrom, this.state.renameTo]).then((e) => {
+
+             this.setState({ rename: false }, () => {
+                PrimaryToaster.show({
+                    message: (e.status ? "Successfully renamed to: " : "Failed: ") + e.msg,
+                    intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+                });
+                this.refresh();
+             })
+        })
+     }
+
     updateTree(thing) {
         thing()
         this.setState({ tree: this.state.tree })
@@ -177,7 +189,7 @@ class ProjectExplorer extends Component {
     }
 
     handleRename(item) {
-        this.setState({ rename: true, renameFile: item.label });
+        this.setState({ rename: true, renameFrom: item.id.key, renameTo: item.id.key });
     }
 
     handleCtxMenu(item, p, e) {
@@ -235,20 +247,7 @@ class ProjectExplorer extends Component {
         })
     }
 
-    renameFile() {
-       window.pywebview.api.call_service(-1, "rename_object", [this.state.renameFile, this.state.filterValue]).then((finish) => {
-            if (finish == false) {
-                return;
-            }
-            this.setState({ rename: false }, () => {
-                PrimaryToaster.show({
-                    message: "Successfully renamed file.",
-                    intent: Intent.SUCCESS,
-                });
-                this.refresh();
-            })
-       })
-    }
+
 
     render() {
 
@@ -259,43 +258,31 @@ class ProjectExplorer extends Component {
 
                 </ButtonGroup>
 
-                <Dialog isOpen={this.state.rename} title="Rename a file" onClose={() => this.setState({ rename: false })}>
+                <Dialog isOpen={this.state.rename} title="Rename" onClose={() => this.setState({ rename: false })}>
                     <div className={Classes.DIALOG_BODY}>
-                        <p>
-                            <strong>
-                                Type in the name to replace
-                            </strong>
-                        </p>
                         <Example>
                             <InputGroup
-                                asyncControl={true}
-                                onChange={this.handleFilterChange("filterValue")}
-                                rightElement={this.state.filterValue ? 
-                                    (this.state.nameExists ? 
-                                        <Icon icon="delete" size={IconSize.LARGE} color="red" />
-                                        : <Icon icon="confirm" size={IconSize.LARGE} color="green" />)
-                                    : undefined }
-                                value={this.state.filterValue}
-                                defaultValue={this.state.renameFile}
+                                onChange={(x) => this.setState({renameTo: x.target.value})}
+                                value={this.state.renameTo}
                             />
                         </Example>
                         <div class=".bp3-ui-text">
                             <pre class="tab" color="red">
-                                {this.state.nameExists ? "Name already exists for another file." : "        " }
+                                {this.state.nameExists ? "Name already exists." : "        " }
                             </pre>
                         </div>
                         <div className={Classes.DIALOG_FOOTER}>
                             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
 
                                 <Button onClick={() => this.setState({ rename: false })}>Cancel</Button>
-                                <Button intent={Intent.SUCCESS} disabled={this.state.nameExists} onClick={() => this.renameFile()}>Confirm</Button>
+                                <Button intent={Intent.SUCCESS} disabled={this.state.nameExists} onClick={() => this.renameObject()}>Confirm</Button>
 
                             </div>
                         </div>
                     </div>
                 </Dialog>
 
-                <Dialog isOpen={this.state.data_picker} title="Select a data" onClose={() => this.setState({ data_picker: false })}>
+                <Dialog isOpen={this.state.data_picker} title="Select data" onClose={() => this.setState({ data_picker: false })}>
                     <div className={Classes.DIALOG_BODY}>
                         <p>
                             <strong>

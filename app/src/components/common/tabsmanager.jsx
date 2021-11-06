@@ -3,9 +3,6 @@ import { Component } from 'react';
 import { NonIdealState } from "@blueprintjs/core";
 
 import Welcome from "../welcome/welcome"
-import ImageView from "../imageview/imageview"
-import DragDropSOM from "../drag-drop/drag-drop"
-import Animal from "../animal/animal"
 
 class TabsManager extends Component {
     constructor(props) {
