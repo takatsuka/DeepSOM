@@ -457,7 +457,7 @@ class SOM(Node):
         """
 
         if not (0 <= slot <= 1):
-            # self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
             return False
         else:
             return True
