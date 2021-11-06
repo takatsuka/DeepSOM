@@ -2,12 +2,19 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Label, Popover, Collapse, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal } from "@blueprintjs/core";
+import { Label, Popover, Collapse, MenuDivider, ProgressBar, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Dialog, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
 
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import "./drag-drop.scss"
 import { some } from 'd3-array';
 import { timeHours } from 'd3-time';
+
+import { PrimaryToaster } from '../common/toaster';
+import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
+
+import { NodeTemplates } from './nodes'
+import teacher from './imgs/training.gif';
+
 
 class DragDropSOM extends Component {
     constructor(props) {
@@ -58,7 +65,7 @@ class DragDropSOM extends Component {
     render() {
         var n = this.props.node
         var t = this.props.template
-        var s = t.style
+        var s = t.styleClass
 
         return (
             <div className="dd-som" id={"ddn_" + n.id}
@@ -67,7 +74,7 @@ class DragDropSOM extends Component {
                 onContextMenu={this.contextMenu.bind(this)}
             >
 
-                <Card style={{ backgroundColor: s.backgroundColor, width: s.width, height: s.height }} interactive={true} elevation={Elevation.THREE}>
+                <Card className={s} interactive={true} elevation={Elevation.THREE}>
                     {t.render(n)}
                     {this.props.parent.state.add_link_active ? (
                         <Button icon="add" intent="success" onClick={() => this.props.parent.add_link_node(n.id)} id={"ddn_add_" + n.id}/>
@@ -85,6 +92,7 @@ class DragDrop extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            model_name: "?",
             soms: {
 
             },
@@ -92,7 +100,10 @@ class DragDrop extends Component {
             add_link_step: 1,
             advanced_open: false,
             side_menu: false,
-            editing: null
+            editing: null,
+
+            service: null,
+            training: false
         };
 
         // Bind functions
@@ -111,170 +122,51 @@ class DragDrop extends Component {
         this.i = 0;
 
 
-        this.node_templates = {
-            inout: {
-                name: "Input",
-                fixed: true,
-                style: { backgroundColor: "#738694", width: "100px", height: "100px" },
-                node_props: { dim: 3 },
-                render: (d) => (
-                    <div style={{ textAlign: 'center' }}>
-                        <p style={{ fontSize: '18px' }}>{d.name}</p>
-                        <strong style={{}}>{d.props.dim}</strong>
-                    </div>
-                ),
+        this.node_templates = NodeTemplates
 
-                contextMenu: (d) => (
-                    <div>
-                        <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
-                        <Divider />
-                        <NumericInput
-                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
-                            rightElement={<Button disabled minimal>Dimension</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-                    </div>
-                )
-            },
+        if (window.pywebview)
+            window.pywebview.api.launch_service("ModelService").then((x) => (
+                this.setState({
+                    service: x
+                })
+            ))
 
-            get_bmu: {
-                name: "get_bmu_",
-                style: { backgroundColor: "#D9822B", width: "180px", height: "50px" },
-                node_props: { shape: '2d_dis' },
-                render: (d) => (
-                    <div style={{ textAlign: 'center', marginTop: "-7px" }}>
-                        <i style={{ fontSize: '18px' }}>Get BMU({d.props.shape})</i>
-                    </div>
-                ),
+        var init = this.props.pullInit()
+        if (init != null && window.pywebview !== null) {
 
-                contextMenu: (d) => (
-                    <div>
-                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
-                        <Divider />
-                        <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => this.wrapSOMS(() => (d.props.shape = t.target.value))} />
-                    </div>
-                )
-            },
+            window.pywebview.api.call_service(-1, "get_object", [init]).then((e) => {
+                if (e !== null) {
+                    this.import_som(e)
+                }
+                else {
+                    this.init_model(false)
+                }
 
-            som: {
-                name: "SOM",
-                style: { backgroundColor: "#137CBD", width: "200px", height: "200px" },
-                node_props: { dim: 10, shape: 'rect', inputDim: 3 },
-                render: (d) => (
-                    <div style={{ textAlign: 'center' }}>
+                this.setState({
+                    model_name: init,
+                    soms: this.state.soms
+                })
+            });
 
-                        <p style={{ fontSize: '18px' }}>{d.name}</p>
-                        <Icon icon="layout-grid" size={30} />
-
-                        <div style={{ textAlign: 'left', marginTop: "20px" }}>
-                            <strong style={{}}> Dimension:</strong><br />
-                            <div style={{ paddingLeft: "10px", marginBottom: '10px' }}>
-                                Data: {d.props.inputDim} <br />
-                                Internal: {d.props.dim}
-                            </div>
-                            <strong style={{}}> Shape: </strong> {d.props.shape}<br />
-                        </div>
-
-                    </div>
-                ),
-                contextMenu: (d) => (
-                    <div>
-                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
-                        <Divider />
-                        <NumericInput
-                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
-                            rightElement={<Button disabled minimal>Dimension</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-                        <NumericInput
-                            value={d.props.inputDim} onValueChange={(t) => this.wrapSOMS(() => (d.props.inputDim = t))}
-                            rightElement={<Button disabled minimal>Input Dimension</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-                        <InputGroup placeholder="rect" value={d.props.shape} onChange={(t) => this.wrapSOMS(() => (d.props.shape = t.target.value))} />
-                    </div>
-                )
-            },
-
-            sampler: {
-                name: "Sampler",
-                style: { backgroundColor: "#DB2C6F", width: "190px", height: "140px" },
-                node_props: { dim: 100 },
-                render: (d) => (
-                    <div style={{ textAlign: 'center' }}>
-
-                        <p style={{ fontSize: '18px' }}>{d.name}</p>
-                        <Icon icon="heat-grid" size={30} />
-
-                        <div style={{ textAlign: 'left', marginTop: "20px" }}>
-                            <p style={{}}> Input Patches: {d.props.dim}</p><br />
-                        </div>
-
-                    </div>
-                ),
-                contextMenu: (d) => (
-                    <div>
-                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
-                        <Divider />
-                        <NumericInput
-                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
-                            rightElement={<Button disabled minimal>N Patches</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-
-                    </div>
-                )
-            },
-
-            minipatch: {
-                name: "mini patcher",
-                style: { backgroundColor: "#00B3A4", width: "190px", height: "185px" },
-                node_props: { dim: 100, kernel: 10, stride: 2 },
-                render: (d) => (
-                    <div style={{ textAlign: 'center' }}>
-
-                        <p style={{ fontSize: '18px' }}>{d.name}</p>
-                        <Icon icon="multi-select" size={30} />
-
-                        <div style={{ textAlign: 'left', marginTop: "5px" }}>
-                            <strong style={{}}> Format:</strong><br />
-                            <div style={{ paddingLeft: "10px", marginBottom: '10px' }}>
-                                Kernel: {d.props.kernel} <br />
-                                Strides: {d.props.stride}
-                            </div>
-                            <strong style={{}}> N Input: </strong> {d.props.dim}<br />
-                        </div>
-
-                    </div>
-                ),
-                contextMenu: (d) => (
-                    <div>
-                        <InputGroup placeholder="Name" value={d.name} onChange={(t) => this.wrapSOMS(() => (d.name = t.target.value))} />
-                        <Divider />
-                        <NumericInput
-                            value={d.props.kernel} onValueChange={(t) => this.wrapSOMS(() => (d.props.kernel = t))}
-                            rightElement={<Button disabled minimal>Kernel</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-                        <NumericInput
-                            value={d.props.stride} onValueChange={(t) => this.wrapSOMS(() => (d.props.stride = t))}
-                            rightElement={<Button disabled minimal>Strides</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-
-                        <NumericInput
-                            value={d.props.dim} onValueChange={(t) => this.wrapSOMS(() => (d.props.dim = t))}
-                            rightElement={<Button disabled minimal>N Input</Button>}
-                            fill buttonPosition="left" placeholder="10" />
-
-                    </div>
-                )
-            }
+            return
         }
 
         var restored = this.props.pullState()
 
-        if(restored != null && "state" in restored && "links" in restored){
+        if (restored != null && "state" in restored && "links" in restored) {
             this.links = restored.links
             this.state = restored.state
             this.i = restored.i
             return
         }
 
+
+        this.init_model(false)
+
+
+    }
+
+    init_model(updateState) {
         var input = this.create_som("inout")
         input.x = 100
         input.y = 200
@@ -287,11 +179,11 @@ class DragDrop extends Component {
         output.name = "Output"
         output.props.dim = 2
         this.state.soms[output.id] = output
-
+        if (updateState) this.setState({ soms: this.state.soms })
     }
 
     componentWillUnmount() {
-        this.props.saveState({state: this.state, links: this.links, i: this.i})
+        this.props.saveState({ state: this.state, links: this.links, i: this.i })
     }
 
     wrapSOMS(thing) {
@@ -321,6 +213,29 @@ class DragDrop extends Component {
 
     }
 
+    push_link() {
+        if (this.links.some(l => (l.from == this.new_link_nodes[0] && l.to == this.new_link_nodes[1]))) {
+            PrimaryToaster.show({
+                message: "Cannot add link - an identical link exists.",
+                intent: Intent.DANGER,
+            });
+
+            return
+        }
+
+        var nl = {
+            from: this.new_link_nodes[0],
+            to: this.new_link_nodes[1],
+            props: {
+                slot: 0,
+                order: 0
+            }
+        }
+        this.links.push(nl);
+
+        this.setState({ add_link_active: false, add_link_step: -1 });
+    }
+
     add_link_init() {
         this.setState({ add_link_active: true, add_link_step: 1 });
     }
@@ -337,18 +252,32 @@ class DragDrop extends Component {
             this.setState({ add_link_step: 2 });
         } else if (this.state.add_link_step == 2) {
             this.new_link_nodes[1] = id;
-            if (!this.links.some(l => (l[0] == this.new_link_nodes[0] && l[1] == this.new_link_nodes[1]))) {
-                this.links.push(this.new_link_nodes.slice(0));
-            } else {
-                alert("Cannot add link - an identical link exists");
-            }
-            this.setState({ add_link_active: false, add_link_step: -1 });
+            this.push_link()
         }
+    }
+
+    update_link_slot(lk, slot) {
+        lk.props.slot = slot
+        this.setState({}) // force render
+    }
+
+    remove_link(lk) {
+        this.links = this.links.filter(l => (l.from !== lk.from && l.to !== lk.to))
+        this.setState({}) // force render
+    }
+
+    links_for_node(id, out) {
+        if (out) {
+            return this.links.filter(l => l.from === id)
+        }
+
+        return this.links.filter(l => l.to === id)
     }
 
     remove_handler(id) {
         var s = this.state.soms
         delete s[id]
+        this.links = this.links.filter(l => !(l.from === id || l.to === id))
         this.setState({ soms: s, side_menu: false, editing: null });
     }
 
@@ -362,16 +291,6 @@ class DragDrop extends Component {
         this.setState({ advanced_open: !this.state.advanced_open });
     }
 
-    import_som(e) {
-        const data = JSON.parse(event.target.value);
-        this.links = data['links'];
-        this.setState({ soms: data['soms'] });
-    }
-
-    export_som() {
-        return { nodes: this.state.soms, connections: this.links }
-    }
-
     closeSideMenu() {
         this.setState({ side_menu: false, editing: null })
     }
@@ -380,15 +299,94 @@ class DragDrop extends Component {
         this.setState({ side_menu: true, editing: som.props.node.id })
     }
 
+    import_som(x) {
+        this.links = x.connections
+        this.i = x.i
+        this.setState({ soms: x.nodes })
+    }
+
+    export_som() {
+        return {
+            nodes: this.state.soms,
+            connections: this.links,
+            i: this.i
+        }
+    }
+
     saveSession() {
+        window.pywebview.api.call_service(-1, "save_object", [this.state.model_name, "model", this.export_som(), true]).then((descriptor) => {
+        });
+    }
+
+    loadSession() {
+
+    }
+
+    saveSessionToFile() {
         window.pywebview.api.save_json_file(this.export_som()).then((e) => (console.log(e)))
     }
 
     loadSessionFromFile() {
         window.pywebview.api.open_json_file().then(function (x) {
-            this.links = x.connections
-            this.setState({ soms: x.nodes })
+            this.import_som(x)
         }.bind(this))
+    }
+
+    compileModel() {
+        console.log(this.state.service)
+        window.pywebview.api.call_service(this.state.service, "update_model", [this.export_som()]).then((e) => {
+            window.pywebview.api.call_service(this.state.service, "compile", []).then((e) => {
+                PrimaryToaster.show({
+                    message: e.status ? "Model compiled successfully." : "Failed: " + e.msg,
+                    intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+                });
+            });
+        });
+
+    }
+
+    trainModel() {
+        this.setState({ training: true })
+        window.pywebview.api.call_service(this.state.service, "train", []).then((e) => {
+            this.setState({ training: false })
+            PrimaryToaster.show({
+                message: e.status ? "Model training finished." : "Failed: " + e.msg,
+                intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+            });
+        });
+    }
+
+    pickInput() {
+        this.props.fileman.ask_user_pick_data("Select a data to use for training.", "matrix", (k) => {
+            console.log(k)
+            window.pywebview.api.call_service(this.state.service, "set_input", [k]).then((e) => {
+                PrimaryToaster.show({
+                    message: "Training data set to: " + e.msg,
+                    intent: Intent.SUCCESS
+                });
+            });
+        })
+
+    }
+
+    saveGraphOutput(opq) {
+        window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name + "_out", opq]).then((e) => {
+            PrimaryToaster.show({
+                message: (e.status ? "Exported as: " : "Failed: ") + e.msg,
+                intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+            });
+            this.props.fileman.refresh()
+        });
+    }
+
+    debugShowOutput() {
+        window.pywebview.api.call_service(this.state.service, "debug_output_str", []).then((e) => {
+            PrimaryToaster.show({
+                message: (e.status ? ":" : "Failed: ") + e.msg,
+                intent: e.status ? Intent.PRIMARY : Intent.DANGER,
+            });
+            this.props.fileman.refresh()
+        });
     }
 
     render() {
@@ -412,21 +410,41 @@ class DragDrop extends Component {
         const sessionMenu = (
             <Menu>
                 <MenuItem icon="document-share" text="Save" onClick={() => this.saveSession()} />
-                <MenuItem icon="document-open" text="Load" onClick={() => this.loadSessionFromFile()} />
+                <MenuDivider title="External" />
+                <MenuItem icon="document-share" text="Save to file" onClick={() => this.saveSessionToFile()} />
+                <MenuItem icon="document-open" text="Load from file" onClick={() => this.loadSessionFromFile()} />
+            </Menu>
+        )
+
+        const runtimeMenu = (
+            <Menu>
+                <MenuDivider title="Prepare" />
+                <MenuItem icon="add-to-artifact" text="Select Input" onClick={() => this.pickInput()} />
+                <MenuDivider title="Action" />
+                <MenuItem icon="ungroup-objects" text="Compile" onClick={() => this.compileModel()} />
+                <MenuItem icon="repeat" text="Train" onClick={() => this.trainModel()} />
+                <MenuDivider title="Save Result as" />
+                <MenuItem icon="play" text="Data" onClick={() => this.saveGraphOutput(false)} />
+                <MenuItem icon="play" text="Opaque" onClick={() => this.saveGraphOutput(true)} />
+                <MenuDivider title="Debug" />
+                <MenuItem icon="database" text="Show Output" onClick={() => this.debugShowOutput()} />
+
             </Menu>
         )
 
         const addMenu = (
             <Menu>
-                <MenuItem icon="one-to-many" text="Distributor" id="dist-btn"/>
-                <MenuItem icon="many-to-one" text="Concatenator" id="conc-btn" />
-                <Divider />
-                <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} id="single-som-btn" />
-                <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} id="sampler-btn" />
-                <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.add_som("minipatch")} id="mini-p-btn" />
-                <Divider />
-                <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} id="get-bmu-btn" />
-                <MenuItem icon="function" text="Random Sample" id="randsamp-btn" />
+                <MenuItem icon="flow-linear" text="Bypass" onClick={() => this.add_som("bypass")} />
+                <MenuDivider title="Utility" />
+                <MenuItem icon="one-to-many" text="Distributor" onClick={() => this.add_som("dist")} />
+                <MenuItem icon="many-to-one" text="Concatenator" onClick={() => this.add_som("concat")} />
+                <MenuDivider title="Self-organizing maps" />
+                <MenuItem icon="layout-skew-grid" text="Single SOM" onClick={() => this.add_som("som")} />
+                <MenuItem icon="heat-grid" text="Sampler" onClick={() => this.add_som("sampler")} />
+                <MenuItem icon="new-grid-item" text="Mini Patcher" onClick={() => this.add_som("minipatch")} />
+                <MenuDivider title="Functional" />
+                <MenuItem icon="function" text="Get BMU" onClick={() => this.add_som("get_bmu")} />
+                <MenuItem icon="function" text="Random Sample" />
 
 
             </Menu>
@@ -438,10 +456,14 @@ class DragDrop extends Component {
                 <div className="submenu">
 
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
-                        <Button disabled={true} >not_so_deep_som</Button>
+                        {/* <Button disabled={true} >not_so_deep_som</Button> */}
                         <Divider />
                         <Popover content={sessionMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
                             <Button className="bp3-minimal" icon="code-block" text="Session" id="session-btn" />
+                        </Popover>
+
+                        <Popover content={runtimeMenu} position={Position.BOTTOM_LEFT} interactionKind="click">
+                            <Button className="bp3-minimal" icon="code-block" text="Runtime" />
                         </Popover>
 
                         <Divider />
@@ -461,8 +483,6 @@ class DragDrop extends Component {
                     <Collapse isOpen={this.state.advanced_open}>
                         <Icon icon="export" /> Export SOM
                         <TextArea id="export_som" value={JSON.stringify({ "soms": this.state.soms, "links": this.links })} growVertically={true} />
-                        <Icon icon="import" /> Import SOM
-                        <TextArea id="import_som" growVertically={true} onChange={this.import_som} />
                     </Collapse>
                 </div>
 
@@ -484,17 +504,86 @@ class DragDrop extends Component {
                             <div className={Classes.DRAWER_BODY}>
                                 <div className={Classes.DIALOG_BODY}>
 
-                                    {this.state.editing == null ? <></> : this.node_templates[editingNode.template].contextMenu(editingNode)}
+                                    <h3>Fields:</h3>
+                                    {this.state.editing == null ? <></> : this.node_templates[editingNode.template].contextMenu(editingNode, this)}
 
+                                    <Divider />
+                                    <h3>Incoming:</h3>
+                                    {this.state.editing == null ? <></> : this.links_for_node(editingNode.id, false).map(function (l, idx) {
+                                        let other = this.state.soms[l.from]
+                                        console.log(other)
+                                        return (
+                                            <div key={idx} className="editor-edge-item">
+                                                <p className="editor-edge-item-text">{other.name}</p>
+                                                <div className="editor-edge-item-slot">
+                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
+                                                </div>
+
+                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
+                                            </div>
+                                        )
+
+                                    }.bind(this))}
+
+
+                                    <Divider />
+                                    <h3>Outgoing:</h3>
+                                    {this.state.editing == null ? <></> : this.links_for_node(editingNode.id, true).map(function (l, idx) {
+                                        let other = this.state.soms[l.to]
+                                        console.log(other)
+                                        return (
+                                            <div key={idx} className="editor-edge-item">
+                                                <p className="editor-edge-item-text">{other.name}</p>
+                                                <div className="editor-edge-item-slot">
+                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
+                                                </div>
+
+                                                <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
+                                            </div>
+                                        )
+
+                                    }.bind(this))}
+
+
+
+
+
+                                    <Divider />
                                 </div>
                             </div>
                             <div className={Classes.DRAWER_FOOTER}>
                                 <Button icon="trash" intent="danger" disabled={editingNode && 'fixed' in this.node_templates[editingNode.template]} minimal onClick={() => this.remove_handler(this.state.editing)}> Delete </Button>
-                                <Button icon="help" intent="success" minimal> Open Manual </Button>
+                                <Button icon="help" intent="success" minimal disabled> Open Manual </Button>
                             </div>
                         </Drawer>
                     </div>
 
+
+                    <Dialog isOpen={this.state.training} title="Training in progress" icon="data-lineage" isCloseButtonShown={false}>
+                        <div className={Classes.DIALOG_BODY}>
+                            <p>
+                                <strong>
+                                    Grab a coffee, this won't take long. ☕️
+                                    <br />
+                                </strong>
+                            </p>
+                            <ProgressBar intent={Intent.PRIMARY} />
+                            <p style={{ marginTop: "15px" }}>
+                                To reduce potential bugs, the application will not respond until this is completed.
+                            </p>
+
+                            <p style={{ marginTop: "15px" }}>
+                                Taking too long? We apologize, if you believe something went wrong please force quit and restart the application.
+                                As stated in our license, we are not responsible for any data loss.
+                            </p>
+
+                            <p style={{ marginTop: "15px" }}>
+                                Looking for faster training?
+                                Try out our premium cloud training services with a 30-days free trial and only $9.99 per-month after.
+                            </p>
+                            <img src={teacher} style={{ position: "relative", top: "-220px", left: "420px", marginBottom: "-250px" }} height={250} />
+                        </div>
+                    </Dialog>
 
                     <div className="som-box" id="som-box">
                         {Object.keys(this.state.soms).map(function (k, idx) {
@@ -502,7 +591,7 @@ class DragDrop extends Component {
                             return (<DragDropSOM key={d.id} node={d} template={this.node_templates[d.template]} parent={this_obj} />);
                         }.bind(this))}
                         {this.links.map(function (d, idx) {
-                            return (<Xarrow key={idx} start={"ddn_" + d[0]} end={"ddn_" + d[1]} dashness={{ animation: 0.5 }} />);
+                            return (<Xarrow key={idx} start={"ddn_" + d.from} end={"ddn_" + d.to} dashness={{ animation: 0.5 }} />);
                         })}
                     </div>
                 </div>

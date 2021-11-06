@@ -15,7 +15,6 @@ class ScatterView3D extends Component {
         // Bind functions
         this.initView = this.initView.bind(this);
         this.drawAxis = this.drawAxis.bind(this);
-        this.updatePlot = this.updatePlot.bind(this);
         this.drawPlot = this.drawPlot.bind(this);
         this.handleShowTrainingChange = this.handleShowTrainingChange.bind(this);
         this.updateWindow = this.updateWindow.bind(this);
@@ -24,10 +23,11 @@ class ScatterView3D extends Component {
 
         // Define state variables
         this.state = {
+            services: null,
             datasetName: "",
             showTraining: false,
-            vizData: null, hasDataset: false, dataset: [],
-            trainingData: null, hasTraining: false, weights: [], weightsId: 0, edges: [], somHeight: 20, somWidth: 20,
+            hasDataset: false,
+            hasTraining: false, weightsId: 0, nSomWeights: 0,
             point3d: null, weights3d: null, xScale3d: null, yScale3d: null, zScale3d: null,
             mouseX: 0, mouseY: 0,
         }
@@ -40,23 +40,43 @@ class ScatterView3D extends Component {
         this.origin = [300, 300];
         this.scale = 100;
         this.startAngle = Math.PI / 4;
+        
+        let xLine = []
+        let yLine = []
+        let zLine = []
 
-        // Add listener for window resize events
-        window.addEventListener('resize', this.updateWindow);
+        for (let i = -1; i <= 1; i = i + 0.5) {
+            xLine.push([-i, 1, -1]);
+            yLine.push([-1, i, -1])
+            zLine.push([-1, 1, -i])
+        }
+        this.axes = [
+            [xLine],
+            [yLine],
+            [zLine]
+        ];
     }
 
     componentDidMount() {
+        // Add listener for window resize events
+        window.addEventListener('resize', this.updateWindow);
+        
         var state = this.props.pullState();
         if (state != null && state.hasDataset) {
             // If there was a previous dataset already loaded
             this.setState(state, () => {
                 this.updateSvg();
-                this.updatePlot();
+                this.drawPlot();
                 this.updateWindow();
             });
 
         } else {
             // If there wasn't a previous dataset loaded
+            window.pywebview.api.launch_service("SOMScatterviewService").then((service) => (
+                window.pywebview.api.call_service(service, "set_datastore", [this.props.datastore]).then(() => (
+                    this.setState({ services: service })
+                ))
+            ))
             this.initView();
             this.updateWindow();
         }
@@ -79,7 +99,6 @@ class ScatterView3D extends Component {
 
     // Draws surface of weight nodes with inputted json data
     drawEdges(data) {
-        console.log("drawing edges");
         const svg = this.svg
         let lines = svg.selectAll('line').data(data);
 
@@ -101,7 +120,7 @@ class ScatterView3D extends Component {
 
     // TODO: Set colour of points accordingly to type of data
     // Draws scatter points with inputted coordinate data
-    drawPoints(data, tt) {
+    drawPoints(data) {
         const svg = this.svg
         const cm = this.colorMap
         var points = svg.selectAll('circle').data(data, (d) => { d.id });
@@ -113,7 +132,6 @@ class ScatterView3D extends Component {
             .attr('cx', this.posPointX)
             .attr('cy', this.posPointY)
             .merge(points)
-            .transition().duration(tt)
             .attr('r', 3)
             .attr('stroke', (d) => d3.color(cm(d.id)).darker(3))
             .attr('fill', (d) => d3.color(cm(d.id)))
@@ -196,144 +214,60 @@ class ScatterView3D extends Component {
         // Calculate rotation angles
         let beta = (d3.pointer(event, this)[0] - this.mx + this.mouseX) * Math.PI / 230;
         let alpha = (d3.pointer(event, this)[1] - this.my + this.mouseY) * Math.PI / 230 * (-1);
+
         // Apply rotation values to d3 objects and data points
-        let data = [
-            this.state.point3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.state.showTraining ? this.state.weights : this.state.dataset[0]),
-            this.state.weights3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.state.edges),
-            this.state.xScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.state.dataset[1]),
-            this.state.yScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.state.dataset[2]),
-            this.state.zScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)(this.state.dataset[3])
-        ];
+        this.state.point3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle),
+        this.state.weights3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle),
+        this.state.xScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle),
+        this.state.yScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle),
+        this.state.zScale3d.rotateY(beta + this.startAngle).rotateX(alpha - this.startAngle)
+
         // Redraw plot
-        this.drawPlot(data, 0);
-    }
-
-    // Hard coded for now
-    loadWeights(data) {
-        let lines = [];
-        let nodes = [];
-
-        for (let i = 0; i < data.length; i++) {
-            let tokens = data[i];
-            let pointX = parseFloat(tokens[0]);
-            let pointY = parseFloat(tokens[1]);
-            let pointZ = parseFloat(tokens[2]);
-            // Append float data to list
-            nodes.push({ x: pointX, y: pointY, z: pointZ });
-        }
-
-        for (let i = 0; i < data.length; i++) {
-            let center = nodes[i];
-            if (i % this.state.somWidth == this.state.somWidth - 1) {
-                // At the right most column
-                if (i != data.length - 1) {
-                    // Not at the bottom row yet
-                    let down = nodes[i + this.state.somWidth];
-                    lines.push([center, down]); // Define line to the down node
-                }
-            } else if (Math.floor(i / this.state.somWidth) == this.state.somHeight - 1) {
-                // At the bottom row
-                let right = nodes[i + 1];
-                lines.push([center, right]); // Define line to the right node
-            } else {
-                // Not at the bottom row nor at the right most column
-                let down = nodes[i + this.state.somWidth];
-                let right = nodes[i + 1];
-                lines.push([center, down]); // Define line to the down node
-                lines.push([center, right]); // Define line to the right node
-            }
-        }
-        return [nodes, lines];
-    }
-
-
-    // Function to run when file is successfully loaded and contents are read in
-    // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
-    loadData(data) {
-        var scatter = [], xLine = [], yLine = [], zLine = [];
-        var counter = 0; // For assigning point IDs
-
-        // Iterate through each line of data
-        for (let i = 0; i < data.length; i++) {
-            let tokens = data[i];
-            let pointX = parseFloat(tokens[0]);
-            let pointY = parseFloat(tokens[1]);
-            let pointZ = parseFloat(tokens[2]);
-            // Append float data to list
-            scatter.push({ x: pointX, y: pointY, z: pointZ, id: 'point_' + counter++ });
-        }
-
-        // Define values for xyz scales
-        for (let i = -1; i <= 1; i = i + 0.5) {
-            xLine.push([-i, 1, -1]);
-            yLine.push([-1, i, -1]);
-            zLine.push([-1, 1, -i]);
-        }
-
-        // Input data for d3 drawing
-        let input = [
-            scatter,
-            [xLine],
-            [yLine],
-            [zLine]
-        ];
-
-        return input;
+        this.drawPlot();
     }
 
     // To accept a data file from the upload point on ScatterView
     importDataFile() {
-        window.pywebview.api.open_csv_file().then((d) => {
-            this.setState({ vizData: d[1], hasDataset: true, datasetName: d[0], showTraining: false, dataset: this.loadData(d[1]) }, () => {
-                this.updatePlot();
-            });
-        });
+        if (this.state.services != null) {
+            window.pywebview.api.call_service(this.state.services, "upload_scatter_dataset", []).then((filename) => (
+                this.setState({ datasetName: filename, hasDataset: true }, () => (this.drawPlot()))
+            ))
+        }
     }
 
     // To accept a weights file from the upload point on ScatterView
-    // TODO: this function is kept for to remaind compatible, might be removed since load was done in python
     importWeightsFile() {
-        window.pywebview.api.open_json_file().then((d) => {
-            let jsonData = d.weightspb;
-            let weightData = this.loadWeights(jsonData);
-            // console.log(jsonData)
-            // TODO: update this.state.somHeight, this.state.somWidth as well when loading weights from JSON file
-            this.setState({
-                
-                trainingData: jsonData,
-                hasTraining: true, showTraining: true,
-                weightsId: 0, weights: weightData[0], edges: weightData[1],
-                somHeight: d.h, somWidth: d.w
-            }, () => {
-                this.updatePlot();
-            });
-        });
+        if (this.state.services != null) {
+            window.pywebview.api.call_service(this.state.services, "upload_scatter_weights_from_json_file", []).then((size) => (
+                this.setState({ hasTraining: true, showTraining: true, weightsId: 0, nSomWeights: size }, () => (this.drawPlot()))
+            ))
+        }
     }
 
     // Draws the scatter points and 3 axes
-    drawPlot(result, tt) {
-        console.log("drawing plot");
-        this.drawPoints(result[0], tt);
-        if (this.state.showTraining) {
-            this.drawEdges(result[1]);
-        } else {
-            this.svg.selectAll("line").remove();
-        }
-        this.drawAxis(result[2], 'x', this.state.xScale3d);
-        this.drawAxis(result[3], 'y', this.state.yScale3d);
-        this.drawAxis(result[4], 'z', this.state.zScale3d);
-    }
+    drawPlot() {
+        // Draw axes
+        this.drawAxis(this.state.xScale3d(this.axes[0]), 'x', this.state.xScale3d);
+        this.drawAxis(this.state.yScale3d(this.axes[1]), 'y', this.state.yScale3d);
+        this.drawAxis(this.state.yScale3d(this.axes[2]), 'z', this.state.zScale3d);
 
-    // Function to update the current plot and redraw, created for slider feature when moving between plots
-    updatePlot() {
-        let result = [
-            this.state.point3d(this.state.showTraining ? this.state.weights : this.state.dataset[0]),
-            this.state.weights3d(this.state.edges),
-            this.state.xScale3d(this.state.dataset[1]),
-            this.state.yScale3d(this.state.dataset[2]),
-            this.state.zScale3d(this.state.dataset[3]),
-        ];
-        this.drawPlot(result, 0);
+        if (this.state.services != null) {
+            if (this.state.showTraining) {
+                // Scatter should show weights and edges
+                window.pywebview.api.call_service(this.state.services, "get_scatter_som_weights", []).then((weights) => {
+                    // Draw weight nodes and edges
+                    this.drawPoints(this.state.point3d(weights[0]));
+                    this.drawEdges(this.state.weights3d(weights[1]));
+                })
+            } else {
+                // Scatter should show dataset points
+                window.pywebview.api.call_service(this.state.services, "get_scatter_dataset", []).then((points) => {
+                    // Remove weight edges from before and draw dataset points
+                    this.svg.selectAll("line").remove();
+                    this.drawPoints(this.state.point3d(points));
+                })
+            }
+        }
     }
 
     // Define the svg variable, function to be used when initialising new state or restoring old state
@@ -428,23 +362,28 @@ class ScatterView3D extends Component {
         // Update d3 objects to be centered and scaled to new values
         this.updateObjects();
         // Redraw plot if the plot exists
-        if (this.state.hasDataset) this.updatePlot();
+        if (this.state.hasDataset) this.drawPlot();
     }
 
     // Function to update state on whether to show SOM training data or not based on switch
     handleShowTrainingChange() {
         this.setState((state) => {
             return { showTraining: !state.showTraining }
-        }, () => this.updatePlot());
+        }, () => this.drawPlot());
     }
 
     // Function to update state on which set of weights from the training process we should visualise
     handleWeightsIdChange(key) {
         return (value) => this.setState({
             [key]: value,
-            weights: this.loadWeights(this.state.trainingData[value])[0],
-            edges: this.loadWeights(this.state.trainingData[value])[1]
-        }, () => this.updatePlot());
+        }, () => {
+            if (this.state.services != null) {
+                window.pywebview.api.call_service(
+                    this.state.services, 
+                    "update_scatter_som_weights_by_training_epoch", 
+                    [this.state.weightsId]).then(() => (this.drawPlot()))
+            }
+        });
     }
 
     embedCard(whatever) {
@@ -483,12 +422,12 @@ class ScatterView3D extends Component {
 
                 <div className="graph-area">
                     <svg className="scatterview-svg-render" ref={this.d3view} />
-                    {this.state.trainingData == null ? <></> :
+                    {!this.state.hasTraining ? <></> :
                         <div className="slider">
                             <Slider
                                 disabled={!this.state.showTraining}
                                 min={0}
-                                max={Object.keys(this.state.trainingData).length} // This is hardcoded for now, TODO: JSON file need to include size 
+                                max={this.state.nSomWeights}
                                 stepSize={1}
                                 labelStepSize={20}
                                 onChange={this.handleWeightsIdChange("weightsId")}

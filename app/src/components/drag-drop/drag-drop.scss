@@ -1,3 +1,5 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
 .dd-som {
     // background-color: #669EFF;
     color: white;
@@ -46,9 +48,15 @@
     width: 100%;
     height: calc(100% - 40px);
     background-size: 25px 25px;
-    background-image: radial-gradient(circle, #1F4B99 1px, rgba(0, 0, 0, 0) 1px);
-    top:40px;
+    background-image: radial-gradient(circle, #1f4b99 1px, rgba(0, 0, 0, 0) 1px);
+    top: 40px;
     user-select: none;
+}
+
+.bp3-dark .drag-drop-box {
+    background-color: $dark-gray2;
+    background-image: radial-gradient(circle, #5C7080 1px, rgba(0, 0, 0, 0) 1px);
+    border: 0;
 }
 
 .som-box {
@@ -65,4 +73,83 @@
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+}
+
+.editor-edge-item {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.editor-edge-item-text {
+    padding-top: 5px;
+    padding-right: 10px;
+    flex-grow: 4;
+}
+
+.editor-edge-item-slot {
+    width: 70px;
+}
+
+// Using ID selector to gai higher priority without !important
+
+.dd-som[id^="ddn_"] {
+    .inout_node {
+        background-color: #738694;
+        width: 100px;
+        height: 100px;
+    }
+
+    .bypass_node {
+        background-color: #202B33;
+        width: 52px;
+        height: 52px;
+    }
+
+    .get_bmu_node {
+        background-color: #D9822B;
+        width: 180px;
+        height: 50px;
+    }
+
+    .dist_node {
+        background-color: #00998C;
+        width: 70px;
+        height: 100px;
+    }
+
+    .concat_node {
+        background-color: #00998C;
+        width: 70px;
+        height: 100px;
+    }
+
+    .som_node {
+        background-color: #137CBD;
+        width: 200px;
+        height: 200px;
+    }
+
+    .sampler_node {
+        background-color: #DB2C6F;
+        width: 190px;
+        height: 140px;
+    }
+
+    .minipatch_node {
+        background-color: #00B3A4;
+        width: 190px;
+        height: 185px;
+    }
+}
+
+.bp3-dark .dd-som[id^="ddn_"] {
+
+    .bypass_node, .bypass_node:hover {
+        box-shadow: -3px 0px 10px 5px rgba(255, 0, 34, 0.7), 3px 0px 10px 5px rgba(92, 126, 250, 0.8);
+    }
+
 }

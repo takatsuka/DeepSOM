@@ -30,6 +30,11 @@ class ImageView extends Component {
     }
 
     componentDidMount() {
+        var init = this.props.pullInit()
+        if(init != null){
+            this.loadData()
+        }
+
         var state = this.props.pullState()
         if (state != null) {
             this.setState(state)

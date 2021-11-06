@@ -7,24 +7,23 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   pysom.components
-   pysom.utils
+   pysom.nodes
 
 Submodules
 ----------
 
-pysom.deep\_som module
-----------------------
+pysom.graph module
+------------------
 
-.. automodule:: pysom.deep_som
+.. automodule:: pysom.graph
    :members:
    :undoc-members:
    :show-inheritance:
 
-pysom.deepcalc module
----------------------
+pysom.node module
+-----------------
 
-.. automodule:: pysom.deepcalc
+.. automodule:: pysom.node
    :members:
    :undoc-members:
    :show-inheritance:
