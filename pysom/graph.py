@@ -11,6 +11,12 @@ LOGLEVEL_ALLEXCEPTION = 3
 
 
 class GraphCompileError(Exception):
+    """
+    Generic error class for any Graph-related issues.
+
+    Args:
+        Exception: base type of the Error
+    """
     pass
 
 
@@ -271,7 +277,7 @@ class Graph:
             value (object): the associated value pair for the provided key
 
         Raises:
-            GraphCompileError: [description]
+            GraphCompileError: when the input key value is not a string
         """
         if not isinstance(key, str):
             raise GraphCompileError("Parameter key should be of a string type")
