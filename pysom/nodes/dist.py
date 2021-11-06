@@ -21,15 +21,15 @@ class Dist(Node):
     Args:
         uid (int): the unique integer ID of the Dist node instance
         graph (Graph): the containing Graph instance holding the
-                        constructed Concat node
+                        constructed Dist node
         selections (list, optional): a list of tuples defining the distribution
                                      of the input of form (axis, [dimensions]).
                                      Defaults to an empty list.
 
     Attributes:
-        uid (str): the unique integer ID of the Concat node instance
+        uid (str): the unique integer ID of the Dist node instance
         incoming (list): the list of all incoming Node objects that have a
-            connection to the current Concat node instance
+            connection to the current Dist node instance
     """
 
     def __init__(self, uid: int, graph, selections: list = []):

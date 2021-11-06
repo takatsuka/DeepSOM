@@ -12,10 +12,10 @@ pysom.nodes.bmu module
    :undoc-members:
    :show-inheritance:
 
-pysom.nodes.classify module
----------------------------
+pysom.nodes.calibrate module
+----------------------------
 
-.. automodule:: pysom.nodes.classify
+.. automodule:: pysom.nodes.calibrate
    :members:
    :undoc-members:
    :show-inheritance:
