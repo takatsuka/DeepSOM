@@ -22,7 +22,7 @@ class Calibrate(Node):
         self.som = None
 
     def __str__(self) -> str:
-        str_rep = "ClassifyNode {}".format(self.uid)
+        str_rep = "Calibrate {}".format(self.uid)
         return str_rep
 
     def get_output(self, slot: int) -> Node:
@@ -34,7 +34,7 @@ class Calibrate(Node):
         then the Concat node itself is returned.
 
         Args:
-            slot (int): if 0, then the Concat node instance is returned. \
+            slot (int): if 0, then the Calibrate node instance is returned. \
                 Else the concatenation of the arrays are returned.
 
         Raises:
@@ -46,15 +46,16 @@ class Calibrate(Node):
                 in the constructor if slot is not 0. Else, the Concat node \
                 is returned.
         """
-        if not self.check_slot(slot):
-            raise RuntimeError("Can only get output from slot 0")
+        if slot == 0:
+            return self
 
         self.som = self.get_input()
         label_map = self.som.map_labels(self.som.get_input(), self.labels)
         
-        if self.test:
-            return self.calibrate(label_map)
-        return label_map
+        if self.test is None:
+            return label_map
+
+        return self.calibrate(label_map)
 
     def check_slot(self, slot: int) -> bool:
         """
@@ -73,10 +74,9 @@ class Calibrate(Node):
         Returns:
             bool: True if the slot is a positive integer
         """
-        if (slot == 0):
-            raise RuntimeError("Slot 0 is reserved for SOMNode")
-        elif (slot < 0):
-            raise RuntimeError("Slots must be positive")
+        if not (0 <= slot <= 1):
+            self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
+            return False
         else:
             return True
 
@@ -122,7 +122,3 @@ class Calibrate(Node):
                 # else, map most common label (default) to this row in data
                 result.append(default)
         return result
-
-
-if __name__ == "__main__":
-    pass

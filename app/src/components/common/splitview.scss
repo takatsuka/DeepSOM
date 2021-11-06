@@ -41,6 +41,11 @@
     border-left: 5px solid rgba(0, 0, 0, 0.5);
     border-right: 5px solid rgba(0, 0, 0, 0.5);
 }
+
+.bp3-dark .Resizer.vertical {
+    opacity: 0.8;
+}
+
 .Resizer.disabled {
     cursor: not-allowed;
 }

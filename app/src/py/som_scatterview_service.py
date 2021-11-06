@@ -5,7 +5,7 @@ import os
 
 
 class SOMScatterviewService:
-    def __init__(self):
+    def __init__(self, ds):
         self.cache = {
             "DATASET_PATH": None,
             "DATASET": None,
@@ -14,7 +14,7 @@ class SOMScatterviewService:
             "WEIGHTS_NODES": None,
             "WEIGHTS_EDGES": None
         }
-        self.datastore = None
+        self.datastore = ds
 
     def set_datastore(self, datastore):
         self.datastore = datastore

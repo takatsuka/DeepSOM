@@ -7,6 +7,11 @@ from .nodes.input_container import InputContainer
 LOGLEVEL_NONE = 0
 LOGLEVEL_ERROR = 1
 LOGLEVEL_VERBOSE = 2
+LOGLEVEL_ALLEXCEPTION = 3
+
+
+class GraphCompileError(Exception):
+    pass
 
 
 class Graph:
@@ -30,8 +35,6 @@ class Graph:
                       automatically assigned unique integer ID
     """
 
-    uid = 3
-
     def __init__(self, loglevel: int = LOGLEVEL_ERROR):
         """
         Constructor of the Graph class representing the deep SOM model.
@@ -45,10 +48,11 @@ class Graph:
                 May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE. \
                 Defaults to LOGLEVEL_ERROR.
         """
-        self.start = 0
-        self.end = 1
+        self.uid = 3
+        self.start = 1
+        self.end = 2
         self.global_params = {
-            "training": False
+            "training": True
         }
         self.loglevel = loglevel
 
@@ -60,13 +64,32 @@ class Graph:
     def _create_node(self, node_type: Type[Node] = None,
                      props: dict = {}) -> Node:
         if node_type is None:
-            node = Node(Graph.uid)
+            node = Node(self.uid, self)
         else:
-            node = node_type(Graph.uid, self, **props)
+            node = node_type(self.uid, self, **props)
 
-        Graph.uid += 1
+        self.uid += 1
 
         return node
+
+    def _log_ex(self, msg):
+        if self.loglevel < LOGLEVEL_ALLEXCEPTION:
+            print(msg)
+            return
+
+        raise GraphCompileError(msg)
+
+    def create_with_id(self, id: int, node_type: Type[Node] = None,
+                       props: dict = {}) -> int:
+        if id in self.nodes:
+            self._log_ex(f"Unable to create, node with {id} already exist.")
+            return -1
+
+        node = self._create_node(node_type=node_type, props=props)
+        node.uid = id
+        self.uid = max(node.uid + 1, self.uid)
+        self._add_node(node)
+        return node.uid
 
     def create(self, node_type: Type[Node] = None, props: dict = {}) -> int:
         """
@@ -152,19 +175,21 @@ class Graph:
                   could not be found, or if the provided IDs were equal
         """
         if uid_in == uid_out:
+            self._log_ex(f"Can not connect to node itself: {uid_in}")
             return False
 
         input_node = self.find_node(uid_in)
         output_node = self.find_node(uid_out)
 
         if (input_node is None) or (output_node is None):
+            self._log_ex(f"Target does not exist: {uid_in} -> {uid_out}")
             return False
 
         node_happy = output_node.add_incoming_connection(input_node, slot)
         if self.loglevel >= LOGLEVEL_ERROR and not node_happy:
-            print(
-                f"Failed to add connection {self.find_node(uid_in)} \
-                    -> {self.find_node(uid_out)}")
+            msg = f"Failed to add connection {self.find_node(uid_in)} \
+                    -> {self.find_node(uid_out)}"
+            self._log_ex(msg)
 
         return node_happy
 
@@ -177,7 +202,7 @@ class Graph:
         back to the caller.
 
         Args:
-            data (object): the data object to be passed and set as the data
+            data (object): the data object to be passed and set as the data \
                            input starting Node
         """
         self.find_node(self.start).data = data
@@ -186,14 +211,21 @@ class Graph:
         """
         Getter function to extract the output data of the end Node.
 
-        Effectively retrieves the trained data at the Graph exit point after
-        an iteration of training.
+        This will trigger the evaluation of all node, if the result was not
+        present, effectively train all attached stateful nodes.
 
         Returns:
-            object: the resultant data object output from the Graph after \
-                    training
+            object: the resulting data object flowed to output node in the \
+                    Graph
         """
-        return self.find_node(self.end).get_output(slot)
+        output = None
+        try:
+            output = self.find_node(self.end).get_output(slot)
+        except IndexError:
+            if self.loglevel >= LOGLEVEL_ERROR:
+                msg = f"Cannot request slot {slot}, connection wasn't added"
+                self._log_ex(msg)
+        return output
 
     def set_param(self, key: str, value: object) -> None:
         """
@@ -214,7 +246,7 @@ class Graph:
             RuntimeError: [description]
         """
         if not isinstance(key, str):
-            raise RuntimeError("Parameter key should be of a string type")
+            raise GraphCompileError("Parameter key should be of a string type")
 
         self.global_params[key] = value
         # TODO: Update nodes if necessary

@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import base64
 import numpy as np
 import webview
 
@@ -18,6 +19,16 @@ class SOMDatastoreService:
 
         self.dumpers = {
             "matrix": lambda x: x.tolist(),
+            "model": lambda x: x
+        }
+
+        self.importers = {
+            "matrix": lambda x: np.frombuffer(base64.b64decode(x[1]), dtype=np.float64).reshape(x[0]),
+            "model": lambda x: x
+        }
+
+        self.exporters = {
+            "matrix": lambda x: [x.shape, base64.b64encode(x).decode('ascii')],
             "model": lambda x: x
         }
 
@@ -120,11 +131,20 @@ class SOMDatastoreService:
             return
         self.data_instances.pop(key)
 
+    def rename_object(self, old_key, new_key):
+        if old_key not in self.data_instances:
+            return False
+        new_key = self.ensure_unique(new_key)
+        value = self.data_instances.pop(old_key)
+        self.data_instances[new_key] = value
+        return True
+        
+
     def current_workspace_name(self):
         return self.ws_name
 
     def load_workspace(self):
-        loaders = self.loaders
+        loaders = self.importers
         self.close_all_instances()
 
         filename = self.open_file()
@@ -163,7 +183,7 @@ class SOMDatastoreService:
         self.save_workspace()
 
     def save_workspace(self, filename=None):
-        dumpers = self.dumpers
+        dumpers = self.exporters
 
         if filename == None:
             filename = self.ws_path
@@ -176,7 +196,9 @@ class SOMDatastoreService:
         files_with_data = {}
         for k, v in self.data_instances.items():
             t = v['type']
+
             # Cry without saying.
+            # This will also skip temp opaque data as they were never mean to be saved
             if t not in dumpers:
                 continue
 
@@ -194,8 +216,21 @@ class SOMDatastoreService:
         self.ws_name = os.path.basename(filename)
         self.ws_path = filename
 
-    # Returns true if the descriptor exists as the name of an open data instance; false if not
+    # Used by other Python services to access pointer to data object
+    def get_object_data(self, key):
+        if key not in self.data_instances:
+            return None
+        item = self.data_instances[key]
+        return item['content']
+    
+    # Used by other Python services to save data object
+    def save_object_data(self, type, key, data):
+        des = self.ensure_unique(key)
+        self.data_instances[des] = {'type': type, 'content': data}
 
+        return des
+
+    # Returns true if the descriptor exists as the name of an open data instance; false if not
     def has_instance_by_descriptor(self, descriptor):
         return descriptor in self.data_instances.keys()
 
