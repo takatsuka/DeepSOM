@@ -44,7 +44,3 @@ class Dist(Node):
             self.graph._log_ex(f"Slots {slot} was assigned from {self} while only {len(self.sel)} outputs are available")
 
         return True
-
-
-if __name__ == "__main__":
-    pass
