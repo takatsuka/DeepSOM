@@ -16,11 +16,9 @@ def setup_function():
 def teardown_function():
     pass
 
-
 """
 Getter and setter tests
 """
-
 
 def test_get_id_basic():
     node = Node(1, g)
@@ -86,3 +84,61 @@ def test_get_output_general():
     node2.add_incoming_connection(node1, 0)  # passthrough connection
     res = node2.get_output(1)
     assert (res == node1)
+
+
+def test_add_incoming_connection_simple():
+    node1 = Node(1, g)
+    node2 = Node(2, g)
+    assert (len(node2.get_incoming()) == 0)
+
+    res = node2.add_incoming_connection(node1, 1)
+    assert (res is True)
+    assert (len(node2.get_incoming()) == 1)
+
+
+def test_add_incoming_connection_duplicate():
+    node1 = Node(1, g)
+    node2 = Node(2, g)
+    assert (len(node2.get_incoming()) == 0)
+
+    res = node2.add_incoming_connection(node1, 1)
+    assert (res is True)
+    assert (len(node2.get_incoming()) == 1)
+
+    res = node2.add_incoming_connection(node1, 1)  # Allowed, but bad practice
+    assert (res is True)
+    assert (len(node2.get_incoming()) == 2)
+
+
+def test_add_incoming_connection_multiple():
+    node1 = Node(1, g)
+    node2 = Node(2, g)
+    node3 = Node(3, g)
+    node4 = Node(4, g)
+
+    assert (len(node1.get_incoming()) == 0)
+
+    node1.add_incoming_connection(node2, 1)
+    assert (len(node1.get_incoming()) == 1)
+
+    node1.add_incoming_connection(node3, 0)
+    assert (len(node1.get_incoming()) == 2)
+
+    node1.add_incoming_connection(node4, 0)
+    assert (len(node1.get_incoming()) == 3)
+
+
+def test_check_slot_basic():
+    node1 = Node(1, g)
+    assert (node1.check_slot(0) is True)
+    assert (node1.check_slot(1) is True)
+
+
+def test_check_slot_negative():
+    node1 = Node(1, g)
+    assert (node1.check_slot(-1) is False)
+
+
+def test_check_slot_high():
+    node1 = Node(1, g)
+    assert (node1.check_slot(5) is False)
