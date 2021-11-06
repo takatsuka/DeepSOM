@@ -41,7 +41,7 @@ class AnimalTile extends Component {
                 } else {
                     let cell = [];
                     for (var k = 0; k < this.props.data[i][j].length; k++) {
-                        cell.push(<div class="animal-icon-flex"><img src={this.props.data[i][j][k]} class="animal-icon"/></div>);
+                        cell.push(<div class="animal-icon"><img src={this.props.data[i][j][k]}/></div>);
                     }
                     row.push(<div class="tile"><div class="animal-box">{cell}</div></div>);
                 }
@@ -62,7 +62,7 @@ class Animal extends Component {
         this.state = {
             data: [
                 [[bear], [elephant], [chicken], null],
-                [[bird], [bull, gorilla], [cat], null],
+                [[bird], [bull, gorilla, pig, octopus], [cat], null],
                 [[turtle], [pig], [hippo], null],
                 [null, null, null, null],
             ],
