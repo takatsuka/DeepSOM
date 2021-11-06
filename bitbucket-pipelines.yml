@@ -24,3 +24,13 @@ pipelines:
               # Enforce style consistency across Python projects https://flake8.pycqa.org/en/latest/manpage.html
               - pip install flake8
               - flake8 . --extend-exclude=dist,build,playgrounds --ignore=E701,E402,E731,E501,E711,W293,F401,E741 --show-source --statistics
+        - step:
+            image: node
+            name: NPM
+            script:
+              - cd app
+              - apt-get update
+              - apt-get install python3-pip -y
+              - pip3 install virtualenv
+              - npm run init
+              - timeout 1m npm run dev || [ $? -eq 124 ] && echo time limit reached
