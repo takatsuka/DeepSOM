@@ -49,8 +49,8 @@ class Graph:
                 Defaults to LOGLEVEL_ERROR.
         """
         self.uid = 3
-        self.start = 0
-        self.end = 1
+        self.start = 1
+        self.end = 2
         self.global_params = {
             "training": True
         }
