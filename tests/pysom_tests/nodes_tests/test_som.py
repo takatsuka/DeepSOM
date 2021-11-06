@@ -261,10 +261,10 @@ def test_offset(hex_som, fix_som):
     assert_array_equal(hex_som.x_mat[0], hex_som.x_mat[0])
 
 
-def test_str():
-    som = SOM(uid=2, graph=None, size=3, dim=3)
-    assert som.__str__() == "SOMNode 2"
-    assert str(som) == "SOMNode 2"
+def test_som_str():
+    som = SOM(uid=3, graph=None, size=3, dim=3)
+    assert som.__str__() == "SOMNode 3"
+    assert str(som) == "SOMNode 3"
 
 
 def test_update():

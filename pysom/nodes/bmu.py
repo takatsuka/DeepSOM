@@ -109,8 +109,7 @@ class BMU(Node):
         # helper method to return a grid of distances dist[i,j], i.e.,
         # distances between data point x[i] and weight at j.
         data = array(data)
-        flatten_weights = self.som.weights.reshape(
-            -1, self.som.weights.shape[2])
+        flatten_weights = self.som.weights.reshape(-1, self.som.weights.shape[2])
         data_sq = (data ** 2).sum(axis=1, keepdims=True)
         flatten_weights_sq = (flatten_weights ** 2).sum(axis=1, keepdims=True)
         dot_term = dot(data, flatten_weights.transpose())
@@ -144,7 +143,3 @@ class BMU(Node):
         # return 2D vector of bmu weights.
         return self.som.weights[unravel_index(bmu_idx,
                                               self.som.weights.shape[:2])]
-
-
-if __name__ == "__main__":
-    pass
