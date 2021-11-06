@@ -4,26 +4,26 @@ import "./animal.scss";
 
 import { Switch, Button, ButtonGroup } from "@blueprintjs/core";
 
-import bear from '../../../imgs/animal/__bear.png';
-import bird from '../../../imgs/animal/__bird.png';
-import bull from '../../../imgs/animal/__bull.png';
-import cat from '../../../imgs/animal/__cat.png';
-import chicken from '../../../imgs/animal/__chicken.png';
-import cow from '../../../imgs/animal/__cow.png';
-import dog from '../../../imgs/animal/__dog.png';
-import duck from '../../../imgs/animal/__duck.png';
-import elephant from '../../../imgs/animal/__elephant.png';
-import floppy_eared_dog from '../../../imgs/animal/__floppy-eared-dog.png';
-import gorilla from '../../../imgs/animal/__gorilla.png';
-import hen from '../../../imgs/animal/__hen.png';
-import hippo from '../../../imgs/animal/__hippo.png';
-import octopus from '../../../imgs/animal/__octopus.png';
-import pig from '../../../imgs/animal/__pig.png';
-import rhino from '../../../imgs/animal/__rhino.png';
-import shark from '../../../imgs/animal/__shark.png';
-import textured_cat from '../../../imgs/animal/__textured-cat.png';
-import turtle from '../../../imgs/animal/__Turtle.png';
-import whale from '../../../imgs/animal/__whale.png';
+import bear from './imgs/__bear.png';
+import bird from './imgs/__bird.png';
+import bull from './imgs/__bull.png';
+import cat from './imgs/__cat.png';
+import chicken from './imgs/__chicken.png';
+import cow from './imgs/__cow.png';
+import dog from './imgs/__dog.png';
+import duck from './imgs/__duck.png';
+import elephant from './imgs/__elephant.png';
+import floppy_eared_dog from './imgs/__floppy-eared-dog.png';
+import gorilla from './imgs/__gorilla.png';
+import hen from './imgs/__hen.png';
+import hippo from './imgs/__hippo.png';
+import octopus from './imgs/__octopus.png';
+import pig from './imgs/__pig.png';
+import rhino from './imgs/__rhino.png';
+import shark from './imgs/__shark.png';
+import textured_cat from './imgs/__textured-cat.png';
+import turtle from './imgs/__Turtle.png';
+import whale from './imgs/__whale.png';
 
 class AnimalTile extends Component {
     constructor(props) {

@@ -110,9 +110,9 @@
 }
 
 .animal-icon > img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: cover;
+    max-height: 90%;
+    max-width: 90%;
+    object-fit: scale-down;
     vertical-align: bottom;
 }
 
