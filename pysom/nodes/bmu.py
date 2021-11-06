@@ -139,3 +139,4 @@ class BMU(Node):
         bmu_idx = self.get_1D(data)
         # return 2D vector of bmu weights.
         return self.som.weights[unravel_index(bmu_idx, self.som.weights.shape[:2])]
+.0

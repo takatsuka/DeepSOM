@@ -4,18 +4,26 @@ from ..node import Node
 
 
 class Calibrate(Node):
+
     """
-    TODO Node that provides a label to associated SOM index (usually BMU).
+    Node that provides a label to associated SOM index (usually BMU).
+
+    Calibrate node should be provided a reference to the test data and list
+    of labels so that the parent Graph class can provide a classification or
+    calibration functionality to the otherwise unsupervised training process.
 
     Args:
-        uid ([type]): [description]
-        graph ([type]): [description]
-        labels ([type], optional): [description]. Defaults to None.
-        test ([type], optional): the input test data that requires \
+        uid (int): the unique integer ID of the BMU node instance
+        graph (Graph): the containing Graph instance holding the
+                        constructed BMU node
+        labels (list, optional): the list of labels to be used during the \
+                                 calibration process. Defaults to None.
+        test (np.ndarray, optional): the input test data that requires \
             labelling. Defaults to None.
     """
 
-    def __init__(self, uid: int, graph, labels=None, test=None):
+    def __init__(self, uid: int, graph, labels: list = None,
+                 test: np.ndarray = None):
         super(Calibrate, self).__init__(uid, graph)
         self.test = test
         self.labels = labels
@@ -27,31 +35,31 @@ class Calibrate(Node):
 
     def get_output(self, slot: int) -> Node:
         """
-        TODO Getter function to return the classification of associated nodes.
+        Getter function to return the classification of associated nodes.
 
         The concatenation of the incoming arrays will be returned. If there
         are no incoming arrays, then a RuntimeError is raised. If slot is 0,
-        then the Concat node itself is returned.
+        then the Calibrate node itself is returned. Else, Calibrated labels
+        or each row in input data, in order is returned.
 
         Args:
             slot (int): if 0, then the Calibrate node instance is returned. \
-                Else the concatenation of the arrays are returned.
+                        Else, the calibrated labels are returned.
 
         Raises:
             RuntimeError: if get_output() is called prior to adding any \
                 incoming array(s)
 
         Returns:
-            object: returns the concatenated arrays along the axis defined \
-                in the constructor if slot is not 0. Else, the Concat node \
-                is returned.
+            object: returns the list of ordered labels if the slot is not 0. \
+                    Else, the Calibration node itself is returned.
         """
         if slot == 0:
             return self
 
         self.som = self.get_input()
         label_map = self.som.map_labels(self.som.get_input(), self.labels)
-        
+
         if self.test is None:
             return label_map
 
@@ -61,18 +69,15 @@ class Calibrate(Node):
         """
         A verification method to confirm if a proposed slot ID can be used.
 
-        No limitation is imposed on the Classify class with regards to valid
-        slot values other than that it must be a positive integer. Returns
-        True if it is valid, else a RuntimeError is raised.
+        The Calibrate class may only accept slot value of either 0 or 1.
+        Returns True if it is valid, else False is returned.
 
         Args:
-            slot (int): a proposed integer slot ID to be checked
-
-        Raises:
-            RuntimeError: if the slot is zero or negative
+            slot (int): a proposed integer slot ID to be checked. May only be
+                        0 or 1.
 
         Returns:
-            bool: True if the slot is a positive integer
+            bool: True if the slot is valid, else returns False
         """
         if not (0 <= slot <= 1):
             self.graph._log_ex(f"Slots {slot} is not acceptable for {self}")
@@ -82,18 +87,21 @@ class Calibrate(Node):
 
     def calibrate(self, label_map: dict) -> list:
         """
-        Getter function to return a list of labels for the test data, as calibrated on the input
-        data of the SOM that it is trained on.
+        Getter function to return a list of labels for the test data, as
+        calibrated on the input data of the SOM that it is trained on.
 
-        Utilises the provided label_map dict which maps each BMU coordinate to a Counter of labels,
-        with frequency value for each label calculated as a number of data vectors with given label L,
-        mapped to the BMU coordinate for an input data vector. This function returns the most common
-        label corresponding to a BMU, if the majority of data vectors mapped to a BMU has that label.
-        If vectors are mapped to a BMU without a label, then a default label (most common in data), is
-        given for that row in the test data.
-        
-        Returns a list of labels for each row in the test data, as calibrated by the input data used to
-        train the SOM, corresponding to the bmu for each row in the input data.
+        Utilises the provided label_map dict which maps each BMU coordinate
+        to a Counter of labels, with frequency value for each label calculated
+        as a number of data vectors with given label L, mapped to the BMU
+        coordinate for an input data vector. This function returns the most
+        common label corresponding to a BMU, if the majority of data vectors
+        mapped to a BMU has that label. If vectors are mapped to a BMU without
+        a label, then a default label (most common in data), is given for that
+        row in the test data.
+
+        Returns a list of labels for each row in the test data, as calibrated
+        by the input data used to train the SOM, corresponding to the BMU
+        for each row in the input data.
 
         Args:
             label_map (defaultdict): Default dictionary where:
@@ -109,7 +117,7 @@ class Calibrate(Node):
         # After summing up, we retrieve the most common label e.g, Counter({"a": 40, "b": 20, "c": 50}).most_common()
         # will return Counter({"c": 50, "a": 40, "b": 20}), thus, .most_common()[0][0] returns label "c", the overall
         # most common label - that we use as our default label if the BMU for our input data is not in the label_map.
-        
+
         result = []
 
         for t in self.test:

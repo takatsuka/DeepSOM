@@ -385,15 +385,15 @@ class SOM(Node):
         self.train(self.get_input())
         self.output_ready = True
 
-    def map_labels(self, data, labels):
+    def map_labels(self, data: np.ndarray, labels: list):
         """
         Returns a default dictionary mapping the coords[i,j] for each bmu of the input data, to a
         list of labels counted by frequency of mappings (of each label) to the bmu with coords[i,j].
-       
+
         Args:
             data (np.ndarray): The input data the SOM is trained on.
-            labels (np.ndarray): Corresponding labels for each row in input data.
-        
+            labels (list): Corresponding labels for each row in input data.
+
         Returns:
             label_map (defaultdict): Default dictionary where:
                 - Key is coordinate tuple (x,y) for the BMU of each row (vector) in data

@@ -58,7 +58,7 @@ class Concat(Node):
         Returns:
             object: returns the concatenated arrays along the axis defined \
                 in the constructor if slot is not 0. Else, the Concat node \
-                is returned.
+                itself is returned.
         """
         if len(self.incoming) == 0:
             raise RuntimeError("Must add at least one array before concat")
@@ -75,18 +75,15 @@ class Concat(Node):
         """
         A verification method to confirm if a proposed slot ID can be used.
 
-        No limitation is imposed on the Concat class with regards to valid
-        slot values other than that it must be a positive integer. Returns
-        True if it is valid, else a RunetimError is raised.
+        The Concat class may only accept slot value of either 0 or 1.
+        Returns True if it is valid, else False is returned.
 
         Args:
-            slot (int): a proposed integer slot ID to be checked
-
-        Raises:
-            RuntimeError: if the slot is zero or negative
+            slot (int): a proposed integer slot ID to be checked. May only be
+                        0 or 1.
 
         Returns:
-            bool: True if the slot is a positive integer
+            bool: True if the slot is valid, else returns False
         """
 
         if not (0 <= slot <= 1):
