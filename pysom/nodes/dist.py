@@ -20,8 +20,8 @@ class Dist(Node):
         return str_rep
 
     def _evaluate(self):
-        if self.output_ready:
-            return
+        # if self.output_ready:
+        #   return
         dat = self.get_input()
         self.pre_chopped = [dat.take(sel, axis=axis) for axis, sel in self.sel]
 
