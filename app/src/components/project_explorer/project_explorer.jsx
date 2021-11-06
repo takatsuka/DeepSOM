@@ -54,7 +54,10 @@ class ProjectExplorer extends Component {
 
             rename: false,
             renameFrom: "",
-            renameTo: ""
+            renameTo: "",
+
+            objectInspector: false,
+            objectDes: null
         }
     }
 
@@ -103,6 +106,19 @@ class ProjectExplorer extends Component {
 
             this.state.tree[2].childNodes = l
             this.setState({ tree: this.state.tree })
+        });
+    }
+
+    inspectObject(key) {
+        window.pywebview.api.call_service(this.props.datastore, "fetch_object_repr", [key]).then((e) => {
+            if(!e.status) {
+                PrimaryToaster.show({
+                    message: "Failed: " + e.msg,
+                    intent: Intent.DANGER,
+                });
+            }
+            
+            this.setState({ objectInspector: true, objectDes: e })
         });
     }
 
@@ -159,15 +175,15 @@ class ProjectExplorer extends Component {
     renameObject() {
         window.pywebview.api.call_service(-1, "rename_object", [this.state.renameFrom, this.state.renameTo]).then((e) => {
 
-             this.setState({ rename: false }, () => {
+            this.setState({ rename: false }, () => {
                 PrimaryToaster.show({
                     message: (e.status ? "Successfully renamed to: " : "Failed: ") + e.msg,
                     intent: e.status ? Intent.SUCCESS : Intent.DANGER,
                 });
                 this.refresh();
-             })
+            })
         })
-     }
+    }
 
     updateTree(thing) {
         thing()
@@ -177,6 +193,10 @@ class ProjectExplorer extends Component {
     handleOpen(item) {
         if (item.id.type === "model") {
             this.props.openTab(<DragDropSOM />, item.id.key, true, item.id.key)
+        }
+
+        if(item.id.type === "opaque") {
+            this.inspectObject(item.id.key)
         }
     }
 
@@ -199,8 +219,10 @@ class ProjectExplorer extends Component {
         let menu = (
             <Menu>
                 <MenuDivider title={item.label} />
-                <MenuItem icon="paperclip" text="Rename" onClick={() => this.handleRename(item)}/>
+                <MenuItem icon="paperclip" text="Rename" onClick={() => this.handleRename(item)} />
                 <MenuItem icon="trash" intent={Intent.DANGER} text="Delete" onClick={() => this.handleDelete(item)} />
+                <MenuDivider title="Advanced" />
+                <MenuItem icon="data-connection" text="Inspect" onClick={() => this.inspectObject(item.id.key)} />
             </Menu>
         )
 
@@ -259,17 +281,20 @@ class ProjectExplorer extends Component {
                 </ButtonGroup>
 
                 <Dialog isOpen={this.state.rename} title="Rename" onClose={() => this.setState({ rename: false })}>
-                    <div className={Classes.DIALOG_BODY}>
-                        <Example>
-                            <InputGroup
-                                onChange={(x) => this.setState({renameTo: x.target.value})}
-                                value={this.state.renameTo}
-                            />
-                        </Example>
-                        <div class=".bp3-ui-text">
-                            <pre class="tab" color="red">
-                                {this.state.nameExists ? "Name already exists." : "        " }
-                            </pre>
+                    <div>
+                        <div className={Classes.DIALOG_BODY}>
+                            <Example>
+                                <InputGroup
+                                    onChange={(x) => this.setState({ renameTo: x.target.value })}
+                                    value={this.state.renameTo}
+                                />
+                            </Example>
+                            <div class=".bp3-ui-text">
+                                <pre class="tab" color="red">
+                                    {this.state.nameExists ? "Name already exists." : "        "}
+                                </pre>
+                            </div>
+
                         </div>
                         <div className={Classes.DIALOG_FOOTER}>
                             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
@@ -283,31 +308,60 @@ class ProjectExplorer extends Component {
                 </Dialog>
 
                 <Dialog isOpen={this.state.data_picker} title="Select data" onClose={() => this.setState({ data_picker: false })}>
-                    <div className={Classes.DIALOG_BODY}>
-                        <p>
-                            <strong>
-                                {this.state.dp_msg}
-                            </strong>
-                        </p>
-                        <Suggest
+                    <div>
+                        <div className={Classes.DIALOG_BODY}>
+                            <p>
+                                <strong>
+                                    Type: {this.state.dp_msg}
+                                </strong>
+                            </p>
+                            <Suggest
 
-                            inputValueRenderer={(e) => (e)}
-                            itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
-                            items={this.state.dp_items}
-                            onItemSelect={(e) => this.setState({ dp_query: e })}
-                            popoverProps={{ minimal: true }}
-                            query={this.state.dp_query}
-                            onQueryChange={(q) => { this.setState({ dp_query: q }) }}
-                            itemPredicate={(a, b) => b.toLowerCase().includes(a.toLowerCase())}
-                            noResults={<MenuItem disabled={true} text="No results. Maybe import them first?" />}
-                        />
+                                inputValueRenderer={(e) => (e)}
+                                itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
+                                items={this.state.dp_items}
+                                onItemSelect={(e) => this.setState({ dp_query: e })}
+                                popoverProps={{ minimal: true }}
+                                query={this.state.dp_query}
+                                onQueryChange={(q) => { this.setState({ dp_query: q }) }}
+                                itemPredicate={(a, b) => b.toLowerCase().includes(a.toLowerCase())}
+                                noResults={<MenuItem disabled={true} text="No results. Maybe import them first?" />}
+                            />
 
+
+                        </div>
                         <div className={Classes.DIALOG_FOOTER}>
                             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
 
                                 <Button onClick={() => this.setState({ data_picker: false })}>Cancel</Button>
                                 <Button intent={Intent.SUCCESS} onClick={() => this.dpConfirm()}>Confirm</Button>
 
+                            </div>
+                        </div>
+                    </div>
+                </Dialog>
+
+                <Dialog isOpen={this.state.objectInspector} title="Opaque Object Inspector" onClose={() => this.setState({ objectInspector: false })}>
+                    <div>
+                        <div className={Classes.DIALOG_BODY}>
+                            <p>
+                                <strong>
+                                    Type: {this.state.objectDes ? this.state.objectDes.type : "?"}
+                                </strong>
+                            </p>
+                            <p>
+                                <strong>
+                                    Representation:
+                                </strong>
+                            </p>
+                            <p>
+                                {this.state.objectDes ? this.state.objectDes.repr : "?"}
+                            </p>
+
+                        </div>
+                        <div className={Classes.DIALOG_FOOTER}>
+                            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                                <Button onClick={() => this.setState({ objectInspector: false })}>Done</Button>
                             </div>
                         </div>
                     </div>

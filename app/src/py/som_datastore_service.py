@@ -149,6 +149,12 @@ class SOMDatastoreService:
         self.data_instances[new_key] = value
         return {"status": True, "msg": new_key}
 
+    def fetch_object_repr(self, key):
+        if key not in self.data_instances:
+            return {"status": False, "msg": "Object does not exist."}
+        obj = self.data_instances[key]
+        return {"status": True, "type": str(obj.__class__), "repr": str(obj), "msg": ""}
+
     def current_workspace_name(self):
         return self.ws_name
 
