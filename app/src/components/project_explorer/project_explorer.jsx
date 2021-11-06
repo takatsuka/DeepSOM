@@ -2,10 +2,9 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Classes, Icon, Intent, MenuDivider, TreeNodeInfo, Tree, Elevation, Card, Button, ButtonGroup, Dialog, MenuItem, ContextMenu, Menu } from "@blueprintjs/core";
+import { Classes, IconSize, Intent, MenuDivider, Tree, Elevation, Spinner, Button, ButtonGroup, Dialog, MenuItem, ContextMenu, Menu, InputGroup, Icon } from "@blueprintjs/core";
+import { Example } from "@blueprintjs/docs-theme";
 import { Suggest } from "@blueprintjs/select";
-import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
-import { TAG_INPUT_VALUES } from '@blueprintjs/core/lib/esm/common/classes';
 
 import DragDropSOM from '../drag-drop/drag-drop';
 import ImageView from '../imageview/imageview';
@@ -17,6 +16,8 @@ import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
 class ProjectExplorer extends Component {
     constructor(props) {
         super(props)
+
+        this.handleFilterChange = this.handleFilterChange.bind(this)
 
         this.state = {
             workspaceName: "new",
@@ -45,6 +46,10 @@ class ProjectExplorer extends Component {
             ],
 
             data_picker: false,
+            rename: false,
+            filterValue: "",
+            renameFile: "",
+            nameExists: false,
 
             dp_type: "",
             dp_msg: "what the f?",
@@ -172,10 +177,7 @@ class ProjectExplorer extends Component {
     }
 
     handleRename(item) {
-        PrimaryToaster.show({
-            message: "Rename failed, not implemented yet :(",
-            intent: Intent.WARNING,
-        });
+        this.setState({ rename: true, renameFile: item.label });
     }
 
     handleCtxMenu(item, p, e) {
@@ -218,6 +220,36 @@ class ProjectExplorer extends Component {
         this.setState({ data_picker: false })
     }
 
+    handleFilterChange(key) {
+        return (event) => this.setState({
+            [key]: event.currentTarget.value,
+            nameExists: false
+        }, () => {
+            window.pywebview.api.call_service(-1, "ensure_unique", [this.state.filterValue]).then((name) => {
+                if (name.localeCompare(this.state.filterValue) != 0) {
+                    this.setState({ nameExists: true })
+                } else {
+                    this.setState({ nameExists: false })
+                }
+            })
+        })
+    }
+
+    renameFile() {
+       window.pywebview.api.call_service(-1, "rename_object", [this.state.renameFile, this.state.filterValue]).then((finish) => {
+            if (finish == false) {
+                return;
+            }
+            this.setState({ rename: false }, () => {
+                PrimaryToaster.show({
+                    message: "Successfully renamed file.",
+                    intent: Intent.SUCCESS,
+                });
+                this.refresh();
+            })
+       })
+    }
+
     render() {
 
         return (
@@ -226,6 +258,42 @@ class ProjectExplorer extends Component {
                     <Button active={true} >{this.state.workspaceName}</Button>
 
                 </ButtonGroup>
+
+                <Dialog isOpen={this.state.rename} title="Rename a file" onClose={() => this.setState({ rename: false })}>
+                    <div className={Classes.DIALOG_BODY}>
+                        <p>
+                            <strong>
+                                Type in the name to replace
+                            </strong>
+                        </p>
+                        <Example>
+                            <InputGroup
+                                asyncControl={true}
+                                onChange={this.handleFilterChange("filterValue")}
+                                rightElement={this.state.filterValue ? 
+                                    (this.state.nameExists ? 
+                                        <Icon icon="delete" size={IconSize.LARGE} color="red" />
+                                        : <Icon icon="confirm" size={IconSize.LARGE} color="green" />)
+                                    : undefined }
+                                value={this.state.filterValue}
+                                defaultValue={this.state.renameFile}
+                            />
+                        </Example>
+                        <div class=".bp3-ui-text">
+                            <pre class="tab" color="red">
+                                {this.state.nameExists ? "Name already exists for another file." : "        " }
+                            </pre>
+                        </div>
+                        <div className={Classes.DIALOG_FOOTER}>
+                            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+
+                                <Button onClick={() => this.setState({ rename: false })}>Cancel</Button>
+                                <Button intent={Intent.SUCCESS} disabled={this.state.nameExists} onClick={() => this.renameFile()}>Confirm</Button>
+
+                            </div>
+                        </div>
+                    </div>
+                </Dialog>
 
                 <Dialog isOpen={this.state.data_picker} title="Select a data" onClose={() => this.setState({ data_picker: false })}>
                     <div className={Classes.DIALOG_BODY}>

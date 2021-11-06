@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.37.0",
+    "@blueprintjs/docs-theme": "^3.10.18",
     "@blueprintjs/icons": "^3.24.0",
     "@blueprintjs/popover2": "0.12.4",
     "@blueprintjs/select": "^3.15.3",
@@ -30,7 +31,6 @@
     "@popperjs/core": "^2.6.0",
     "d3": "^6.4.0",
     "d3-3d": "^0.1.2",
-    "react-split": "2.0.13",
     "normalize.css": "^8.0.1",
     "react": "^16.14.0",
     "react-dom": "16.12.0",
