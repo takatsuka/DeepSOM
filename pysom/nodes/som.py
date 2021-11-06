@@ -422,7 +422,3 @@ class SOM(Node):
 
     def check_slot(self, slot: int) -> bool:
         return slot <= 1
-
-
-if __name__ == "__main__":
-    pass
