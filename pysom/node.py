@@ -185,7 +185,3 @@ class Node:
             bool: True by default
         """
         return self.check_slot(slot)
-
-
-if __name__ == "__main__":
-    pass
