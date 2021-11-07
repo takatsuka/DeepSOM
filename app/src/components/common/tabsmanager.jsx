@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { NonIdealState } from "@blueprintjs/core";
 
 import Welcome from "../welcome/welcome"
+import SOMView from '../somview/somview';
 
 class TabsManager extends Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class TabsManager extends Component {
     componentDidMount() {
 
         this.openTab(<Welcome />, "Welcome to PySOM", true)
+        this.openTab(<SOMView />, "SOM view", true)
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {

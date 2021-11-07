@@ -27,6 +27,7 @@ class Calibrate(Node):
         super(Calibrate, self).__init__(uid, graph)
         self.test = test
         self.labels = labels
+        self.label_map = None
         self.som = None
 
     def __str__(self) -> str:
@@ -58,10 +59,11 @@ class Calibrate(Node):
             return self
 
         self.som = self.get_input()
-        label_map = self.som.map_labels(self.som.get_input(), self.labels)
-
+        self.label_map = self.som.map_labels(self.som.get_input(), self.labels)
+        self.output_ready = True
+        
         if self.test is None:
-            return label_map
+            return self.label_map
 
         return self.calibrate(label_map)
 

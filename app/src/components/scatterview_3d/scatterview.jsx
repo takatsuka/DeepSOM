@@ -416,8 +416,6 @@ class ScatterView3D extends Component {
                         <Button icon="document" onClick={() => this.importDataFile()}>Load Data</Button>
                         <Button icon="one-to-many" disabled={!this.state.hasDataset} onClick={() => this.importWeightsFile()}>Train data</Button>
                     </ButtonGroup>
-
-
                 </div>
 
                 <div className="graph-area">
