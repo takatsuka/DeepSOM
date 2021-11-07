@@ -154,10 +154,17 @@ def get_index_page():
     raise Exception(f'No index.html found {os.getcwd()} {sys._MEIPASS}')
 
 
-if hasattr(sys, '_MEIPASS'):
-    print("moving to forzen application path: " + sys._MEIPASS)
-    os.chdir(sys._MEIPASS)
-window = webview.create_window('PySOM Creator', get_index_page(
-), js_api=Api(), frameless=True, easy_drag=False)
+if __name__ == "__main__":
+    if hasattr(sys, '_MEIPASS'):
+        print("moving to forzen application path: " + sys._MEIPASS)
+        os.chdir(sys._MEIPASS)
+
+    index_page = get_index_page()
+    if len(sys.argv) == 2 and sys.argv[1] == "--runtest":
+        index_page = index_page.replace("index.html", "index-testing.html")
+
+    window = webview.create_window('PySOM Creator', index_page, js_api=Api(),
+                                    frameless=True, easy_drag=False)
 # gui="cef")
-webview.start(debug=(False if hasattr(sys, '_MEIPASS') else True))
+
+    webview.start(debug=(False if hasattr(sys, '_MEIPASS') else True))

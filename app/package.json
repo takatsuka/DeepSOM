@@ -19,7 +19,8 @@
     "start:windows": ".\\venv\\Scripts\\python src\\index.py",
     "start:default": "./venv/bin/python src/index.py",
     "build": "npm run clean && npm run frontend:prod && run-script-os",
-    "build:macos": "pyinstaller build-macOS.spec"
+    "build:macos": "pyinstaller build-macOS.spec",
+    "testing": "parcel build src/index-testing.html --public-url . -d gui && ./venv/bin/python src/index.py --runtest"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.37.0",
