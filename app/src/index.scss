@@ -18,3 +18,16 @@ html {
 .bp3-dark .leftpanel {
     background-color: $dark-gray3;
 }
+
+#test-overlay {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 30%;
+    height: 30%;
+    background-color: #000452;
+    opacity: 0.8;
+    z-index: 10000;
+    overflow: scroll;
+    padding: 10px;
+}

@@ -22,6 +22,7 @@ class DragDropSOM extends Component {
         this.state = { dragging: false };
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.locationUpdateAPI = this.locationUpdateAPI.bind(this);
     }
 
     onMouseDown(e) {
@@ -62,6 +63,15 @@ class DragDropSOM extends Component {
         this.props.parent.openSideMenu(this)
     }
 
+    locationUpdateAPI(e) {
+        var x = e.target.getAttribute("data-api-x");
+        var y = e.target.getAttribute("data-api-y")
+        if (x == "default" || y == "default") {
+            return;
+        }
+        this.props.parent.child_update(this.props.node.id, parseInt(x), parseInt(y));
+    }
+
     render() {
         var n = this.props.node
         var t = this.props.template
@@ -72,6 +82,10 @@ class DragDropSOM extends Component {
                 style={{ top: n.y, left: n.x, opacity: this.state.dragging ? 0.6 : 1, width: s.width, height: s.height }}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onContextMenu={this.contextMenu.bind(this)}
+                onClick={this.locationUpdateAPI.bind(this)}
+                data-api-x="default"
+                data-api-y="default"
+                tabIndex="0"
             >
 
                 <Card className={s} interactive={true} elevation={Elevation.THREE}>

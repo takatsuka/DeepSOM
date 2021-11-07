@@ -20,6 +20,7 @@
     "start:default": "./venv/bin/python src/index.py",
     "build": "npm run clean && npm run frontend:prod && run-script-os",
     "build:macos": "pyinstaller build-macOS.spec",
+    "fasttesting": "parcel serve src/index-testing.html",
     "testing": "parcel build src/index-testing.html --public-url . -d gui && ./venv/bin/python src/index.py --runtest"
   },
   "dependencies": {
@@ -37,7 +38,8 @@
     "react-dom": "^17.0.2",
     "react-split": "^2.0.13",
     "react-split-pane": "^0.1.92",
-    "react-xarrows": "^2.0.2"
+    "react-xarrows": "^2.0.2",
+    "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
     "parcel-bundler": "1.12.2",
