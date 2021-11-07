@@ -482,7 +482,7 @@ class DragDrop extends Component {
                 <MenuItem icon="new-grid-item" text="Mini Patcher" id="mini-patcher-btn" onClick={() => this.add_som("minipatch")} />
                 <MenuDivider title="Functional" />
                 <MenuItem icon="function" text="Get BMU" id="get-bmu-btn" onClick={() => this.add_som("get_bmu")} />
-                <MenuItem icon="function" text="Calibrate" onClick={() => this.add_som("calibrate")} />
+                <MenuItem icon="function" text="Calibrate" id="calibrate-btn" onClick={() => this.add_som("calibrate")} />
 
 
             </Menu>

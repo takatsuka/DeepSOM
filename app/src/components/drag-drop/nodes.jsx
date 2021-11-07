@@ -25,6 +25,7 @@ export const NodeTemplates = {
                 <InputGroup placeholder="Name" disabled value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
                 <NumericInput
+                    id="input-dim"
                     value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
                     rightElement={<Button disabled minimal>Dimension</Button>}
                     fill buttonPosition="left" placeholder="10" />
@@ -61,9 +62,10 @@ export const NodeTemplates = {
 
         contextMenu: (d, editor) => (
             <div>
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
                 <Suggest
+                    id="input-shape"
                     inputValueRenderer={(e) => (e)}
                     itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
                     items={["index", "weights"]}
@@ -90,7 +92,7 @@ export const NodeTemplates = {
 
         contextMenu: (d, editor) => (
             <div>
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
                 <h4>Label Data</h4>
                 <p>{d.props.label_key == "" ? "Not yet selected." : d.props.label_key}</p>
@@ -120,8 +122,9 @@ export const NodeTemplates = {
         contextMenu: (d, editor) => (
             <div>
 
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <NumericInput
+                    id="input-axis"
                     value={d.props.axis} onValueChange={(t) => editor.wrapSOMS(() => (d.props.axis = t))}
                     rightElement={<Button disabled minimal>Axis</Button>}
                     fill buttonPosition="left" placeholder="10" />
@@ -161,8 +164,9 @@ export const NodeTemplates = {
         contextMenu: (d, editor) => (
             <div>
 
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <NumericInput
+                    id="input-axis"
                     value={d.props.axis} onValueChange={(t) => editor.wrapSOMS(() => (d.props.axis = t))}
                     rightElement={<Button disabled minimal>Axis</Button>}
                     fill buttonPosition="left" placeholder="10" />
@@ -194,28 +198,33 @@ export const NodeTemplates = {
         ),
         contextMenu: (d, editor) => (
             <div>
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
                 <h4>Dimensions</h4>
                 <NumericInput
+                    id="input-indim"
                     value={d.props.inputDim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.inputDim = t))}
                     rightElement={<Button disabled minimal>Input</Button>}
                     fill buttonPosition="left" placeholder="10" />
                 <NumericInput
+                    id="input-dim"
                     value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
                     rightElement={<Button disabled minimal>Map Size</Button>}
                     fill buttonPosition="left" placeholder="10" />
 
                 <h4>Training</h4>
                 <NumericInput
+                    id="input-trainiter"
                     value={d.props.train_iter} onValueChange={(t) => editor.wrapSOMS(() => (d.props.train_iter = t))}
                     rightElement={<Button disabled minimal>Training Iterations</Button>}
                     fill buttonPosition="left" />
                 <NumericInput
+                    id="input-sigma"
                     value={d.props.sigma} onValueChange={(t) => editor.wrapSOMS(() => (d.props.sigma = t))} stepSize={0.2}
                     rightElement={<Button disabled minimal>Sigma</Button>}
                     fill buttonPosition="left" />
                 <NumericInput
+                    id="input-lr"
                     value={d.props.lr} onValueChange={(t) => editor.wrapSOMS(() => (d.props.lr = t))} stepSize={0.1}
                     rightElement={<Button disabled minimal>Learning Rate</Button>}
                     fill buttonPosition="left" />
@@ -281,9 +290,10 @@ export const NodeTemplates = {
         ),
         contextMenu: (d, editor) => (
             <div>
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
                 <NumericInput
+                    id="input-dim"
                     value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
                     rightElement={<Button disabled minimal>N Patches</Button>}
                     fill buttonPosition="left" placeholder="10" />
@@ -315,18 +325,21 @@ export const NodeTemplates = {
         ),
         contextMenu: (d, editor) => (
             <div>
-                <InputGroup placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
+                <InputGroup id="input-name" placeholder="Name" value={d.name} onChange={(t) => editor.wrapSOMS(() => (d.name = t.target.value))} />
                 <Divider />
                 <NumericInput
+                    id="input-kernel"
                     value={d.props.kernel} onValueChange={(t) => editor.wrapSOMS(() => (d.props.kernel = t))}
                     rightElement={<Button disabled minimal>Kernel</Button>}
                     fill buttonPosition="left" placeholder="10" />
                 <NumericInput
+                    id="input-stride"
                     value={d.props.stride} onValueChange={(t) => editor.wrapSOMS(() => (d.props.stride = t))}
                     rightElement={<Button disabled minimal>Strides</Button>}
                     fill buttonPosition="left" placeholder="10" />
 
                 <NumericInput
+                    id="input-dim"
                     value={d.props.dim} onValueChange={(t) => editor.wrapSOMS(() => (d.props.dim = t))}
                     rightElement={<Button disabled minimal>N Input</Button>}
                     fill buttonPosition="left" placeholder="10" />
