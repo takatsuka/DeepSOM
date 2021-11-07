@@ -4,7 +4,7 @@ import { Component } from 'react';
 
 import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
 
-
+import { PrimaryToaster } from '../common/toaster';
 import Split from 'react-split'
 import SplitPane, { Pane } from 'react-split-pane';
 import "../common/splitview.scss"
@@ -21,12 +21,20 @@ class SOMView extends Component {
         this.d3view = React.createRef();
         this.resultView = React.createRef();
         this.state = {
-            somDim: 10, dotRadius: 10, img: null, services: null,
-            resultViewSize: 100,
+            somDim: 10, dotRadius: 10,
+            viewReady: false,
+            service: null,
+
+            links: null, nodes: null
         }
 
+        if (window.pywebview)
+            window.pywebview.api.launch_service("SomViewService").then((x) => (
+                this.setState({
+                    service: x
+                })
+            ))
 
-        this.selector = []
     }
 
     componentDidMount() {
@@ -39,9 +47,6 @@ class SOMView extends Component {
         if (state != null) {
             this.setState(state)
         }
-
-        this.initSOMView()
-
     }
 
     componentWillUnmount() {
@@ -49,14 +54,27 @@ class SOMView extends Component {
     }
 
 
-    embedCard(whatever) {
-        return (
-            <Card interactive={false} elevation={Elevation.TWO}>
-                {whatever}
-            </Card>
-        )
-    }
+    pickInput() {
+        this.props.fileman.ask_user_pick_data("Select a SOM", "opaque", (k) => {
+            window.pywebview.api.call_service(this.state.service, "set_input", [k]).then((e) => {
 
+                if (!e.status) {
+                    PrimaryToaster.show({
+                        message: (e.status ? "SOM Opened." : "Failed: ") + e.msg,
+                        intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+                    });
+                }
+
+                window.pywebview.api.call_service(this.state.service, "get_som_viz_data", []).then((e) => {
+                    
+                    this.setState({viewReady: true, links: e.obj.links, nodes: e.obj.nodes}, () => {
+                        this.initSOMView()
+                    })
+                });
+            });
+        })
+
+    }
     drag(simulation) {
         const somview = this
         function dragstarted(event, d) {
@@ -93,24 +111,12 @@ class SOMView extends Component {
             .on("end", dragended);
     }
 
-    loadData() {
-        var self = this
-        window.pywebview.api.launch_service("SOMVisualizationService").then((x) => (
-            self.setState({ services: x }, () => (
-                window.pywebview.api.call_service(self.state.services, "get_dim", []).then((y) => (
-                    self.setState({ somDim: y }, () => self.initSOMView(false))
-                ))
-            ))
-        ))
-
-    }
-
     rectLinks(dim) {
         var links = []
         for (let y = 0; y < dim; y++) {
             for (let x = 0; x < dim - 1; x++) {
                 let row = y * dim
-                links.push({ "source": row + x, "target": row + x+1, "value": 26 })
+                links.push({ "source": row + x, "target": row + x + 1, "value": 26 })
             }
         }
 
@@ -133,7 +139,7 @@ class SOMView extends Component {
         d3.select(this.d3view.current).selectAll('g').attr("transform", transform);
     }
 
-    initSOMView() {
+    initSOMView(nodes, links) {
         var margin = 30
         var w = this.d3view.current.clientWidth
         var h = this.d3view.current.clientHeight
@@ -142,10 +148,10 @@ class SOMView extends Component {
         var horMarg = this.state.dotRadius
         var verMarg = h * 0.5 - (gridSize * 0.5)
 
-        var nodes = [...Array(this.state.somDim * this.state.somDim).keys()].map((e) => ({
-            id: e
-        }))
-        var links = this.rectLinks(this.state.somDim)
+        var nodes = this.state.nodes
+        var links = this.state.links
+        console.log(nodes)
+        console.log(links)
 
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id(d => d.id).strength(1.0).distance((d) => d.value).iterations(15))
@@ -160,7 +166,7 @@ class SOMView extends Component {
             })
 
 
-
+ 
 
         const svg = d3.select(this.d3view.current)
         svg.call(zoom);
@@ -188,15 +194,15 @@ class SOMView extends Component {
         this.linkline = l
 
 
-        // const t = this.nodeg.selectAll("text")
-        //     .data(nodes)
-        //     .join("text")
-        //     .style("fill", "white")
-        //     .style("font-size", 4)
-        //     .text(d => d.id)
-        //     .attr("stroke-width", 0)
-        //     .attr("text-anchor", "middle")
-        //     .attr("dy", 6)
+        const t = this.nodeg.selectAll("text")
+            .data(nodes)
+            .join("text")
+            .style("fill", "white")
+            .style("font-size", 10)
+            .text(d => d.l)
+            .attr("stroke-width", 0)
+            .attr("text-anchor", "middle")
+            .attr("dy", 6)
 
         simulation.on("tick", () => {
             l
@@ -210,9 +216,9 @@ class SOMView extends Component {
                 .attr("cy", d => d.y);
 
 
-            // t
-            //     .attr("x", d => d.x)
-            //     .attr("y", d => d.y);
+            t
+                .attr("x", d => d.x)
+                .attr("y", d => d.y);
 
         });
     }
@@ -222,7 +228,7 @@ class SOMView extends Component {
             <>
                 <div className="submenu">
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
-                        <Button icon="document" onClick={() => this.loadData()}>Select SOM</Button>
+                        <Button icon="document" onClick={() => this.pickInput()}>Select SOM</Button>
                         <Button icon="document" onClick={() => this.resizeViews()}>Reinit View</Button>
                     </ButtonGroup>
                 </div>
