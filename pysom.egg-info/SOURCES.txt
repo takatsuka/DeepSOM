@@ -11,7 +11,6 @@ pysom.egg-info/top_level.txt
 pysom/nodes/__init__.py
 pysom/nodes/bmu.py
 pysom/nodes/calibrate.py
-pysom/nodes/classify.py
 pysom/nodes/concat.py
 pysom/nodes/dist.py
 pysom/nodes/input_container.py

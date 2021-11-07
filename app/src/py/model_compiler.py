@@ -55,6 +55,7 @@ def bmu_props(dict, *_):
         "output": output[dict['shape']],
     }
 
+
 def calibrate_props(dict, ds, n, *_):
     key = dict['label_key']
     dat = ds.get_object_data(key)
@@ -68,6 +69,7 @@ def calibrate_props(dict, ds, n, *_):
     return {
         "labels": dat.reshape(len(dat)).tolist()
     }
+
 
 node_props = {
     "inout": None,
@@ -107,7 +109,6 @@ def parse_dict(dict, ds):
 
 
 if __name__ == "__main__":
-    import numpy as np
     import sys
     import json
 
