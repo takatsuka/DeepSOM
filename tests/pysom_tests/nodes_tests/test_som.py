@@ -345,4 +345,7 @@ def test_train_log_err():
     g = Graph()
     with pytest.raises(ValueError) as e_info:
         g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 100, 'check_points': 0, 'hexagonal': False})
-    assert str(e_info.value) == "Expecting check point argument of at least default value 1, instead got 0."
+    assert str(e_info.value) == "Expecting checkpoint value of at least default 1, instead got 0."
+    with pytest.raises(ValueError) as e_info:
+        g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 100, 'check_points': 101, 'hexagonal': False})
+    assert str(e_info.value) == "Checkpoints must not exceed number of training iterations.\nCheckpoints must at most be 100 for number of training iterations requested."

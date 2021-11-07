@@ -239,13 +239,16 @@ class SOM(Node):
         self.x_neig = self.y_neig = arange(size).astype(float)  # set x and y to be 0..size
         # arrange x y as horizontal and vert axis
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
-        
         self.graph = graph
+
         if not check_points:
-            msg = f"Expecting check point argument of at least default value 1, instead got {check_points}."
+            msg = f"Expecting checkpoint value of at least default 1, instead got {check_points}."
+            raise ValueError(msg)
+        elif check_points > n_iters:
+            msg = f"Checkpoints must not exceed number of training iterations.\nCheckpoints must at most be {n_iters} for number of training iterations requested."
             raise ValueError(msg)
         self.cp, self.train_log = 0, {i: np.array([]) for i in np.arange(check_points)}
-
+        
         if hexagonal:
             # offset every second row if hexagonal grid used
             self.x_mat[::-2] -= 0.5
