@@ -40,7 +40,7 @@ class ImageView extends Component {
             this.setState(state)
         }
 
-        this.initSOMView()
+        // this.initSOMView()
 
     }
 

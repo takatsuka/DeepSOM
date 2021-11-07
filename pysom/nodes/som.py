@@ -400,7 +400,9 @@ class SOM(Node):
             self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters, dump_weight)
 
     def _evaluate(self):
-        self.train(self.get_input())
+        if self.graph.global_params['training']:
+            self.train(self.get_input())
+           
         self.output_ready = True
 
     def map_labels(self, data: np.ndarray, labels: list):

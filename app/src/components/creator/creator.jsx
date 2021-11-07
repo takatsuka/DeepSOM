@@ -13,6 +13,7 @@ import Welcome from "../welcome/welcome"
 import ScatterView3D from "../scatterview_3d/scatterview"
 import DragDropSOM from '../drag-drop/drag-drop';
 import ImageView from '../imageview/imageview';
+import SOMView from '../somview/somview';
 
 import ProjectExplorer from '../project_explorer/project_explorer';
 
@@ -107,8 +108,9 @@ class Creator extends Component {
         <Divider />
         <MenuItem icon="layout-auto" text="Editor" id="menu-editor" onClick={() => { this.tabman.current.openTab(<DragDropSOM />, "untitled", true) }} />
         <MenuDivider title="Visualization" />
+        <MenuItem icon="layout-auto" text="SOM" onClick={() => { this.tabman.current.openTab(<SOMView />, "SOM", true) }} />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
-        <MenuItem icon="media" text="Image" onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
+        <MenuItem icon="media" text="Image" disabled onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
         <MenuDivider title="Appearance" />
         <Switch style={{marginLeft:"10px", marginTop:"10px"}} large checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
       </Menu>
