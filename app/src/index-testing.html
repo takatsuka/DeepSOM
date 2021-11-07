@@ -12,8 +12,11 @@
 
 <body style="width: 100%;" class="bp3-dark">
     <div id="test-overlay">
-        <h2>Automation Testing</h2>
-        <pre id="test-debug-output"></pre>
+        <h2>Automation Testing: <span id="test-passed">0</span> passed, <span id="test-failed">0</span> failed, <span id="test-pending">0</span> pending</h2>
+        <div class="test-log-container">
+            <pre class="test-debug-output" id="summary-output"></pre>
+            <pre class="test-debug-output" id="verbose-output"></pre>
+        </div>
     </div>
     <div id="app" style="height: 100%; overflow: auto;"></div>
     <script src="index.jsx"></script>

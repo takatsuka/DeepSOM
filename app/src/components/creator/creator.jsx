@@ -163,7 +163,7 @@ class Creator extends Component {
               <div className="submenubar">
                 <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
                   {this.state.tabs.map((t) => (
-                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)} /> </Tab>
+                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)} id={"close_tab_" + t.id}/> </Tab>
                   ))}
                 </Tabs>
               </div>

@@ -22,7 +22,7 @@ html {
 #test-overlay {
     position: fixed;
     bottom: 0;
-    right: 0;
+    left: 0;
     width: 30%;
     height: 30%;
     background-color: #000452;
@@ -31,7 +31,14 @@ html {
     padding: 10px;
 }
 
-#test-debug-output {
-    height: 100%;
+.test-log-container {
+    height: 90%;
+    width: 100%;
+    display: flex;
+}
+
+.test-debug-output {
+    flex: 1;
     overflow: scroll;
+    padding: 10px;
 }
