@@ -205,6 +205,10 @@ class SOM(Node):
         lr (float, optional): the base learning rate. Defaults to 0.7.
         n_iters (int, optional): the number of iterations to train per epoch. \
             Defaults to 1.
+        check_points (int, optional): the number of checkpoints recorded in the \
+            training log. A checkpoint will store a snapshot of weights captured \
+            after each interval of training, defined as the number of iterations \
+            to train per checkpoint. Defaults to 1.
         hexagonal (bool, optional): sets if the resultant map should output \
             as a hexagonal grid or not. Defaults to False.
         dist (callable, optional): the distance function to be used during \
@@ -215,10 +219,10 @@ class SOM(Node):
             map weights. Defaults to None.
     """
 
-    def __init__(self, uid: int, graph, size: int, dim: int,
-                 sigma: float = 0.5, lr: float = 0.7, n_iters: int = 1,
-                 hexagonal: bool = None, dist: callable = dist_euclidean,
-                 nhood: callable = nhood_gaussian, rand_state: int = False):
+    def __init__(self, uid: int, graph, size: int, dim: int, sigma: float = 0.5,
+                 lr: float = 0.7, n_iters: int = 1, check_points: int = 1, hexagonal: bool = None,
+                 dist: callable = dist_euclidean, nhood: callable = nhood_gaussian,
+                 rand_state: int = False):
         super(SOM, self).__init__(uid, graph)
 
         # set size of grid and dims (size, size, dims)
@@ -237,6 +241,10 @@ class SOM(Node):
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
         
         self.graph = graph
+        if not check_points:
+            msg = f"Expecting check point argument of at least default value 1, instead got {check_points}."
+            raise ValueError(msg)
+        self.cp, self.train_log = 0, {i: np.array([]) for i in np.arange(check_points)}
 
         if hexagonal:
             # offset every second row if hexagonal grid used
@@ -292,7 +300,7 @@ class SOM(Node):
         return unravel_index(self.map.argmin(), self.map.shape)
 
     def update(self, x: np.ndarray, bmu: tuple, curr: int,
-               max_iter: int) -> None:
+               max_iter: int, dump_weight: bool = None) -> None:
         """
         Updates the SOM weights based on an input for the current iteration
 
@@ -340,6 +348,9 @@ class SOM(Node):
         """
 
         self.weights += einsum('ij, ijk->ijk', nhood, x - self.weights)
+        if dump_weight:
+            self.train_log[self.cp], self.cp = self.get_weights(), self.cp + 1
+
         """ Example
         X = [0.3 0.6] (input vector)
 
@@ -380,8 +391,10 @@ class SOM(Node):
         # enumerating iters s.t. weights[i] results from bmu(data[i]) at curr=i and n_iters=999
         # iter value goes from 0-255, and repeats until n_iters is reached
         # (lr and sigma are calculated within update as a factor of curr and n_iters)
-        [self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters)
-         for curr, iter in enumerate(iters)]
+        
+        for curr, iter in enumerate(iters):
+            dump_weight = True if not curr % len(self.train_log) else False
+            self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters, dump_weight)
 
     def _evaluate(self):
         self.train(self.get_input())

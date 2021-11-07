@@ -319,3 +319,30 @@ def test_slot(g_resource):
     assert g.find_node(som).check_slot(slot=1)
     assert g.find_node(som).check_slot(slot=0)
     assert not g.find_node(som).check_slot(slot=2)
+
+
+def test_train_log():
+    g = Graph()
+
+    file_path = "datasets/sphere/sphere_256.txt"
+    datastr = [l.strip().split(',') for l in open(file_path).readlines()]
+    data = [[float(c) for c in e] for e in datastr]
+
+    g.set_input(data=data)
+
+    som = g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 100, 'check_points': 10, 'hexagonal': False})
+    g.connect(g.start, som, slot=1)
+    g.connect(som, g.end, slot=1)
+
+    assert isinstance(g.get_output(), np.ndarray)
+
+    assert g.find_node(som).train_log.get(0).shape == (400, 3)
+    assert len(g.find_node(som).train_log) == 10
+    assert g.find_node(som).get_weights().shape == (400, 3)
+
+
+def test_train_log_err():
+    g = Graph()
+    with pytest.raises(ValueError) as e_info:
+        g.create(node_type=SOM, props={'size': 20, 'dim': 3, 'sigma': 6, 'lr': 0.8, 'n_iters': 100, 'check_points': 0, 'hexagonal': False})
+    assert str(e_info.value) == "Expecting check point argument of at least default value 1, instead got 0."
