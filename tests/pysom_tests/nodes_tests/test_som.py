@@ -294,12 +294,6 @@ def test_run(sphere):
 
 # GRAPH RELATED: TODO: Most likely all functions will be covered in one hit
 
-def test_slot(som_resource):
-    assert som_resource.check_slot(slot=1)
-    assert som_resource.check_slot(slot=0)
-    assert not som_resource.check_slot(slot=2)
-
-
 @pytest.fixture()
 def g_resource():
     g = Graph()
@@ -317,3 +311,11 @@ def test_get_output_slot(g_resource):
     assert isinstance(g.find_node(som).get_output(0), SOM)
     assert isinstance(g.find_node(som).get_output(1), np.ndarray)
     assert g.find_node(som).get_output(2) is None
+
+
+def test_slot(g_resource):
+    g = g_resource['graph']
+    som = g_resource['som']
+    assert g.find_node(som).check_slot(slot=1)
+    assert g.find_node(som).check_slot(slot=0)
+    assert not g.find_node(som).check_slot(slot=2)
