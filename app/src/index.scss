@@ -28,6 +28,10 @@ html {
     background-color: #000452;
     opacity: 0.8;
     z-index: 10000;
-    overflow: scroll;
     padding: 10px;
+}
+
+#test-debug-output {
+    height: 100%;
+    overflow: scroll;
 }

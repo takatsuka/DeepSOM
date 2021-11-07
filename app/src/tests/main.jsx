@@ -1,6 +1,6 @@
 const regeneratorRuntime = require("regenerator-runtime");
 const MAX_RETRIES = 10;
-const RETRY_DELAY = 20;
+const RETRY_DELAY = 10;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -8,19 +8,9 @@ function sleep(ms) {
 
 function debug_log(msg) {
     $("pre#test-debug-output").append(`${msg}<br>`);
+    var elem = document.getElementById("test-debug-output");
+    elem.scrollTop = elem.scrollHeight;
 }
-
-// function click(selector) {
-//     var checkExist = setInterval(function() {
-//         if ($(selector).length && $(selector).is(":visible")) {
-//             $(selector)[0].click();
-//             debug_log(`Clicked ${selector}`);
-//             clearInterval(checkExist);
-//         } else {
-//             debug_log(`Waiting for ${selector} to become available`);
-//         }
-//     }, 200);
-// }
 
 async function click(selector) {
     await sleep(RETRY_DELAY);
@@ -43,7 +33,7 @@ async function update_location(selector, x, y) {
         if ($(selector).length && $(selector).is(":visible")) {
             $(selector).attr({"data-api-x":x, "data-api-y":y});
             $(selector)[0].click();
-            debug_log(`Updated ${selector}`);
+            debug_log(`Moved ${selector} to ${x}, ${y}`);
             return true;
         } else {
             debug_log(`Waiting for ${selector} to become available`);
@@ -64,13 +54,35 @@ async function open_editor() {
         await click("#view-btn");
         await click("#menu-editor");
 
-        await update_location(input_node_id, 250, 150);
-        await update_location(output_node_id, 1750, 150);
+        await update_location(input_node_id, 850, 100);
+        await update_location(output_node_id, 450, 950);
 
-        for (var i = 3; i < 10; i++) {
+        for (var i = 3; i < 20; i++) {
             await click("#add-node-btn");
             await click("#single-som-btn");
-            await update_location(`#ddn_${i}`, 150 * i, 500);
+            await update_location(`#ddn_${i}`, 100 * i, 300);
+
+            await click("#add-link-btn")
+            await click(input_node_btn_id)
+            await click(`#ddn_add_${i}`)
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i}`)
+            await click(output_node_btn_id)
+        }
+
+        for (var i = 20; i < 37; i++) {
+            await click("#add-node-btn");
+            await click("#sampler-btn");
+            await update_location(`#ddn_${i}`, 100 * (i-17), 600);
+
+            await click("#add-link-btn")
+            await click(input_node_btn_id)
+            await click(`#ddn_add_${i}`)
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i}`)
+            await click(output_node_btn_id)
         }
     } catch(err) {
         debug_log(err);

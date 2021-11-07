@@ -36,6 +36,7 @@ class DragDropSOM extends Component {
         });
         document.addEventListener('mousemove', this.onMouseMove);
         document.addEventListener('mouseup', this.onMouseUp);
+        e.stopPropagation();
     }
 
     onMouseUp() {
@@ -65,11 +66,12 @@ class DragDropSOM extends Component {
 
     locationUpdateAPI(e) {
         var x = e.target.getAttribute("data-api-x");
-        var y = e.target.getAttribute("data-api-y")
-        if (x == "default" || y == "default") {
-            return;
+        var y = e.target.getAttribute("data-api-y");
+        if (!isNaN(x) && !isNaN(y)) {
+            e.target.setAttribute("data-api-x", "default");
+            e.target.setAttribute("data-api-y", "default");
+            this.props.parent.child_update(this.props.node.id, parseInt(x), parseInt(y));
         }
-        this.props.parent.child_update(this.props.node.id, parseInt(x), parseInt(y));
     }
 
     render() {
@@ -309,6 +311,9 @@ class DragDrop extends Component {
     }
 
     child_update(id, x, y) {
+        if (isNaN(x) || isNaN(y)) {
+            return;
+        }
         this.state.soms[id].x = x;
         this.state.soms[id].y = y;
         this.setState({ render_now: true });
