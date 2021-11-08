@@ -48,6 +48,8 @@ class SOMView extends Component {
         if (state != null) {
             this.setState(state)
         }
+
+        this.initSOMView()
     }
 
     componentWillUnmount() {
@@ -138,40 +140,51 @@ class SOMView extends Component {
 
     zoomed(transform) {
         d3.select(this.d3view.current).selectAll('g').attr("transform", transform);
+        this.transform = transform
     }
 
-    initSOMView(nodes, links) {
-        var margin = 30
+    initSOMView() {
         var w = this.d3view.current.clientWidth
         var h = this.d3view.current.clientHeight
-        var gridSize = Math.min(w, h) - this.state.dotRadius * 2 - margin * 2
-        var spacing = gridSize / (this.state.somDim - 1)
-        var horMarg = this.state.dotRadius
-        var verMarg = h * 0.5 - (gridSize * 0.5)
+
+
+        const svg = d3.select(this.d3view.current)
+        svg.selectAll('*').remove()
+
+        if (!this.zoom) {
+            const zoom = d3.zoom()
+                .extent([[0, 0], [w, h]])
+                .scaleExtent([0.5, 100])
+                .on("zoom", ({ transform }) => {
+                    this.zoomed(transform)
+                })
+
+
+            svg.call(zoom);
+            this.zoom = zoom
+        }
+
+
+        svg.append("rect")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "#5C7080");
+
+        if (this.state.nodes === null && this.state.links === null) return
 
         var nodes = this.state.nodes
-        var links = this.state.links.map((e) => ({ "source": e.source, "target": e.target, "value": 10 + this.state.scale * e.value }))
-        console.log(nodes)
-        console.log(links)
+        var links = this.state.links.map((e) => ({ "source": e.source, "target": e.target, "value": 16 + this.state.scale * e.value }))
+
+        if (this.simulation) {
+            this.simulation.stop()
+        }
 
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id(d => d.id).strength(1.0).distance((d) => d.value).iterations(15))
             .force("charge", d3.forceManyBody().strength(-30))
             .force("center", d3.forceCenter(w / 2, h / 2))
+        this.simulation = simulation
 
-        const zoom = d3.zoom()
-            .extent([[0, 0], [w, h]])
-            .scaleExtent([0.5, 100])
-            .on("zoom", ({ transform }) => {
-                this.zoomed(transform)
-            })
-
-
-
-
-        const svg = d3.select(this.d3view.current)
-        svg.call(zoom);
-        svg.selectAll('*').remove()
         const nodeG = svg.append("g")
             .attr("stroke", "#fff")
             .attr("stroke-width", 0.2)
@@ -222,6 +235,8 @@ class SOMView extends Component {
                 .attr("y", d => d.y);
 
         });
+
+        if(this.transform) this.zoomed(this.transform)
     }
 
     render() {
