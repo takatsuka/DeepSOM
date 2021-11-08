@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Component } from 'react';
 import Xarrow from "react-xarrows";
 
-import { Label, Popover, Collapse, MenuDivider, ProgressBar, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, Card, Elevation, Alignment, Text, Dialog, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
+import { Label, Popover, Collapse, MenuDivider, ProgressBar, TextArea, InputGroup, Menu, Icon, NumericInput, Button, ButtonGroup, TagInput, Card, Elevation, Alignment, Text, Dialog, Position, MenuItem, Divider, Drawer, DrawerSize, Classes, Portal, Intent } from "@blueprintjs/core";
 import { Suggest } from "@blueprintjs/select";
 
 
@@ -112,8 +112,8 @@ export const NodeTemplates = {
             </div>
         ),
 
-        updateInput: function (old, text) {
-            var n = text.split(",").map((a) => parseInt(a))
+        updateInput: function (na) {
+            var n = na.map((a) => parseInt(a))
             if (n.some((n) => isNaN(n))) return old
 
             return n
@@ -132,8 +132,12 @@ export const NodeTemplates = {
                 {d.props === null ? <></> : d.props.selections.map(function (sel, idx) {
                     return (
                         <div key={idx}>
-                            <InputGroup placeholder="crap" value={d.props.selections[idx].sel}
-                                onChange={(t) => editor.wrapSOMS(() => (d.props.selections[idx].sel = editor.node_templates[d.template].updateInput(d.props.selections[idx].sel, t.target.value)))} />
+                            <TagInput
+                                values={d.props.selections[idx].sel.map((x) => x.toString())}
+                                onChange={(t) => editor.wrapSOMS(() => (d.props.selections[idx].sel = editor.node_templates[d.template].updateInput(t)))}
+                            />
+                            {/* <InputGroup placeholder="crap" value={d.props.selections[idx].sel}
+                                onChange={(t) => editor.wrapSOMS(() => (d.props.selections[idx].sel = editor.node_templates[d.template].updateInput(d.props.selections[idx].sel, t.target.value)))} /> */}
                         </div>
                     )
 
