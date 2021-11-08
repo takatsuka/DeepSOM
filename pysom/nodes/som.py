@@ -222,7 +222,7 @@ class SOM(Node):
     def __init__(self, uid: int, graph, size: int, dim: int, sigma: float = 0.5,
                  lr: float = 0.7, n_iters: int = 1, check_points: int = 1, hexagonal: bool = None,
                  dist: callable = dist_euclidean, nhood: callable = nhood_gaussian,
-                 rand_state: int = False):
+                 rand_state: int = None):
         super(SOM, self).__init__(uid, graph)
 
         # set size of grid and dims (size, size, dims)

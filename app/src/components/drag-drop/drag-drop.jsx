@@ -347,6 +347,7 @@ class DragDrop extends Component {
 
     saveSession() {
         window.pywebview.api.call_service(-1, "save_object", [this.state.model_name, "model", this.export_som(), true]).then((descriptor) => {
+            this.fileman.refresh()
         });
     }
 

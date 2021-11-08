@@ -192,7 +192,7 @@ class SOMView extends Component {
             .data(nodes)
             .join("circle")
             .attr("r", this.state.dotRadius)
-            .attr("fill", "#10161A")
+            .attr("fill", (d) => d.c)
             .call(this.drag(simulation))
 
         this.n_c = n

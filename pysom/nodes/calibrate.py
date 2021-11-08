@@ -61,7 +61,7 @@ class Calibrate(Node):
         self.som = self.get_input()
         self.label_map = self.som.map_labels(self.som.get_input(), self.labels)
         self.output_ready = True
-        
+
         if self.test is None:
             return self.label_map
 
@@ -132,3 +132,26 @@ class Calibrate(Node):
                 # else, map most common label (default) to this row in data
                 result.append(default)
         return result
+
+    def logit(self):
+        def fmt(x): return ','.join([f'{i}' for i in x.keys()])
+        def softmax(x): return np.exp(x) / np.sum(np.exp(x))
+
+        self.som = self.get_input()
+
+        w = self.som.get_weights()
+        mapped = self.som.map_labels(self.som.get_input(), self.labels)
+        print(f"labels {len(mapped)}")
+        mapped = [(k[0]*self.som.size + k[1], fmt(v), w[k[0]*self.som.size + k[1]])
+                  for k, v in mapped.items()]
+
+        mat = np.array([a[2] for a in mapped])
+
+        probs = []
+
+        for i in range(self.som.size ** 2):
+            dis = np.linalg.norm(w[i] - mat, axis=1) ** 2
+            p = softmax((1 - (dis / (np.mean(dis)))) * 2)
+            probs.append(p)
+
+        return probs
