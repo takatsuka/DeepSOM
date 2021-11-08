@@ -26,7 +26,7 @@ class ProjectExplorer extends Component {
                     id: 0,
                     isExpanded: false,
                     icon: "folder-close",
-                    label: 'Objects',
+                    label: 'Data Objects',
                     childNodes: []
                 },
                 {

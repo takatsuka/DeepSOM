@@ -60,7 +60,7 @@ class SomViewService:
             labelmap = None
             if not self.cal is None:
                 labelmap = {k[0]*self.som.size + k[1] : v for k,v in self.cal.get_output(slot=1).items()}
-            fmt = lambda x: ','.join([str(int(i)) for i in x.keys()])
+            fmt = lambda x: ','.join([f'{i}' for i in x.keys()])
             self.nodes = [{'id': i, 'l': fmt(labelmap.get(i, Counter())) if labelmap else ""} for i in range(self.som.size ** 2)]
         except:
             return {'status': False, 'msg': traceback.format_exc()}

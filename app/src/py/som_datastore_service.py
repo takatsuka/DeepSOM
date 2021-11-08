@@ -23,12 +23,12 @@ class SOMDatastoreService:
         }
 
         self.importers = {
-            "matrix": lambda x: np.frombuffer(base64.b64decode(x[1]), dtype=np.float64).reshape(x[0]),
+            "matrix": lambda x: np.frombuffer(base64.b64decode(x[2]), dtype=x[1]).reshape(x[0]),
             "model": lambda x: x
         }
 
         self.exporters = {
-            "matrix": lambda x: [x.shape, base64.b64encode(x).decode('ascii')],
+            "matrix": lambda x: [x.shape, x.dtype.str, base64.b64encode(x).decode('ascii')],
             "model": lambda x: x
         }
 
@@ -65,11 +65,28 @@ class SOMDatastoreService:
             return None
 
         # Open CSV file and parse to np.array
-        # TODO: Shall we use Pandas instead?
-        # Which will bring extra features for cleaning up data, but that's just extra.
         datastr = [l.strip().split(',') for l in open(filename).readlines()]
-        data = np.array([[float(c) for c in e]
-                        for e in datastr], dtype=np.float64)
+        datalist = [[c for c in e] for e in datastr]
+        data = None
+
+        parsers = [
+            # We like float64, so priorities that.
+            lambda x: np.array(x, dtype=np.float64),
+            lambda x: np.array(x)
+        ]
+
+        # Try each parser in order.
+        for p in parsers:
+            try:
+                data = p(datalist)
+            except:
+                pass
+
+            if not data is None:
+                break
+
+        if data is None:
+            return None
 
         # Check if descriptor string already exists in data instances
         descriptor = self.ensure_unique(
@@ -153,7 +170,7 @@ class SOMDatastoreService:
         if key not in self.data_instances:
             return {"status": False, "msg": "Object does not exist."}
         obj = self.data_instances[key]['content']
-        return {"status": True, "type": str(obj.__class__), "repr": str(obj), "msg": ""}
+        return {"status": True, "type": str(obj.__class__), "repr": repr(obj), "msg": ""}
 
     def current_workspace_name(self):
         return self.ws_name
@@ -177,8 +194,19 @@ class SOMDatastoreService:
             if t not in loaders:
                 continue
 
+            loaded = None
+            try:
+                loaded = loaders[t](v['content'])
+            except:
+                # TODO: report error?
+                pass
+
+            if loaded is None:
+                continue
+
             self.data_instances[name] = {
-                'type': t, 'content': loaders[t](v['content'])}
+                'type': t, 'content': loaded
+            }
 
         self.ws_path = filename
         self.ws_name = label
