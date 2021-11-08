@@ -46,7 +46,6 @@ class SOMDatastoreService:
 
     def open_file(self):
         p = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG)
-
         if p == None:
             return None
         if len(p) < 1:
@@ -123,7 +122,7 @@ class SOMDatastoreService:
     # Fetch list of object keys with given type
     def fetch_objects(self, type):
         if type == '':
-            return self.data_instances.keys()
+            return list(self.data_instances.keys())
         return [k for k, v in self.data_instances.items() if v['type'] == type]
 
     def remove_object(self, key):
@@ -139,7 +138,7 @@ class SOMDatastoreService:
             return {"status": False, "msg": "Object does not exist."}
 
         if new_key in self.data_instances:
-            return {"status": False, "msg": "New key already exist."}
+            return {"status": False, "msg": "New key already exists."}
 
         if len(new_key) < 1:
             return {"status": False, "msg": "Gotcha hacker."}
@@ -245,35 +244,6 @@ class SOMDatastoreService:
 
         return des
 
-    # Returns true if the descriptor exists as the name of an open data instance; false if not
-    def has_instance_by_descriptor(self, descriptor):
-        return descriptor in self.data_instances.keys()
-
-    # Returns all open data instances
-    def get_all_instances(self):
-        return self.data_instances
-
     # Closes all open data instances
     def close_all_instances(self):
         self.data_instances = {}
-
-    def get_all_instance_descriptors(self):
-        return list(self.data_instances.keys())
-
-    # Allows insertion of custom data instance
-    def open_custom_instance_with_descriptor(self, descriptor, instance):
-        # Check if descriptor string already exists in data instances
-        descriptor = self.ensure_unique(descriptor)
-        self.data_instances[descriptor] = instance
-        return descriptor
-
-    # Returns data from the open data instance with the specified string descriptor
-    def get_instance_by_descriptor(self, descriptor):
-        if descriptor in self.data_instances.keys:
-            return self.data_instances['descriptor']
-        return None
-
-    # Closes open data instance with the specified string descriptor
-    def close_instance_with_descriptor(self, descriptor):
-        obj = self.data_instances.pop(descriptor)
-        return obj
