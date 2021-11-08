@@ -103,6 +103,17 @@ async function editor_stress() {
 
 // helper functions
 
+$(document).keydown(function(e){
+    if (e.which == 38) { // up
+       $(".cmd-prompt").show();
+       return false;
+   } else if (e.which == 40) { // down
+       $(".cmd-prompt").hide();
+       $("#test-overlay").hide();
+       return false;
+   }
+});
+
 async function click(selector) {
     await sleep(RETRY_DELAY);
     for (var i = 0; i < MAX_RETRIES; i++) {
