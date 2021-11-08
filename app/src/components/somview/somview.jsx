@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Component } from 'react';
 
-import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay } from "@blueprintjs/core";
+import { Tag, Popover, Menu, MenuItem, Position, Button, ButtonGroup, Tab, Tabs, Slider, Intent, Spinner, Card, Elevation, Icon, Navbar, Alignment, Text, NonIdealState, Overlay, Divider } from "@blueprintjs/core";
 
 import { PrimaryToaster } from '../common/toaster';
 import Split from 'react-split'
@@ -25,7 +25,8 @@ class SOMView extends Component {
             viewReady: false,
             service: null,
 
-            links: null, nodes: null
+            links: null, nodes: null,
+            scale: 1
         }
 
         if (window.pywebview)
@@ -66,8 +67,8 @@ class SOMView extends Component {
                 }
 
                 window.pywebview.api.call_service(this.state.service, "get_som_viz_data", []).then((e) => {
-                    
-                    this.setState({viewReady: true, links: e.obj.links, nodes: e.obj.nodes}, () => {
+
+                    this.setState({ viewReady: true, links: e.obj.links, nodes: e.obj.nodes }, () => {
                         this.initSOMView()
                     })
                 });
@@ -149,7 +150,7 @@ class SOMView extends Component {
         var verMarg = h * 0.5 - (gridSize * 0.5)
 
         var nodes = this.state.nodes
-        var links = this.state.links
+        var links = this.state.links.map((e) => ({ "source": e.source, "target": e.target, "value": 10 + this.state.scale * e.value }))
         console.log(nodes)
         console.log(links)
 
@@ -166,7 +167,7 @@ class SOMView extends Component {
             })
 
 
- 
+
 
         const svg = d3.select(this.d3view.current)
         svg.call(zoom);
@@ -230,6 +231,16 @@ class SOMView extends Component {
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
                         <Button icon="document" onClick={() => this.pickInput()}>Select SOM</Button>
                         <Button icon="document" onClick={() => this.resizeViews()}>Reinit View</Button>
+                        <Divider />
+                        <Slider
+                            min={0}
+                            max={1}
+                            stepSize={0.01}
+                            onChange={(n) => this.setState({ scale: n }, () => {
+                                this.initSOMView()
+                            })}
+                            value={this.state.scale}
+                        />
                     </ButtonGroup>
                 </div>
                 <div className="somview-graph-area" >
