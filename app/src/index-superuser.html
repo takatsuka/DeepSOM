@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html style="display: flex; height: 100%;">
+
+<head>
+    <title>PySOM Creator Super User Mode</title>
+    <meta name="format-detection" content="telephone=no" />
+    <link href="index.scss" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script src="tests/superuser.jsx"></script>
+</head>
+
+<body style="width: 100%;" class="bp3-dark">
+    <div id="test-overlay" style="display: none">
+        <h2>Debug Console</h2>
+        <div class="test-log-container">
+            <pre class="test-debug-output" id="debug-output"></pre>
+        </div>
+    </div>
+    <div class="cmd-prompt">
+        <form id="cmd" autocomplete="off">
+            <label for="cmd">root@dsd$ </label>
+            <input type="text" name="cmd" />
+        </form>
+    </div>
+    <div id="app" style="height: 100%; overflow: auto;"></div>
+    <script src="index.jsx"></script>
+</body>
+
+</html>

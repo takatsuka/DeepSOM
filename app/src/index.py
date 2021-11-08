@@ -164,10 +164,13 @@ if __name__ == "__main__":
     index_page = get_index_page()
     width, height = (1440, 900)
 
-    if len(sys.argv) == 2 and sys.argv[1] == "--runtest":
-        # maximise window for testing
-        width, height = (2560, 1440)
-        index_page = index_page.replace("index.html", "index-testing.html")
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "--runtest":
+            # maximise window for testing
+            width, height = (2560, 1440)
+            index_page = index_page.replace("index.html", "index-testing.html")
+        elif sys.argv[1] == "--sudo":
+            index_page = index_page.replace("index.html", "index-superuser.html")
 
     window = webview.create_window('PySOM Creator', index_page, js_api=Api(),
                 frameless=True, easy_drag=False, width=width, height = height)
