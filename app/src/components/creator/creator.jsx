@@ -112,7 +112,7 @@ class Creator extends Component {
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
         <MenuItem icon="media" text="Image" disabled onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
         <MenuDivider title="Appearance" />
-        <Switch style={{marginLeft:"10px", marginTop:"10px"}} large checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
+        <Switch id="dark-mode-switch" style={{marginLeft:"10px", marginTop:"10px"}} large checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
       </Menu>
     )
 
