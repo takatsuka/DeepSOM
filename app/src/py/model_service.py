@@ -3,7 +3,7 @@ import os
 import re
 import numpy as np
 import webview
-from .model_compiler import parse_dict as do_compile
+from model_compiler import parse_dict as do_compile
 from pysom.graph import GraphCompileError
 import traceback
 
