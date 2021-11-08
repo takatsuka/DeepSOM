@@ -24,6 +24,11 @@ function update_test_stats(passed, failed, pending) {
     $("#test-pending").text(pending);
 }
 
+function update_time() {
+    var time = parseInt($("#test-time").text());
+    $("#test-time").text(time + 1);
+}
+
 async function click(selector) {
     await sleep(RETRY_DELAY);
     for (var i = 0; i < MAX_RETRIES; i++) {
@@ -493,15 +498,7 @@ async function test_editor_various_nodes_dancing() {
             await update_location(output_node_id, 700 + x * 300, 800 + y * 300);
         }
 
-        for (var d = 360; d >= -30; d -= 30) {
-            var x = Math.cos(d*Math.PI/180);
-            var y = Math.sin(d*Math.PI/180);
-            for (var i = 0; i < soms.length; i++) {
-                await update_location(`#ddn_${i+3}`, 100 * (i+3) + x * 500, 500 + y * 500);
-            }
-        }
-
-        for (var r = 50; r < 800; r += 30) {
+        for (var r = 50; r < 700; r += 30) {
             for (var i = 0; i < soms.length; i++) {
                 var d = i * 45;
                 var x = Math.cos(d*Math.PI/180);
@@ -543,14 +540,14 @@ async function test_editor_random_nodes() {
             "calibrate-btn"
         ]
 
-        for (var i = 0; i < 50; i++) {
+        for (var i = 0; i < 40; i++) {
             var som_idx = Math.floor(Math.random() * soms.length);
             await click("#add-node-btn");
             await click(`#${soms[som_idx]}`);
             await update_location(`#ddn_${i+3}`, 80 + Math.floor(Math.random() * 2000), 80 + Math.floor(Math.random() * 1000));
         }
-        for (var z = 0; z < 3; z++) {
-            for (var i = 0; i < 50; i++) {
+        for (var z = 0; z < 2; z++) {
+            for (var i = 0; i < 40; i++) {
                 await update_location(`#ddn_${i+3}`, 80 + Math.floor(Math.random() * 2000), 80 + Math.floor(Math.random() * 1000));
             }
         }
@@ -593,12 +590,8 @@ async function test_editor_random_links() {
             await update_location(`#ddn_${i+3}`, 80 + Math.floor(Math.random() * 2000), 80 + Math.floor(Math.random() * 1000));
 
             await click("#add-link-btn")
-            await click(input_node_btn_id)
+            await click(`#ddn_add_${i+2}`)
             await click(`#ddn_add_${i+3}`)
-
-            await click("#add-link-btn")
-            await click(`#ddn_add_${i+3}`)
-            await click(output_node_btn_id)
         }
 
     } catch(err) {
@@ -629,6 +622,8 @@ $(document).ready(async function(){
     var passed = 0;
     var failed = 0;
     var pending = tests.length;
+    $("#test-time").text(0);
+    var timer = setInterval(update_time, 1000);
     update_test_stats(passed, failed, pending);
 
     for (var i = 0; i < tests.length; i++) {
@@ -649,4 +644,6 @@ $(document).ready(async function(){
     for (var i = 1; i < tests.length; i++) {
         await click(`#close_tab_${i}`);
     }
+
+    clearInterval(timer);
 });
