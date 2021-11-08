@@ -173,4 +173,5 @@ if __name__ == "__main__":
                 frameless=True, easy_drag=False, width=width, height = height)
 # gui="cef")
 
-    webview.start(debug=(False if hasattr(sys, '_MEIPASS') else True))
+    # webview.start(debug=(False if hasattr(sys, '_MEIPASS') else True))
+    webview.start(debug=True) # work around the debuging bug in pywebview for now.
