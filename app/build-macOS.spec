@@ -41,7 +41,7 @@ exe = EXE(
 app = BUNDLE(exe,
              name='PySOM Creator.app',
              version='0.3.1',
-            #  icon='dev/icon/moccasin.icns',
+             icon='imgs/dsd_icon.icns',
              bundle_identifier='com.deepsomdome.creator',
              info_plist={
                     'NSHighResolutionCapable': 'True',
