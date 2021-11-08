@@ -234,10 +234,10 @@ async function test_editor_stress() {
         await update_location(input_node_id, 850, 100);
         await update_location(output_node_id, 450, 950);
 
-        for (var i = 3; i < 20; i++) {
+        for (var i = 3; i < 15; i++) {
             await click("#add-node-btn");
             await click("#single-som-btn");
-            await update_location(`#ddn_${i}`, 100 * i, 300);
+            await update_location(`#ddn_${i}`, 140 * (i-2), 300);
 
             await click("#add-link-btn")
             await click(input_node_btn_id)
@@ -248,21 +248,46 @@ async function test_editor_stress() {
             await click(output_node_btn_id)
         }
 
-        for (var i = 20; i < 37; i++) {
+        for (var i = 15; i < 27; i++) {
             await click("#add-node-btn");
             await click("#sampler-btn");
-            await update_location(`#ddn_${i}`, 100 * (i-17), 600);
-        }
-
-        for (var i = 20; i < 37; i++) {
-            await click("#add-link-btn")
-            await click(input_node_btn_id)
-            await click(`#ddn_add_${i}`)
+            await update_location(`#ddn_${i}`, 140 * (i-14), 600);
 
             await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
             await click(`#ddn_add_${i}`)
-            await click(output_node_btn_id)
         }
+
+        for (var i = 27; i < 35; i++) {
+            await click("#add-node-btn");
+            await click("#bypass-btn");
+            await update_location(`#ddn_${i}`, 2000, 300 + 110 * (i-26));
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
+            await click(`#ddn_add_${i}`)
+        }
+
+        for (var i = 35; i < 43; i++) {
+            await click("#add-node-btn");
+            await click("#bypass-btn");
+            await update_location(`#ddn_${i}`, 2150, 300 + 110 * (43-i));
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
+            await click(`#ddn_add_${i}`)
+        }
+
+        for (var i = 43; i < 51; i++) {
+            await click("#add-node-btn");
+            await click("#bypass-btn");
+            await update_location(`#ddn_${i}`, 2300, 300 + 110 * (i-42));
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
+            await click(`#ddn_add_${i}`)
+        }
+
     } catch(err) {
         debug_log(err);
         return false;
