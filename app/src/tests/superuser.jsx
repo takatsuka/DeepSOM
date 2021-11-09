@@ -28,8 +28,19 @@ $(document).ready(async function() {
                 editor_stress();
                 break;
             case "complex":
+                editor_dist();
+                break
+            case "complex_full":
                 editor_complex();
-                break;
+                break
+            case "ls":
+                debug_log("stress_editor");
+                debug_log("complex_full");
+                debug_log("complex");
+                debug_log("random");
+                debug_log("dance1");
+                debug_log("dance2");
+                break
             default:
                 debug_log("Unknown command");
         }
@@ -105,15 +116,26 @@ async function editor_stress() {
     }
 }
 
+async function editor_dist(){
+    let input_node_id = "#ddn_1";
+    let output_node_id = "#ddn_2";
+    let input_node_btn_id = "#ddn_add_1";
+    let output_node_btn_id = "#ddn_add_2";
+    await update_location(input_node_id, 9, 9);
+    await update_location(output_node_id, 1089, 311);
+    await update_location(`#ddn_3`, 23, 169);
+
+    await contextmenu("#ddn_3");
+    await update_value("#dist-ip1", "3,4,5,6,7,8,9,10,11,12");
+}
+
 async function editor_complex() {
     let input_node_id = "#ddn_1";
     let output_node_id = "#ddn_2";
     let input_node_btn_id = "#ddn_add_1";
     let output_node_btn_id = "#ddn_add_2";
 
-    await update_location(input_node_id, 9, 9);
-    await update_location(output_node_id, 1089, 311);
-    await update_location(`#ddn_3`, 23, 169);
+
 
     // SOM SIZE
     await contextmenu("#ddn_4");
