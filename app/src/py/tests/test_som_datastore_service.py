@@ -23,7 +23,7 @@ def test_init():
     assert ds.loaders["model"](1) == 1
     assert ds.dumpers["matrix"](np.array([1, 1, 1])) == [1, 1, 1]
     assert ds.dumpers["model"](1) == 1
-    assert np.any((ds.importers["matrix"]([[3], "AAAAAAAA8D8AAAAAAAAAQAAAAAAAAAhA"])))
+    assert np.any((ds.importers["matrix"]([[3], np.float64, "AAAAAAAA8D8AAAAAAAAAQAAAAAAAAAhA"])))
     assert ds.importers["model"](1) == 1
 
 def test_ensure_unique():
@@ -229,7 +229,7 @@ def test_fetch_object_repr():
     assert actual["status"] == False and actual["msg"] == "Object does not exist."
 
     actual = ds.fetch_object_repr("key")
-    assert (actual["status"] == True and actual["type"] == "<class 'numpy.ndarray'>") and actual["repr"] == "[1. 2. 3.]"
+    assert (actual["status"] == True and actual["type"] == "<class 'numpy.ndarray'>") and actual["repr"] == "array([1., 2., 3.])"
 
 def test_current_workspace():
     assert ds.current_workspace_name() == "lol"
