@@ -116,6 +116,7 @@ async function editor_complex() {
     // SOM SIZE
     await contextmenu("#ddn_4");
     await update_value("#input-name", "Size");
+    await update_value("#input-trainiter", "10000");
     await click(".bp3-drawer-header button");
     await update_location(`#ddn_4`, 221, 144);
 
@@ -141,6 +142,10 @@ async function editor_complex() {
     await click("#add-link-btn");
     await click("#ddn_add_3");
     await click("#ddn_add_6");
+
+    await contextmenu("#ddn_3");
+    await update_value("#input-outgoing-1", 2);
+    await click(".bp3-drawer-header button");
 
     // Calibrate
     await click("#add-node-btn");
@@ -195,6 +200,19 @@ async function editor_complex() {
     await click("#add-link-btn");
     await click("#ddn_add_10");
     await click("#ddn_add_11");
+
+    await contextmenu("#ddn_8");
+    await update_value("#input-outgoing-0", 1);
+    await click(".bp3-drawer-header button");
+    await contextmenu("#ddn_9");
+    await update_value("#input-outgoing-0", 1);
+    await click(".bp3-drawer-header button");
+
+    await contextmenu("#ddn_10");
+    await update_value("#input-incoming-0", 1);
+    await update_value("#input-incoming-1", 1);
+    await update_value("#input-outgoing-0", 1);
+    await click(".bp3-drawer-header button");
 
     // Calibrate
     await click("#add-node-btn");
