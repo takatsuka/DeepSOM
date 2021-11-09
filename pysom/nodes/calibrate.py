@@ -65,7 +65,7 @@ class Calibrate(Node):
         if self.test is None:
             return self.label_map
 
-        return self.calibrate(label_map)
+        return self.calibrate(self.label_map)
 
     def check_slot(self, slot: int) -> bool:
         """
@@ -134,15 +134,18 @@ class Calibrate(Node):
         return result
 
     def logit(self):
-        def fmt(x): return ','.join([f'{i}' for i in x.keys()])
-        def softmax(x): return np.exp(x) / np.sum(np.exp(x))
+        def fmt(x):
+            return ','.join([f'{i}' for i in x.keys()])
+
+        def softmax(x):
+            return np.exp(x) / np.sum(np.exp(x))
 
         self.som = self.get_input()
 
         w = self.som.get_weights()
         mapped = self.som.map_labels(self.som.get_input(), self.labels)
         print(f"labels {len(mapped)}")
-        mapped = [(k[0]*self.som.size + k[1], fmt(v), w[k[0]*self.som.size + k[1]])
+        mapped = [(k[0] * self.som.size + k[1], fmt(v), w[k[0] * self.som.size + k[1]])
                   for k, v in mapped.items()]
 
         mat = np.array([a[2] for a in mapped])
