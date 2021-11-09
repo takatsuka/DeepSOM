@@ -1,9 +1,10 @@
 import pytest
 import numpy as np
 from unittest.mock import Mock, MagicMock, patch
-
-from model_service import ModelService
 from pysom.graph import GraphCompileError
+
+import os
+from model_service import ModelService
 
 def setup_function():
     global model
