@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 import "./animal.scss";
 
-import { Switch, Button, ButtonGroup } from "@blueprintjs/core";
-
+import { Switch, Button, ButtonGroup, Intent } from "@blueprintjs/core";
+import { PrimaryToaster } from '../common/toaster';
 import bear from './imgs/__bear.png';
 import bird from './imgs/__bird.png';
 import bull from './imgs/__bull.png';
@@ -42,7 +42,7 @@ class AnimalTile extends Component {
                     let cell = [];
 
                     for (var k = 0; k < this.props.data[i][j].length; k++) {
-                        cell.push(<div className="animal-icon"><img src={this.props.data[i][j][k]}/></div>);
+                        cell.push(<div className="animal-icon"><img src={this.props.data[i][j][k]} /></div>);
                     }
 
                     if (this.props.data[i][j].length <= 4) {
@@ -56,8 +56,8 @@ class AnimalTile extends Component {
             tiles.push(<div className="animal-row">{row}</div>);
         }
         return <div className="platform">
-                  {tiles}
-            </div>;
+            {tiles}
+        </div>;
     }
 }
 
@@ -71,10 +71,11 @@ class Animal extends Component {
                 [[bear], [elephant], [chicken], null],
                 [[bird], [bull, gorilla, pig, bull, gorilla, pig, bull, gorilla, pig], [cat], null],
                 [[turtle], [hen, hippo, elephant, duck, dog, pig], [hippo, elephant, duck, dog], null],
-                [null, null, null, null],
+                [[], [], [], []],
             ],
             iter: 0,
             isometric: true,
+            service: null,
         };
         this.sharkindex = [
             [3, 0],
@@ -91,11 +92,59 @@ class Animal extends Component {
             [2, 0]
         ];
 
+        if (window.pywebview)
+            window.pywebview.api.launch_service("AnimalService").then((x) => (
+                this.setState({
+                    service: x
+                })
+            ))
+
+    }
+
+    pickInput() {
+        this.props.fileman.ask_user_pick_data("Select a SOM", "opaque", (k) => {
+            window.pywebview.api.call_service(this.state.service, "set_input", [k]).then((e) => {
+
+                if (!e.status) {
+                    PrimaryToaster.show({
+                        message: (e.status ? "SOM Opened." : "Failed: ") + e.msg,
+                        intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+                    });
+                }
+
+                window.pywebview.api.call_service(this.state.service, "get_animal_data", []).then((e) => {
+                    var animalMap = {
+                        "Dove": bird,
+                        "Chicken": chicken,
+                        "Duck": duck,
+                        "Goose": hen,
+                        "Owl": cow,
+                        "Hawk": cow,
+                        "Eagle": cow,
+                        "Fox": cow,
+                        "Dog": dog,
+                        "Wolf": hippo,
+                        "Cat": cow,
+                        "Tiger": cow,
+                        "Lion": cow,
+                        "Horse": cow,
+                        "Zebra": cow,
+                        "Cow": cow
+                    }
+                    var d = e.obj.map((e) => e.map((a) => a.map((q) => animalMap[q])))
+
+                    this.setState({data: d}, () => {
+                        
+                    })
+                });
+            });
+        })
+
     }
 
     shark() {
         var that = this;
-        setTimeout(function() {
+        setTimeout(function () {
 
             var iter = that.state.iter;
             var idx = that.sharkindex[iter];
@@ -122,20 +171,21 @@ class Animal extends Component {
         } else {
             document.getElementById('animal-viz').classList.add('isometric');
         }
-        this.setState(prevState => ({isometric: !prevState.isometric}));
+        this.setState(prevState => ({ isometric: !prevState.isometric }));
     }
 
     render() {
         return <div>
             <div className="submenu">
                 <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
-                    <Button className="bp3-minimal" icon="presentation" text="Baby Shark Mode" onClick={this.shark}/>
-                    <Switch style={{marginLeft:"10px", marginTop:"5px"}} large checked={this.state.isometric} innerLabel="Planar" innerLabelChecked="Isometric" onChange={this.projection_toggle} />
+                    <Button icon="document" onClick={() => this.pickInput()}>Select Model</Button>
+                    <Button className="bp3-minimal" icon="presentation" text="Baby Shark Mode" onClick={this.shark} />
+                    <Switch style={{ marginLeft: "10px", marginTop: "5px" }} large checked={this.state.isometric} innerLabel="Planar" innerLabelChecked="Isometric" onChange={this.projection_toggle} />
                 </ButtonGroup>
             </div>
 
             <div className="animal-viz-container isometric" id="animal-viz">
-                <AnimalTile data={this.state.data}/>
+                <AnimalTile data={this.state.data} />
             </div>
 
         </div>;
