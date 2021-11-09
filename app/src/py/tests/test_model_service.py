@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import Mock, MagicMock
 from pysom.graph import GraphCompileError
 
 import os
@@ -31,19 +31,39 @@ def test_update_model():
     model.update_model("fake model")
     assert model.model_export == "fake model"
 
-def test_compile(mocker):
+def test_compile_missing_export(mocker):
     actual = model.compile()
     assert actual['status'] == False and actual['msg'] == "Missing model data?"
 
-    # def fake_compile(export, ds):
-    #     raise GraphCompileError("halp")
+def test_compile_graph_compile_error():
+    model.model_export = {
+        "nodes": {
+            "1": {
+                "name": "Input", 
+                "id": 1, 
+                "x": 137, 
+                "y": 226, 
+                "props": {"dim": 3}, 
+                "template": "inout"
+            }
+        }, "connections": [{"from": 1, "to": 1, "props": {"slot": 0, "order": 0}}], "i": 1}
 
-    # model.model_export = "fake export"
-    # patcher = patch("model_compiler.parse_dict", auto_spec=True, side_effect=fake_compile)
-    # patcher.start()
-    # actual = model.compile()
-    # patcher.stop()
-    # assert actual['status'] == False and actual['msg'] == "halp"
+    actual = model.compile()
+    assert actual['status'] == False and actual['msg'] == "Can not connect to node itself: 1"
+
+def test_compile_graph_exception():
+    model.model_export = "fake export"
+    actual = model.compile()
+    assert actual['status'] == False
+
+def test_compile_success():
+    model.model_export = {
+        "nodes": {},
+        "connections": {}
+    }
+    actual = model.compile()
+
+    assert actual['status'] == True and actual['msg'] == "good"
 
 def test_train_missing_components():
     actual = model.train()
@@ -121,6 +141,28 @@ def test_export_output(mocker):
     assert actual['status'] == True and actual['msg'] == 'name'
     mock_database.save_object_data.called_only_once_with('opaque', 'name', model.model_output)
 
+def test_export_node():
+    actual = model.export_node("name", 1)
+    assert actual['status'] == False and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
+
+    model.model_output = "fake output"
+    actual = model.export_node("name", 1)
+    assert actual['status'] == False and actual['msg'] == 'Model not present.'
+
+    mock_graph_fail = Mock()
+    mock_graph_fail.find_node.return_value = None
+    model.graph = mock_graph_fail
+    actual = model.export_node("name", 1)
+    assert actual['status'] == False and actual['msg'] == 'Requested Node does not present.'
+
+    mock_graph_success = Mock()
+    mock_graph_success.find_node.return_value = "real node"
+    mock_database.save_object_data.return_value = "real key"
+    model.graph = mock_graph_success
+    actual = model.export_node("name", 1)
+
+    assert actual['status'] == True and actual['msg'] == "real key"
+    mock_database.save_object_data.called_only_once_with('opaque', 'name', 'real node')
 
 def test_debug_output_str():
     actual = model.debug_output_str()
