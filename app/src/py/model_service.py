@@ -6,7 +6,7 @@ import webview
 from .model_compiler import parse_dict as do_compile
 from pysom.graph import GraphCompileError
 import traceback
-
+from time import sleep
 
 # Model training service
 class ModelService:
@@ -60,6 +60,8 @@ class ModelService:
             return {'status': False, 'msg': f"{str(e)}"}
         except Exception:
             return {'status': False, 'msg': f"Error ocurred during evaluations: {traceback.format_exc()}"}
+
+        sleep(5)
 
         return {'status': True, 'msg': 'Training finished.'}
 
