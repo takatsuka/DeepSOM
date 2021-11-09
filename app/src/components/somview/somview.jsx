@@ -76,8 +76,8 @@ class SOMView extends Component {
                 });
             });
         })
-
     }
+
     drag(simulation) {
         const somview = this
         function dragstarted(event, d) {
@@ -168,7 +168,7 @@ class SOMView extends Component {
         svg.append("rect")
             .attr("width", "100%")
             .attr("height", "100%")
-            .attr("fill", "#5C7080");
+            .attr("fill", "#30404D");
 
         if (this.state.nodes === null && this.state.links === null) return
 
@@ -236,7 +236,7 @@ class SOMView extends Component {
 
         });
 
-        if(this.transform) this.zoomed(this.transform)
+        if (this.transform) this.zoomed(this.transform)
     }
 
     render() {
@@ -245,7 +245,7 @@ class SOMView extends Component {
                 <div className="submenu">
                     <ButtonGroup style={{ minWidth: 200 }} minimal={true} className="sm-buttong">
                         <Button icon="document" onClick={() => this.pickInput()}>Select SOM</Button>
-                        <Button icon="document" onClick={() => this.resizeViews()}>Reinit View</Button>
+                        <Button icon="filter-remove" onClick={() => this.resizeViews()}>Clear Highlights</Button>
                         <Divider />
                         <Slider
                             min={0}

@@ -313,7 +313,7 @@ class ProjectExplorer extends Component {
                         <div className={Classes.DIALOG_BODY}>
                             <p>
                                 <strong>
-                                    Type: {this.state.dp_msg}
+                                    {this.state.dp_msg}
                                 </strong>
                             </p>
                             <Suggest

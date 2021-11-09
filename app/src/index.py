@@ -10,7 +10,7 @@ from py.som_scatterview_service import SOMScatterviewService
 from py.som_viz_service import SOMVisualizationService
 from py.model_service import ModelService
 from py.som_view_service import SomViewService
-
+from py.animal_service import AnimalService
 
 class Api:
 
@@ -19,7 +19,8 @@ class Api:
         'SOMScatterviewService': SOMScatterviewService,
         'SOMVisualizationService': SOMVisualizationService,
         "ModelService": ModelService,
-        "SomViewService": SomViewService
+        "SomViewService": SomViewService,
+        "AnimalService": AnimalService
     }
 
     global_services = {
