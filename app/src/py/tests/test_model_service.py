@@ -105,9 +105,10 @@ def test_train_exception(mocker):
     actual = model.train()
     assert actual['status'] == False and actual['msg'].startswith("Error ocurred during evaluations:")
 
-def test_train_success():
+def test_train_success(mocker):
     mock_database.get_object_data = MagicMock(return_value="fake data")
     mock_graph = Mock()
+    mocker.patch.object(mock_graph, "nodes", [])
     model.graph = mock_graph
     model.input_key = "fake key"
     mock_graph.set_input = MagicMock()
