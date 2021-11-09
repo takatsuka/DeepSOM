@@ -566,7 +566,7 @@ class DragDrop extends Component {
                                             <div key={idx} className="editor-edge-item">
                                                 <p className="editor-edge-item-text">{other.name}</p>
                                                 <div className="editor-edge-item-slot">
-                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
+                                                    <NumericInput id="input-incoming" fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
                                                 </div>
 
                                                 <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
@@ -585,7 +585,7 @@ class DragDrop extends Component {
                                             <div key={idx} className="editor-edge-item">
                                                 <p className="editor-edge-item-text">{other.name}</p>
                                                 <div className="editor-edge-item-slot">
-                                                    <NumericInput fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
+                                                    <NumericInput id="input-outgoing" fill value={l.props.slot} onValueChange={(v) => this.update_link_slot(l, v)} />
                                                 </div>
 
                                                 <Button minimal icon="cross" intent={Intent.DANGER} onClick={() => this.remove_link(l)} />
