@@ -1,6 +1,6 @@
 const regeneratorRuntime = require("regenerator-runtime");
 const MAX_RETRIES = 5;
-const RETRY_DELAY = 10;
+const RETRY_DELAY = 100;
 
 // command prompt controller
 $(document).ready(async function() {
@@ -26,6 +26,8 @@ $(document).ready(async function() {
                 break;
             case "stress":
                 editor_stress();
+            case "complex":
+                editor_complex();
             default:
                 debug_log("Unknown command");
         }
@@ -99,6 +101,133 @@ async function editor_stress() {
         await click(`#ddn_add_${i-1}`)
         await click(`#ddn_add_${i}`)
     }
+}
+
+async function editor_complex() {
+    let input_node_id = "#ddn_1";
+    let output_node_id = "#ddn_2";
+    let input_node_btn_id = "#ddn_add_1";
+    let output_node_btn_id = "#ddn_add_2";
+
+    await update_location(input_node_id, 9, 9);
+    await update_location(output_node_id, 1089, 311);
+    await update_location(`#ddn_3`, 23, 169);
+
+    // SOM SIZE
+    await contextmenu("#ddn_4");
+    await update_value("#input-name", "Size");
+    await update_value("#input-trainiter", "10000");
+    await click(".bp3-drawer-header button");
+    await update_location(`#ddn_4`, 221, 144);
+
+    // Calibrate
+    await click("#add-node-btn");
+    await click("#calibrate-btn");
+    await update_location(`#ddn_5`, 413, 52);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_4");
+    await click("#ddn_add_5");
+
+    // SOM REST
+    await click("#add-node-btn");
+    await click("#single-som-btn");
+    await contextmenu("#ddn_6");
+    await update_value("#input-name", "Rest");
+    await update_value("#input-indim", "10");
+    await update_value("#input-dim", "10");
+    await click(".bp3-drawer-header button");
+    await update_location(`#ddn_6`, 223, 397);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_3");
+    await click("#ddn_add_6");
+
+    await contextmenu("#ddn_3");
+    await update_value("#input-outgoing-1", 2);
+    await click(".bp3-drawer-header button");
+
+    // Calibrate
+    await click("#add-node-btn");
+    await click("#calibrate-btn");
+    await update_location(`#ddn_7`, 463, 637);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_6");
+    await click("#ddn_add_7");
+
+    // BMU TOP
+    await click("#add-node-btn");
+    await click("#get-bmu-btn");
+    await update_location(`#ddn_8`, 492, 211);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_4");
+    await click("#ddn_add_8");
+
+    // BMU bottom
+    await click("#add-node-btn");
+    await click("#get-bmu-btn");
+    await update_location(`#ddn_9`, 512, 466);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_6");
+    await click("#ddn_add_9");
+
+    // Concat
+    await click("#add-node-btn");
+    await click("#concatenator-btn");
+    await update_location(`#ddn_10`, 561, 309);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_8");
+    await click("#ddn_add_10");
+
+    await click("#add-link-btn");
+    await click("#ddn_add_9");
+    await click("#ddn_add_10");
+
+    // SOM right
+
+    await click("#add-node-btn");
+    await click("#single-som-btn");
+    await contextmenu("#ddn_11");
+    await update_value("#input-indim", "13");
+    await update_value("#input-dim", "10");
+    await click(".bp3-drawer-header button");
+    await update_location(`#ddn_11`, 775, 256);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_10");
+    await click("#ddn_add_11");
+
+    await contextmenu("#ddn_8");
+    await update_value("#input-outgoing-0", 1);
+    await click(".bp3-drawer-header button");
+    await contextmenu("#ddn_9");
+    await update_value("#input-outgoing-0", 1);
+    await click(".bp3-drawer-header button");
+
+    await contextmenu("#ddn_10");
+    await update_value("#input-incoming-0", 1);
+    await update_value("#input-incoming-1", 1);
+    await update_value("#input-outgoing-0", 1);
+    await click(".bp3-drawer-header button");
+
+    // Calibrate
+    await click("#add-node-btn");
+    await click("#calibrate-btn");
+    await update_location(`#ddn_12`, 933, 538);
+
+    await click("#add-link-btn");
+    await click("#ddn_add_11");
+    await click("#ddn_add_12");
+
+    await click("#add-link-btn");
+    await click("#ddn_add_12");
+    await click("#ddn_add_2");
+
+
 }
 
 // helper functions
