@@ -74,7 +74,7 @@ def calibrate_props(dict, ds, n, *_):
 node_props = {
     "inout": None,
     "dist": dist_props,
-    "bypass": lambda x: {},
+    "bypass": lambda x, *_: {},
     "concat": concat_props,
     "som": som_props,
     "get_bmu": bmu_props,

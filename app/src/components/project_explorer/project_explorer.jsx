@@ -26,7 +26,7 @@ class ProjectExplorer extends Component {
                     id: 0,
                     isExpanded: false,
                     icon: "folder-close",
-                    label: 'Objects',
+                    label: 'Data Objects',
                     childNodes: []
                 },
                 {
@@ -239,7 +239,8 @@ class ProjectExplorer extends Component {
                 dp_type: type,
                 dp_msg: message,
                 dp_items: e,
-                dp_cb: finish
+                dp_cb: finish,
+                dp_query: ""
             })
         });
 

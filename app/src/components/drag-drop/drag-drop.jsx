@@ -347,6 +347,7 @@ class DragDrop extends Component {
 
     saveSession() {
         window.pywebview.api.call_service(-1, "save_object", [this.state.model_name, "model", this.export_som(), true]).then((descriptor) => {
+            this.fileman.refresh()
         });
     }
 
@@ -409,6 +410,17 @@ class DragDrop extends Component {
 
     saveGraphOutput(opq) {
         window.pywebview.api.call_service(this.state.service, "export_output", [this.state.model_name + "_out", opq]).then((e) => {
+            PrimaryToaster.show({
+                message: (e.status ? "Exported as: " : "Failed: ") + e.msg,
+                intent: e.status ? Intent.SUCCESS : Intent.DANGER,
+            });
+            this.props.fileman.refresh()
+        });
+    }
+
+    saveGraphNode() {
+        var node = this.state.soms[this.state.editing]
+        window.pywebview.api.call_service(this.state.service, "export_node", [this.state.model_name + node.name, node.id]).then((e) => {
             PrimaryToaster.show({
                 message: (e.status ? "Exported as: " : "Failed: ") + e.msg,
                 intent: e.status ? Intent.SUCCESS : Intent.DANGER,
@@ -591,7 +603,7 @@ class DragDrop extends Component {
                             </div>
                             <div className={Classes.DRAWER_FOOTER}>
                                 <Button icon="trash" intent="danger" disabled={editingNode && 'fixed' in this.node_templates[editingNode.template]} minimal onClick={() => this.remove_handler(this.state.editing)}> Delete </Button>
-                                <Button icon="help" intent="success" minimal disabled> Open Manual </Button>
+                                <Button icon="data-connection" intent="primary" minimal onClick={() => this.saveGraphNode()}> Export Opaque </Button>
                             </div>
                         </Drawer>
                     </div>

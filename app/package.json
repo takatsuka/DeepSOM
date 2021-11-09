@@ -21,7 +21,9 @@
     "build": "npm run clean && npm run frontend:prod && run-script-os",
     "build:macos": "pyinstaller build-macOS.spec",
     "fasttesting": "parcel serve src/index-testing.html",
-    "testing": "parcel build src/index-testing.html --no-minify --public-url . -d gui && ./venv/bin/python src/index.py --runtest"
+    "testing": "parcel build src/index-testing.html --no-minify --public-url . -d gui && ./venv/bin/python src/index.py --runtest",
+    "sudodebug": "parcel serve src/index-superuser.html",
+    "sudo": "parcel build src/index-superuser.html --public-url . -d gui && ./venv/bin/python src/index.py --sudo"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.37.0",

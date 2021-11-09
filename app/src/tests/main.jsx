@@ -24,6 +24,11 @@ function update_test_stats(passed, failed, pending) {
     $("#test-pending").text(pending);
 }
 
+function update_time() {
+    var time = parseInt($("#test-time").text());
+    $("#test-time").text(time + 1);
+}
+
 async function click(selector) {
     await sleep(RETRY_DELAY);
     for (var i = 0; i < MAX_RETRIES; i++) {
@@ -115,7 +120,39 @@ async function update_value(selector, text) {
     throw `ERROR: ${selector} not available`;
 }
 
+async function is_class_exist() {
+    if ($("body.bp3-dark")[0]) {
+        debug_log("Detected dark mode");
+        return true;
+    }
+    debug_log("Detected light mode");
+    return false;
+}
+
 // Begin test cases
+
+async function test_dark_mode() {
+    try {
+        await click("#view-btn");
+        var expect = true;
+        for (var i = 0; i < 6; i++) {
+            if (await is_class_exist() != expect) {
+                return false;
+            }
+
+            expect = !expect;
+            await click("#dark-mode-switch");
+
+            if (await is_class_exist() != expect) {
+                return false;
+            }
+        }
+    } catch(err) {
+        debug_log(err);
+        return false;
+    }
+    return true;
+}
 
 async function test_editor_open() {
     try {
@@ -202,10 +239,10 @@ async function test_editor_stress() {
         await update_location(input_node_id, 850, 100);
         await update_location(output_node_id, 450, 950);
 
-        for (var i = 3; i < 20; i++) {
+        for (var i = 3; i < 15; i++) {
             await click("#add-node-btn");
             await click("#single-som-btn");
-            await update_location(`#ddn_${i}`, 100 * i, 300);
+            await update_location(`#ddn_${i}`, 140 * (i-2), 300);
 
             await click("#add-link-btn")
             await click(input_node_btn_id)
@@ -216,19 +253,46 @@ async function test_editor_stress() {
             await click(output_node_btn_id)
         }
 
-        for (var i = 20; i < 37; i++) {
+        for (var i = 15; i < 27; i++) {
             await click("#add-node-btn");
             await click("#sampler-btn");
-            await update_location(`#ddn_${i}`, 100 * (i-17), 600);
+            await update_location(`#ddn_${i}`, 140 * (i-14), 600);
 
             await click("#add-link-btn")
-            await click(input_node_btn_id)
+            await click(`#ddn_add_${i-1}`)
             await click(`#ddn_add_${i}`)
-
-            await click("#add-link-btn")
-            await click(`#ddn_add_${i}`)
-            await click(output_node_btn_id)
         }
+
+        for (var i = 27; i < 35; i++) {
+            await click("#add-node-btn");
+            await click("#bypass-btn");
+            await update_location(`#ddn_${i}`, 2000, 300 + 110 * (i-26));
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
+            await click(`#ddn_add_${i}`)
+        }
+
+        for (var i = 35; i < 43; i++) {
+            await click("#add-node-btn");
+            await click("#bypass-btn");
+            await update_location(`#ddn_${i}`, 2150, 300 + 110 * (43-i));
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
+            await click(`#ddn_add_${i}`)
+        }
+
+        for (var i = 43; i < 51; i++) {
+            await click("#add-node-btn");
+            await click("#bypass-btn");
+            await update_location(`#ddn_${i}`, 2300, 300 + 110 * (i-42));
+
+            await click("#add-link-btn")
+            await click(`#ddn_add_${i-1}`)
+            await click(`#ddn_add_${i}`)
+        }
+
     } catch(err) {
         debug_log(err);
         return false;
@@ -434,15 +498,7 @@ async function test_editor_various_nodes_dancing() {
             await update_location(output_node_id, 700 + x * 300, 800 + y * 300);
         }
 
-        for (var d = 360; d >= -30; d -= 30) {
-            var x = Math.cos(d*Math.PI/180);
-            var y = Math.sin(d*Math.PI/180);
-            for (var i = 0; i < soms.length; i++) {
-                await update_location(`#ddn_${i+3}`, 100 * (i+3) + x * 500, 500 + y * 500);
-            }
-        }
-
-        for (var r = 50; r < 800; r += 30) {
+        for (var r = 50; r < 700; r += 30) {
             for (var i = 0; i < soms.length; i++) {
                 var d = i * 45;
                 var x = Math.cos(d*Math.PI/180);
@@ -484,14 +540,14 @@ async function test_editor_random_nodes() {
             "calibrate-btn"
         ]
 
-        for (var i = 0; i < 50; i++) {
+        for (var i = 0; i < 40; i++) {
             var som_idx = Math.floor(Math.random() * soms.length);
             await click("#add-node-btn");
             await click(`#${soms[som_idx]}`);
             await update_location(`#ddn_${i+3}`, 80 + Math.floor(Math.random() * 2000), 80 + Math.floor(Math.random() * 1000));
         }
-        for (var z = 0; z < 3; z++) {
-            for (var i = 0; i < 50; i++) {
+        for (var z = 0; z < 2; z++) {
+            for (var i = 0; i < 40; i++) {
                 await update_location(`#ddn_${i+3}`, 80 + Math.floor(Math.random() * 2000), 80 + Math.floor(Math.random() * 1000));
             }
         }
@@ -534,12 +590,8 @@ async function test_editor_random_links() {
             await update_location(`#ddn_${i+3}`, 80 + Math.floor(Math.random() * 2000), 80 + Math.floor(Math.random() * 1000));
 
             await click("#add-link-btn")
-            await click(input_node_btn_id)
+            await click(`#ddn_add_${i+2}`)
             await click(`#ddn_add_${i+3}`)
-
-            await click("#add-link-btn")
-            await click(`#ddn_add_${i+3}`)
-            await click(output_node_btn_id)
         }
 
     } catch(err) {
@@ -552,6 +604,7 @@ async function test_editor_random_links() {
 // run tests
 $(document).ready(async function(){
     var tests = [
+        test_dark_mode,
         test_editor_open,
         test_editor_add_link_basic,
         test_editor_add_link_duplicate,
@@ -569,23 +622,28 @@ $(document).ready(async function(){
     var passed = 0;
     var failed = 0;
     var pending = tests.length;
+    $("#test-time").text(0);
+    var timer = setInterval(update_time, 1000);
     update_test_stats(passed, failed, pending);
 
     for (var i = 0; i < tests.length; i++) {
         summary_log(`Starting test "${tests[i].name}"`);
+        debug_log(`Starting test "${tests[i].name}"`);
         var result = await tests[i]();
         if (result) {
-            summary_log(`Test "${tests[i].name}" PASSED`);
+            summary_log(">>>PASSED");
             passed++;
         } else {
-            summary_log(`Test "${tests[i].name}" FAILED`);
+            summary_log("!!!FAILED");
             failed++;
         }
         pending--;
         update_test_stats(passed, failed, pending);
 
     }
-    for (var i = 0; i < tests.length; i++) {
-        await click(`#close_tab_${i+1}`);
+    for (var i = 1; i < tests.length; i++) {
+        await click(`#close_tab_${i}`);
     }
+
+    clearInterval(timer);
 });

@@ -23,16 +23,17 @@ html {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 30%;
-    height: 30%;
+    width: 40%;
+    height: 40%;
     background-color: #000452;
     opacity: 0.8;
-    z-index: 10000;
+    z-index: 9999;
     padding: 10px;
+    color: #fff;
 }
 
 .test-log-container {
-    height: 90%;
+    height: 80%;
     width: 100%;
     display: flex;
 }
@@ -41,4 +42,41 @@ html {
     flex: 1;
     overflow: scroll;
     padding: 10px;
+}
+
+.test-debug-output#debug-output {
+    font-size: 20px;
+}
+
+.cmd-prompt {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    height: 35px;
+    background-color: #000;
+    z-index: 10000;
+    padding: 0;
+    color: #9ACD32;
+    font-family: monospace;
+}
+
+.cmd-prompt label {
+    position: absolute;
+    left: 0;
+    width: 120px;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.cmd-prompt input {
+    position: absolute;
+    left: 115px;
+    width: calc(100% - 120px);
+    background-color: #000;
+    color: #9ACD32;
+    font-family: monospace;
+    font-size: 20px;
+    line-height: 30px;
+    border: 0;
 }

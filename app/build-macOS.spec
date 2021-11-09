@@ -36,11 +36,16 @@ exe = EXE(
     strip=False,
     # icon='.\\src\\assets\\logo.ico',
     upx=True,
-    console=True)  # set this to see error output of the executable
+    console=False)  # set this to see error output of the executable
 
 app = BUNDLE(exe,
              name='PySOM Creator.app',
-            #  icon='dev/icon/moccasin.icns',
-             bundle_identifier=None,
-             info_plist={'NSHighResolutionCapable': 'True'},
+             version='0.3.1',
+             icon='imgs/dsd_icon.icns',
+             bundle_identifier='com.deepsomdome.creator',
+             info_plist={
+                    'NSHighResolutionCapable': 'True',
+                    'NSPrincipalClass': 'NSApplication',
+                    'NSAppleScriptEnabled': False,
+                },
              )

@@ -73,6 +73,23 @@ class ModelService:
         key = self.ds.save_object_data('opaque' if opaque else 'matrix', name, self.model_output)
         return {'status': True, 'msg': key}
 
+    def export_node(self, name, id):
+        if self.model_output is None:
+            return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
+        
+        if self.graph is None:
+            return {'status': False, 'msg': 'Model not present.'}
+
+        node = self.graph.find_node(int(id))
+
+        if node is None:
+            return {'status': False, 'msg': 'Requested Node does not present.'}
+        
+        key = self.ds.save_object_data('opaque', name, node)
+        return {'status': True, 'msg': key}
+
+
+
     def debug_output_str(self):
         if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}

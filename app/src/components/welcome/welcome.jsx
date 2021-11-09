@@ -45,19 +45,19 @@ class Welcome extends Component {
                 <div className="card-flex">
                     <Card interactive={true} elevation={Elevation.TWO}>
                         <h2>Start a new project</h2>
-                        <Button large="true" icon="add">Start</Button>
+                        <Button large="true" icon="add" disabled>Start</Button>
                     </Card>
                     <Card interactive={true} elevation={Elevation.TWO}>
                         <h2>Continue with a project</h2>
-                        <Button large="true" icon="folder-open">Continue</Button>
+                        <Button large="true" icon="folder-open" disabled>Continue</Button>
                     </Card>
                     <Card interactive={true} elevation={Elevation.TWO}>
                         <h2>Play with examples</h2>
-                        <Button large="true" icon="code-block">Play</Button>
+                        <Button large="true" icon="code-block" disabled>Play</Button>
                     </Card>
                     <Card interactive={true} elevation={Elevation.TWO}>
                         <h2>Help documentation</h2>
-                        <Button large="true" icon="help">Read</Button>
+                        <Button large="true" icon="help" disabled>Read</Button>
                     </Card>
                 </div>
             </div>)

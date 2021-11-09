@@ -1,0 +1,16 @@
+    Dove
+    Chicken
+    Duck
+    Goose
+    Owl
+    Hawk
+    Eagle
+    Fox
+    Dog
+    Wolf
+    Cat
+    Tiger
+    Lion
+    Horse
+    Zebra
+    Cow
