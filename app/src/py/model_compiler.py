@@ -107,22 +107,3 @@ def parse_dict(dict, ds):
 
     return g
 
-
-if __name__ == "__main__":
-    import sys
-    import json
-
-    txt = open(sys.argv[1]).read()
-    json = json.loads(txt)
-    graph = parse_dict(json)
-
-    dat = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
-    dat = np.array(dat)
-
-    graph.set_input(dat)
-
-    print(graph.get_output())
