@@ -26,8 +26,10 @@ $(document).ready(async function() {
                 break;
             case "stress":
                 editor_stress();
+                break;
             case "complex":
                 editor_complex();
+                break;
             default:
                 debug_log("Unknown command");
         }
