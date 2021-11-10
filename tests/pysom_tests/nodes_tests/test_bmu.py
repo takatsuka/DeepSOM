@@ -9,8 +9,8 @@ import pytest
 
 def test_init_err():
     with pytest.raises(RuntimeError) as e_info:
-        BMU(None, None, output='2D')
-    assert str(e_info.value) == "Output should be either '1D' or 'w' only"
+        BMU(None, None, output='3D')
+    assert str(e_info.value) == "Output should be either '1D', '2D' or 'w' only"
 
 
 def test_init_1D():
@@ -92,8 +92,8 @@ def test_get_output_slot1_1D(g_bmu1D):
     bmu = g_bmu1D['bmu']
     out = g.find_node(bmu).get_output(slot=1)
     assert isinstance(out, np.ndarray)
-    assert out.shape == (2, )
-    assert_array_equal(out, array([0, 0]))
+    assert out.shape == (2, 1)
+    assert_array_equal(out, array([[0],[0]]))
 
 
 def test_get_output_slot1_weight(g_bmu_weight):
