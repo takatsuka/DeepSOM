@@ -273,7 +273,7 @@ class SOM(Node):
         return str_rep
 
     def _check_dims(self, data: np.ndarray) -> bool:
-        """
+        
         if self.data_dim != len(data[0]):
             msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
             raise ValueError(msg)
@@ -282,7 +282,7 @@ class SOM(Node):
             if self.data_dim != len(data[i]):
                 msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
                 raise ValueError(msg)
-        """
+        
         return True
 
     def get_weights(self) -> np.ndarray:
