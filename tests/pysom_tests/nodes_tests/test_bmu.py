@@ -93,7 +93,7 @@ def test_get_output_slot1_1D(g_bmu1D):
     out = g.find_node(bmu).get_output(slot=1)
     assert isinstance(out, np.ndarray)
     assert out.shape == (2, 1)
-    assert_array_equal(out, array([[0],[0]]))
+    assert_array_equal(out, array([[0], [0]]))
 
 
 def test_get_output_slot1_weight(g_bmu_weight):
