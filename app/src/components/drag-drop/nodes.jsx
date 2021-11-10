@@ -133,7 +133,9 @@ export const NodeTemplates = {
                     return (
                         <div key={idx}>
                             <TagInput
+                                inputProps={{id:"dist-ip" + idx}}
                                 values={d.props.selections[idx].sel.map((x) => x.toString())}
+                                addOnBlur addOnPaste
                                 onChange={(t) => editor.wrapSOMS(() => (d.props.selections[idx].sel = editor.node_templates[d.template].updateInput(t)))}
                             />
                             {/* <InputGroup placeholder="crap" value={d.props.selections[idx].sel}

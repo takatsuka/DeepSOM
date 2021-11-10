@@ -14,6 +14,7 @@ import ScatterView3D from "../scatterview_3d/scatterview"
 import DragDropSOM from '../drag-drop/drag-drop';
 import ImageView from '../imageview/imageview';
 import SOMView from '../somview/somview';
+import Animal from '../animal/animal';
 
 import ProjectExplorer from '../project_explorer/project_explorer';
 
@@ -71,7 +72,7 @@ class Creator extends Component {
     } else {
       document.body.classList.add('bp3-dark');
     }
-    this.setState(prevState => ({dark: !prevState.dark}));
+    this.setState(prevState => ({ dark: !prevState.dark }));
   }
 
   embedCard(whatever) {
@@ -97,7 +98,7 @@ class Creator extends Component {
         <MenuItem icon="polygon-filter" text="Import Model" onClick={() => { this.explorerman.current.addSOM() }} />
 
         <MenuDivider title="DEBUG" />
-        <MenuItem icon="database" text="Picker" onClick={() => { this.explorerman.current.ask_user_pick_data("Select a data to do nothing.","matrix", (k) => console.log(k)) }} />
+        <MenuItem icon="database" text="Picker" onClick={() => { this.explorerman.current.ask_user_pick_data("Select a data to do nothing.", "matrix", (k) => console.log(k)) }} />
       </Menu>
     )
 
@@ -110,9 +111,23 @@ class Creator extends Component {
         <MenuDivider title="Visualization" />
         <MenuItem icon="layout-auto" text="SOM" onClick={() => { this.tabman.current.openTab(<SOMView />, "SOM", true) }} />
         <MenuItem icon="heatmap" text="Scatter" onClick={() => { this.tabman.current.openTab(<ScatterView3D />, "Scatter", true, this.state.datastore) }} />
-        <MenuItem icon="media" text="Image" disabled onClick={() => { this.tabman.current.openTab(<ImageView />, "Image", true) }} />
+
+        <MenuItem icon="applications" text="Applications">
+          <MenuItem icon="media" text="Image" onClick={() => { null }} />
+          <MenuItem icon="globe-network" text="Reddit Post Graph" onClick={() => { null }} />
+          <MenuItem icon="crown" text="Animals" onClick={() => { this.tabman.current.openTab(<Animal />, "Animal", true) }} />
+          <MenuDivider title="External Clients" />
+          <MenuItem icon="buggy" text="Terran Gen(Unity3D)" onClick={() => { null }} />
+          <MenuItem icon="tree" text="Mushroom Forest" onClick={() => { null }} />
+        </MenuItem>
+
+
+
+
+
+
         <MenuDivider title="Appearance" />
-        <Switch id="dark-mode-switch" style={{marginLeft:"10px", marginTop:"10px"}} large checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
+        <Switch id="dark-mode-switch" style={{ marginLeft: "10px", marginTop: "10px" }} large checked={this.state.dark} innerLabel="Light" innerLabelChecked="Dark" onChange={() => this.darkModeToggle()} />
       </Menu>
     )
 
@@ -165,7 +180,7 @@ class Creator extends Component {
               <div className="submenubar">
                 <Tabs id="TabsExample" onChange={(x) => { this.onTabChange(x) }} selectedTabId={this.state.tab}>
                   {this.state.tabs.map((t) => (
-                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)} id={"close_tab_" + t.id}/> </Tab>
+                    <Tab id={t.id} key={t.id} title={t.dname}> <Icon icon="small-cross" onClick={() => this.tabman.current.closeTab(t.id)} id={"close_tab_" + t.id} /> </Tab>
                   ))}
                 </Tabs>
               </div>

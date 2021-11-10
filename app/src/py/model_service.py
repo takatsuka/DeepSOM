@@ -6,15 +6,17 @@ import webview
 from .model_compiler import parse_dict as do_compile
 from pysom.graph import GraphCompileError
 import traceback
-
+from time import sleep
 
 # Model training service
+
+
 class ModelService:
     def __init__(self, ds):
         self.ds = ds
         self.input_key = None
         self.graph = None
-        
+
         self.model_export = None
         self.model_output = None
 
@@ -46,7 +48,7 @@ class ModelService:
 
         if self.input_key is None:
             return {'status': False, 'msg': 'Input data not set.'}
-        
+
         data = self.ds.get_object_data(self.input_key)
         # return {'status': False, 'msg': data}
         if data is None:
@@ -61,22 +63,25 @@ class ModelService:
         except Exception:
             return {'status': False, 'msg': f"Error ocurred during evaluations: {traceback.format_exc()}"}
 
+        sleep(len(self.graph.nodes) * 0.5)
+
         return {'status': True, 'msg': 'Training finished.'}
 
     def export_output(self, name, opaque):
         if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
-        
+
         if not opaque and not isinstance(self.model_output, np.ndarray):
             return {'status': False, 'msg': 'Output data format is not supported for export. Please check the output connection of your graph.'}
 
-        key = self.ds.save_object_data('opaque' if opaque else 'matrix', name, self.model_output)
+        key = self.ds.save_object_data(
+            'opaque' if opaque else 'matrix', name, self.model_output)
         return {'status': True, 'msg': key}
 
     def export_node(self, name, id):
         if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
-        
+
         if self.graph is None:
             return {'status': False, 'msg': 'Model not present.'}
 
@@ -84,14 +89,12 @@ class ModelService:
 
         if node is None:
             return {'status': False, 'msg': 'Requested Node does not present.'}
-        
+
         key = self.ds.save_object_data('opaque', name, node)
         return {'status': True, 'msg': key}
-
-
 
     def debug_output_str(self):
         if self.model_output is None:
             return {'status': False, 'msg': 'Output data not avaliable. Train or Run the model first to generate data.'}
-        
+
         return {'status': True, 'msg': str(self.model_output)}
