@@ -16,9 +16,6 @@ class SOMScatterviewService:
         }
         self.datastore = ds
 
-    def set_datastore(self, datastore):
-        self.datastore = datastore
-
     # Update the current weights being shown according to epoch
     def update_scatter_som_weights_by_training_epoch(self, epoch):
         if not self.cache['WEIGHTS']:
@@ -89,13 +86,6 @@ class SOMScatterviewService:
         self.cache['WEIGHTS'] = fields
         self.update_scatter_som_weights_by_training_epoch(0)
         return len(fields['weights'])
-
-    # (TODO) Function can be called from backend API that directly uploads weights from training
-    def upload_scatter_weights_from_api(self, path):
-        fields = json.loads(open(path).read())
-        self.cache['WEIGHTS'] = fields
-        self.update_scatter_som_weights_by_training_epoch(0)
-        return len(fields["weightspb"])
 
     # Return dataset dimensions
     def upload_scatter_dataset(self):
