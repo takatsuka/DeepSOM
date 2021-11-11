@@ -19,18 +19,6 @@ class SOMScatterviewService:
     def set_datastore(self, datastore):
         self.datastore = datastore
 
-    # Gets all open projects from datastore to choose which project to visualise
-    def get_all_open_projects_from_datastore(self):
-        pass
-
-    # Gets dataset from the datastore to visualise
-    def get_open_dataset_from_datastore(self):
-        pass
-
-    # Gets project json files from the datastore to visualise
-    def get_open_weight_from_datastore(self):
-        pass
-
     # Update the current weights being shown according to epoch
     def update_scatter_som_weights_by_training_epoch(self, epoch):
         if not self.cache['WEIGHTS']:
