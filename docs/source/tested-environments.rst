@@ -87,35 +87,33 @@ Instructions for macOS
 
    .. container:: rightside
        
-      **MacOS <INSERT VERSION> <INSERT OTHER INFO>**
+      **MacOS Big Sur Version 11.2.2**
 
-      To install: ???
-      
-      Notes: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id odio metus. Phasellus rhoncus, tortor nec tincidunt faucibus, nulla metus aliquet purus, vitae rutrum dolor enim nec diam. Proin sodales velit iaculis fringilla molestie. Curabitur facilisis vestibulum massa, nec dapibus massa rutrum id. 
+      To install: Python, NodeJS, virtualenv
 
 
 macOS Install Instructions
 ++++++++++++++++++++++++++
 
-Nulla hendrerit orci vitae tincidunt fringilla. Phasellus nunc magna, accumsan eget tempus sed, tristique sit amet neque. Maecenas et ultricies ante. Etiam augue eros, ultrices ac tempus luctus, luctus sed elit. Cras facilisis nibh id pellentesque suscipit. Phasellus commodo sodales odio, non tempus eros viverra fringilla. Morbi aliquam neque metus, id dignissim diam scelerisque eget. Fusce vestibulum consectetur libero. 
+Python 2.7 comes with any Mac OS X out of the box, however you should upgrade to Python 3.X as the default version has been 
+deprecated. Be sure you have XCode setup to have GCC installed, and a package manager such as Homebrew would also be useful.
 
-A list for you to use:
+- Downloading Python through a package manager such as Homebrew will be a much easier process. Another option is to download 
+Python 3.X from `the Python official website`_. 
 
-- Item 1
+- Once Python 3.X has been installed, you will be able to install virtualenv module by running `pip install virtualenv` on the command 
+line. 
 
-- Item 2
-
-- Item 3
-
-  - Indented item 3.1
-
-- Item 4
+- Install NodeJS from `the NodeJS official website`_ or through a package manager such as Homebrew. The dependencies for npm will also
+ be automatically installed if done through Homebrew, one of which includes Python. 
 
 
 macOS Install Quirks
 ++++++++++++++++++++++++
 
-Nulla hendrerit orci vitae tincidunt fringilla. Phasellus nunc magna, accumsan eget tempus sed, tristique sit amet neque. Maecenas et ultricies ante. Etiam augue eros, ultrices ac tempus luctus, luctus sed elit. Cras facilisis nibh id pellentesque suscipit. Phasellus commodo sodales odio, non tempus eros viverra fringilla. Morbi aliquam neque metus, id dignissim diam scelerisque eget. Fusce vestibulum consectetur libero. Nulla hendrerit orci vitae tincidunt fringilla. Phasellus nunc magna, accumsan eget tempus sed, tristique sit amet neque. Maecenas et ultricies ante. Etiam augue eros, ultrices ac tempus luctus, luctus sed elit. Cras facilisis nibh id pellentesque suscipit. Phasellus commodo sodales odio, non tempus eros viverra fringilla. Morbi aliquam neque metus, id dignissim diam scelerisque eget. Fusce vestibulum consectetur libero. 
+Not many quirks with MacOS fortunately; if any of the above instructions were executed by doesn't seem to be installed, make sure 
+to have the PATH variable setup to point to the right directories. Specific commands to add to PATH are usually printed on the command
+line after a successful install of packages.
 
 
 Instructions for Linux
