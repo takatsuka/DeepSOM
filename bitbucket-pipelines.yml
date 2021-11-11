@@ -15,7 +15,7 @@ pipelines:
             script:
               - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
               - pip install coverage pytest pytest-mock
-              - pip install numpy matplotlib
+              - pip install numpy matplotlib pywebview
               - coverage run -m pytest tests/ && coverage report
               # - coverage run -m pytest -s tests/ && coverage report && coverage html
         - step:
@@ -28,7 +28,7 @@ pipelines:
             image: node
             name: NPM
             script:
-                - echo "temporarily disabled"
+              - echo "temporarily disabled"
         #       - cd app
         #       - apt-get update
         #       - apt-get install python3-pip -y
