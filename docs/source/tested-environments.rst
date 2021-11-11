@@ -90,9 +90,6 @@ Instructions for macOS
       **MacOS Big Sur Version 11.2.2**
 
       To install: Python, NodeJS, virtualenv
-      
-      Notes: Avoid using Python version newer than 3.8 due to an issue
-      with dependencies. Further details can be found below.
 
 
 macOS Install Instructions
@@ -102,9 +99,7 @@ Python 2.7 comes with any Mac OS X out of the box, however you should upgrade to
 deprecated. Be sure you have XCode setup to have GCC installed, and a package manager such as Homebrew would also be useful.
 
 - Downloading Python through a package manager such as Homebrew will be a much easier process. Another option is to download 
-Python 3.X from `the Python official website`_. PySOM Creator uses python3, but will not work with a version newer than Python3.8. You can use 
-a venv to circumvent this, or make sure that your environment variable points to the correct version if you have multiple versions 
-of Python installed.
+Python 3.X from `the Python official website`_. 
 
 - Once Python 3.X has been installed, you will be able to install virtualenv module by running `pip install virtualenv` on the command 
 line. 
