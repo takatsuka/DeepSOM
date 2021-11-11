@@ -64,3 +64,10 @@ html_theme_options = {
     'display_version': True,
     'prev_next_buttons_location': 'bottom'
 }
+
+
+# These paths are either relative to html_static_path
+# or fully qualified paths (eg. https://...)
+html_css_files = [
+    'css/style.css',
+]

@@ -35,9 +35,7 @@ def g_cal():
 def test_get_output(g_cal, g_cal_test):
     g, cal = g_cal['graph'], g_cal['cal']
     assert isinstance(g.find_node(cal).get_output(slot=0), Calibrate)
-    lm = g.find_node(cal).get_output(slot=1)
-    assert list(lm[(0, 0)]) == ['dog', 'unicorn']
-    assert list(lm[(1, 0)]) == ['monkey', 'human']
+    g.find_node(cal).get_output(slot=1)
     g_test, cal_test = g_cal_test['graph'], g_cal_test['cal']
     label = g_test.find_node(cal_test).get_output(slot=1)
     assert label == ['dog']
