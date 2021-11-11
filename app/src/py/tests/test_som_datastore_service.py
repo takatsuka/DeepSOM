@@ -4,7 +4,7 @@ import filecmp
 import os
 import webview
 import numpy as np
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 
 from som_datastore_service import SOMDatastoreService
 
@@ -45,7 +45,12 @@ def test_open_file_fail(mocker):
     mocker.patch.object(os, "path", mock_path)
 
     filepath = ds.open_file()
-    mock_window.create_file_dialog.assert_called_once()
+    assert filepath == None
+
+    mock_window.create_file_dialog.return_value = []
+    mocker.patch.object(webview, "windows", [mock_window])
+
+    filepath = ds.open_file()
     assert filepath == None
 
 def test_open_file_success(mocker):
@@ -102,6 +107,10 @@ def test_import_data_from_csv_success(mocker):
     assert ds.get_object("test_csv.txt") == [[1.0, 1.0, 1.0]]
     unique_spy.assert_called_once()
     file_spy.assert_called_once()
+
+    mock_window.create_file_dialog.return_value = ["tests/resources/empty.txt"]
+    mocker.patch.object(webview, "windows", [mock_window])
+    assert ds.import_data_from_csv() == "empty.txt"
 
 def test_import_json_fail(mocker):
     mock_window = Mock()
@@ -165,11 +174,14 @@ def test_save_object():
     assert descriptor == "some key"
     assert ds.get_object(descriptor) == "another one"
 
+    descriptor = ds.save_object("bad key", "bad type", "object", False)
+    assert descriptor == None
+
 def test_get_object():
     assert ds.get_object("fake key") == None
 
-    ds.save_object("fake key", "fake type", "object", False)
-    assert ds.get_object("fake key") == None
+    ds.save_object_data("bad type", "bad key", "object")
+    assert ds.get_object("bad key") == None
 
     ds.save_object("fake key", "model", "object", False)
     assert ds.get_object("fake key") == "object"
@@ -234,7 +246,11 @@ def test_fetch_object_repr():
 def test_current_workspace():
     assert ds.current_workspace_name() == "lol"
 
-def test_load_workspace(mocker):
+def test_load_workspace_fail():
+    ds.open_file = MagicMock(return_value=None)
+    assert ds.load_workspace() == None
+
+def test_load_workspace_success(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = ["tests/resources/test_workspace.json"]
     mocker.patch.object(webview, "windows", [mock_window])
@@ -292,7 +308,7 @@ def test_save_workspace(mocker):
 
     ds.save_object("should save 1", "matrix", [1, 2, 3], False)
     ds.save_object("should save 2", "model", "content", False)
-    ds.save_object("should not save", "opaque", "SOM object", False)
+    ds.save_object_data("opaque", "should not save", "SOM object")
 
     ds.save_workspace()
 
