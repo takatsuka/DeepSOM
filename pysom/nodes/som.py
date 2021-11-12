@@ -1,7 +1,10 @@
 from __future__ import annotations
 import numpy as np
-from numpy import exp, logical_and, random, outer, linalg, zeros, arange
-from numpy import meshgrid, subtract, multiply, unravel_index, einsum
+from numpy import exp, logical_and, random, outer, linalg, zeros, arange, cov
+from numpy import meshgrid, subtract, multiply, unravel_index, einsum, linspace
+from numpy import array, mean
+from numpy.linalg import eig
+from numpy.core.fromnumeric import argsort
 from ..node import Node
 # from numba import jit
 from collections import Counter, defaultdict
@@ -183,6 +186,17 @@ def dist_manhattan(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
     return linalg.norm(subtract(data, weights), ord=1, axis=-1)
 
 
+def pca(data):
+    M = mean(data.transpose(), axis=1)  # calc mean each col
+    C = data - M  # subtract col means (centers cols)
+    V = cov(C.transpose())  # covar matrix
+    val, vec = eig(V)  # eigendecomp covar matrix
+    # P = vec.transpose().dot(C.transpose())
+    ord_val = argsort(-val)  # first two capture 85%
+
+    return vec, ord_val
+
+
 class SOM(Node):
     """
     Node type holding the Self-Organising Map data.
@@ -222,6 +236,7 @@ class SOM(Node):
     def __init__(self, uid: int, graph, size: int, dim: int, sigma: float = 0.5,
                  lr: float = 0.7, n_iters: int = 1, check_points: int = 1, hexagonal: bool = None,
                  dist: callable = dist_euclidean, nhood: callable = nhood_gaussian,
+                 pca: bool = False, norm: bool = False,
                  rand_state: int = None):
         super(SOM, self).__init__(uid, graph)
 
@@ -239,8 +254,8 @@ class SOM(Node):
         self.x_neig = self.y_neig = arange(size).astype(float)  # set x and y to be 0..size
         # arrange x y as horizontal and vert axis
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
+        self.pca, self.norm = pca, norm
         self.graph = graph
-
         if not check_points:
             msg = f"Expecting checkpoint value of at least default 1, instead got {check_points}."
             raise ValueError(msg)
@@ -258,14 +273,16 @@ class SOM(Node):
         return str_rep
 
     def _check_dims(self, data: np.ndarray) -> bool:
+        
         if self.data_dim != len(data[0]):
             msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
             raise ValueError(msg)
+        
         for i in range(0, len(data)):
             if self.data_dim != len(data[i]):
                 msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
                 raise ValueError(msg)
-
+        
         return True
 
     def get_weights(self) -> np.ndarray:
@@ -277,6 +294,15 @@ class SOM(Node):
         """
         # returns weights with (x * y) rows and data_dim input columns
         return self.weights.reshape(self.size ** 2, self.data_dim)
+
+    def _pca(self, data):
+        # normalize data first...? or leave to user to choose
+        vec, ord_val = pca(data)
+
+        for i, pc0 in enumerate(linspace(-1, 1, (self.size))):
+            for j, pc1 in enumerate(linspace(-1, 1, (self.size))):
+
+                self.weights[i, j] = pc0 * vec[ord_val[0]] + pc1 * vec[ord_val[1]]
 
     def activate(self, x: np.ndarray) -> None:
         """
@@ -401,8 +427,13 @@ class SOM(Node):
 
     def _evaluate(self):
         if self.graph.global_params['training']:
-            self.train(self.get_input())
-           
+            data = self.get_input()
+            if self.norm:
+                data = array(self.get_input(), dtype=np.float64)
+                data /= linalg.norm(data)
+            if self.pca:
+                self._pca(data)
+            self.train(data)
         self.output_ready = True
 
     def map_labels(self, data: np.ndarray, labels: list):

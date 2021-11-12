@@ -28,12 +28,13 @@ class BMU(Node):
     """
 
     def __init__(self, uid: int, graph, output: str = 'w'):
-        if output != '1D' and output != 'w':
-            raise RuntimeError("Output should be either '1D' or 'w' only")
+        if output != '1D' and output != 'w' and output != '2D':
+            raise RuntimeError("Output should be either '1D', '2D' or 'w' only")
 
         super(BMU, self).__init__(uid, graph)
         self.som = None
         ret_bmu = {'1D': self.get_1D,
+                   '2D': self.get_2D,
                    'w': self.get_weight}
         self.get_bmu = ret_bmu[output]
 
@@ -124,7 +125,11 @@ class BMU(Node):
             np.ndarray: the vector of BMU indices
         """
         # return 1D vector of bmu indices.
-        return argmin(self.dist_from_weights(data), axis=1)
+        return array([[b] for b in argmin(self.dist_from_weights(data), axis=1)])
+
+    def get_2D(self, data: np.ndarray) -> np.ndarray:
+        # return 2D vector of bmu coords
+        return array([self.som.bmu(x) for x in data])
 
     def get_weight(self, data: np.ndarray) -> np.ndarray:
         """
@@ -136,6 +141,6 @@ class BMU(Node):
         Returns:
             np.ndarray: the array of BMU weights
         """
-        bmu_idx = self.get_1D(data)
         # return 2D vector of bmu weights.
+        bmu_idx = argmin(self.dist_from_weights(data), axis=1)
         return self.som.weights[unravel_index(bmu_idx, self.som.weights.shape[:2])]

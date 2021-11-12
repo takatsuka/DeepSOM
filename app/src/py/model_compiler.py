@@ -45,11 +45,12 @@ def som_props(dict, *_):
         "hexagonal": dict['shape'] == 'hex',
         "dist": dist[dict['distance_func']],
         "nhood": nh[dict['nhood_func']],
+        "norm": dict['pre'] == "normalize"
     }
 
 
 def bmu_props(dict, *_):
-    output = {'index': '1D', 'weights': 'w'}
+    output = {'index': '1D', 'weights': 'w', 'coord': "2D"}
 
     return {
         "output": output[dict['shape']],
