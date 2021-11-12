@@ -1,6 +1,6 @@
 from __future__ import annotations
 import numpy as np
-from numpy import exp, logical_and, random, outer, linalg, zeros, arange, cov
+from numpy import exp, float64, logical_and, random, outer, linalg, zeros, arange, cov
 from numpy import meshgrid, subtract, multiply, unravel_index, einsum, linspace
 from numpy import array, mean
 from numpy.linalg import eig
@@ -153,8 +153,8 @@ def dist_cosine(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
         msg = f"input is {str(type(typ))[7:][:-1]}, expecting 'numpy.ndarray'"
         raise ValueError(msg)
 
-    num = (data * weights).sum(axis=2)
-    denum = multiply(linalg.norm(weights, axis=2), linalg.norm(data))
+    num = (data * weights).sum(axis=-1)
+    denum = multiply(linalg.norm(weights, axis=-1), linalg.norm(data))
     return 1 - num / (denum + 1 * 10 ** -8)
 
 
@@ -246,15 +246,14 @@ class SOM(Node):
         self.lr, self.sigma, self.n_iters = lr, sigma, n_iters
         # set distance metric, and nhood function
         self.distance, self.nhood_func = dist, nhood
-        self.weights = random.RandomState(rand_state).rand(size, size, dim) * 2 - 1  # randomize weights grid
-        # normalize weight values
-        self.weights /= linalg.norm(self.weights, axis=-1, keepdims=True)
         # initialize nhood map with size of grid
         self.map = zeros((size, size))
         self.x_neig = self.y_neig = arange(size).astype(float)  # set x and y to be 0..size
         # arrange x y as horizontal and vert axis
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
         self.pca, self.norm = pca, norm
+        self._rand_weights(rand_state)
+        self.label_map = defaultdict(list)
         self.graph = graph
         if not check_points:
             msg = f"Expecting checkpoint value of at least default 1, instead got {check_points}."
@@ -263,7 +262,7 @@ class SOM(Node):
             msg = f"Checkpoints must not exceed number of training iterations.\nCheckpoints must at most be {n_iters} for number of training iterations requested."
             raise ValueError(msg)
         self.cp, self.train_log = 0, {i: np.array([]) for i in np.arange(check_points)}
-        
+
         if hexagonal:
             # offset every second row if hexagonal grid used
             self.x_mat[::-2] -= 0.5
@@ -273,16 +272,13 @@ class SOM(Node):
         return str_rep
 
     def _check_dims(self, data: np.ndarray) -> bool:
-        
         if self.data_dim != len(data[0]):
             msg = f"Expecting {self.data_dim} dimensions, input has {len(data[0])}"
             raise ValueError(msg)
-        
         for i in range(0, len(data)):
             if self.data_dim != len(data[i]):
                 msg = f"Expecting {self.data_dim} dimensions, input has {len(data[i])} in row {i}"
                 raise ValueError(msg)
-        
         return True
 
     def get_weights(self) -> np.ndarray:
@@ -295,15 +291,21 @@ class SOM(Node):
         # returns weights with (x * y) rows and data_dim input columns
         return self.weights.reshape(self.size ** 2, self.data_dim)
 
+    def _rand_weights(self, rand_state):
+        # randomize weights grid
+        self.weights = random.RandomState(rand_state).randn(self.size, self.size, self.data_dim) * 2
+        # normalize weight values
+        self.weights /= linalg.norm(self.weights, axis=2, keepdims=True)
+
     def _pca(self, data):
         # normalize data first...? or leave to user to choose
         vec, ord_val = pca(data)
-
-        for i, pc0 in enumerate(linspace(-1, 1, (self.size))):
-            for j, pc1 in enumerate(linspace(-1, 1, (self.size))):
-
-                self.weights[i, j] = pc0 * vec[ord_val[0]] + pc1 * vec[ord_val[1]]
-
+        grid_length = linspace(-1, 1, self.size, dtype=float64)
+        for i, pc0 in enumerate(grid_length):
+            for j, pc1 in enumerate(grid_length):
+                self.weights[i, j] = (pc0 * vec[ord_val[0]])    # first principle component
+                self.weights[i, j] += (pc1 * vec[ord_val[1]])   # add second as linear combination
+        
     def activate(self, x: np.ndarray) -> None:
         """
         Helper function to trigger the distance function for an input vector
@@ -430,7 +432,7 @@ class SOM(Node):
             data = self.get_input()
             if self.norm:
                 data = array(self.get_input(), dtype=np.float64)
-                data /= linalg.norm(data)
+                data /= linalg.norm(data, axis=-1, keepdims=True)           
             if self.pca:
                 self._pca(data)
             self.train(data)
@@ -451,13 +453,11 @@ class SOM(Node):
                 - Value is list [Counter("lab1": count1, "lab2": count2, "lab3": count3)]
         """
         self._check_dims(data)
-
-        label_map = defaultdict(list)
-        for neuron, lab in zip(data, labels):
-            label_map[self.bmu(neuron)].append(lab)
-        for pos in label_map:
-            label_map[pos] = Counter(label_map[pos])
-        return label_map
+        # project labels to data
+        [self.label_map[self.bmu(neuron)].append(lab) for neuron, lab in zip(data, labels)]
+        for pos in self.label_map:
+            self.label_map[pos] = Counter(self.label_map[pos])  # count labels
+        return self.label_map
 
     def get_output(self, slot: int) -> object:
         """
