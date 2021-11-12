@@ -7,6 +7,7 @@ from pysom.node import Node
 from pysom.nodes.som import nhood_gaussian, nhood_bubble, nhood_mexican
 from pysom.nodes.som import dist_cosine, dist_euclidean, dist_manhattan
 from pysom.nodes.calibrate import Calibrate
+from pysom.nodes.scale import Scale
 from pysom.graph import GraphCompileError
 
 import numpy as np
@@ -18,7 +19,8 @@ template_2_node = {
     "concat": Concat,
     "som": SOM,
     "get_bmu": BMU,
-    "calibrate": Calibrate
+    "calibrate": Calibrate,
+    "scale": Scale
 }
 
 
@@ -79,7 +81,8 @@ node_props = {
     "concat": concat_props,
     "som": som_props,
     "get_bmu": bmu_props,
-    "calibrate": calibrate_props
+    "calibrate": calibrate_props,
+    "scale": lambda x, *_: {}
 }
 
 

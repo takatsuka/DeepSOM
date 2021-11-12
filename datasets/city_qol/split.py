@@ -6,3 +6,4 @@ f = np.array(f)[1:]
 open("city_labels", "w").write("\n".join(f[:, 1]))
 
 open("city_feat", "w").write(''.join([','.join(i) for i in f[:, 4:]]))
+print(f[:, 4:].shape)

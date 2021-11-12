@@ -1,2 +1,2 @@
-## Animal
-Animal Dataset for demonstrating Self-organizing map from Kohonen's original SOM paper.
+## City Quality of Life Dataset
+(Kaggle)[https://www.kaggle.com/orhankaramancode/city-quality-of-life-dataset]
