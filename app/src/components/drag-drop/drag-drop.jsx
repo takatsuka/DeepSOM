@@ -478,7 +478,6 @@ class DragDrop extends Component {
                 <MenuItem icon="play" text="Opaque" onClick={() => this.saveGraphOutput(true)} />
                 <MenuDivider title="Debug" />
                 <MenuItem icon="database" text="Show Output" onClick={() => this.debugShowOutput()} />
-
             </Menu>
         )
 
@@ -495,8 +494,6 @@ class DragDrop extends Component {
                 <MenuDivider title="Functional" />
                 <MenuItem icon="function" text="Get BMU" id="get-bmu-btn" onClick={() => this.add_som("get_bmu")} />
                 <MenuItem icon="function" text="Calibrate" id="calibrate-btn" onClick={() => this.add_som("calibrate")} />
-
-
             </Menu>
         )
 
@@ -593,10 +590,6 @@ class DragDrop extends Component {
                                         )
 
                                     }.bind(this))}
-
-
-
-
 
                                     <Divider />
                                 </div>
