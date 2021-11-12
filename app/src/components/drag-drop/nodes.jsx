@@ -80,6 +80,24 @@ export const NodeTemplates = {
         )
     },
 
+    scale: {
+        name: "scale",
+        styleClass: "scale_node",
+        node_props: {},
+        render: (d) => (
+            <div style={{ textAlign: 'center', marginTop: "-7px" }}>
+                <i style={{ fontSize: '16px' }}>Scale()</i>
+            </div>
+        ),
+
+        contextMenu: (d, editor) => (
+            <div>
+                <InputGroup id="input-name" placeholder="Name" value={d.name} disabled />
+                <Divider />
+            </div>
+        )
+    },
+
     calibrate: {
         name: "calibrate",
         styleClass: "calibrate_node",

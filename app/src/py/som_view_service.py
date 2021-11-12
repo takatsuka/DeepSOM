@@ -43,6 +43,7 @@ class SomViewService:
                                  [0.85882353, 0.85882353, 0.55294118],
                                  [0.09019608, 0.74509804, 0.81176471],
                                  [0.61960784, 0.85490196, 0.89803922]])
+        self.num_colors = len(self.palette)
 
     def generate_nodes(self):
         def rgb2hex(x): return "#{:02x}{:02x}{:02x}".format(
@@ -58,7 +59,8 @@ class SomViewService:
         else:
             return [{'id': i} for i in range(self.som.size ** 2)]
 
-        cmap = np.array(self.palette[:len(labelmap)])
+        cmap = np.array([self.palette[i % self.num_colors]
+                        for i in range(len(labelmap))])
         logit = self.cal.logit()
         # self.nodes = [{
         #     'id': i,

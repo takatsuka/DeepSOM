@@ -34,6 +34,10 @@ class Calibrate(Node):
         str_rep = "Calibrate {}".format(self.uid)
         return str_rep
 
+    def __repr__(self) -> str:
+        str_rep = f"Calibrate {self.uid}\nResult: {self.label_map}"
+        return str_rep
+
     def get_output(self, slot: int) -> Node:
         """
         Getter function to return the classification of associated nodes.
