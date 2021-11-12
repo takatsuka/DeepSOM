@@ -63,7 +63,7 @@ class ModelService:
         except Exception:
             return {'status': False, 'msg': f"Error ocurred during evaluations: {traceback.format_exc()}"}
 
-        sleep(len(self.graph.nodes) * 0.5)
+        sleep(len(self.graph.nodes) * 0.35)
 
         return {'status': True, 'msg': 'Training finished.'}
 

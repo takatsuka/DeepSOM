@@ -68,7 +68,7 @@ export const NodeTemplates = {
                     id="input-shape"
                     inputValueRenderer={(e) => (e)}
                     itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
-                    items={["index", "weights"]}
+                    items={["index", "weights", "coord"]}
                     onItemSelect={(e) => editor.wrapSOMS(() => (d.props.shape = e))}
                     popoverProps={{ minimal: true }}
                     query={d.props.shape}
@@ -133,7 +133,7 @@ export const NodeTemplates = {
                     return (
                         <div key={idx}>
                             <TagInput
-                                inputProps={{id:"dist-ip" + idx}}
+                                inputProps={{ id: "dist-ip" + idx }}
                                 values={d.props.selections[idx].sel.map((x) => x.toString())}
                                 addOnBlur addOnPaste
                                 onChange={(t) => editor.wrapSOMS(() => (d.props.selections[idx].sel = editor.node_templates[d.template].updateInput(t)))}
@@ -184,7 +184,7 @@ export const NodeTemplates = {
     som: {
         name: "SOM",
         styleClass: "som_node",
-        node_props: { dim: 10, shape: 'rect', inputDim: 3, train_iter: 1000, distance_func: "euclidean", nhood_func: "gaussian", sigma: 2, lr: 0.7 },
+        node_props: { dim: 10, shape: 'rect', inputDim: 3, train_iter: 1000, distance_func: "euclidean", nhood_func: "gaussian", sigma: 2, lr: 0.7, pre: "none" },
         render: (d) => (
             <div style={{ textAlign: 'center' }}>
 
@@ -258,7 +258,7 @@ export const NodeTemplates = {
                     query={d.props.distance_func}
                     onQueryChange={(q) => editor.wrapSOMS(() => (d.props.distance_func = q))}
                     itemPredicate={(a, b) => true}
-                    noResults={<MenuItem disabled={true} text="No shape matches." />}
+                    noResults={<MenuItem disabled={true} text="." />}
                 />
 
                 <h4>N_Hood</h4>
@@ -271,7 +271,20 @@ export const NodeTemplates = {
                     query={d.props.nhood_func}
                     onQueryChange={(q) => editor.wrapSOMS(() => (d.props.nhood_func = q))}
                     itemPredicate={(a, b) => true}
-                    noResults={<MenuItem disabled={true} text="No shape matches." />}
+                    noResults={<MenuItem disabled={true} text="." />}
+                />
+
+                <h4>Preprocess Input</h4>
+                <Suggest
+                    inputValueRenderer={(e) => (e)}
+                    itemRenderer={(e, { handleClick }) => <MenuItem key={e} text={e} onClick={handleClick} />}
+                    items={["none", "normalize"]}
+                    onItemSelect={(e) => editor.wrapSOMS(() => (d.props.pre = e))}
+                    popoverProps={{ minimal: true }}
+                    query={d.props.pre}
+                    onQueryChange={(q) => editor.wrapSOMS(() => (d.props.pre = q))}
+                    itemPredicate={(a, b) => true}
+                    noResults={<MenuItem disabled={true} text="." />}
                 />
 
             </div>

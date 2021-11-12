@@ -1,5 +1,8 @@
 [run]
-source = pysom
+source = 
+    pysom
+    app
+
 omit =
 ;     # omit anything in a .local directory anywhere
 ;     */.local/*

@@ -55,12 +55,14 @@ class Calibrate(Node):
             object: returns the list of ordered labels if the slot is not 0. \
                     Else, the Calibration node itself is returned.
         """
+
+        if not self.output_ready:
+            self.som = self.get_input()
+            self.label_map = self.som.map_labels(self.som.get_input(), self.labels)
+            self.output_ready = True
+
         if slot == 0:
             return self
-
-        self.som = self.get_input()
-        self.label_map = self.som.map_labels(self.som.get_input(), self.labels)
-        self.output_ready = True
 
         if self.test is None:
             return self.label_map

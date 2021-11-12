@@ -45,11 +45,12 @@ def som_props(dict, *_):
         "hexagonal": dict['shape'] == 'hex',
         "dist": dist[dict['distance_func']],
         "nhood": nh[dict['nhood_func']],
+        "norm": dict['pre'] == "normalize"
     }
 
 
 def bmu_props(dict, *_):
-    output = {'index': '1D', 'weights': 'w'}
+    output = {'index': '1D', 'weights': 'w', 'coord': "2D"}
 
     return {
         "output": output[dict['shape']],
@@ -107,22 +108,3 @@ def parse_dict(dict, ds):
 
     return g
 
-
-if __name__ == "__main__":
-    import sys
-    import json
-
-    txt = open(sys.argv[1]).read()
-    json = json.loads(txt)
-    graph = parse_dict(json)
-
-    dat = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
-    dat = np.array(dat)
-
-    graph.set_input(dat)
-
-    print(graph.get_output())

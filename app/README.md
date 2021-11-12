@@ -38,6 +38,14 @@ _The only available target currently is macOS. Other targets are still under dev
 
 Run `npm run build` to start the bundling process. GUI will be recompiled into `./gui` with production flags and the resutlting portable application bundle will be placed in `./dist` after a successful build.
 
+## Add the application source code to your Python Path
+
+Please run the following command if `npm run start` throws an ModuleNotFoundError.
+
+`export PYTHONPATH="${PYTHONPATH}:/path/to/project/root/app/src/py"`.
+
+This is to allow for absolute imports instead of relative imports, so that the tests can run properly.
+
 # Features
 
 ## Deep SOM 3D visualisation
