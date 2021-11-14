@@ -27,7 +27,7 @@ def test_init():
 
 
 def test_scatter_som_weights_by_training_epoch():
-    assert service.update_scatter_som_weights_by_training_epoch(0) == None
+    assert service.update_scatter_som_weights_by_training_epoch(0) is None
 
     fake_weights = {
         'w': 2,
@@ -73,18 +73,18 @@ def test_upload_scatter_weights_from_json_file_fail(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = None
     mocker.patch.object(webview, "windows", [mock_window])
-    assert service.upload_scatter_weights_from_json_file() == None
+    assert service.upload_scatter_weights_from_json_file() is None
 
     mock_window.create_file_dialog.return_value = []
     mocker.patch.object(webview, "windows", [mock_window])
-    assert service.upload_scatter_weights_from_json_file() == None
+    assert service.upload_scatter_weights_from_json_file() is None
 
     mock_window.create_file_dialog.return_value = ["fake json file"]
     mocker.patch.object(webview, "windows", [mock_window])
     mock_path = Mock()
     mock_path.exists.return_value = False
     mocker.patch.object(os, "path", mock_path)
-    assert service.upload_scatter_weights_from_json_file() == None
+    assert service.upload_scatter_weights_from_json_file() is None
 
 
 def test_upload_scatter_weights_from_json_file_success(mocker):
@@ -106,18 +106,18 @@ def test_upload_scatter_dataset_fail(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = None
     mocker.patch.object(webview, "windows", [mock_window])
-    assert service.upload_scatter_dataset() == None
+    assert service.upload_scatter_dataset() is None
 
     mock_window.create_file_dialog.return_value = []
     mocker.patch.object(webview, "windows", [mock_window])
-    assert service.upload_scatter_dataset() == None
+    assert service.upload_scatter_dataset() is None
 
     mock_window.create_file_dialog.return_value = ["fake csv file"]
     mocker.patch.object(webview, "windows", [mock_window])
     mock_path = Mock()
     mock_path.exists.return_value = False
     mocker.patch.object(os, "path", mock_path)
-    assert service.upload_scatter_dataset() == None
+    assert service.upload_scatter_dataset() is None
 
 
 def test_upload_scatter_dataset_success(mocker):

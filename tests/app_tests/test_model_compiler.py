@@ -5,17 +5,106 @@ from app.src.py.model_compiler import *
 from pysom.graph import Graph
 from pysom.nodes.som import dist_euclidean, nhood_gaussian
 
-test_export = {"nodes": {"1": {"name": "Input", "id": 1, "x": 71, "y": 155, "props": {"dim": 3}, "template": "inout"}, "2": {"name": "Output", "id": 2, "x": 857, "y": 217, "props": {"dim": 2}, "template": "inout"}, "3": {"name": "SOM", "id": 3, "x": 274, "y": 85, "props": {"dim": 10, "shape": "rect", "inputDim": 3, "train_iter": 1000, "distance_func": "euclidean",
-                                                                                                                                                                                                                                                                                  "nhood_func": "gaussian", "sigma": 2, "lr": 0.7}, "template": "som"}, "4": {"name": "get_bmu_", "id": 4, "x": 509, "y": 355, "props": {"shape": "weights"}, "template": "get_bmu"}}, "connections": [{"from": 1, "to": 3, "props": {"slot": 1, "order": 0}}, {"from": 3, "to": 4, "props": {"slot": 0, "order": 0}}, {"from": 4, "to": 2, "props": {"slot": 1, "order": 0}}], "i": 4}
-test_export_bad_link = {"nodes": {"1": {"name": "Input", "id": 1, "x": 101, "y": 200, "props": {
-    "dim": 3}, "template": "inout"}}, "connections": [{"from": 1, "to": 1, "props": {"slot": 0, "order": 0}}],  "i": 1}
-test_export_missing_node = {"nodes": {"1": {"name": "Input", "id": 1, "x": 101, "y": 200, "props": {
-    "dim": 3}, "template": "inout"}}, "connections": [{"from": 1, "to": 1, "props": {"slot": 0, "order": 0}}],  "i": 1}
-test_export_bad_template = {"nodes": {"1": {"name": "Input", "id": 1, "x": 101, "y": 200, "props": {"dim": 3}, "template": "inout"}, "2": {
-    "name": "Output", "id": 2, "x": 600, "y": 201, "props": {"dim": 2}, "template": "fake template"}}, "connections": [{"from": 1, "to": 2, "props": {"slot": 0, "order": 0}}],  "i": 2}
+test_export = {"nodes": {"1": {"name": "Input",
+                               "id": 1,
+                               "x": 71,
+                               "y": 155,
+                               "props": {"dim": 3},
+                               "template": "inout"},
+                         "2": {"name": "Output",
+                               "id": 2,
+                               "x": 857,
+                               "y": 217,
+                               "props": {"dim": 2},
+                               "template": "inout"},
+                         "3": {"name": "SOM",
+                               "id": 3,
+                               "x": 274,
+                               "y": 85,
+                               "props": {"dim": 10,
+                                         "shape": "rect",
+                                         "inputDim": 3,
+                                         "train_iter": 1000,
+                                         "distance_func": "euclidean",
+                                         "nhood_func": "gaussian",
+                                         "sigma": 2,
+                                         "lr": 0.7},
+                               "template": "som"},
+                         "4": {"name": "get_bmu_",
+                               "id": 4,
+                               "x": 509,
+                               "y": 355,
+                               "props": {"shape": "weights"},
+                               "template": "get_bmu"}},
+               "connections": [{"from": 1,
+                                "to": 3,
+                                "props": {"slot": 1,
+                                          "order": 0}},
+                               {"from": 3,
+                                "to": 4,
+                                "props": {"slot": 0,
+                                          "order": 0}},
+                               {"from": 4,
+                                "to": 2,
+                                "props": {"slot": 1,
+                                          "order": 0}}],
+               "i": 4}
+test_export_bad_link = {
+    "nodes": {
+        "1": {
+            "name": "Input",
+            "id": 1,
+            "x": 101,
+            "y": 200,
+            "props": {
+                "dim": 3},
+            "template": "inout"}},
+    "connections": [
+        {
+            "from": 1,
+            "to": 1,
+            "props": {
+                "slot": 0,
+                "order": 0}}],
+    "i": 1}
+test_export_missing_node = {
+    "nodes": {
+        "1": {
+            "name": "Input",
+            "id": 1,
+            "x": 101,
+            "y": 200,
+            "props": {
+                "dim": 3},
+            "template": "inout"}},
+    "connections": [
+        {
+            "from": 1,
+            "to": 1,
+            "props": {
+                "slot": 0,
+                "order": 0}}],
+    "i": 1}
+test_export_bad_template = {
+    "nodes": {
+        "1": {
+            "name": "Input", "id": 1, "x": 101, "y": 200, "props": {
+                "dim": 3}, "template": "inout"}, "2": {
+                    "name": "Output", "id": 2, "x": 600, "y": 201, "props": {
+                        "dim": 2}, "template": "fake template"}}, "connections": [
+                            {
+                                "from": 1, "to": 2, "props": {
+                                    "slot": 0, "order": 0}}], "i": 2}
 
-som_test_props = {"dim": 10, "shape": "rect", "inputDim": 3, "train_iter": 1000,
-                  "distance_func": "euclidean", "nhood_func": "gaussian", "sigma": 2, "lr": 0.7}
+som_test_props = {
+    "dim": 10,
+    "shape": "rect",
+    "inputDim": 3,
+    "train_iter": 1000,
+    "distance_func": "euclidean",
+    "nhood_func": "gaussian",
+    "sigma": 2,
+    "lr": 0.7}
 bmu_test_props = {"shape": "weights"}
 test_props = {"selections": [{"type": "idx", "sel": [0, 1]}], "axis": 1}
 calibrate_test_props = {"label_key": "fake key"}
@@ -76,4 +165,4 @@ def test_parse_dict_bad_connection():
 
 
 def test_parse_dict_success():
-    assert type(parse_dict(test_export, "fake datastore")) == Graph
+    assert isinstance(parse_dict(test_export, "fake datastore"), Graph)

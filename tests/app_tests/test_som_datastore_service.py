@@ -20,7 +20,7 @@ def teardown_function():
 
 def test_init():
     assert len(ds.data_instances) == 0
-    assert ds.ws_path == None
+    assert ds.ws_path is None
     assert ds.ws_name == "lol"
     assert np.all(ds.loaders["matrix"]([1, 1, 1]))
     assert ds.loaders["model"](1) == 1
@@ -50,13 +50,13 @@ def test_open_file_fail(mocker):
     mocker.patch.object(os, "path", mock_path)
 
     filepath = ds.open_file()
-    assert filepath == None
+    assert filepath is None
 
     mock_window.create_file_dialog.return_value = []
     mocker.patch.object(webview, "windows", [mock_window])
 
     filepath = ds.open_file()
-    assert filepath == None
+    assert filepath is None
 
 
 def test_open_file_success(mocker):
@@ -82,7 +82,7 @@ def test_import_data_from_csv_fail(mocker):
 
     actual = ds.import_data_from_csv()
 
-    assert actual == None
+    assert actual is None
     unique_spy.assert_not_called()
     file_spy.assert_called_once()
 
@@ -133,7 +133,7 @@ def test_import_json_fail(mocker):
     file_spy = mocker.spy(ds, "open_file")
 
     actual = ds.import_json("model")
-    assert(actual == None)
+    assert(actual is None)
     unique_spy.assert_not_called()
     file_spy.assert_called_once()
 
@@ -193,14 +193,14 @@ def test_save_object():
     assert ds.get_object(descriptor) == "another one"
 
     descriptor = ds.save_object("bad key", "bad type", "object", False)
-    assert descriptor == None
+    assert descriptor is None
 
 
 def test_get_object():
-    assert ds.get_object("fake key") == None
+    assert ds.get_object("fake key") is None
 
     ds.save_object_data("bad type", "bad key", "object")
-    assert ds.get_object("bad key") == None
+    assert ds.get_object("bad key") is None
 
     ds.save_object("fake key", "model", "object", False)
     assert ds.get_object("fake key") == "object"
@@ -231,7 +231,7 @@ def test_remove_object():
     assert ds.get_object("key 1") == "model1"
 
     ds.remove_object("key 1")
-    assert ds.get_object("key 1") == None
+    assert ds.get_object("key 1") is None
 
 
 def test_rename_object():
@@ -248,12 +248,12 @@ def test_rename_object():
     assert actual["status"] == False and actual["msg"] == "Gotcha hacker."
 
     actual = ds.rename_object("key", "key")
-    assert actual["status"] == True and actual["msg"] == "key"
+    assert actual["status"] and actual["msg"] == "key"
     assert ds.get_object("key") == "model"
 
     actual = ds.rename_object("key", "new key")
-    assert actual["status"] == True and actual["msg"] == "new key"
-    assert ds.get_object("key") == None
+    assert actual["status"] and actual["msg"] == "new key"
+    assert ds.get_object("key") is None
     assert ds.get_object("new key") == "model"
 
 
@@ -264,7 +264,7 @@ def test_fetch_object_repr():
     assert actual["status"] == False and actual["msg"] == "Object does not exist."
 
     actual = ds.fetch_object_repr("key")
-    assert (actual["status"] == True and actual["type"] ==
+    assert (actual["status"] and actual["type"] ==
             "<class 'numpy.ndarray'>") and actual["repr"] == "array([1., 2., 3.])"
 
 
@@ -274,7 +274,7 @@ def test_current_workspace():
 
 def test_load_workspace_fail():
     ds.open_file = MagicMock(return_value=None)
-    assert ds.load_workspace() == None
+    assert ds.load_workspace() is None
 
 
 def test_load_workspace_success(mocker):
@@ -306,7 +306,7 @@ def test_load_workspace_success(mocker):
 def test_new_workspace():
     ds.new_workspace()
     assert ds.ws_name == "untitled"
-    assert ds.ws_path == None
+    assert ds.ws_path is None
     assert len(ds.data_instances) == 0
 
 
@@ -346,15 +346,16 @@ def test_save_workspace(mocker):
 
     assert ds.ws_name == "test_workspace_actual.json"
     assert ds.ws_path == "tests/app_tests/resources/test_workspace_actual.json"
-    assert filecmp.cmp("tests/app_tests/resources/test_workspace_actual.json",
-                       "tests/app_tests/resources/test_workspace_expected.json")
+    assert filecmp.cmp(
+        "tests/app_tests/resources/test_workspace_actual.json",
+        "tests/app_tests/resources/test_workspace_expected.json")
 
 
 def test_get_object_data():
     ds.save_object("key", "matrix", [1, 2, 3], False)
 
     actual = ds.get_object_data("fake key")
-    assert actual == None
+    assert actual is None
 
     actual = ds.get_object_data("key")
     assert isinstance(actual, np.ndarray)

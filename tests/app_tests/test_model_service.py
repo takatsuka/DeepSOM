@@ -20,16 +20,16 @@ def teardown_function():
 
 def test_init():
     assert model.ds == mock_database
-    assert model.input_key == None
-    assert model.graph == None
-    assert model.model_export == None
-    assert model.model_output == None
+    assert model.input_key is None
+    assert model.graph is None
+    assert model.model_export is None
+    assert model.model_output is None
 
 
 def test_set_input():
     actual = model.set_input("fake key")
     assert model.input_key == "fake key"
-    assert actual["status"] == True and actual["msg"] == "fake key"
+    assert actual["status"] and actual["msg"] == "fake key"
 
 
 def test_update_model():
@@ -72,7 +72,7 @@ def test_compile_success():
     }
     actual = model.compile()
 
-    assert actual['status'] == True and actual['msg'] == "good"
+    assert actual['status'] and actual['msg'] == "good"
 
 
 def test_train_missing_components():
@@ -131,7 +131,7 @@ def test_train_success(mocker):
 
     actual = model.train()
 
-    assert actual['status'] == True and actual["msg"] == "Training finished."
+    assert actual['status'] and actual["msg"] == "Training finished."
     assert model.model_output == "fake output"
     mock_graph.set_input.called_only_once()
     mock_graph.set_param.called_only_once()
@@ -150,12 +150,12 @@ def test_export_output(mocker):
     model.model_output = np.array([1, 1, 1])
 
     actual = model.export_output("name", False)
-    assert actual['status'] == True and actual['msg'] == 'name'
+    assert actual['status'] and actual['msg'] == 'name'
     mock_database.save_object_data.called_only_once_with(
         'matrix', 'name', model.model_output)
 
     actual = model.export_output("opaque name", True)
-    assert actual['status'] == True and actual['msg'] == 'name'
+    assert actual['status'] and actual['msg'] == 'name'
     mock_database.save_object_data.called_only_once_with(
         'opaque', 'name', model.model_output)
 
@@ -180,7 +180,7 @@ def test_export_node():
     model.graph = mock_graph_success
     actual = model.export_node("name", 1)
 
-    assert actual['status'] == True and actual['msg'] == "real key"
+    assert actual['status'] and actual['msg'] == "real key"
     mock_database.save_object_data.called_only_once_with(
         'opaque', 'name', 'real node')
 
@@ -191,4 +191,4 @@ def test_debug_output_str():
 
     model.model_output = "fake output"
     actual = model.debug_output_str()
-    assert actual['status'] == True and actual['msg'] == 'fake output'
+    assert actual['status'] and actual['msg'] == 'fake output'
