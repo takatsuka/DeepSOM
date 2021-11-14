@@ -46,14 +46,18 @@ class SomViewService:
         self.num_colors = len(self.palette)
 
     def generate_nodes(self):
-        def rgb2hex(x): return "#{:02x}{:02x}{:02x}".format(
-            *np.clip(np.array((x * 255.0), dtype=np.int32), 0, 255))
+        def rgb2hex(x):
+            return "#{:02x}{:02x}{:02x}".format(
+                *np.clip(np.array((x * 255.0), dtype=np.int32), 0, 255))
 
-        def fmt(x): return ','.join([f'{i}' for i in x.keys()])
-        def mix(w, m): return np.sum(m * w[:, np.newaxis], axis=0)
+        def fmt(x):
+            return ','.join([f'{i}' for i in x.keys()])
+
+        def mix(w, m):
+            return np.sum(m * w[:, np.newaxis], axis=0)
 
         labelmap = None
-        if not self.cal is None:
+        if self.cal is not None:
             labelmap = {k[0]*self.som.size + k[1]: v for k,
                         v in self.cal.get_output(slot=1).items()}
         else:
@@ -113,7 +117,7 @@ class SomViewService:
 
         try:
             self.generate_nodes()
-        except:
+        except Exception as _:
             return {'status': False, 'msg': traceback.format_exc()}
 
         return {'status': True, 'msg': key}

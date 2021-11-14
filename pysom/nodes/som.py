@@ -248,7 +248,8 @@ class SOM(Node):
         self.distance, self.nhood_func = dist, nhood
         # initialize nhood map with size of grid
         self.map = zeros((size, size))
-        self.x_neig = self.y_neig = arange(size).astype(float)  # set x and y to be 0..size
+        self.x_neig = self.y_neig = arange(size).astype(
+            float)  # set x and y to be 0..size
         # arrange x y as horizontal and vert axis
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
         self.pca, self.norm = pca, norm
@@ -261,7 +262,8 @@ class SOM(Node):
         elif check_points > n_iters:
             msg = f"Checkpoints must not exceed number of training iterations.\nCheckpoints must at most be {n_iters} for number of training iterations requested."
             raise ValueError(msg)
-        self.cp, self.train_log = 0, {i: np.array([]) for i in np.arange(check_points)}
+        self.cp, self.train_log = 0, {i: np.array(
+            []) for i in np.arange(check_points)}
 
         if hexagonal:
             # offset every second row if hexagonal grid used
@@ -293,7 +295,8 @@ class SOM(Node):
 
     def _rand_weights(self, rand_state):
         # randomize weights grid
-        self.weights = random.RandomState(rand_state).randn(self.size, self.size, self.data_dim) * 2
+        self.weights = random.RandomState(rand_state).randn(
+            self.size, self.size, self.data_dim) * 2
         # normalize weight values
         self.weights /= linalg.norm(self.weights, axis=2, keepdims=True)
 
@@ -303,9 +306,11 @@ class SOM(Node):
         grid_length = linspace(-1, 1, self.size, dtype=float64)
         for i, pc0 in enumerate(grid_length):
             for j, pc1 in enumerate(grid_length):
-                self.weights[i, j] = (pc0 * vec[ord_val[0]])    # first principle component
-                self.weights[i, j] += (pc1 * vec[ord_val[1]])   # add second as linear combination
-        
+                # first principle component
+                self.weights[i, j] = (pc0 * vec[ord_val[0]])
+                # add second as linear combination
+                self.weights[i, j] += (pc1 * vec[ord_val[1]])
+
     def activate(self, x: np.ndarray) -> None:
         """
         Helper function to trigger the distance function for an input vector
@@ -422,17 +427,18 @@ class SOM(Node):
         # enumerating iters s.t. weights[i] results from bmu(data[i]) at curr=i and n_iters=999
         # iter value goes from 0-255, and repeats until n_iters is reached
         # (lr and sigma are calculated within update as a factor of curr and n_iters)
-        
+
         for curr, iter in enumerate(iters):
             dump_weight = True if not curr % len(self.train_log) else False
-            self.update(data[iter], self.bmu(data[iter]), curr, self.n_iters, dump_weight)
+            self.update(data[iter], self.bmu(data[iter]),
+                        curr, self.n_iters, dump_weight)
 
     def _evaluate(self):
         if self.graph.global_params['training']:
             data = self.get_input()
             if self.norm:
                 data = array(self.get_input(), dtype=np.float64)
-                data /= linalg.norm(data, axis=-1, keepdims=True)           
+                data /= linalg.norm(data, axis=-1, keepdims=True)
             if self.pca:
                 self._pca(data)
             self.train(data)
@@ -454,7 +460,8 @@ class SOM(Node):
         """
         self._check_dims(data)
         # project labels to data
-        [self.label_map[self.bmu(neuron)].append(lab) for neuron, lab in zip(data, labels)]
+        [self.label_map[self.bmu(neuron)].append(lab)
+         for neuron, lab in zip(data, labels)]
         for pos in self.label_map:
             self.label_map[pos] = Counter(self.label_map[pos])  # count labels
         return self.label_map
