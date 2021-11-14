@@ -28,7 +28,8 @@ test_export = {"nodes": {"1": {"name": "Input",
                                          "distance_func": "euclidean",
                                          "nhood_func": "gaussian",
                                          "sigma": 2,
-                                         "lr": 0.7},
+                                         "lr": 0.7,
+                                         "pre": "normalize"},
                                "template": "som"},
                          "4": {"name": "get_bmu_",
                                "id": 4,
@@ -104,7 +105,8 @@ som_test_props = {
     "distance_func": "euclidean",
     "nhood_func": "gaussian",
     "sigma": 2,
-    "lr": 0.7}
+    "lr": 0.7,
+    "pre": "normalize"}
 bmu_test_props = {"shape": "weights"}
 test_props = {"selections": [{"type": "idx", "sel": [0, 1]}], "axis": 1}
 calibrate_test_props = {"label_key": "fake key"}
@@ -128,6 +130,7 @@ def test_som_props():
     assert not props['hexagonal']
     assert props['dist'] == dist_euclidean
     assert props['nhood'] == nhood_gaussian
+    assert props['norm']
 
 
 def test_bmu_props():

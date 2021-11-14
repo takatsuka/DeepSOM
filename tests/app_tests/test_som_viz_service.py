@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, mock_open
 import json
-
+import numpy as np
 from app.src.py.som_viz_service import lerp, bilinear, SOMVisualizationService
 
 

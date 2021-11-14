@@ -85,7 +85,7 @@ def test_set_input_som_success():
     service.rect_links = MagicMock(return_value="some links")
     service.generate_nodes = MagicMock(return_value=None)
     actual = service.set_input("key")
-    assert not actual['status'] and actual['msg'] == "key"
+    assert actual['status'] and actual['msg'] == "key"
     assert service.links == "some links"
     assert service.som == mock_som
 

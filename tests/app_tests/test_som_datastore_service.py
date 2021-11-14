@@ -264,8 +264,7 @@ def test_fetch_object_repr():
     assert not actual["status"] and actual["msg"] == "Object does not exist."
 
     actual = ds.fetch_object_repr("key")
-    assert (actual["status"] and actual["type"] ==
-            "<class 'numpy.ndarray'>") and actual["repr"] == "array([1., 2., 3.])"
+    assert (actual["status"] and actual["type"] == "<class 'numpy.ndarray'>") and actual["repr"] == "array([1., 2., 3.])"
 
 
 def test_current_workspace():
@@ -287,18 +286,14 @@ def test_load_workspace_success(mocker):
 
     ds.load_workspace()
 
-    expected = {
-        "should save 1": {
-            "type": "matrix",
-            "content": np.array([1, 2, 3])
-        },
-        "should save 2:": {
-            "type": "model",
-            "content": "content"
-        }
-    }
+    expected_array = np.array([1, 2, 3])
+
     assert ds.ws_name == "test_workspace.json"
     assert ds.ws_path == "tests/app_tests/resources/test_workspace.json"
+    assert ds.data_instances['should save 1']['type'] == "matrix"
+    assert (ds.data_instances['should save 1']['content'] == expected_array).all()
+    assert ds.data_instances['should save 2']['type'] == 'model'
+    assert ds.data_instances['should save 2']['content'] == 'content'
     file_spy.assert_called_once()
     close_spy.assert_called_once()
 
