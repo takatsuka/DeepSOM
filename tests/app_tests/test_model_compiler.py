@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import Mock
 
-from app.src.py.model_compiler import *
-from pysom.graph import Graph
+from app.src.py.model_compiler import dist_props, concat_props, som_props, bmu_props, calibrate_props, parse_dict
+from pysom.graph import Graph, GraphCompileError
 from pysom.nodes.som import dist_euclidean, nhood_gaussian
 
 test_export = {"nodes": {"1": {"name": "Input",
