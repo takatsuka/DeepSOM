@@ -37,8 +37,8 @@ class AnimalService:
         else:
             return {'status': False, 'msg': 'Input data is neither a SOM node or Calibrate node.'}
 
-        animal_grid = [[[] for _ in range(self.som.size)] for _ in range(self.som.size)]
-
+        animal_grid = [[[] for _ in range(self.som.size)]
+                       for _ in range(self.som.size)]
 
         try:
             labels = self.cal.get_output(slot=1).items()

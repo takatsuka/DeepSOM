@@ -12,6 +12,7 @@ from py.model_service import ModelService
 from py.som_view_service import SomViewService
 from py.animal_service import AnimalService
 
+
 class Api:
 
     # Class variables
@@ -171,11 +172,13 @@ if __name__ == "__main__":
             width, height = (2560, 1440)
             index_page = index_page.replace("index.html", "index-testing.html")
         elif sys.argv[1] == "--sudo":
-            index_page = index_page.replace("index.html", "index-superuser.html")
+            index_page = index_page.replace(
+                "index.html", "index-superuser.html")
 
     window = webview.create_window('PySOM Creator', index_page, js_api=Api(),
-                frameless=True, easy_drag=False, width=width, height = height)
+                                   frameless=True, easy_drag=False, width=width, height=height)
 # gui="cef")
 
     # webview.start(debug=(False if hasattr(sys, '_MEIPASS') else True))
-    webview.start(debug=True) # work around the debuging bug in pywebview for now.
+    # work around the debuging bug in pywebview for now.
+    webview.start(debug=True)

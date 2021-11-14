@@ -6,14 +6,17 @@ from pysom.graph import GraphCompileError
 import os
 from app.src.py.model_service import ModelService
 
+
 def setup_function():
     global model
     global mock_database
     mock_database = Mock()
     model = ModelService(mock_database)
 
+
 def teardown_function():
     pass
+
 
 def test_init():
     assert model.ds == mock_database
@@ -22,28 +25,32 @@ def test_init():
     assert model.model_export == None
     assert model.model_output == None
 
+
 def test_set_input():
     actual = model.set_input("fake key")
     assert model.input_key == "fake key"
     assert actual["status"] == True and actual["msg"] == "fake key"
 
+
 def test_update_model():
     model.update_model("fake model")
     assert model.model_export == "fake model"
+
 
 def test_compile_missing_export(mocker):
     actual = model.compile()
     assert actual['status'] == False and actual['msg'] == "Missing model data?"
 
+
 def test_compile_graph_compile_error():
     model.model_export = {
         "nodes": {
             "1": {
-                "name": "Input", 
-                "id": 1, 
-                "x": 137, 
-                "y": 226, 
-                "props": {"dim": 3}, 
+                "name": "Input",
+                "id": 1,
+                "x": 137,
+                "y": 226,
+                "props": {"dim": 3},
                 "template": "inout"
             }
         }, "connections": [{"from": 1, "to": 1, "props": {"slot": 0, "order": 0}}], "i": 1}
@@ -51,10 +58,12 @@ def test_compile_graph_compile_error():
     actual = model.compile()
     assert actual['status'] == False and actual['msg'] == "Can not connect to node itself: 1"
 
+
 def test_compile_graph_exception():
     model.model_export = "fake export"
     actual = model.compile()
     assert actual['status'] == False
+
 
 def test_compile_success():
     model.model_export = {
@@ -65,6 +74,7 @@ def test_compile_success():
 
     assert actual['status'] == True and actual['msg'] == "good"
 
+
 def test_train_missing_components():
     actual = model.train()
     assert actual['status'] == False and actual['msg'] == 'Model not present.'
@@ -72,6 +82,7 @@ def test_train_missing_components():
     model.graph = "fake graph"
     actual = model.train()
     assert actual['status'] == False and actual['msg'] == "Input data not set."
+
 
 def test_train_invalid_components():
     mock_database.get_object_data = MagicMock(return_value=None)
@@ -81,6 +92,7 @@ def test_train_invalid_components():
     actual = model.train()
     assert actual['status'] == False and actual['msg'] == 'Input data does not exist.'
     mock_database.get_object_data.called_only_once_with('fake key')
+
 
 def test_train_exception(mocker):
     mock_database.get_object_data = MagicMock(return_value="fake data")
@@ -103,7 +115,9 @@ def test_train_exception(mocker):
 
     mock_graph.get_output = Mock(side_effect=throwExceptionError)
     actual = model.train()
-    assert actual['status'] == False and actual['msg'].startswith("Error ocurred during evaluations:")
+    assert actual['status'] == False and actual['msg'].startswith(
+        "Error ocurred during evaluations:")
+
 
 def test_train_success(mocker):
     mock_database.get_object_data = MagicMock(return_value="fake data")
@@ -123,6 +137,7 @@ def test_train_success(mocker):
     mock_graph.set_param.called_only_once()
     mock_graph.get_output.called_only_once()
 
+
 def test_export_output(mocker):
     actual = model.export_output("name", False)
     assert actual['status'] == False and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
@@ -136,11 +151,14 @@ def test_export_output(mocker):
 
     actual = model.export_output("name", False)
     assert actual['status'] == True and actual['msg'] == 'name'
-    mock_database.save_object_data.called_only_once_with('matrix', 'name', model.model_output)
+    mock_database.save_object_data.called_only_once_with(
+        'matrix', 'name', model.model_output)
 
     actual = model.export_output("opaque name", True)
     assert actual['status'] == True and actual['msg'] == 'name'
-    mock_database.save_object_data.called_only_once_with('opaque', 'name', model.model_output)
+    mock_database.save_object_data.called_only_once_with(
+        'opaque', 'name', model.model_output)
+
 
 def test_export_node():
     actual = model.export_node("name", 1)
@@ -163,7 +181,9 @@ def test_export_node():
     actual = model.export_node("name", 1)
 
     assert actual['status'] == True and actual['msg'] == "real key"
-    mock_database.save_object_data.called_only_once_with('opaque', 'name', 'real node')
+    mock_database.save_object_data.called_only_once_with(
+        'opaque', 'name', 'real node')
+
 
 def test_debug_output_str():
     actual = model.debug_output_str()

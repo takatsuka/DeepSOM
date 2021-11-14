@@ -64,10 +64,12 @@ def calibrate_props(dict, ds, n, *_):
     dat = ds.get_object_data(key)
 
     if dat is None:
-        raise GraphCompileError(f"Data object {key} expected by {n['name']} is missing.")
+        raise GraphCompileError(
+            f"Data object {key} expected by {n['name']} is missing.")
 
     if not isinstance(dat, np.ndarray):
-        raise GraphCompileError(f"Data object {key} expected by {n['name']}: bad format. {str(dat.__class__)}")
+        raise GraphCompileError(
+            f"Data object {key} expected by {n['name']}: bad format. {str(dat.__class__)}")
 
     return {
         "labels": dat.reshape(len(dat)).tolist()
@@ -110,4 +112,3 @@ def parse_dict(dict, ds):
             raise GraphCompileError(f"Unable to connect {l}.")
 
     return g
-

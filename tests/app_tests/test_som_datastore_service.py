@@ -8,12 +8,15 @@ from unittest.mock import Mock, MagicMock
 
 from app.src.py.som_datastore_service import SOMDatastoreService
 
+
 def setup_function():
     global ds
     ds = SOMDatastoreService()
 
+
 def teardown_function():
     pass
+
 
 def test_init():
     assert len(ds.data_instances) == 0
@@ -23,8 +26,10 @@ def test_init():
     assert ds.loaders["model"](1) == 1
     assert ds.dumpers["matrix"](np.array([1, 1, 1])) == [1, 1, 1]
     assert ds.dumpers["model"](1) == 1
-    assert np.any((ds.importers["matrix"]([[3], np.float64, "AAAAAAAA8D8AAAAAAAAAQAAAAAAAAAhA"])))
+    assert np.any((ds.importers["matrix"](
+        [[3], np.float64, "AAAAAAAA8D8AAAAAAAAAQAAAAAAAAAhA"])))
     assert ds.importers["model"](1) == 1
+
 
 def test_ensure_unique():
     assert ds.ensure_unique("not exist") == "not exist"
@@ -53,6 +58,7 @@ def test_open_file_fail(mocker):
     filepath = ds.open_file()
     assert filepath == None
 
+
 def test_open_file_success(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = ["real_file"]
@@ -66,22 +72,25 @@ def test_open_file_success(mocker):
     mock_window.create_file_dialog.assert_called_once()
     assert filepath == "real_file"
 
+
 def test_import_data_from_csv_fail(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = None
     mocker.patch.object(webview, "windows", [mock_window])
     unique_spy = mocker.spy(ds, "ensure_unique")
     file_spy = mocker.spy(ds, "open_file")
-    
+
     actual = ds.import_data_from_csv()
 
     assert actual == None
     unique_spy.assert_not_called()
     file_spy.assert_called_once()
 
+
 def test_import_data_from_csv_duplicate(mocker):
     mock_window = Mock()
-    mock_window.create_file_dialog.return_value = ["tests/app_tests/resources/test_csv.txt"]
+    mock_window.create_file_dialog.return_value = [
+        "tests/app_tests/resources/test_csv.txt"]
     mocker.patch.object(webview, "windows", [mock_window])
 
     ds.save_object("test_csv.txt", "matrix", [1, 1, 1], False)
@@ -94,9 +103,11 @@ def test_import_data_from_csv_duplicate(mocker):
     unique_spy.assert_called_once()
     file_spy.assert_called_once()
 
+
 def test_import_data_from_csv_success(mocker):
     mock_window = Mock()
-    mock_window.create_file_dialog.return_value = ["tests/app_tests/resources/test_csv.txt"]
+    mock_window.create_file_dialog.return_value = [
+        "tests/app_tests/resources/test_csv.txt"]
     mocker.patch.object(webview, "windows", [mock_window])
     unique_spy = mocker.spy(ds, "ensure_unique")
     file_spy = mocker.spy(ds, "open_file")
@@ -108,9 +119,11 @@ def test_import_data_from_csv_success(mocker):
     unique_spy.assert_called_once()
     file_spy.assert_called_once()
 
-    mock_window.create_file_dialog.return_value = ["tests/app_tests/resources/empty.txt"]
+    mock_window.create_file_dialog.return_value = [
+        "tests/app_tests/resources/empty.txt"]
     mocker.patch.object(webview, "windows", [mock_window])
     assert ds.import_data_from_csv() == "empty.txt"
+
 
 def test_import_json_fail(mocker):
     mock_window = Mock()
@@ -123,13 +136,14 @@ def test_import_json_fail(mocker):
     assert(actual == None)
     unique_spy.assert_not_called()
     file_spy.assert_called_once()
-    
+
 
 def test_import_duplicate_json(mocker):
     mock_window = Mock()
-    mock_window.create_file_dialog.return_value = ["tests/app_tests/resources/test_json.json"]
+    mock_window.create_file_dialog.return_value = [
+        "tests/app_tests/resources/test_json.json"]
     mocker.patch.object(webview, "windows", [mock_window])
-    
+
     ds.save_object("test_json.json", "model", "json object", False)
     unique_spy = mocker.spy(ds, "ensure_unique")
     file_spy = mocker.spy(ds, "open_file")
@@ -139,9 +153,11 @@ def test_import_duplicate_json(mocker):
     unique_spy.assert_called_once()
     file_spy.assert_called_once()
 
+
 def test_import_json_success(mocker):
     mock_window = Mock()
-    mock_window.create_file_dialog.return_value = ["tests/app_tests/resources/test_json.json"]
+    mock_window.create_file_dialog.return_value = [
+        "tests/app_tests/resources/test_json.json"]
     mocker.patch.object(webview, "windows", [mock_window])
     unique_spy = mocker.spy(ds, "ensure_unique")
     file_spy = mocker.spy(ds, "open_file")
@@ -156,6 +172,7 @@ def test_import_json_success(mocker):
     unique_spy.assert_called_once()
     file_spy.assert_called_once()
 
+
 def test_save_json():
     ds.save_json("some key", "model", "some json object")
     assert ds.get_object("some key") == "some json object"
@@ -163,6 +180,7 @@ def test_save_json():
     ds.save_json("some key", "model", "another json object")
     assert ds.get_object("some key") == "some json object"
     assert ds.get_object("some key_(1)") == "another json object"
+
 
 def test_save_object():
     ds.save_json("some key", "model", "some object")
@@ -177,6 +195,7 @@ def test_save_object():
     descriptor = ds.save_object("bad key", "bad type", "object", False)
     assert descriptor == None
 
+
 def test_get_object():
     assert ds.get_object("fake key") == None
 
@@ -186,11 +205,12 @@ def test_get_object():
     ds.save_object("fake key", "model", "object", False)
     assert ds.get_object("fake key") == "object"
 
+
 def test_fetch_objects():
     ds.save_object("key 1", "model", "model1", False)
     ds.save_object("key 2", "matrix", [], False)
     ds.save_object("key 3", "model", "model3", False)
-    
+
     actual = ds.fetch_objects('')
     assert len(actual) == 3
     assert ("key 1" in actual and "key 2" in actual) and "key 3" in actual
@@ -204,6 +224,7 @@ def test_fetch_objects():
     actual = ds.fetch_objects("fake type")
     assert actual == []
 
+
 def test_remove_object():
     ds.save_object("key 1", "model", "model1", False)
     ds.remove_object("fake key")
@@ -211,6 +232,7 @@ def test_remove_object():
 
     ds.remove_object("key 1")
     assert ds.get_object("key 1") == None
+
 
 def test_rename_object():
     ds.save_object("key", "model", "model", False)
@@ -234,6 +256,7 @@ def test_rename_object():
     assert ds.get_object("key") == None
     assert ds.get_object("new key") == "model"
 
+
 def test_fetch_object_repr():
     ds.save_object("key", "matrix", [1, 2, 3], False)
 
@@ -241,18 +264,23 @@ def test_fetch_object_repr():
     assert actual["status"] == False and actual["msg"] == "Object does not exist."
 
     actual = ds.fetch_object_repr("key")
-    assert (actual["status"] == True and actual["type"] == "<class 'numpy.ndarray'>") and actual["repr"] == "array([1., 2., 3.])"
+    assert (actual["status"] == True and actual["type"] ==
+            "<class 'numpy.ndarray'>") and actual["repr"] == "array([1., 2., 3.])"
+
 
 def test_current_workspace():
     assert ds.current_workspace_name() == "lol"
+
 
 def test_load_workspace_fail():
     ds.open_file = MagicMock(return_value=None)
     assert ds.load_workspace() == None
 
+
 def test_load_workspace_success(mocker):
     mock_window = Mock()
-    mock_window.create_file_dialog.return_value = ["tests/app_tests/resources/test_workspace.json"]
+    mock_window.create_file_dialog.return_value = [
+        "tests/app_tests/resources/test_workspace.json"]
     mocker.patch.object(webview, "windows", [mock_window])
     file_spy = mocker.spy(ds, "open_file")
     close_spy = mocker.spy(ds, "close_all_instances")
@@ -274,32 +302,36 @@ def test_load_workspace_success(mocker):
     file_spy.assert_called_once()
     close_spy.assert_called_once()
 
+
 def test_new_workspace():
     ds.new_workspace()
     assert ds.ws_name == "untitled"
     assert ds.ws_path == None
     assert len(ds.data_instances) == 0
 
+
 def test_save_current_workspace(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = "tests/app_tests/resources/test_workspace"
     mocker.patch.object(webview, "windows", [mock_window])
-    
+
     spy = mocker.spy(ds, "save_workspace")
     ds.save_current_workspace()
 
     spy.assert_called_once()
 
+
 def test_save_workspace_as(mocker):
     mock_window = Mock()
     mock_window.create_file_dialog.return_value = "tests/app_tests/resources/test_workspace"
     mocker.patch.object(webview, "windows", [mock_window])
-    
+
     spy = mocker.spy(ds, "save_workspace")
     ds.save_workspace_as()
 
     spy.assert_called_once()
     assert ds.ws_path == "tests/app_tests/resources/test_workspace"
+
 
 def test_save_workspace(mocker):
     mock_window = Mock()
@@ -314,7 +346,9 @@ def test_save_workspace(mocker):
 
     assert ds.ws_name == "test_workspace_actual.json"
     assert ds.ws_path == "tests/app_tests/resources/test_workspace_actual.json"
-    assert filecmp.cmp("tests/app_tests/resources/test_workspace_actual.json", "tests/app_tests/resources/test_workspace_expected.json")
+    assert filecmp.cmp("tests/app_tests/resources/test_workspace_actual.json",
+                       "tests/app_tests/resources/test_workspace_expected.json")
+
 
 def test_get_object_data():
     ds.save_object("key", "matrix", [1, 2, 3], False)
@@ -325,12 +359,12 @@ def test_get_object_data():
     actual = ds.get_object_data("key")
     assert isinstance(actual, np.ndarray)
 
+
 def test_save_object_data():
     ds.save_object_data("matrix", "new key", [1, 2, 3])
     assert ds.get_object_data("new key") == [1, 2, 3]
 
+
 def test_close_all_instances():
     ds.close_all_instances()
     assert len(ds.data_instances) == 0
-
-    
