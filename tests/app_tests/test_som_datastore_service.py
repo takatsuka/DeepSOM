@@ -133,7 +133,7 @@ def test_import_json_fail(mocker):
     file_spy = mocker.spy(ds, "open_file")
 
     actual = ds.import_json("model")
-    assert(actual is None)
+    assert actual is None
     unique_spy.assert_not_called()
     file_spy.assert_called_once()
 
@@ -239,13 +239,13 @@ def test_rename_object():
     ds.save_object("another key", "model", "another model", False)
 
     actual = ds.rename_object("fake key", "new key")
-    assert actual["status"] == False and actual["msg"] == "Object does not exist."
+    assert not actual["status"] and actual["msg"] == "Object does not exist."
 
     actual = ds.rename_object("key", "another key")
-    assert actual["status"] == False and actual["msg"] == "New key already exists."
+    assert not actual["status"] and actual["msg"] == "New key already exists."
 
     actual = ds.rename_object("key", "")
-    assert actual["status"] == False and actual["msg"] == "Gotcha hacker."
+    assert not actual["status"] and actual["msg"] == "Gotcha hacker."
 
     actual = ds.rename_object("key", "key")
     assert actual["status"] and actual["msg"] == "key"
@@ -261,7 +261,7 @@ def test_fetch_object_repr():
     ds.save_object("key", "matrix", [1, 2, 3], False)
 
     actual = ds.fetch_object_repr("fake key")
-    assert actual["status"] == False and actual["msg"] == "Object does not exist."
+    assert not actual["status"] and actual["msg"] == "Object does not exist."
 
     actual = ds.fetch_object_repr("key")
     assert (actual["status"] and actual["type"] ==

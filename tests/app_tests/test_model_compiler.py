@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock
-
+import numpy as np
 from app.src.py.model_compiler import dist_props, concat_props, som_props, bmu_props, calibrate_props, parse_dict
 from pysom.graph import Graph, GraphCompileError
 from pysom.nodes.som import dist_euclidean, nhood_gaussian
@@ -125,7 +125,7 @@ def test_som_props():
     assert props['sigma'] == 2
     assert props['lr'] == 0.7
     assert props['n_iters'] == 1000
-    assert props['hexagonal'] == False
+    assert not props['hexagonal']
     assert props['dist'] == dist_euclidean
     assert props['nhood'] == nhood_gaussian
 

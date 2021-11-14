@@ -39,7 +39,7 @@ def test_update_model():
 
 def test_compile_missing_export(mocker):
     actual = model.compile()
-    assert actual['status'] == False and actual['msg'] == "Missing model data?"
+    assert not actual['status'] and actual['msg'] == "Missing model data?"
 
 
 def test_compile_graph_compile_error():
@@ -56,13 +56,13 @@ def test_compile_graph_compile_error():
         }, "connections": [{"from": 1, "to": 1, "props": {"slot": 0, "order": 0}}], "i": 1}
 
     actual = model.compile()
-    assert actual['status'] == False and actual['msg'] == "Can not connect to node itself: 1"
+    assert not actual['status'] and actual['msg'] == "Can not connect to node itself: 1"
 
 
 def test_compile_graph_exception():
     model.model_export = "fake export"
     actual = model.compile()
-    assert actual['status'] == False
+    assert not actual['status']
 
 
 def test_compile_success():
@@ -77,11 +77,11 @@ def test_compile_success():
 
 def test_train_missing_components():
     actual = model.train()
-    assert actual['status'] == False and actual['msg'] == 'Model not present.'
+    assert not actual['status'] and actual['msg'] == 'Model not present.'
 
     model.graph = "fake graph"
     actual = model.train()
-    assert actual['status'] == False and actual['msg'] == "Input data not set."
+    assert not actual['status'] and actual['msg'] == "Input data not set."
 
 
 def test_train_invalid_components():
@@ -90,7 +90,7 @@ def test_train_invalid_components():
     model.input_key = "fake key"
 
     actual = model.train()
-    assert actual['status'] == False and actual['msg'] == 'Input data does not exist.'
+    assert not actual['status'] and actual['msg'] == 'Input data does not exist.'
     mock_database.get_object_data.called_only_once_with('fake key')
 
 
@@ -111,11 +111,11 @@ def test_train_exception(mocker):
     mock_graph.get_output = Mock(side_effect=throwGraphCompileError)
 
     actual = model.train()
-    assert actual['status'] == False and actual['msg'] == 'help'
+    assert not actual['status'] and actual['msg'] == 'help'
 
     mock_graph.get_output = Mock(side_effect=throwExceptionError)
     actual = model.train()
-    assert actual['status'] == False and actual['msg'].startswith(
+    assert not actual['status'] and actual['msg'].startswith(
         "Error ocurred during evaluations:")
 
 
@@ -140,11 +140,11 @@ def test_train_success(mocker):
 
 def test_export_output(mocker):
     actual = model.export_output("name", False)
-    assert actual['status'] == False and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
+    assert not actual['status'] and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
 
     model.model_output = "fake output"
     actual = model.export_output("name", False)
-    assert actual['status'] == False and actual['msg'] == 'Output data format is not supported for export. Please check the output connection of your graph.'
+    assert not actual['status'] and actual['msg'] == 'Output data format is not supported for export. Please check the output connection of your graph.'
 
     mock_database.save_object_data = MagicMock(return_value="name")
     model.model_output = np.array([1, 1, 1])
@@ -162,17 +162,17 @@ def test_export_output(mocker):
 
 def test_export_node():
     actual = model.export_node("name", 1)
-    assert actual['status'] == False and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
+    assert not actual['status'] and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
 
     model.model_output = "fake output"
     actual = model.export_node("name", 1)
-    assert actual['status'] == False and actual['msg'] == 'Model not present.'
+    assert not actual['status'] and actual['msg'] == 'Model not present.'
 
     mock_graph_fail = Mock()
     mock_graph_fail.find_node.return_value = None
     model.graph = mock_graph_fail
     actual = model.export_node("name", 1)
-    assert actual['status'] == False and actual['msg'] == 'Requested Node does not present.'
+    assert not actual['status'] and actual['msg'] == 'Requested Node does not present.'
 
     mock_graph_success = Mock()
     mock_graph_success.find_node.return_value = "real node"
@@ -187,7 +187,7 @@ def test_export_node():
 
 def test_debug_output_str():
     actual = model.debug_output_str()
-    assert actual['status'] == False and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
+    assert not actual['status'] and actual['msg'] == 'Output data not avaliable. Train or Run the model first to generate data.'
 
     model.model_output = "fake output"
     actual = model.debug_output_str()

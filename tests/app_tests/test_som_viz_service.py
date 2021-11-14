@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock, mock_open
 import json
 
-from app.src.py.som_viz_service import *
+from app.src.py.som_viz_service import lerp, bilinear, SOMVisualizationService
 
 
 def _set_up():
