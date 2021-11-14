@@ -45,7 +45,7 @@ class AnimalService:
             for k, v in labels:
                 animal_grid[k[0]][k[1]] = list(v.keys())
 
-        except Exception as _:
+        except:
             return {'status': False, 'msg': traceback.format_exc()}
 
         self.animals = animal_grid

@@ -16,20 +16,20 @@ def setup_function():
 
 def test_init():
     assert service.ds == mock_datastore
-    assert service.input_key == None
-    assert service.som == None
-    assert service.cal == None
-    assert service.animals == None
+    assert service.input_key is None
+    assert service.som is None
+    assert service.cal is None
+    assert service.animals is None
 
 
 def test_set_input_fail():
     mock_datastore.get_object_data.return_value = None
     actual = service.set_input("fake key")
-    assert actual['status'] == False and actual['msg'] == 'Input data does not exist.'
+    assert not actual['status'] and actual['msg'] == 'Input data does not exist.'
 
     mock_datastore.get_object_data.return_value = "fake data"
     actual = service.set_input("fake key")
-    assert actual['status'] == False and actual['msg'] == 'Input data is neither a SOM node or Calibrate node.'
+    assert not actual['status'] and actual['msg'] == 'Input data is neither a SOM node or Calibrate node.'
 
 
 def test_set_input_exception(mocker):
@@ -38,7 +38,7 @@ def test_set_input_exception(mocker):
     mock_datastore.get_object_data.return_value = mock_som
     mocker.patch("traceback.format_exc").return_value = "stacktrace"
     actual = service.set_input("fake key")
-    assert actual['status'] == False and actual['msg'] == "stacktrace"
+    assert not actual['status'] and actual['msg'] == "stacktrace"
 
 
 def test_set_calibrate_input():
@@ -55,15 +55,15 @@ def test_set_calibrate_input():
     mock_datastore.get_object_data.return_value = mock_calibrate
 
     actual = service.set_input("key")
-    assert actual['status'] == True and actual['msg'] == ""
+    assert actual['status'] and actual['msg'] == ""
     assert service.animals == [[['animal 1', 'animal 2']]]
 
 
 def test_get_animal_data():
     actual = service.get_animal_data()
-    assert actual['status'] == False and actual['msg'] == 'Not available'
+    assert not actual['status'] and actual['msg'] == 'Not available'
 
     service.animals = "animals"
     actual = service.get_animal_data()
-    assert actual['status'] == True and actual['msg'] == 'Ok'
+    assert actual['status'] and actual['msg'] == 'Ok'
     assert actual['obj'] == 'animals'
