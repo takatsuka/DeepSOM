@@ -78,7 +78,7 @@ class SOMDatastoreService:
         for p in parsers:
             try:
                 data = p(datalist)
-            except Exception as _:
+            except:
                 pass
 
             if data is not None:
@@ -196,7 +196,7 @@ class SOMDatastoreService:
             loaded = None
             try:
                 loaded = loaders[t](v['content'])
-            except Exception as _:
+            except:
                 # TODO: report error?
                 pass
 

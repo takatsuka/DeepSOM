@@ -58,7 +58,7 @@ class SomViewService:
 
         labelmap = None
         if self.cal is not None:
-            labelmap = {k[0]*self.som.size + k[1]: v for k,
+            labelmap = {k[0] * self.som.size + k[1]: v for k,
                         v in self.cal.get_output(slot=1).items()}
         else:
             return [{'id': i} for i in range(self.som.size ** 2)]
@@ -117,7 +117,7 @@ class SomViewService:
 
         try:
             self.generate_nodes()
-        except Exception as _:
+        except:
             return {'status': False, 'msg': traceback.format_exc()}
 
         return {'status': True, 'msg': key}
