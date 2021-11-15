@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import DefaultDict
 import numpy as np
 from numpy import exp, float64, logical_and, random, outer, linalg, zeros, arange, cov
 from numpy import meshgrid, subtract, multiply, unravel_index, einsum, linspace
@@ -254,7 +255,6 @@ class SOM(Node):
         self.x_mat, self.y_mat = meshgrid(self.x_neig, self.y_neig)
         self.pca, self.norm = pca, norm
         self._rand_weights(rand_state)
-        self.label_map = defaultdict(list)
         self.graph = graph
         if not check_points:
             msg = f"Expecting checkpoint value of at least default 1, instead got {check_points}."
@@ -264,7 +264,7 @@ class SOM(Node):
             raise ValueError(msg)
         self.cp, self.train_log = 0, {i: np.array(
             []) for i in np.arange(check_points)}
-
+        self.label_map = defaultdict(list)
         if hexagonal:
             # offset every second row if hexagonal grid used
             self.x_mat[::-2] -= 0.5
@@ -459,12 +459,12 @@ class SOM(Node):
                 - Value is list [Counter("lab1": count1, "lab2": count2, "lab3": count3)]
         """
         self._check_dims(data)
+        label_map = DefaultDict(list)
         # project labels to data
-        [self.label_map[self.bmu(neuron)].append(lab)
-         for neuron, lab in zip(data, labels)]
-        for pos in self.label_map:
-            self.label_map[pos] = Counter(self.label_map[pos])  # count labels
-        return self.label_map
+        [label_map[self.bmu(x)].append(l) for x, l in zip(data, labels)]
+        for pos in label_map:
+            label_map[pos] = Counter(label_map[pos])  # count labels
+        return label_map
 
     def get_output(self, slot: int) -> object:
         """
