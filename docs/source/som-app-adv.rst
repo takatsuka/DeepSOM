@@ -16,36 +16,45 @@ Follow the steps outlined below:
 
 #. Set the dimensions of the input node to 13.
 
-#. Add the ``Distributor``, ``SOM``, ``BMU``, ``Concat`` and ``Calibrate`` 
-   nodes as follows. The graph should resemble the image below.
+#. Add the ``Dist``, ``SOM``, ``BMU``, ``Concat`` and ``Calibrate`` 
+   nodes as follows. The graph should resemble the image below. You'll notice
+   that there are two ``Calibrate`` nodes that aren't connected to the output,
+   and this is intentional.
 
+<IMAGE HERE>
 
 #. The ``SOM`` nodes after the ``Dist`` nodes should all have the following
    custom parameters, the rest can be default:
 
-    - Dimensions: 16
-    - Training Iterations: 10000
-    - Sigma: 2
-    - Learning Rate: 0.8
-    - Shape: rect
-    - Distance: euclidean
-    - N_Hood: gaussian
-    - Preprocess input: none
-    - Outgoing dist: 1
+    - Input Dimensions: 3 (top), 10 (bottom)
+    - Map Size: 5 (top), 10 (bottom)
 
-#. However, the dimensions differ, from top to bottom they should be:
-    
-    - Input: 3 for the top-most ``SOM``
-    - Input: 2 for the second ``SOM`` from the top
-    - Input: 4 for the third ``SOM`` from the top
-    - Input: 4 for the third ``SOM`` from the top
+#. Set the outgoing slots for the ``Dist`` to be 1 and 2, and incoming from
+   the input node as 1.
 
-#. Change the ``Dist`` node to receive incoming ``Input`` in slot 1, and outgoing
-   should be ascending order from 1 to 4, as in the screenshot below. This 
-   should reflect in the incoming properties of the ``SOM`` nodes discussed previously.
+#. Set the outgoing slot of all ``SOM`` to ``Calibrate`` as 0 (we want to pass
+   the SOM objet, unlike normal convention). Set the outgoing slot of the 
+   ``Calibrate`` to the output node as 0, for similar reasons.
+
+#. Set the outgoing slot of every other non ``Dist`` and non ``Concat`` nodes to be 1.
 
 #. Set the remaining nodes Outgoing slot to be 1.
 
-#. Load the input data with ``feature.txt``, and load the ``Calibrate`` node with
-   ``.txt`` TODO
-   
+#. Load the input data with ``feature.txt``, and load all ``Calibrate`` nodes with
+   ``label_name.txt``.
+
+#. Compile and train the model.
+
+#. You can extract the results from the following nodes in the property panel.
+
+    - The edge ``Calibrate`` nodes from the two ``SOM`` nodes after the ``Dist``.
+      Name the top one ``animal_size`` and the other one ``animal_other`` or similar
+    - The output node, name this as ``animal_demo`` or similar
+
+You can now view these outputs in the SOM viewer in ``View->SOM``. To assist you,
+you can watch the video below for a demonstration of this process, with the
+visualisation tool also demonstrated.
+
+.. raw:: html
+
+    <video controls src="_static/demo.mp4"></video> 
