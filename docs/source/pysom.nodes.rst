@@ -44,6 +44,14 @@ pysom.nodes.input\_container module
    :undoc-members:
    :show-inheritance:
 
+pysom.nodes.scale module
+------------------------
+
+.. automodule:: pysom.nodes.scale
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pysom.nodes.som module
 ----------------------
 

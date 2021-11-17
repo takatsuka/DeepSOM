@@ -99,13 +99,13 @@ Python 2.7 comes with any Mac OS X out of the box, however you should upgrade to
 deprecated. Be sure you have XCode setup to have GCC installed, and a package manager such as Homebrew would also be useful.
 
 - Downloading Python through a package manager such as Homebrew will be a much easier process. Another option is to download 
-Python 3.X from `the Python official website`_. 
+  Python 3.X from `the Python official website`_. 
 
 - Once Python 3.X has been installed, you will be able to install virtualenv module by running `pip install virtualenv` on the command 
-line. 
+  line. 
 
 - Install NodeJS from `the NodeJS official website`_ or through a package manager such as Homebrew. The dependencies for npm will also
- be automatically installed if done through Homebrew, one of which includes Python. 
+  be automatically installed if done through Homebrew, one of which includes Python. 
 
 
 macOS Install Quirks
@@ -171,25 +171,8 @@ Some instructions online to set up pywebview will be to install dependencies glo
 but these are not typically reachable within a virtual environment.
 
 
-
-PySOM Instructions 
-------------------------
-
-(this will be moved later to the actual quickstart page)
-
-- Go `to the repository`_ and clone or download it. Extract the archive to your location
-  of choice if downloaded.
-- Navigate to the `deep-som-dome` root folder and install via `pip install .` - this 
-  will install the backend library as a python module on your system. 
-- Navigate to the `deep-som-dome/app` folder and install via `npm run init` to 
-  install the frontend application dependencies.
-- Optionally, navigate to `deep-som-dome/docs` and generate the latest documentation
-  with `sphinx-apidoc -fo source/ ../pysom && make clean && make html`. The resultant
-  docs html homepage will be found at `deep-som-dome/docs/build/html/index.html`
-
 .. _at the following link: https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps
 .. _the Python official website: https://www.python.org/downloads/
 .. _the NodeJS official website: https://nodejs.org/en/download/
 .. _the MSVS official website: https://visualstudio.microsoft.com/downloads/
-.. _to the repository: https://bitbucket.org/deep-som-dome/deep-som-dome/
 .. _on their GitHub repo: https://github.com/pythonnet/pythonnet

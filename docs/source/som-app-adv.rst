@@ -1,2 +1,2 @@
-Advanced Tips and Tricks
-================================
+An Advanced Example using PySOM Creator
+========================================

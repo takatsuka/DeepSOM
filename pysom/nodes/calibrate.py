@@ -6,7 +6,7 @@ from ..node import Node
 class Calibrate(Node):
 
     """
-    Node that provides a label to associated SOM index (usually BMU).
+    Node that provides labelling to associated SOM node indices (based on the BMU).
 
     Calibrate node should be provided a reference to the test data and list
     of labels so that the parent Graph class can provide a classification or

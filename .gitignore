@@ -95,3 +95,4 @@ pysom/graph/playground.py
 
 # Local testers
 mytest.py
+pysom.egg-info

@@ -1,2 +1,2 @@
-Introduction to PySOM Creator
+PySOM Creator Helper Tools
 =====================================
