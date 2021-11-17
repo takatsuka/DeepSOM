@@ -21,7 +21,7 @@ Follow the steps outlined below:
    that there are two ``Calibrate`` nodes that aren't connected to the output,
    and this is intentional.
 
-<IMAGE HERE>
+.. image:: _static/AnimalSetup1.png
 
 #. The ``SOM`` nodes after the ``Dist`` nodes should all have the following
    custom parameters, the rest can be default:
@@ -52,7 +52,7 @@ Follow the steps outlined below:
     - The output node, name this as ``animal_demo`` or similar
 
 You can now view these outputs in the SOM viewer in ``View->SOM``. To assist you,
-you can watch the video below for a demonstration of this process, with the
+a video has been provided below for a demonstration of this entire process, with the
 visualisation tool also demonstrated.
 
 .. raw:: html
