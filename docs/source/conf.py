@@ -65,7 +65,7 @@ html_theme_options = {
     'prev_next_buttons_location': 'bottom'
 }
 
-html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
+html_sidebars = {'**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html']}
 
 # These paths are either relative to html_static_path
 # or fully qualified paths (eg. https://...)

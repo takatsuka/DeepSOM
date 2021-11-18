@@ -49,7 +49,7 @@ should be followed `at the following link`_.
   circumvent this, or make sure that your environment variable points to the
   correct version if you have multiple versions of Python installed.
 
-- Make sure `virtualenv` is part of your installed modules with `pip install virtualenv`.
+- Make sure `virtualenv` is part of your installed modules with ``pip install virtualenv``
 
 - Install Visual Studio from `the MSVS official website`_ which is needed for NodeJS. 
   The community edition is free. Make sure that "Desktop development with C++"
@@ -101,7 +101,7 @@ deprecated. Be sure you have XCode setup to have GCC installed, and a package ma
 - Downloading Python through a package manager such as Homebrew will be a much easier process. Another option is to download 
   Python 3.X from `the Python official website`_. 
 
-- Once Python 3.X has been installed, you will be able to install virtualenv module by running `pip install virtualenv` on the command 
+- Once Python 3.X has been installed, you will be able to install virtualenv module by running ``pip install virtualenv`` on the command 
   line. 
 
 - Install NodeJS from `the NodeJS official website`_ or through a package manager such as Homebrew. The dependencies for npm will also
@@ -148,14 +148,14 @@ working for the front-end application.
 - Check that you have a relatively new version of Python3. We have tested 
   Python 3.7 and newer and it works fine. Install `pip3` if you haven't already.
 
-- Install virtualenv with `apt install python3-virtualenv`.
+- Install virtualenv with ``apt install python3-virtualenv``
 
-- Install pywebview dependencies with `sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.0`.
+- Install pywebview dependencies with ``sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.0``
 
-- Install NodeJS and `npm` with `apt install npm`. The older stable release of 
+- Install NodeJS and `npm` with ``apt install npm``. The older stable release of 
   node v10.19.0 and npm v6.14.4 is sufficient.
 
-- Install pywebview dependencies WITHIN the `deep-som-dome/app/venv` via the following: `pip install vext vext.gi PyGObject`.
+- Install pywebview dependencies WITHIN the ``deep-som-dome/app/venv`` via the following: ``pip install vext vext.gi PyGObject``
 
 - You're all set to install the library and front-end app!
 

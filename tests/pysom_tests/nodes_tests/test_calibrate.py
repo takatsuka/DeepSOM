@@ -60,7 +60,7 @@ def g_cal_default():
     som = g.create(SOM, props={'size': 4, 'dim': 4})
     g.connect(g.start, som, 1)
     t = np.array([[9, 9, 9, 9], [0, 0, 0, 0]])
-    cal = g.create(Calibrate, props={'labels': ['dog', 'dog', 'dog', 'unicorn'], 'test': t})
+    cal = g.create(Calibrate, props={'labels': ['dog', 'dog', 'dog', 'dog'], 'test': t})
     g.connect(som, cal, 0)
     g.connect(cal, g.end, 1)
     dat = np.array([[0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 1, 0], [0, 1, 1, 1]])

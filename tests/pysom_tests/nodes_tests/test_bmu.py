@@ -56,6 +56,32 @@ def g_bmu1D():
 
 
 @pytest.fixture()
+def g_bmu2D():
+    g = Graph()
+    dat = [
+        [0, 0],
+        [0, 0]
+    ]
+    dat = array(dat)
+    som = g.create(SOM, props={'size': 2, 'dim': 2})
+    bmu = g.create(BMU, props={'output': '2D'})
+    g.connect(g.start, som, 1)
+    g.connect(som, bmu, 0)
+    g.connect(bmu, g.end, 1)
+
+    # hard code SOM weights
+    s = g.find_node(som)
+    s.weights = [
+        [[0, 0],
+         [0, 0]],
+        [[1, 1],
+         [1, 1]]
+    ]
+    g.set_input(dat)
+    yield {'graph': g, 'bmu': bmu}
+
+
+@pytest.fixture()
 def g_bmu_weight():
     g = Graph()
     dat = [
@@ -94,6 +120,15 @@ def test_get_output_slot1_1D(g_bmu1D):
     assert isinstance(out, np.ndarray)
     assert out.shape == (2, 1)
     assert_array_equal(out, array([[0], [0]]))
+
+
+def test_get_output_slot1_2D(g_bmu2D):
+    g = g_bmu2D['graph']
+    bmu = g_bmu2D['bmu']
+    out = g.find_node(bmu).get_output(slot=1)
+    assert isinstance(out, np.ndarray)
+    assert out.shape == (2, 2)
+    assert_array_equal(out, array([[0, 0], [0, 0]]))
 
 
 def test_get_output_slot1_weight(g_bmu_weight):

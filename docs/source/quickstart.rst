@@ -116,8 +116,10 @@ Move into the ``deep-som-dome/app`` directory and run the application with
 
 .. image:: _static/BasicGraph1.png
 
-- Right click the Distributor node and set the options as follows. Make sure to
-  change the slots at the bottom to 1 and 2. Set the axis to 1.
+- Right click the Distributor node to bring up the properties panel and set the
+  options as follows. Make sure to change the slots at the bottom to 1 and 2. 
+  We do not set any slot to 0, because this passes the actual Node object down 
+  the graph, not the data. Set the axis to 1.
 
 .. image:: _static/BasicGraph2.png
 

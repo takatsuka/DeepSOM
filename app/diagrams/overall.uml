@@ -1,0 +1,120 @@
+@startuml
+
+package React {
+    class Creator
+    Creator <|-- FileManager
+    Creator <|-- TabManager
+
+    class FileManager {
+        ...
+
+        openProject()
+        openFileAsTab()
+        loadJSON()
+        loadCSV()†
+    }
+
+
+    class TabManager {
+        ...
+
+        launchTab(JSXObj, init, active)
+        activeTab(id)
+        closeTab(id)
+
+        () => storeState
+        () => pullState
+        () => pullInit
+        
+    }
+
+    TabManager <|-- WelcomeView
+    TabManager <|-- ModelEditorView
+    TabManager <|-- ImageVizView
+    TabManager <|-- ModelEditorView
+    TabManager <|-- Scatter3DView
+
+    class ImageVizView {
+        engine
+    }
+    class ModelEditorView {
+        verifyService
+    }
+
+    class Scatter3DView {
+        trainingData
+        weightData
+    }
+
+    Scatter3DView::trainingData -> FileManager::loadCSV
+    Scatter3DView::weightData -> FileManager::loadJSON
+}
+
+package Python {
+
+package GraphEngine{
+class Graph {
+    global_params : {}
+    nodes : {}
+
+   create(node_type, props)
+   set_input(d)
+}
+}
+
+class CommunicationHub {
+   pydict2json(d)
+   webkit_eval_js(...)
+   ...
+}
+
+class APIHandle {
+   fileServices
+   services_handle : {}
+   services : []
+   services_n : int
+
+   launch_service(key)
+   close_service(id)
+   call_service(id, method, params)
+}
+
+APIHandle *-- CommunicationHub
+
+interface Service
+package Services {
+
+Service <|-- VisualizationService
+Service <|-- TrainingService
+Service <|-- ModelVerificationService
+Service <|-- OtherService
+
+class VisualizationService{
+
+}
+
+class TrainingService{
+
+}
+
+class ModelVerificationService{
+
+}
+
+}
+
+}
+
+
+
+APIHandle *-- VisualizationService
+APIHandle *-- TrainingService
+APIHandle *-- ModelVerificationService
+APIHandle *-- OtherService
+ImageVizView::engine --> CommunicationHub
+ModelEditorView::verifyService --> CommunicationHub
+
+FileManager::loadCSV --> APIHandle::fileServices
+FileManager::loadJSON --> APIHandle::fileServices
+
+@enduml
