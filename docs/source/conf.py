@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Deep SOM Library'
+project = 'PySOM Library'
 copyright = '2021, COMP3988_T17_01_Group2'
 author = 'COMP3988_T17_01_Group2'
 

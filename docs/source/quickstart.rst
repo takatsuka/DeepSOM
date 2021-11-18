@@ -104,9 +104,9 @@ Move into the ``deep-som-dome/app`` directory and run the application with
 .. code-block::
     :caption: Contents of ``test.data``
 
-    [[1 2 3]
-    [1 2 3]
-    [1 2 3]]
+    1,3,2
+    1,3,2
+    1,3,2
 
 - Upload the data via ``File->Dataset->Import Data`` and select the ``test.data``
   you just made
