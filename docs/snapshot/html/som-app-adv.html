@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Harder Example using PySOM Creator &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pysom" href="modules.html" />
+    <link rel="prev" title="PySOM Creator Helper Tools" href="som-app-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tested-environments.html">Tested Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-guide.html">PySOM Library Explained in 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-adv.html">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pysom</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>A Harder Example using PySOM Creator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/som-app-adv.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="a-harder-example-using-pysom-creator">
+<h1>A Harder Example using PySOM Creator<a class="headerlink" href="#a-harder-example-using-pysom-creator" title="Permalink to this headline">¶</a></h1>
+<p>We will build a more complicated graph using the same animal dataset as
+discussed in <a class="reference internal" href="som-lib-adv.html"><span class="doc">A Harder Example using PySOM Library</span></a>, however, the graph produced will be slightly
+different, to demonstrate how to use some of the visualisation tools.</p>
+<p>Follow the steps outlined below:</p>
+<ol class="arabic">
+<li><p>Open a new workspace and new model as demonstrated in <a class="reference internal" href="quickstart.html"><span class="doc">Quickstart</span></a>.</p></li>
+<li><p>Load in the following animal data files, as provided in the
+<code class="docutils literal notranslate"><span class="pre">deep-som-dome/datasets/animal</span></code> path:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">feature.txt</span></code> - the animal vectors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_name.txt</span></code> - the animal labels</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Set the dimensions of the input node to 13.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">Dist</span></code>, <code class="docutils literal notranslate"><span class="pre">SOM</span></code>, <code class="docutils literal notranslate"><span class="pre">BMU</span></code>, <code class="docutils literal notranslate"><span class="pre">Concat</span></code> and <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code>
+nodes as follows. The graph should resemble the image below. You’ll notice
+that there are two <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> nodes that aren’t connected to the output,
+and this is intentional.</p></li>
+</ol>
+<img alt="_images/AnimalSetup1.png" src="_images/AnimalSetup1.png" />
+<ol class="arabic">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">SOM</span></code> nodes after the <code class="docutils literal notranslate"><span class="pre">Dist</span></code> nodes should all have the following
+custom parameters, the rest can be default:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Input Dimensions: 3 (top), 10 (bottom)</p></li>
+<li><p>Map Size: 5 (top), 10 (bottom)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Set the outgoing slots for the <code class="docutils literal notranslate"><span class="pre">Dist</span></code> to be 1 and 2, and incoming from
+the input node as 1.</p></li>
+<li><p>Set the outgoing slot of all <code class="docutils literal notranslate"><span class="pre">SOM</span></code> to <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> as 0 (we want to pass
+the SOM objet, unlike normal convention). Set the outgoing slot of the
+<code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> to the output node as 0, for similar reasons.</p></li>
+<li><p>Set the outgoing slot of every other non <code class="docutils literal notranslate"><span class="pre">Dist</span></code> and non <code class="docutils literal notranslate"><span class="pre">Concat</span></code> nodes to be 1.</p></li>
+<li><p>Set the remaining nodes Outgoing slot to be 1.</p></li>
+<li><p>Load the input data with <code class="docutils literal notranslate"><span class="pre">feature.txt</span></code>, and load all <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> nodes with
+<code class="docutils literal notranslate"><span class="pre">label_name.txt</span></code>.</p></li>
+<li><p>Compile and train the model.</p></li>
+<li><p>You can extract the results from the following nodes in the property panel.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The edge <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> nodes from the two <code class="docutils literal notranslate"><span class="pre">SOM</span></code> nodes after the <code class="docutils literal notranslate"><span class="pre">Dist</span></code>.
+Name the top one <code class="docutils literal notranslate"><span class="pre">animal_size</span></code> and the other one <code class="docutils literal notranslate"><span class="pre">animal_other</span></code> or similar</p></li>
+<li><p>The output node, name this as <code class="docutils literal notranslate"><span class="pre">animal_demo</span></code> or similar</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>You can now view these outputs in the SOM viewer in <code class="docutils literal notranslate"><span class="pre">View-&gt;SOM</span></code>. To assist you,
+a video has been provided below for a demonstration of this entire process, with the
+visualisation tool also demonstrated.</p>
+<video controls src="_static/demo.mp4"></video></div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="som-app-guide.html" class="btn btn-neutral float-left" title="PySOM Creator Helper Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="pysom" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tested Environments &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Setup &amp; Installation" href="installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tested Environments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#instructions-for-windows">Instructions for Windows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#windows-install-instructions">Windows Install Instructions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows-install-quirks">Windows Install Quirks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#instructions-for-macos">Instructions for macOS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#macos-install-instructions">macOS Install Instructions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos-install-quirks">macOS Install Quirks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#instructions-for-linux">Instructions for Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux-install-instructions">Linux Install Instructions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-install-quirks">Linux Install Quirks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-guide.html">PySOM Library Explained in 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-adv.html">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-app-adv.html">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pysom</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Tested Environments</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tested-environments.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tested-environments">
+<h1>Tested Environments<a class="headerlink" href="#tested-environments" title="Permalink to this headline">¶</a></h1>
+<p>The PySOM library and bundled GUI editor has been tested with the following
+platforms on a best efforts basis.</p>
+<p>The following system configurations were tested in the development
+of PySOM. There are no minimum hardware specifications, but try not to run
+PySOM on a potato.</p>
+<p>Since the backend uses Python and it is not the most performant language, and
+without performance optimisations with Numba, the library may run slower than
+expected. Future work will focus more on this aspect given enough time and
+resources.</p>
+<div class="section" id="instructions-for-windows">
+<h2>Instructions for Windows<a class="headerlink" href="#instructions-for-windows" title="Permalink to this headline">¶</a></h2>
+<div class="twocol docutils container">
+<div class="leftside docutils container">
+<a class="reference internal image-reference" href="_images/logo_win10.png"><img alt="Windows 10" src="_images/logo_win10.png" style="width: 180px;" /></a>
+</div>
+<div class="rightside docutils container">
+<p><strong>Windows 10 Home Version 1909</strong></p>
+<p>To install: Python3 (see below), NodeJS, Visual Studio</p>
+<p>Notes: Avoid using Python version newer than 3.8 due to an issue
+with dependencies. Further details can be found below.</p>
+</div>
+</div>
+<div class="section" id="windows-install-instructions">
+<h3>Windows Install Instructions<a class="headerlink" href="#windows-install-instructions" title="Permalink to this headline">¶</a></h3>
+<p>Naturally if any requirements are already satisfied then the relevant steps can be omitted. Note that instructions
+are for a native Windows install. If Windows Subsystem for Linux is used, then
+follow the Linux instructions instead. Support for WSL GUI applications
+should be followed <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps">at the following link</a>.</p>
+<ul class="simple">
+<li><p>Install Python from <a class="reference external" href="https://www.python.org/downloads/">the Python official website</a>  or through a package
+manager such as Chocolatey or Anaconda. PySOM Creator uses python3, but
+will not work with a version newer than Python3.8. You can use a venv to
+circumvent this, or make sure that your environment variable points to the
+correct version if you have multiple versions of Python installed.</p></li>
+<li><p>Make sure <cite>virtualenv</cite> is part of your installed modules with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">virtualenv</span></code></p></li>
+<li><p>Install Visual Studio from <a class="reference external" href="https://visualstudio.microsoft.com/downloads/">the MSVS official website</a> which is needed for NodeJS.
+The community edition is free. Make sure that “Desktop development with C++”
+is checked for the install.</p></li>
+<li><p>Install NodeJS from <a class="reference external" href="https://nodejs.org/en/download/">the NodeJS official website</a> or through a package manager
+such as Chocolatey.</p></li>
+<li><p>You are now ready to install PySOM - how exciting!</p></li>
+</ul>
+</div>
+<div class="section" id="windows-install-quirks">
+<h3>Windows Install Quirks<a class="headerlink" href="#windows-install-quirks" title="Permalink to this headline">¶</a></h3>
+<p>If NodeJS is having issues finding Visual Studio build tools it may be
+because Visual Studio is too new (2022). Installing NodeJS via the <cite>.msi</cite> installer
+has an option to bundle the necessary build tools, so use that method instead of manually through
+a package manager. Note that it will install Chocolatey and Python if you haven’t already.</p>
+<p>The issue with the Python version is due to <cite>Python.NET</cite> and the last supported
+version nominated <a class="reference external" href="https://github.com/pythonnet/pythonnet">on their GitHub repo</a> is Python3.8. The setup process for <cite>pythonnet</cite> will
+fail for a newer version of Python.</p>
+</div>
+</div>
+<div class="section" id="instructions-for-macos">
+<h2>Instructions for macOS<a class="headerlink" href="#instructions-for-macos" title="Permalink to this headline">¶</a></h2>
+<div class="twocol docutils container">
+<div class="leftside docutils container">
+<a class="reference internal image-reference" href="_images/logo_apple.png"><img alt="MacOS" src="_images/logo_apple.png" style="width: 200px;" /></a>
+</div>
+<div class="rightside docutils container">
+<p><strong>MacOS Big Sur Version 11.2.2</strong></p>
+<p>To install: Python, NodeJS, virtualenv</p>
+</div>
+</div>
+<div class="section" id="macos-install-instructions">
+<h3>macOS Install Instructions<a class="headerlink" href="#macos-install-instructions" title="Permalink to this headline">¶</a></h3>
+<p>Python 2.7 comes with any Mac OS X out of the box, however you should upgrade to Python 3.X as the default version has been
+deprecated. Be sure you have XCode setup to have GCC installed, and a package manager such as Homebrew would also be useful.</p>
+<ul class="simple">
+<li><p>Downloading Python through a package manager such as Homebrew will be a much easier process. Another option is to download
+Python 3.X from <a class="reference external" href="https://www.python.org/downloads/">the Python official website</a>.</p></li>
+<li><p>Once Python 3.X has been installed, you will be able to install virtualenv module by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">virtualenv</span></code> on the command
+line.</p></li>
+<li><p>Install NodeJS from <a class="reference external" href="https://nodejs.org/en/download/">the NodeJS official website</a> or through a package manager such as Homebrew. The dependencies for npm will also
+be automatically installed if done through Homebrew, one of which includes Python.</p></li>
+</ul>
+</div>
+<div class="section" id="macos-install-quirks">
+<h3>macOS Install Quirks<a class="headerlink" href="#macos-install-quirks" title="Permalink to this headline">¶</a></h3>
+<p>Not many quirks with MacOS fortunately; if any of the above instructions were executed by doesn’t seem to be installed, make sure
+to have the PATH variable setup to point to the right directories. Specific commands to add to PATH are usually printed on the command
+line after a successful install of packages.</p>
+</div>
+</div>
+<div class="section" id="instructions-for-linux">
+<h2>Instructions for Linux<a class="headerlink" href="#instructions-for-linux" title="Permalink to this headline">¶</a></h2>
+<div class="twocol docutils container">
+<div class="leftside docutils container">
+<a class="reference internal image-reference" href="_images/logo_ubuntu.png"><img alt="Linux Ubuntu" src="_images/logo_ubuntu.png" style="width: 180px;" /></a>
+</div>
+<div class="rightside docutils container">
+<p><strong>Linux/Ubuntu 20.04 LTS</strong></p>
+<p>To install: Vext, pywebview, PyGObject</p>
+<p>Notes: There are too many distros and setups to check for Linux, so you can use
+the following guide as a general guideline. Substitute the package manager with
+the one bundled with your distro.</p>
+</div>
+</div>
+<div class="section" id="linux-install-instructions">
+<h3>Linux Install Instructions<a class="headerlink" href="#linux-install-instructions" title="Permalink to this headline">¶</a></h3>
+<p>Fortunately, a newer stable release of a common distro like Ubuntu comes with
+Python pre-installed and with a relatively sane default developer setup.
+Most work here will be to install the requirements for getting <cite>pywebview</cite>
+working for the front-end application.</p>
+<ul class="simple">
+<li><p>Check that you have a relatively new version of Python3. We have tested
+Python 3.7 and newer and it works fine. Install <cite>pip3</cite> if you haven’t already.</p></li>
+<li><p>Install virtualenv with <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">python3-virtualenv</span></code></p></li>
+<li><p>Install pywebview dependencies with <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">python3-gi</span> <span class="pre">python3-gi-cairo</span> <span class="pre">gir1.2-gtk-3.0</span> <span class="pre">gir1.2-webkit2-4.0</span></code></p></li>
+<li><p>Install NodeJS and <cite>npm</cite> with <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">npm</span></code>. The older stable release of
+node v10.19.0 and npm v6.14.4 is sufficient.</p></li>
+<li><p>Install pywebview dependencies WITHIN the <code class="docutils literal notranslate"><span class="pre">deep-som-dome/app/venv</span></code> via the following: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">vext</span> <span class="pre">vext.gi</span> <span class="pre">PyGObject</span></code></p></li>
+<li><p>You’re all set to install the library and front-end app!</p></li>
+</ul>
+</div>
+<div class="section" id="linux-install-quirks">
+<h3>Linux Install Quirks<a class="headerlink" href="#linux-install-quirks" title="Permalink to this headline">¶</a></h3>
+<p>Any clashes with virtualenv, namely an error resembling “No module named
+virtualenv.seed.embed.via_app_data” is a consequence of having virtualenv installed
+both via <cite>pip</cite> and <cite>apt</cite> (or your package manager). You just need to uninstall the
+<cite>pip</cite> version.</p>
+<p>Some instructions online to set up pywebview will be to install dependencies globally
+but these are not typically reachable within a virtual environment.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installing.html" class="btn btn-neutral float-left" title="Setup &amp; Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PySOM Library Explained in 5 Minutes &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="A Harder Example using PySOM Library" href="som-lib-adv.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tested-environments.html">Tested Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PySOM Library Explained in 5 Minutes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-graph-class-and-constructing-your-model">The Graph Class and Constructing Your Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-different-types-of-pysom-nodes">The Different Types of PySOM Nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-adv.html">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-app-adv.html">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pysom</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>PySOM Library Explained in 5 Minutes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/som-lib-guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="pysom-library-explained-in-5-minutes">
+<h1>PySOM Library Explained in 5 Minutes<a class="headerlink" href="#pysom-library-explained-in-5-minutes" title="Permalink to this headline">¶</a></h1>
+<p>The PySOM Library is essentially a graph builder framework that allows the user to
+manipulate and train data through the predefined nodes in the library. Given the
+extensible nature of the library, the user is also welcome to (and is encouraged to)
+add to this collection of node elements as required.</p>
+<div class="section" id="the-graph-class-and-constructing-your-model">
+<h2>The Graph Class and Constructing Your Model<a class="headerlink" href="#the-graph-class-and-constructing-your-model" title="Permalink to this headline">¶</a></h2>
+<p>The main <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class defines the methods needed to actually construct the
+deep SOM model. Graph nodes will be instantiated and managed through this class -
+the user does not create the nodes independently. By default the input and output
+nodes are generated automatically. but explicit input data needs to be set through
+the helper functionality.</p>
+<p>Additionally, the edge connections are created through a ‘slot’ system (simply
+an integer ID to represent some edge connection) and likewise this is also done
+through the <code class="docutils literal notranslate"><span class="pre">Graph</span></code> class.</p>
+<p>Lastly, any global parameters that affects the model beyond a node or edge level
+should be defined through the helper functions.</p>
+<p>Because the Graph is responsible for the node and edge elements, it is also
+responsible for the compiling and training process. In summary, the <code class="docutils literal notranslate"><span class="pre">Graph</span></code>
+class captures the entire functionality of the model akin to a programming
+facade or API.</p>
+</div>
+<div class="section" id="the-different-types-of-pysom-nodes">
+<h2>The Different Types of PySOM Nodes<a class="headerlink" href="#the-different-types-of-pysom-nodes" title="Permalink to this headline">¶</a></h2>
+<p>As of the library’s first beta release, the PySOM library contains the following
+basic graph nodes, with a basic description of each:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BMU</span></code> - this is the node that extracts the Best Matching Unit based on some
+input data and the weights output by an incoming node (i.e. the <code class="docutils literal notranslate"><span class="pre">SOM</span></code> node)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> - the node that provides a functionality to provide labelling
+information on the best matching units and returns the most common label</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Concat</span></code> - a simple node that has the opposite effect of the <code class="docutils literal notranslate"><span class="pre">Dist</span></code> node,
+and concatenates the input into one output array</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dist</span></code> - a simple node that distributes data into multiple output slots for
+manipulation of independent neighbouring downstream nodes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InputContainer</span></code> - a holder node class that serves as the entry point into
+the <code class="docutils literal notranslate"><span class="pre">Graph</span></code>. This is automatically generated upon instantiation of <code class="docutils literal notranslate"><span class="pre">Graph</span></code>,
+and otherwise does nothing special.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Scale</span></code> - a normalisation class that transforms the input data into a
+scaled, and standardised/transformed output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SOM</span></code> - the heart of the actual SOM training logic containing all the learning
+and training logic, including the various neighbourhood distance and learn
+rate functions</p></li>
+</ol>
+<p>Note that there is default parent concrete <code class="docutils literal notranslate"><span class="pre">Node</span></code> class that can be used and
+manipulated as with any other node, but does not provide any useful functionality
+beyond simple defaults.</p>
+<p>If you wish to create your own <code class="docutils literal notranslate"><span class="pre">Node</span></code> subclass, it is advised to investigate
+the <a class="reference internal" href="pysom.html"><span class="doc">pysom package</span></a> API documentation in greater detail.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="som-lib-adv.html" class="btn btn-neutral float-right" title="A Harder Example using PySOM Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

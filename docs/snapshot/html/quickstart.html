@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quickstart &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PySOM Library Explained in 5 Minutes" href="som-lib-guide.html" />
+    <link rel="prev" title="Tested Environments" href="tested-environments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tested-environments.html">Tested Environments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-guide.html">PySOM Library Explained in 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-adv.html">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-app-adv.html">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pysom</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Quickstart</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>Let’s now start building a simple deep SOM graph so we can test that we’ve
+installed everything and that it is working correctly.</p>
+<p>Fire up your favourite text editor or use a Python REPL whichever you prefer and
+paste run the following commands.</p>
+<p>Essentially, we are building the following graph (shown in ASCII art) below:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">The graph to be produced</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               <span class="o">*-&gt;</span> <span class="n">node1</span> <span class="o">-&gt;*</span>
+              <span class="o">/</span>             \
+            <span class="p">(</span><span class="mi">1</span><span class="p">)</span>              \
+            <span class="o">/</span>                 \
+<span class="nb">input</span> <span class="o">-&gt;</span> <span class="n">dist</span>                 <span class="n">concat</span> <span class="o">-&gt;</span> <span class="n">output</span>
+            \                 <span class="o">/</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>            <span class="o">/</span>
+              \             <span class="o">/</span>
+               <span class="o">*-&gt;</span> <span class="n">node2</span> <span class="o">-&gt;*</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">A simple graph example built in PySOM Library</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pysom.node</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">pysom.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.dist</span> <span class="kn">import</span> <span class="n">Dist</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.concat</span> <span class="kn">import</span> <span class="n">Concat</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1">### CODE HERE ###</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>  <span class="c1"># initialise Graph instance</span>
+
+<span class="n">sel</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">])]</span>  <span class="c1"># selection(1): dimensions at index 0, 2</span>
+<span class="c1"># selection(2): dimensions at index 1</span>
+
+<span class="c1"># create Dist node and provide selections</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Dist</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;selections&#39;</span><span class="p">:</span> <span class="n">sel</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># connect Start node to Distribute node</span>
+
+<span class="n">node1</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span>  <span class="c1"># create Default node 1</span>
+<span class="n">node2</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span>  <span class="c1"># create Default node 2</span>
+
+<span class="c1"># connect Dist node to Default node 1 &lt; sends selection(1) &gt;</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># connect Dist node to Default node 2 &lt; sends selection(2) &gt;</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># create Concat node and select axis &lt; axis = 1: concatenates column-wise &gt;</span>
+<span class="n">con</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Concat</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;axis&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># connect Default node 1 to Concat node</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">node2</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># connect Default node 2 to Concat node</span>
+
+<span class="c1"># connect Concat node to End node (Completes the Graph)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">set_input</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># set input data</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">get_output</span><span class="p">())</span>  <span class="c1"># get output</span>
+</pre></div>
+</div>
+</div>
+<p>You should then see the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>Congratulations! You’ve successfully re-ordered the dimensions of the input
+data using a <strong>Distributor</strong> and <strong>Concatenator</strong> node. Next we’ll look
+at a far more interesting application that will actually use the core <strong>SOM</strong>
+node object that trains the data.</p>
+<p>But before we do that, if you are interested in using the frontend PySOM
+creator application, then we can try to build this same model and get the same
+output.</p>
+<p>Move into the <code class="docutils literal notranslate"><span class="pre">deep-som-dome/app</span></code> directory and run the application with
+<code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">run</span> <span class="pre">start</span></code>. Follow the instructions below:</p>
+<ul class="simple">
+<li><p>Click on <code class="docutils literal notranslate"><span class="pre">File-&gt;Workspace-&gt;New</span></code> to create a new Workspace. Give it any name
+you want in the top left corner (defaults to <cite>untitled</cite>).</p></li>
+<li><p>Click on <code class="docutils literal notranslate"><span class="pre">File-&gt;Create-&gt;New</span> <span class="pre">Model</span></code> to create a new session in the
+drag-and-drop editor or just use the default one named <cite>SOM</cite>.</p></li>
+<li><p>Create a comma separate data file of the input graph, the content of this file
+(called <code class="docutils literal notranslate"><span class="pre">test.data</span></code> as an example) should resemble the following:</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Contents of <code class="docutils literal notranslate"><span class="pre">test.data</span></code></span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span>
+<span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span>
+<span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p>Upload the data via <code class="docutils literal notranslate"><span class="pre">File-&gt;Dataset-&gt;Import</span> <span class="pre">Data</span></code> and select the <code class="docutils literal notranslate"><span class="pre">test.data</span></code>
+you just made</p></li>
+<li><p>Load the data with <code class="docutils literal notranslate"><span class="pre">Runtime-&gt;Prepare-&gt;Select</span> <span class="pre">Input</span></code>.</p></li>
+<li><p>Add the Concatenator, Passthrough and Distributor nodes and then add the
+links until it resembles the graph below.</p></li>
+</ul>
+<img alt="_images/BasicGraph1.png" src="_images/BasicGraph1.png" />
+<ul class="simple">
+<li><p>Right click the Distributor node to bring up the properties panel and set the
+options as follows. Make sure to change the slots at the bottom to 1 and 2.
+We do not set any slot to 0, because this passes the actual Node object down
+the graph, not the data. Set the axis to 1.</p></li>
+</ul>
+<img alt="_images/BasicGraph2.png" src="_images/BasicGraph2.png" />
+<ul class="simple">
+<li><p>Change the slots of every other node to 1, except the bottom Passthrough should
+have the incoming as 2 (to match the Distributor).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Compile</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> the graph under the <code class="docutils literal notranslate"><span class="pre">Runtime</span></code> options.</p></li>
+<li><p>Go to <code class="docutils literal notranslate"><span class="pre">Runtime-&gt;Save</span> <span class="pre">Result</span> <span class="pre">as-&gt;Data</span></code>, then right click on the new Data Object
+on the left and inspect it. You should see the output below - great work!</p></li>
+</ul>
+<img alt="_images/BasicGraph3.png" src="_images/BasicGraph3.png" />
+<p>Next we’ll look at a more interesting example using an example animal dataset.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tested-environments.html" class="btn btn-neutral float-left" title="Tested Environments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="som-lib-guide.html" class="btn btn-neutral float-right" title="PySOM Library Explained in 5 Minutes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

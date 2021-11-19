@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pysom.nodes package &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pysom package" href="pysom.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tested-environments.html">Tested Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-guide.html">PySOM Library Explained in 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-adv.html">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-app-adv.html">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pysom</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pysom.html">pysom package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pysom.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pysom.nodes package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pysom.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pysom.html#module-pysom.graph">pysom.graph module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pysom.html#module-pysom.node">pysom.node module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pysom.html#module-pysom">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">pysom</a> &raquo;</li>
+          <li><a href="pysom.html">pysom package</a> &raquo;</li>
+      <li>pysom.nodes package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pysom.nodes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="pysom-nodes-package">
+<h1>pysom.nodes package<a class="headerlink" href="#pysom-nodes-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pysom.nodes.bmu">
+<span id="pysom-nodes-bmu-module"></span><h2>pysom.nodes.bmu module<a class="headerlink" href="#module-pysom.nodes.bmu" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.bmu.BMU">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.bmu.</span></code><code class="sig-name descname"><span class="pre">BMU</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'w'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.bmu.BMU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node that finds the Best Matching Unit for an associated SOM node.</p>
+<p>User may choose to receive the BMU information in terms of a 1-dimensional
+vector or in terms of the weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>int</em>) – the unique integer ID of the BMU node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed BMU node</p></li>
+<li><p><strong>output</strong> (<em>str</em><em>, </em><em>optional</em>) – defines whether to output the coordinate             vector of the BMU to 1D or weights themselves. Defaults to ‘w’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – when the output is not defined as ‘1D’ or ‘w’</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="pysom.nodes.bmu.BMU.uid">
+<code class="sig-name descname"><span class="pre">uid</span></code><a class="headerlink" href="#pysom.nodes.bmu.BMU.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>the unique integer ID of the BMU node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pysom.nodes.bmu.BMU.incoming">
+<code class="sig-name descname"><span class="pre">incoming</span></code><a class="headerlink" href="#pysom.nodes.bmu.BMU.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>the list of all incoming Node objects that have a
+connection to the current BMU node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.bmu.BMU.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.bmu.BMU.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>The BMU class may only accept slot value of either 0 or 1.
+Returns True if it is valid, else False is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. May only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, else returns False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.bmu.BMU.dist_from_weights">
+<code class="sig-name descname"><span class="pre">dist_from_weights</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.bmu.BMU.dist_from_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs a grid of distances of an example to SOM weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – the weights array to be received from an
+associated output SOM node</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the grid of distances between the example data                         and the SOM</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.bmu.BMU.get_1D">
+<code class="sig-name descname"><span class="pre">get_1D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.bmu.BMU.get_1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to return the BMU as a 1-dimensional vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – the array of distances to be checked</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the vector of BMU indices</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.bmu.BMU.get_2D">
+<code class="sig-name descname"><span class="pre">get_2D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.bmu.BMU.get_2D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.bmu.BMU.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.nodes.bmu.BMU.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the BMU from an associated SOM node.</p>
+<p>Pulls the SOM data directly into the BMU Node and prepares it for
+evaluation of the actual Best Matching Unit. BMU expects only 1 input
+node, and will thus always request data from slot 0 of the input
+edges. Then it evaluates and returns the BMU as a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – the slot id of the incoming SOM node. If defined as                         0, then the BMU object itself is returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns the BMU vector/array with BMU data determined by                 the output parameter in the constructor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.bmu.BMU.get_weight">
+<code class="sig-name descname"><span class="pre">get_weight</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.bmu.BMU.get_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to return the BMU weight value itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – the array of distances to be checked</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the array of BMU weights</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.calibrate">
+<span id="pysom-nodes-calibrate-module"></span><h2>pysom.nodes.calibrate module<a class="headerlink" href="#module-pysom.nodes.calibrate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.calibrate.Calibrate">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.calibrate.</span></code><code class="sig-name descname"><span class="pre">Calibrate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.calibrate.Calibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node that provides labelling to associated SOM node indices (based on the BMU).</p>
+<p>Calibrate node should be provided a reference to the test data and list
+of labels so that the parent Graph class can provide a classification or
+calibration functionality to the otherwise unsupervised training process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>int</em>) – the unique integer ID of the BMU node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed BMU node</p></li>
+<li><p><strong>labels</strong> (<em>list</em><em>, </em><em>optional</em>) – the list of labels to be used during the                                  calibration process. Defaults to None.</p></li>
+<li><p><strong>test</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – the input test data that requires             labelling. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pysom.nodes.calibrate.Calibrate.calibrate">
+<code class="sig-name descname"><span class="pre">calibrate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_map</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="headerlink" href="#pysom.nodes.calibrate.Calibrate.calibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return a list of labels for the test data, as
+calibrated on the input data of the SOM that it is trained on.</p>
+<p>Utilises the provided label_map dict which maps each BMU coordinate
+to a Counter of labels, with frequency value for each label calculated
+as a number of data vectors with given label L, mapped to the BMU
+coordinate for an input data vector. This function returns the most
+common label corresponding to a BMU, if the majority of data vectors
+mapped to a BMU has that label. If vectors are mapped to a BMU without
+a label, then a default label (most common in data), is given for that
+row in the test data.</p>
+<p>Returns a list of labels for each row in the test data, as calibrated
+by the input data used to train the SOM, corresponding to the BMU
+for each row in the input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label_map</strong> (<em>defaultdict</em>) – Default dictionary where:
+- Key is coordinate tuple (x,y) of BMU,
+- Value is list [Counter(“lab1”: count1, “lab2”: count2, “lab3”: count3)]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Calibrated labels for each row in input data, in order.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.calibrate.Calibrate.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.calibrate.Calibrate.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>The Calibrate class may only accept slot value of either 0 or 1.
+Returns True if it is valid, else False is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. May only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, else returns False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.calibrate.Calibrate.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><span class="pre">pysom.node.Node</span></a><a class="headerlink" href="#pysom.nodes.calibrate.Calibrate.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the classification of associated nodes.</p>
+<p>The concatenation of the incoming arrays will be returned. If there
+are no incoming arrays, then a RuntimeError is raised. If slot is 0,
+then the Calibrate node itself is returned. Else, Calibrated labels
+or each row in input data, in order is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – if 0, then the Calibrate node instance is returned.                         Else, the calibrated labels are returned.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – if get_output() is called prior to adding any                 incoming array(s)</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns the list of ordered labels if the slot is not 0.                     Else, the Calibration node itself is returned.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.calibrate.Calibrate.logit">
+<code class="sig-name descname"><span class="pre">logit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.calibrate.Calibrate.logit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.concat">
+<span id="pysom-nodes-concat-module"></span><h2>pysom.nodes.concat module<a class="headerlink" href="#module-pysom.nodes.concat" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.concat.Concat">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.concat.</span></code><code class="sig-name descname"><span class="pre">Concat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.concat.Concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node that accepts input nodes and provides concatenation as the output.</p>
+<p>Must specify a specific axis to concatenate the input nodes along or be
+None. If axis is not None, then the arrays must of same shape other than
+the dimension nominated. If axis is None, then the array will be
+flattened prior to concatenation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>int</em>) – the unique integer ID of the Concat node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed Concat node</p></li>
+<li><p><strong>axis</strong> (<em>int</em>) – the axis corresponding to the dimension along which the             concatenation should act on.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="pysom.nodes.concat.Concat.uid">
+<code class="sig-name descname"><span class="pre">uid</span></code><a class="headerlink" href="#pysom.nodes.concat.Concat.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>the unique integer ID of the Concat node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pysom.nodes.concat.Concat.incoming">
+<code class="sig-name descname"><span class="pre">incoming</span></code><a class="headerlink" href="#pysom.nodes.concat.Concat.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>the list of all incoming Node objects that have a
+connection to the current Concat node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.concat.Concat.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.concat.Concat.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>The Concat class may only accept slot value of either 0 or 1.
+Returns True if it is valid, else False is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. May only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, else returns False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.concat.Concat.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.nodes.concat.Concat.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the concatenation of associated nodes.</p>
+<p>The concatenation of the incoming arrays will be returned. If there
+are no incoming arrays, then a RuntimeError is raised. If slot is 0,
+then the Concat node itself is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – if 0, then the Concat node instance is returned.                 Else the concatenation of the arrays are returned.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – if get_output() is called prior to adding any                 incoming array(s)</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns the concatenated arrays along the axis defined                 in the constructor if slot is not 0. Else, the Concat node                 itself is returned.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.dist">
+<span id="pysom-nodes-dist-module"></span><h2>pysom.nodes.dist module<a class="headerlink" href="#module-pysom.nodes.dist" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.dist.Dist">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.dist.</span></code><code class="sig-name descname"><span class="pre">Dist</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selections</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.dist.Dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node that extract specific dimensions of data as a distribution method.</p>
+<p>The Dist node must accept a list of distribution selections where each of
+the selections represent a 2-tuple slice of information that describes
+how any input data is to be distributed. Each tuple is of the form
+(axis, [dimensions]).</p>
+<p>For example, a tuple of form (1, [0 2]) suggests the extraction of data
+along the 1st axis (0-indexed, so 1st axis is vertical) and along axis
+entries 0 and 2 out of the entire axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>int</em>) – the unique integer ID of the Dist node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed Dist node</p></li>
+<li><p><strong>selections</strong> (<em>list</em><em>, </em><em>optional</em>) – a list of tuples defining the distribution
+of the input of form (axis, [dimensions]).
+Defaults to an empty list.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="pysom.nodes.dist.Dist.uid">
+<code class="sig-name descname"><span class="pre">uid</span></code><a class="headerlink" href="#pysom.nodes.dist.Dist.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>the unique integer ID of the Dist node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pysom.nodes.dist.Dist.incoming">
+<code class="sig-name descname"><span class="pre">incoming</span></code><a class="headerlink" href="#pysom.nodes.dist.Dist.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>the list of all incoming Node objects that have a
+connection to the current Dist node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.dist.Dist.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.dist.Dist.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>The Dist class may not accept a negative slot value. Does not return
+itself if slot is 0, unlike other typical Node classes. If slot
+provided exceeds the number of selections, then the slot is invalid.
+Returns True if it is valid, else False is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. Validity
+of a positive or zero slot depends on selections
+provided by user during construction.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, else returns False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.dist.Dist.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.nodes.dist.Dist.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the distributed data of the input data.</p>
+<p>The user provided slot shall pertain to the order in which the data is
+to be distributed as defined by the selections during the construction
+of the Dist node. If slot is 0, then it will return the Dist node
+itself as an identity function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – if 0, then the Dist node is returned. Else, returns
+the distributed data based at the selection index,
+based off 1-indexing rule.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>returns the Dist node if slot is 0, else returns an</dt><dd><p>np.ndarray of the distributed data at the selection index</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.input_container">
+<span id="pysom-nodes-input-container-module"></span><h2>pysom.nodes.input_container module<a class="headerlink" href="#module-pysom.nodes.input_container" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.input_container.InputContainer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.input_container.</span></code><code class="sig-name descname"><span class="pre">InputContainer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.input_container.InputContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node wrapper class that provides storage of input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>int</em>) – the unique integer ID of the InputContainer node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed InputContainer node</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="pysom.nodes.input_container.InputContainer.uid">
+<code class="sig-name descname"><span class="pre">uid</span></code><a class="headerlink" href="#pysom.nodes.input_container.InputContainer.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>the unique integer ID of the Concat node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pysom.nodes.input_container.InputContainer.incoming">
+<code class="sig-name descname"><span class="pre">incoming</span></code><a class="headerlink" href="#pysom.nodes.input_container.InputContainer.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>the list of all incoming Node objects that have a
+connection to the current InputContainer node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.input_container.InputContainer.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.nodes.input_container.InputContainer.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the input data held by this node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – remains unused for this class.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns the input data as a passthrough</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.layer">
+<span id="pysom-nodes-layer-module"></span><h2>pysom.nodes.layer module<a class="headerlink" href="#module-pysom.nodes.layer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.layer.Layer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.layer.</span></code><code class="sig-name descname"><span class="pre">Layer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_som_props</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bmu_output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'2D'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.layer.Layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node type for holding many SOMs at once.
+The SOMs follow the same rules and structure as the graph’s independent
+SOM node. The advantage of this node is that it makes the independence of
+parallel SOMs explicit, and can feed data through several SOMs
+simultaneously. Multiprocessing may optionally be used in the evaluating
+of the layer. It may also be easier to set up than a full graph structure
+for several parallel SOMs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>str</em>) – the unique integer ID of the Layer node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the             constructed Layer node</p></li>
+<li><p><strong>parallel_mode</strong> (<em>bool</em>) – whether the Layer will spawn additional
+processes to perform evaluation on the different SOMs in parallel.</p></li>
+<li><p><strong>all_som_props</strong> (<em>list</em>) – a list of dictionaries. Each dictionary should
+contain the attributes desired to build one SOM, with arguments
+the same as when constructing a SOM node in the graph. The Layer
+will be formed from the resulting SOMs, in the given order</p></li>
+<li><p><strong>bmu_output</strong> (<em>str</em>) – As in the BMU Node class. Determines whether the
+bmu nodes extracting output from the SOMs inside the layer
+will output in 1D or 2D mode. Must be either “1D” or “2D”.
+Defaults to 2D</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pysom.nodes.layer.Layer.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.layer.Layer.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>Typically deferred to implementing classes to manage whether a slot ID
+can be used when a connection is to be established between two nodes.
+A Node object can only accept two slot values to enforce multiplicity
+constraints of Node connectivity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. Can only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, or False otherwise.                   Returns True by default in the Node superclass.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.layer.Layer.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.layer.Layer.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return some data after a post-evaluation process.</p>
+<p>Typically called to extract some sort of result from the current node
+during the training process to be passed downstream towards the
+final output node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – the slot ID representing a stream of data where the
+output is to be passed down. If set to 0, then the
+Node object itself is returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data object to be passed down the edge identified by                     the user provided slot ID</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.layer.Layer.process_route">
+<code class="sig-name descname"><span class="pre">process_route</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.layer.Layer.process_route" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.scale">
+<span id="pysom-nodes-scale-module"></span><h2>pysom.nodes.scale module<a class="headerlink" href="#module-pysom.nodes.scale" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.scale.Scale">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.scale.</span></code><code class="sig-name descname"><span class="pre">Scale</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.scale.Scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node that simply standardises some input data.</p>
+<dl class="py method">
+<dt id="pysom.nodes.scale.Scale.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.scale.Scale.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>The Scale class may only accept slot value of either 0 or 1.
+Returns True if it is valid, else False is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. May only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, else returns False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.scale.Scale.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.nodes.scale.Scale.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the standarised values of an input nodeß.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – if 0, then the Scale node instance is returned.                 Else the standardised values of the input data is returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns the standardised values of the input data                 if slot is not defined as 0. Else, the Scale node                 itself is returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes.som">
+<span id="pysom-nodes-som-module"></span><h2>pysom.nodes.som module<a class="headerlink" href="#module-pysom.nodes.som" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.nodes.som.SOM">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">SOM</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">uid:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">graph</span></em>, <em class="sig-param"><span class="pre">size:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">dim:</span> <span class="pre">int</span></em>, <em class="sig-param"><span class="pre">sigma:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.5</span></em>, <em class="sig-param"><span class="pre">lr:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.7</span></em>, <em class="sig-param"><span class="pre">n_iters:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em>, <em class="sig-param"><span class="pre">check_points:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em>, <em class="sig-param"><span class="pre">hexagonal:</span> <span class="pre">Optional[bool]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">dist:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">dist_euclidean&gt;</span></em>, <em class="sig-param"><span class="pre">nhood:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">nhood_gaussian&gt;</span></em>, <em class="sig-param"><span class="pre">pca:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">norm:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">rand_state:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.som.SOM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pysom.html#pysom.node.Node" title="pysom.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysom.node.Node</span></code></a></p>
+<p>Node type holding the Self-Organising Map data.</p>
+<p>Geometry and hyperparameters of the SOM class may be defined on a per-SOM
+basis. SOM generally obeys the rules of the parent node type, but must
+be assigned a slot of 0 as in incoming edge as a form of an identity
+check. The training logic of the graph is usually deferred to this class,
+in the sense that it is the only Node type that accepts and is mutated by
+some sort of input data (e.g. training data).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>str</em>) – the unique integer ID of the BMU node instance</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="pysom.html#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed BMU node</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – the length of any dimension of the n-cube map</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – the dimensionality of the n-cube map</p></li>
+<li><p><strong>sigma</strong> (<em>float</em><em>, </em><em>optional</em>) – the base neighbourhood radius.             Defaults to 0.5.</p></li>
+<li><p><strong>lr</strong> (<em>float</em><em>, </em><em>optional</em>) – the base learning rate. Defaults to 0.7.</p></li>
+<li><p><strong>n_iters</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of iterations to train per epoch.             Defaults to 1.</p></li>
+<li><p><strong>check_points</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of checkpoints recorded in the             training log. A checkpoint will store a snapshot of weights captured             after each interval of training, defined as the number of iterations             to train per checkpoint. Defaults to 1.</p></li>
+<li><p><strong>hexagonal</strong> (<em>bool</em><em>, </em><em>optional</em>) – sets if the resultant map should output             as a hexagonal grid or not. Defaults to False.</p></li>
+<li><p><strong>dist</strong> (<em>callable</em><em>, </em><em>optional</em>) – the distance function to be used during             training for this node. Defaults to dist_euclidean.</p></li>
+<li><p><strong>nhood</strong> (<em>callable</em><em>, </em><em>optional</em>) – the neighbourhood search function to be             used during training for this node. Defaults to nhood_gaussian.</p></li>
+<li><p><strong>rand_state</strong> (<em>int</em><em>, </em><em>optional</em>) – seed to initialise RNG for the initial             map weights. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.activate">
+<code class="sig-name descname"><span class="pre">activate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#pysom.nodes.som.SOM.activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to trigger the distance function for an input vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>np.ndarray</em>) – the vector that the SOM updates its values on</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.bmu">
+<code class="sig-name descname"><span class="pre">bmu</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="headerlink" href="#pysom.nodes.som.SOM.bmu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to compute and retrieve the BMU for an input vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>np.ndarray</em>) – the vector that the SOM updates its values on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the co-ordinate indices of the BMU found</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.som.SOM.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>The SOM class may only accept slot value of either 0 or 1.
+Returns True if it is valid, else False is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. May only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, else returns False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.nodes.som.SOM.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the trained weights of the SOM.</p>
+<p>Will trigger the training of the SOM if not done so already for the
+current iteration. May define a slot of 0 for the identity (returns
+itself), otherwise it will return the trained weights if slot is 1.
+All other values of slot are invalid and the method will effectively
+fail in this scenario.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – if 0, then the SOM node instance is returned.                         If 1, weights of the SOM node after training is                         returned. Else, slot is invalid and None is returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns the SOM node if slot is 0. Returns the weights                     of the SOM as an np.ndarray is slot is 1. Returns None                     otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.get_weights">
+<code class="sig-name descname"><span class="pre">get_weights</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.SOM.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to export the weights of the current BMU state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the weights matrix of the BMU</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.map_labels">
+<code class="sig-name descname"><span class="pre">map_labels</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.som.SOM.map_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a default dictionary mapping the coords[i,j] for each bmu of the input data, to a
+list of labels counted by frequency of mappings (of each label) to the bmu with coords[i,j].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – The input data the SOM is trained on.</p></li>
+<li><p><strong>labels</strong> (<em>list</em>) – Corresponding labels for each row in input data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Default dictionary where:</dt><dd><ul class="simple">
+<li><p>Key is coordinate tuple (x,y) for the BMU of each row (vector) in data</p></li>
+<li><p>Value is list [Counter(“lab1”: count1, “lab2”: count2, “lab3”: count3)]</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>label_map (defaultdict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.train">
+<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.som.SOM.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trains SOM, updating SOM weights based on input data for each iter and bmu for each input data[iter],
+updating weights as a factor of LR and Sigma, reducing nhood radius of each bmu as iter value increases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – The input data to train the SOM on.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.nodes.som.SOM.update">
+<code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bmu</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dump_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#pysom.nodes.som.SOM.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the SOM weights based on an input for the current iteration</p>
+<p>Weights are updated dependent on both the actual training data and
+the defined functions during construction of the SOM node. Reduced
+values are computed based on the iteration, and the learning rate
+and neighbourhood radius attributes are not mutated at all by this
+method.</p>
+<p>Does not return a value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – the vector that the SOM updates its values on</p></li>
+<li><p><strong>bmu</strong> (<em>tuple</em>) – the co-ordinates of the BMU</p></li>
+<li><p><strong>curr</strong> (<em>int</em>) – an integer value of the current iteration</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em>) – an integer value of the maximum iteration</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.dist_cosine">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">dist_cosine</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.dist_cosine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility distance function using cosine distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – the first array</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em>) – the second array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array of computed distances based on cosine distance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.dist_euclidean">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">dist_euclidean</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.dist_euclidean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility distance function using Euclidean distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – the first array</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em>) – the second array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array of computed distances based on Euclidean distance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.dist_manhattan">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">dist_manhattan</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.dist_manhattan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility distance function using Manhattan distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – the first array</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em>) – the second array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array of computed distances based on Manhattan distance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.exponential_decay">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">exponential_decay</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="headerlink" href="#pysom.nodes.som.exponential_decay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classless utility exponential decay function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lr</strong> (<em>float</em>) – the learning rate hyperparameter</p></li>
+<li><p><strong>curr</strong> (<em>int</em>) – an integer value of the current iteration</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em>) – an integer value of the maximum iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the exponential decay correction factor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.nhood_bubble">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">nhood_bubble</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bmu</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_neig</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_neig</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.nhood_bubble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classless learning method via simple radius search method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bmu</strong> (<em>tuple</em>) – the index of the best matching unit</p></li>
+<li><p><strong>x_neig</strong> (<em>np.ndarry</em>) – first array to be searched</p></li>
+<li><p><strong>y_neig</strong> (<em>np.ndarray</em>) – second array to be searched</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – the neighbourhood radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the resultant array after the neighbourhood function is             applied</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.nhood_gaussian">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">nhood_gaussian</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bmu</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.nhood_gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classless learning method via Gaussian function of two input arrays.</p>
+<p>Runs two input arrays through a Gaussian neighourhood function and returns
+the elementwise multiplication of the two resultant arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bmu</strong> (<em>tuple</em>) – the index of the best matching unit</p></li>
+<li><p><strong>x_mat</strong> (<em>np.ndarray</em>) – the first array to be reweighted and reduced</p></li>
+<li><p><strong>y_mat</strong> (<em>np.ndarray</em>) – the second array to be reweighted and reduced</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – the neighbourhood radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the resultant array after the neighbourhood function is             applied</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.nhood_mexican">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">nhood_mexican</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bmu</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#pysom.nodes.som.nhood_mexican" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classless learning method using the Mexican hat/Ricker wave method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bmu</strong> (<em>tuple</em>) – the index of the best matching unit</p></li>
+<li><p><strong>x_mat</strong> (<em>np.ndarry</em>) – first array to be searched</p></li>
+<li><p><strong>y_mat</strong> (<em>np.ndarray</em>) – second array to be searched</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – the neighbourhood radius</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the resultant array after the neighbourhood function is             applied</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.pca">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">pca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.nodes.som.pca" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.reduce_params">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">reduce_params</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="headerlink" href="#pysom.nodes.som.reduce_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classless helper method applying exponential decay to lr and sig.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lr</strong> (<em>float</em>) – the learning rate hyperparameter</p></li>
+<li><p><strong>sig</strong> (<em>float</em>) – sigma/radius hyperparameter</p></li>
+<li><p><strong>curr</strong> (<em>int</em>) – an integer value of the current iteration</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em>) – an integer value of the maximum iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the exponential decayed values of the learning rate and             sigma/radius parameters as a 2-tuple</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pysom.nodes.som.verify_pos">
+<code class="sig-prename descclassname"><span class="pre">pysom.nodes.som.</span></code><code class="sig-name descname"><span class="pre">verify_pos</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bmu</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.nodes.som.verify_pos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pysom.nodes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pysom.nodes" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pysom.html" class="btn btn-neutral float-left" title="pysom package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

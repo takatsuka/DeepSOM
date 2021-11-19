@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Harder Example using PySOM Library &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PySOM Creator Helper Tools" href="som-app-guide.html" />
+    <link rel="prev" title="PySOM Library Explained in 5 Minutes" href="som-lib-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tested-environments.html">Tested Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="som-lib-guide.html">PySOM Library Explained in 5 Minutes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-app-adv.html">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pysom</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>A Harder Example using PySOM Library</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/som-lib-adv.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="a-harder-example-using-pysom-library">
+<h1>A Harder Example using PySOM Library<a class="headerlink" href="#a-harder-example-using-pysom-library" title="Permalink to this headline">¶</a></h1>
+<p>Let’s take a look at constructing a deep SOM model to analyse an animal dataset
+using the PySOM library.</p>
+<p>First let’s load in the required PySOM modules, and also numpy, pandas, sklearn and
+matplotlib to help process and visualise what we’re working with.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Start by importing the following Python modules and helper function</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">eig</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">argsort</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">linspace</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">scale</span>
+
+<span class="kn">import</span> <span class="nn">pysom</span>
+<span class="kn">from</span> <span class="nn">pysom.node</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">pysom.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.bmu</span> <span class="kn">import</span> <span class="n">BMU</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.dist</span> <span class="kn">import</span> <span class="n">Dist</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.concat</span> <span class="kn">import</span> <span class="n">Concat</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.calibrate</span> <span class="kn">import</span> <span class="n">Calibrate</span>
+<span class="kn">from</span> <span class="nn">pysom.nodes.som</span> <span class="kn">import</span> <span class="n">SOM</span><span class="p">,</span> <span class="n">nhood_mexican</span><span class="p">,</span> <span class="n">nhood_bubble</span><span class="p">,</span> <span class="n">dist_manhattan</span><span class="p">,</span> <span class="n">dist_cosine</span>
+
+<span class="k">def</span> <span class="nf">plot_features</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">bmu</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bmu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">bmu</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.35</span><span class="p">,</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Next, let’s load the actual animal dataset and pack it into a pandas dataframe.
+Note that each row of the numpy array corresponds to an animal as shown in the
+in-lined comments, and the columns are the dimensions/attributes of the data
+as shown in the definition of the pandas dataframe columns.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Loading the animal dataset into our application</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">animal</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dove&#39;</span><span class="p">,</span> <span class="s1">&#39;Chicken&#39;</span><span class="p">,</span> <span class="s1">&#39;Duck&#39;</span><span class="p">,</span> <span class="s1">&#39;Goose&#39;</span><span class="p">,</span> <span class="s1">&#39;Owl&#39;</span><span class="p">,</span> <span class="s1">&#39;Hawk&#39;</span><span class="p">,</span> <span class="s1">&#39;Eagle&#39;</span><span class="p">,</span> <span class="s1">&#39;Fox&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Dog&#39;</span><span class="p">,</span> <span class="s1">&#39;Wolf&#39;</span><span class="p">,</span> <span class="s1">&#39;Cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Tiger&#39;</span><span class="p">,</span> <span class="s1">&#39;Lion&#39;</span><span class="p">,</span> <span class="s1">&#39;Horse&#39;</span><span class="p">,</span> <span class="s1">&#39;Zebra&#39;</span><span class="p">,</span> <span class="s1">&#39;Cow&#39;</span><span class="p">]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Dove</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Chicken</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>    <span class="c1"># Duck</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>    <span class="c1"># Goose</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Owl</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Hawk</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Eagle</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Fox</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Dog</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Wolf</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Cat</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Tiger</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Lion</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Horse</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Zebra</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>     <span class="c1"># Cow</span>
+<span class="p">]</span>
+
+<span class="n">feats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+<span class="n">feats</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Small&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;Big&#39;</span><span class="p">,</span> <span class="s1">&#39;2-legs&#39;</span><span class="p">,</span> <span class="s1">&#39;4-legs&#39;</span><span class="p">,</span> <span class="s1">&#39;Hair&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;Hooves&#39;</span><span class="p">,</span> <span class="s1">&#39;Mane&#39;</span><span class="p">,</span> <span class="s1">&#39;Feathers&#39;</span><span class="p">,</span> <span class="s1">&#39;Hunt&#39;</span><span class="p">,</span> <span class="s1">&#39;Run&#39;</span><span class="p">,</span> <span class="s1">&#39;Fly&#39;</span><span class="p">,</span> <span class="s1">&#39;Swim&#39;</span><span class="p">]</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">feats</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<p>As with before, we need to construct our PySOM graph. Here we need to define the
+network structure as represented in the following ASCII art.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">The deep SOM graph we want to build</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              <span class="o">*-&gt;</span><span class="n">som</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">bmu</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">-&gt;*</span>
+             <span class="o">/</span>                          \\
+            <span class="o">/---&gt;</span><span class="n">som</span><span class="p">(</span><span class="n">legs</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">bmu</span><span class="p">(</span><span class="n">legs</span><span class="p">)</span><span class="o">----</span>\\
+<span class="n">animal</span> <span class="o">-&gt;</span> <span class="n">dist</span>                          <span class="n">concat</span> <span class="o">-&gt;</span> <span class="n">som</span> <span class="o">-&gt;</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+            \\<span class="o">--&gt;</span><span class="n">som</span><span class="p">(</span><span class="n">char</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">bmu</span><span class="p">(</span><span class="n">char</span><span class="p">)</span><span class="o">----/</span>
+             \\                         <span class="o">/</span>
+              <span class="o">*-&gt;</span><span class="n">som</span><span class="p">(</span><span class="n">move</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">bmu</span><span class="p">(</span><span class="n">move</span><span class="p">)</span><span class="o">-&gt;*</span>
+</pre></div>
+</div>
+</div>
+<p>Immediately we can see the automatically constructed <code class="docutils literal notranslate"><span class="pre">InputContainer</span></code> denoted by
+“animal” feeds into a <code class="docutils literal notranslate"><span class="pre">Distributor</span></code> node. This then branches out into 4
+different types of attributes which individual <code class="docutils literal notranslate"><span class="pre">SOM</span></code> and <code class="docutils literal notranslate"><span class="pre">BMU</span></code> nodes are
+trained upon, before the result is joined together through a <code class="docutils literal notranslate"><span class="pre">Concatenator</span></code> and
+output with <code class="docutils literal notranslate"><span class="pre">SOM</span></code> and <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code> nodes.</p>
+<p>This should allow us to effectively train the 4 independent SOMs on specific
+features of the dataset, before we bring it together and map it to our last
+SOM. Lastly, we apply our calibration process to provide labelling to our
+SOM model output, which will allow us to plot our results.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Construct out graph and plot the trained result</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+<span class="n">sel</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">])]</span>
+
+<span class="n">dist</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Dist</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;selections&quot;</span><span class="p">:</span> <span class="n">sel</span><span class="p">})</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">som_size</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">SOM</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;n_iters&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">})</span>
+<span class="n">som_legs</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">SOM</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;n_iters&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">})</span>
+<span class="n">som_char</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">SOM</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;n_iters&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">})</span>
+<span class="n">som_move</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">SOM</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;n_iters&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">som_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">som_legs</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">som_char</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">som_move</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="n">bmu_size</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">BMU</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">})</span>
+<span class="n">bmu_legs</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">BMU</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">})</span>
+<span class="n">bmu_char</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">BMU</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">})</span>
+<span class="n">bmu_move</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">BMU</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">som_size</span><span class="p">,</span> <span class="n">bmu_size</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">som_legs</span><span class="p">,</span> <span class="n">bmu_legs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">som_char</span><span class="p">,</span> <span class="n">bmu_char</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">som_move</span><span class="p">,</span> <span class="n">bmu_move</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">concat</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Concat</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">bmu_size</span><span class="p">,</span> <span class="n">concat</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">bmu_legs</span><span class="p">,</span> <span class="n">concat</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">bmu_char</span><span class="p">,</span> <span class="n">concat</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">bmu_move</span><span class="p">,</span> <span class="n">concat</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">size</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">som</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">SOM</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span> <span class="s1">&#39;dim&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s2">&quot;nhood&quot;</span><span class="p">:</span> <span class="n">nhood_mexican</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;n_iters&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">concat</span><span class="p">,</span> <span class="n">som</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">cal</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Calibrate</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">animal</span><span class="p">})</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">som</span><span class="p">,</span> <span class="n">cal</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">cal</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">scale</span><span class="p">(</span><span class="n">feats</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set_input</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+
+<span class="n">plot_features</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>You should see the following clusters being printed to standard out, as well
+as an image of with the clusters visualised and annotated on our final output SOM.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;Dove&#39;</span><span class="p">,</span> <span class="s1">&#39;Chicken&#39;</span><span class="p">,</span> <span class="s1">&#39;Duck&#39;</span><span class="p">,</span> <span class="s1">&#39;Goose&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Owl&#39;</span><span class="p">,</span> <span class="s1">&#39;Hawk&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Eagle&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Fox&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Dog&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Wolf&#39;</span><span class="p">,</span> <span class="s1">&#39;Tiger&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Cat&#39;</span><span class="p">]</span>
+<span class="p">[</span><span class="s1">&#39;Lion&#39;</span><span class="p">,</span> <span class="s1">&#39;Horse&#39;</span><span class="p">,</span> <span class="s1">&#39;Zebra&#39;</span><span class="p">,</span> <span class="s1">&#39;Cow&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<img alt="_images/AnimalPlot1.png" src="_images/AnimalPlot1.png" />
+<p>We can see with our simple dataset that our animals seem to be clustered together
+based on some sort of semantic meaning - based on the attributes we distributed
+earlier - size, legs, characteristic, locomotion.</p>
+<p>Hopefully this inspires you to make much more complex and interesting models on
+your own datasets.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="som-lib-guide.html" class="btn btn-neutral float-left" title="PySOM Library Explained in 5 Minutes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="som-app-guide.html" class="btn btn-neutral float-right" title="PySOM Creator Helper Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

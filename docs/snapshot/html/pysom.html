@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pysom package &mdash; PySOM Library 0.0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/style.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pysom.nodes package" href="pysom.nodes.html" />
+    <link rel="prev" title="pysom" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> PySOM Library<img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Setup and Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Setup &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tested-environments.html">Tested Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Library:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-guide.html">PySOM Library Explained in 5 Minutes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-lib-adv.html">A Harder Example using PySOM Library</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guide to PySOM Creator:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="som-app-guide.html">PySOM Creator Helper Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="som-app-adv.html">A Harder Example using PySOM Creator</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pysom</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pysom package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pysom.nodes.html">pysom.nodes package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pysom.graph">pysom.graph module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pysom.node">pysom.node module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pysom">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PySOM Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">pysom</a> &raquo;</li>
+      <li>pysom package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pysom.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="pysom-package">
+<h1>pysom package<a class="headerlink" href="#pysom-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pysom.nodes.html">pysom.nodes package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.bmu">pysom.nodes.bmu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.calibrate">pysom.nodes.calibrate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.concat">pysom.nodes.concat module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.dist">pysom.nodes.dist module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.input_container">pysom.nodes.input_container module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.layer">pysom.nodes.layer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.scale">pysom.nodes.scale module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes.som">pysom.nodes.som module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysom.nodes.html#module-pysom.nodes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pysom.graph">
+<span id="pysom-graph-module"></span><h2>pysom.graph module<a class="headerlink" href="#module-pysom.graph" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.graph.Graph">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.graph.</span></code><code class="sig-name descname"><span class="pre">Graph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.graph.Graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class of the API library representing the graph of the deep SOM model.</p>
+<p>Holds all the methods necessary for constructing the graphs. May
+construct vertices and join vertices.</p>
+<p>Creates the starting input node of ID 0 and final output node of ID 0
+upon instantiation. Training flag is initially set to false and can
+be toggled using the training methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>loglevel</strong> (<em>int</em><em>, </em><em>optional</em>) – sets the verbosity for debugging.             May be LOGLEVEL_NONE, LOGLEVEL_ERROR, LOGLEVEL_VERBOSE in             increasing levels of verbosity. Defaults to LOGLEVEL_ERROR.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="pysom.graph.Graph.nodes">
+<code class="sig-name descname"><span class="pre">nodes</span></code><a class="headerlink" href="#pysom.graph.Graph.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>the map of all Node objects indexed by their
+automatically assigned unique integer ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.connect">
+<code class="sig-name descname"><span class="pre">connect</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uid_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.graph.Graph.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edge creation function to connect two Node objects in the graph.</p>
+<p>Also triggers the bookkeeping required in the Node class in terms
+of tracking of incoming and outgoing Nodes. No explicit edge object
+will be stored in the Graph nor the Node instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid_in</strong> (<em>int</em>) – the unique integer ID of the node accepting the
+directed edge connection. May not be equal to
+uid_out.</p></li>
+<li><p><strong>uid_out</strong> (<em>int</em>) – the unique integer ID of the node outputting data
+along the directed edge connection. May not be
+equal to uid_in.</p></li>
+<li><p><strong>slot</strong> (<em>int</em>) – a slot ID representing the edge stored in the output
+Node instance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if an edge was able to be created. False if any node                   could not be found, or if the provided IDs were equal, or                   if the connection could not be established between the                   nodes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.create">
+<code class="sig-name descname"><span class="pre">create</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><span class="pre">pysom.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#pysom.graph.Graph.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to create a vertex in the Graph.</p>
+<p>A node type may be specified to define custom behaviour of the graph
+node. If set to None, then it will default to the basic Node class.
+Returns a unique integer ID of the newly created node, which may be
+later used to retrieve the actual Node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_type</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><em>Node</em></a><em>]</em><em>, </em><em>optional</em>) – the class of the Node to be
+created as defined in
+graph/nodetypes. Defaults to
+None, which creates and returns
+a parent Node instance.</p></li>
+<li><p><strong>props</strong> (<em>dict</em><em>, </em><em>optional</em>) – property parameters that may be unpacked
+and interpreted by the constructor of the
+Node. Defaults to an empty dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the automatically assigned unique integer ID of the node</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.create_with_id">
+<code class="sig-name descname"><span class="pre">create_with_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><span class="pre">pysom.node.Node</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#pysom.graph.Graph.create_with_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to create a vertex with defined id in the Graph.</p>
+<p>The conditions of create() also apply here, except the graph attempts
+to create a Node with an id matching the user provided id. Will not
+create the node if the provided id is already assigned to a node
+attached to the graph. Else, the node is created, and added to the
+graph and the same id is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the id to be prescribed to the generated Node.</p></li>
+<li><p><strong>node_type</strong> (<em>Type</em><em>[</em><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><em>Node</em></a><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+<li><p><strong>props</strong> (<em>dict</em><em>, </em><em>optional</em>) – property parameters that may be unpacked
+and interpreted by the constructor of the
+Node. Defaults to an empty dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the integer id of the newly created Node. Will not be                  negative, or smaller than previously generated Node ids if</dt><dd><p>valid. If invalid, then a value of -1 is returned.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.find_node">
+<code class="sig-name descname"><span class="pre">find_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><span class="pre">pysom.node.Node</span></a><a class="headerlink" href="#pysom.graph.Graph.find_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to retrieve a specific Node object in the graph.</p>
+<p>Returns the Node object matching the provided unique integer ID if
+possible. If there is no such match, then None is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>uid</strong> (<em>int</em>) – the unique integer ID search key for retrieving a Node
+object stored by the current Graph instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the matching Node object with an ID matching the provided                   uid. Will return None if no suitable match is found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node">Node</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.get_nodes">
+<code class="sig-name descname"><span class="pre">get_nodes</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="headerlink" href="#pysom.graph.Graph.get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to return the nodes in the graph.</p>
+<p>Returns the map of all nodes currently stored and indexed by the
+current Graph instance by their unique integer node ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the map of nodes indexed by their ID. Will not be empty.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.graph.Graph.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to extract the output data of the end Node.</p>
+<p>This will trigger the evaluation of all node, if the result was not
+present, effectively train all attached stateful nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em><em>, </em><em>optional</em>) – the output slot of the finishing node                                   of the Graph instance. Defaults to 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the resulting data object flowed to output node in the                     Graph. Returns None if the output could not be retrieved                     due to a malformed Graph or Node(s) structure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.set_input">
+<code class="sig-name descname"><span class="pre">set_input</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#pysom.graph.Graph.set_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter function to set the input data of the starting Node.</p>
+<p>Effectively sets the data at Graph entry point to prepare for training.
+Does not check or sanitise the user input. Does not return any value
+back to the caller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>object</em>) – the data object to be passed and set as the data                            input starting Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.graph.Graph.set_param">
+<code class="sig-name descname"><span class="pre">set_param</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#pysom.graph.Graph.set_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper functionality to set property of the Graph to a value.</p>
+<p>Key should be a string value but value can be of any generic type.
+If key is not a string, a GraphCompileError is raised.
+Used to toggle or manage states in Graph. Useful to enforce or
+restrict certain behaviour during training time or other busy periods.
+If key is not an existing property in Graph, then it will be created
+with the value set to the user provided value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – a property string parameter for the Graph instance</p></li>
+<li><p><strong>value</strong> (<em>object</em>) – the associated value pair for the provided key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysom.graph.GraphCompileError" title="pysom.graph.GraphCompileError"><strong>GraphCompileError</strong></a> – when the input key value is not a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="pysom.graph.GraphCompileError">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.graph.</span></code><code class="sig-name descname"><span class="pre">GraphCompileError</span></code><a class="headerlink" href="#pysom.graph.GraphCompileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Generic error class for any Graph-related issues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Exception</strong> – base type of the Error</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom.node">
+<span id="pysom-node-module"></span><h2>pysom.node module<a class="headerlink" href="#module-pysom.node" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pysom.node.Node">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pysom.node.</span></code><code class="sig-name descname"><span class="pre">Node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysom.node.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The default Node class used to build a SOM Node.</p>
+<p>Also the parent class of all node types defined in graph/nodetypes.
+The basic building element for the Deep SOM Model. Can be connected
+to other SOM Nodes, and at any time may optionally hold some data for
+evaluation during the training process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>int</em>) – a unique positive integer ID for the Node</p></li>
+<li><p><strong>graph</strong> (<a class="reference internal" href="#pysom.graph.Graph" title="pysom.graph.Graph"><em>Graph</em></a>) – the containing Graph instance holding the
+constructed Node</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="pysom.node.Node.uid">
+<code class="sig-name descname"><span class="pre">uid</span></code><a class="headerlink" href="#pysom.node.Node.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>the unique integer ID of the Node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pysom.node.Node.incoming">
+<code class="sig-name descname"><span class="pre">incoming</span></code><a class="headerlink" href="#pysom.node.Node.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>the list of all incoming Node objects that have a
+connection to the current Node instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.add_incoming_connection">
+<code class="sig-name descname"><span class="pre">add_incoming_connection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><span class="pre">pysom.node.Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.node.Node.add_incoming_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an edge from the user-provided output node to the current node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_node</strong> (<a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><em>Node</em></a>) – the user provided node that outputs some sort
+of data to be used by the current node</p></li>
+<li><p><strong>slot</strong> (<em>int</em>) – the user provided integer slot ID that is to be
+assigned to the edge</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the outgoing edge was added successfully, False                   otherwise</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.check_outgoing_connection">
+<code class="sig-name descname"><span class="pre">check_outgoing_connection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pysom.node.Node" title="pysom.node.Node"><span class="pre">pysom.node.Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.node.Node.check_outgoing_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to check connection can be added for an outgoing node.</p>
+<p>Since the training process relies on a backtracking training algorithm,
+the slot validation method is checked by an outgoing node which has
+ownership over the slots assigned to outgoing edges. Is typically
+called by the receiving node of the output, prior to appending any
+incoming connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – the assigned integer representing the ID of the edge
+to be created</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True by default</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.check_slot">
+<code class="sig-name descname"><span class="pre">check_slot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#pysom.node.Node.check_slot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verification method to confirm if a proposed slot ID can be used.</p>
+<p>Typically deferred to implementing classes to manage whether a slot ID
+can be used when a connection is to be established between two nodes.
+A Node object can only accept two slot values to enforce multiplicity
+constraints of Node connectivity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – a proposed integer slot ID to be checked. Can only be
+0 or 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the slot is valid, or False otherwise.                   Returns True by default in the Node superclass.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.get_id">
+<code class="sig-name descname"><span class="pre">get_id</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#pysom.node.Node.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return the ID of the current node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the assigned unique integer ID of the current node</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.get_incoming">
+<code class="sig-name descname"><span class="pre">get_incoming</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="headerlink" href="#pysom.node.Node.get_incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return a list of all incoming Node objects.</p>
+<p>Incoming Node objects are other Node instances which have a valid
+outgoing edge to the current node. Used to backtrace and request
+data output from these nodes during the training process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the list of all nodes that have an outgoing edge to the                   current node</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.get_input">
+<code class="sig-name descname"><span class="pre">get_input</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.node.Node.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to retrieve the output of an incoming node.</p>
+<p>A wrapper function allowing the extraction of data from an incoming
+graph Node using the current node as a point of reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em><em>, </em><em>optional</em>) – the index of the incoming node, not
+necessarily equivalent to the slot number
+of the outgoing edge. Defaults to 0.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data returned from the incoming node indexed</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.get_output">
+<code class="sig-name descname"><span class="pre">get_output</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="headerlink" href="#pysom.node.Node.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function to return some data after a post-evaluation process.</p>
+<p>Typically called to extract some sort of result from the current node
+during the training process to be passed downstream towards the
+final output node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slot</strong> (<em>int</em>) – the slot ID representing a stream of data where the
+output is to be passed down. If set to 0, then the
+Node object itself is returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data object to be passed down the edge identified by                     the user provided slot ID</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pysom.node.Node.make_input_ready">
+<code class="sig-name descname"><span class="pre">make_input_ready</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#pysom.node.Node.make_input_ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to prepare all incoming nodes.</p>
+<p>Forcibly triggers the evaluation of all incoming nodes for
+the current iteration. This method is idempotent for each iteration,
+so calling this method more than once does not do anything. Method
+does not return anything.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pysom">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pysom" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pysom" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pysom.nodes.html" class="btn btn-neutral float-right" title="pysom.nodes package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, COMP3988_T17_01_Group2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
