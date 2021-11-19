@@ -14,7 +14,7 @@ import { INTENT_SUCCESS } from '@blueprintjs/core/lib/esm/common/classes';
 
 import { NodeTemplates } from './nodes'
 import teacher from './imgs/training.gif';
-
+// GIF courtesy of giphy.com: https://giphy.com/stickers/show-presentation-spanishelzonte-Pqc5ggGzJ15DG8ubhY
 
 class DragDropSOM extends Component {
     constructor(props) {

@@ -188,7 +188,7 @@ def dist_manhattan(data: np.ndarray, weights: np.ndarray) -> np.ndarray:
 
 
 def pca(data):
-    M = mean(data.transpose(), axis=1)  # calc mean each col
+    M = mean(data.transpose(), axis=-1)  # calc mean each col
     C = data - M  # subtract col means (centers cols)
     V = cov(C.transpose())  # covar matrix
     val, vec = eig(V)  # eigendecomp covar matrix
@@ -303,13 +303,11 @@ class SOM(Node):
     def _pca(self, data):
         # normalize data first...? or leave to user to choose
         vec, ord_val = pca(data)
-        grid_length = linspace(-1, 1, self.size, dtype=float64)
+        grid_length = linspace(-1, 1, self.size)
         for i, pc0 in enumerate(grid_length):
             for j, pc1 in enumerate(grid_length):
-                # first principle component
-                self.weights[i, j] = (pc0 * vec[ord_val[0]])
-                # add second as linear combination
-                self.weights[i, j] += (pc1 * vec[ord_val[1]])
+                # first principle component + second as linear combination
+                self.weights[i, j] = (pc0 * vec[ord_val[0]]) + (pc1 * vec[ord_val[1]])
 
     def activate(self, x: np.ndarray) -> None:
         """
@@ -438,7 +436,7 @@ class SOM(Node):
             data = self.get_input()
             if self.norm:
                 data = array(self.get_input(), dtype=np.float64)
-                data /= linalg.norm(data, axis=-1, keepdims=True)
+                data = data / linalg.norm(data, axis=0, keepdims=True)
             if self.pca:
                 self._pca(data)
             self.train(data)
