@@ -1,9 +1,22 @@
 @startuml
 
 package React {
-    class Creator
-    Creator <|-- FileManager
-    Creator <|-- TabManager
+    class SplitView {
+        item
+        detail
+    }
+
+    class Creator {
+        PyObjc_handles
+        draggables
+        exit
+
+        create_window()
+    }
+
+    Creator::create_window <|-r- SplitView
+    SplitView::item <|-- FileManager
+    SplitView::detail <|-l- TabManager
 
     class FileManager {
         ...
@@ -12,6 +25,7 @@ package React {
         openFileAsTab()
         loadJSON()
         loadCSV()†
+        loadWorkspace()
     }
 
 
@@ -28,6 +42,7 @@ package React {
         
     }
 
+    TabManager <|-- SOMView
     TabManager <|-- WelcomeView
     TabManager <|-- ModelEditorView
     TabManager <|-- ImageVizView
@@ -46,21 +61,71 @@ package React {
         weightData
     }
 
-    Scatter3DView::trainingData -> FileManager::loadCSV
-    Scatter3DView::weightData -> FileManager::loadJSON
+    class SOMView {
+    }
+
+    Scatter3DView::trainingData -d-> FileManager::loadCSV
+    Scatter3DView::weightData -d-> FileManager::loadJSON
 }
 
 package Python {
 
-package GraphEngine{
+
 class Graph {
     global_params : {}
     nodes : {}
 
    create(node_type, props)
    set_input(d)
+   get_output()
+   set_param(k,v)
 }
+
+class ModelCompiler{
+
 }
+class Node {
+    uid
+    output_ready
+    incoming : {}
+
+}
+
+class SOM {
+    nhood_gaussian()
+    nhood_bubble()
+    nhood_mexican()
+
+    dist_cosine()
+    dist_euclidean()
+    dist_manhattan()
+
+    ...
+}
+
+class SOMNode {
+}
+
+class Dist {
+}
+class Concat {
+}
+
+class BMU {
+}
+
+class Calibrate {
+}
+
+Graph <|-- Node
+SOM <|-- SOMNode
+Node <|-- SOMNode
+Node <|-- Dist
+Node <|-- Concat
+Node <|-- BMU
+Node <|-- Calibrate
+
+
 
 class CommunicationHub {
    pydict2json(d)
@@ -81,40 +146,75 @@ class APIHandle {
 
 APIHandle *-- CommunicationHub
 
+
+
+
+
 interface Service
 package Services {
 
 Service <|-- VisualizationService
-Service <|-- TrainingService
-Service <|-- ModelVerificationService
 Service <|-- OtherService
+Service <|-- ModelService
+
+
 
 class VisualizationService{
 
 }
 
-class TrainingService{
+
+
+
+class SOMViewService{
 
 }
 
-class ModelVerificationService{
+class ModelService{
+    model
+    graph
+}
+
+Graph *-- ModelService
 
 }
 
+class DatastoreService{
+    workspace
+    loaders : {}
+    dumpers : {}
+    importers : {}
+    exporters : {}
+
+    import_data_from_csv()
+    fetch_objects()
+    load_workspace()
+    ...
+}
 }
 
-}
 
+ModelCompiler -u-> ModelService
+ModelCompiler -u-> DatastoreService
+ModelCompiler -u-> Graph
 
-
+ModelService --> DatastoreService
+SOMViewService --> DatastoreService
+APIHandle *-- DatastoreService
+APIHandle *-- ModelService
 APIHandle *-- VisualizationService
-APIHandle *-- TrainingService
-APIHandle *-- ModelVerificationService
+APIHandle *-- SOMViewService
 APIHandle *-- OtherService
-ImageVizView::engine --> CommunicationHub
-ModelEditorView::verifyService --> CommunicationHub
+SOMView *-- SOMViewService
+ImageVizView::engine -d-> CommunicationHub
+ModelEditorView -d-> ModelService
 
-FileManager::loadCSV --> APIHandle::fileServices
-FileManager::loadJSON --> APIHandle::fileServices
+FileManager::loadCSV -d-> APIHandle::fileServices
+FileManager::loadJSON -d-> APIHandle::fileServices
+FileManager::loadWorkspace -d-> DatastoreService::load_workspace
+SOMView -d-> FileManager
+SOMView -d-> APIHandle
+ModelEditorView -d-> APIHandle
+ModelEditorView -d-> FileManager
 
 @enduml
