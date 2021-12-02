@@ -11,7 +11,7 @@ import multiprocessing
 from ..deprecated import deprecated
 
 import warnings
-warnings.warn(f"""Module {__name__} have never been tested and was deprecated. 
+warnings.warn(f"""Module {__name__} have never been tested and was deprecated.
                   Any usages is not recommend and the behavior is undefined""",
               DeprecationWarning, stacklevel=2)
 
