@@ -19,7 +19,6 @@ BMU_1D = "1D"
 BMU_2D = "2D"
 
 
-@deprecated
 class Layer(Node):
     """
     Node type for holding many SOMs at once.
