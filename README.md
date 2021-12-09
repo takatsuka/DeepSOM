@@ -2,6 +2,10 @@
 
 This repository contains the core library for PySOM and its essential components. 
 
+![graph](imgs/g.png)
+
+![graph](imgs/viz.png)
+
 ### Structure Overview ###
 
 * `app` PySOM Creator standalone application.
