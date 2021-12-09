@@ -2,11 +2,9 @@
 
 This repository contains the core library for PySOM and its essential components. 
 
-#### [Roadmap](https://christopher-irving.atlassian.net/jira/software/projects/DSD/boards/2/roadmap?shared=&atlOrigin=eyJpIjoiMGZmZDdmZjRiMGY2NDc3OWJiZTg2YmZmMjM4NDIyNTUiLCJwIjoiaiJ9)
-
 ### Structure Overview ###
 
-* `app` root for PySOM Creator standalone application.
+* `app` PySOM Creator standalone application.
 * `pysom` PySOM Python module.
 * `datasets` useful data set for benchmarking models wrapped with loaders.
 * `playground` experimental code.
@@ -14,7 +12,7 @@ This repository contains the core library for PySOM and its essential components
 
 ### How do I get set up? ###
 
-* To be updated(Due Fri, Oct 8)
+* Visit [app](https://github.com/takatsuka/DeepSOM/tree/master/app)
 
 ### Contribution guidelines ###
 
